@@ -56,7 +56,6 @@ CREATE TABLE country (
   `iso_3166` varchar(2) default NULL,
   `name` text NOT NULL,
   UNIQUE KEY `cons_country_iso_3166` (`iso_3166`),
-  UNIQUE KEY `cons_country_name` (`name`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -87,7 +86,7 @@ CREATE TABLE lga (
 
 CREATE TABLE pharmacy_dictionary_type (
   `id` int NOT NULL,
-  `ordernum` int NOT NLL,
+  `ordernum` int NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -117,8 +116,7 @@ insert into pharmacy_dictionary_type(id,ordernum,name) values (21, 21, 'OVC Care
 CREATE TABLE pharmacy_dictionary (
   `id` int NOT NULL,
   `id_pharmacy_dictionary_type` int NOT NULL,
-  `name` text NOT NULL,
-  UNIQUE KEY `cons_pharmacy_dictionary_name` (`name`),
+  `name` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -168,77 +166,77 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (36,
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (37, 8, 'Pain, tingling or numbness in hands or feet');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (38, 8, 'Visual disturbances (blured vision etc.)');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (33, 9, 'Chest pain / Chest discomfort');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (34, 9, 'Dyspnoea / Shortness of breath');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (35, 9, 'Oedema');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (36, 9, 'Palpitation');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (39, 9, 'Chest pain / Chest discomfort');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (40, 9, 'Dyspnoea / Shortness of breath');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (41, 9, 'Oedema');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (42, 9, 'Palpitation');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (37, 10, 'Pluritus (Itching)');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (38, 10, 'Skin Rash');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (39, 10, 'Steven-Johnson Syndrome');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (40, 10, 'Hyperpigmentation');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (43, 10, 'Pluritus (Itching)');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (44, 10, 'Skin Rash');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (45, 10, 'Steven-Johnson Syndrome');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (46, 10, 'Hyperpigmentation');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (41, 11, 'Dysmenorrhea');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (42, 11, 'Excessive thirst (Polydipsia)');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (43, 11, 'Lipodystrophy');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (44, 11, 'Polyuria (Increased micturition)');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (47, 11, 'Dysmenorrhea');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (48, 11, 'Excessive thirst (Polydipsia)');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (49, 11, 'Lipodystrophy');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (50, 11, 'Polyuria (Increased micturition)');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (45, 12, 'Arthralgia');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (46, 12, 'Myopathy');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (47, 12, 'Muscle Pain (Myalgia)');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (51, 12, 'Arthralgia');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (52, 12, 'Myopathy');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (53, 12, 'Muscle Pain (Myalgia)');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (48, 13, 'Anaemia');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (49, 13, 'Fatigue/weakness');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (40, 13, 'Malaise');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (54, 13, 'Anaemia');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (55, 13, 'Fatigue/weakness');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (56, 13, 'Malaise');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (41, 14, 'Secondary/Tertiary institution');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (42, 14, 'PHC');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (43, 14, 'TBA');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (44, 14, 'PMV');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (57, 14, 'Secondary/Tertiary institution');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (58, 14, 'PHC');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (59, 14, 'TBA');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (60, 14, 'PMV');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (45, 15, 'HCT');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (46, 15, 'ART');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (47, 15, 'PMTCT');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (48, 15, 'TB');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (49, 15, 'STI');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (50, 15, 'FP');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (51, 15, 'Support group');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (52, 15, 'OVC services');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (61, 15, 'HCT');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (62, 15, 'ART');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (63, 15, 'PMTCT');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (64, 15, 'TB');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (65, 15, 'STI');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (66, 15, 'FP');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (67, 15, 'Support group');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (68, 15, 'OVC services');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (53, 16, 'Positive');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (54, 16, 'Negative');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (55, 16, 'Intermediate');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (69, 16, 'Positive');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (70, 16, 'Negative');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (71, 16, 'Intermediate');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (56, 17, 'Adherence Counseling');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (57, 17, 'Ol management');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (58, 17, 'Psychosocial support');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (59, 17, 'Pain Management');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (60, 17, 'Nutritional Support and Counseling');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (61, 17, 'Malaria Prevention');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (62, 17, 'Malaria Treatment');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (72, 17, 'Adherence Counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (73, 17, 'Ol management');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (74, 17, 'Psychosocial support');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (75, 17, 'Pain Management');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (76, 17, 'Nutritional Support and Counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (77, 17, 'Malaria Prevention');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (78, 17, 'Malaria Treatment');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (63, 18, 'Condoms Provided');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (64, 18, 'Emergency Contraceptive Provided');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (65, 18, 'Injectable Contraceptive Provided');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (66, 18, 'Oral Contraceptives Provided');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (67, 18, 'RH/FP Counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (79, 18, 'Condoms Provided');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (80, 18, 'Emergency Contraceptive Provided');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (81, 18, 'Injectable Contraceptive Provided');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (82, 18, 'Oral Contraceptives Provided');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (83, 18, 'RH/FP Counseling');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (68, 19, 'STI Screening');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (69, 19, 'STI Treatment');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (70, 19, 'STI Counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (84, 19, 'STI Screening');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (85, 19, 'STI Treatment');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (86, 19, 'STI Counseling');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (71, 20, 'TB Screening');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (72, 20, 'TB Adherence Support');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (73, 20, 'TB Drugs Refills');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (74, 20, 'DOTs/CTBC');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (87, 20, 'TB Screening');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (88, 20, 'TB Adherence Support');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (89, 20, 'TB Drugs Refills');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (90, 20, 'DOTs/CTBC');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (75, 21, 'Enrollment');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (76, 21, 'Educational support');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (77, 21, 'Shelter');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (78, 21, 'Nutritional');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (79, 21, 'Legal support/Protection');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (80, 21, 'Health support');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (81, 21, 'Economic support (Skill acquisition)');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (91, 21, 'Enrollment');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (92, 21, 'Educational support');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (93, 21, 'Shelter');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (94, 21, 'Nutritional');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (95, 21, 'Legal support/Protection');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (96, 21, 'Health support');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (97, 21, 'Economic support (Skill acquisition)');
 
 
 /************* END Pharmacy Dictionaries **************************************************/
@@ -252,6 +250,7 @@ CREATE TABLE pharmacy (
   `id_country` int default NULL,
   `id_state` int default NULL,
   `id_facility` int default NULL,
+  `is_active` int default 1,
   UNIQUE KEY `cons_pharmacy_name` (`name`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -294,6 +293,7 @@ CREATE TABLE physician (
 
 CREATE TABLE patient (
   `id` int NOT NULL,
+  `is_active` int default 1,
   `identifier` varchar(255) NOT NULL,
   `first_name` varchar(256) default NULL,
   `last_name` varchar(256) default NULL,
@@ -311,27 +311,242 @@ CREATE TABLE patient (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE form_pharm_care (
+/****************** START FRM_PHARM_CARE tables ************************************************/
+CREATE TABLE frm_care (
   `id` int NOT NULL,
   `id_patient` int NOT NULL,
+  `date_of_visit` datetime NOT NULL,
+  `is_pregnant` int default 0,
+  `is_receive_prescription` int,
+  `is_med_error_screened` int,
+  `is_med_error_identified` int,
+  `is_med_adh_problem_screened` int,
+  `is_med_adh_problem_identified` int,
+  `is_adh_intervention_provided` int,
+  `is_adr_screened` int,
+  `is_adr_symptoms` int,
+  `adr_start_date` datetime default NULL,
+  `adr_stop_date` datetime default NULL,
+  `is_adr_intervention_provided` int,
+  `is_nafdac_adr_filled` int,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_med_error_type (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_med_error_type_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_med_adh_problem (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_med_adh_problem_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_adh_intervention (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_adh_intervention_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_adh_intervention_outcome (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_adh_intervention_outcome_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_adr_severity (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_adr_severity_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_suspected_adr_hepatic (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_suspected_adr_hepatic_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_suspected_adr_nervous (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_suspected_adr_nervous_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_suspected_adr_cardiovascular (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_suspected_adr_cardiovascular_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_suspected_adr_skin (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_suspected_adr_skin_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_suspected_adr_metabolic (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_suspected_adr_metabolic_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_suspected_adr_musculoskeletal (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_suspected_adr_musculoskeletal_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_suspected_adr_general (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_suspected_adr_general_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_adr_intervention (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_adr_intervention_1` (`id_frm_care`, `id_pharmacy_dictionary`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE form_pharm_community (
+/****************** END FRM_PHARM_CARE tables ************************************************/
+
+
+
+/****************** START FRM_PHARM_COMMUNITY tables ************************************************/
+
+CREATE TABLE frm_community (
   `id` int NOT NULL,
   `id_patient` int NOT NULL,
+  `date_of_visit` datetime NOT NULL,
+  `is_referred_in` int,
+  `is_referred_out` int,
+  `is_referral_completed` int,
+  `is_hiv_risk_assesment_done` int,
+  `is_htc_done` int,
+  `is_client_received_htc` int,
+  `is_htc_done_in_current_pharmacy` int,
+  `is_palliative_services_to_plwha` int,
+  `is_sti_services` int,
+  `is_reproductive_health_services` int,
+  `is_tuberculosis_services` int,
+  `is_ovc_services` int,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE report_pharm_care (
+CREATE TABLE frm_community_referred_in (
   `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_referred_in_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_community_referred_out (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_referred_out_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_community_htc_result (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_htc_result_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_community_palliative_care_type (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_palliative_care_type_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_community_sti_type (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_sti_type_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_community_reproductive_health_type (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_reproductive_health_type_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_community_tuberculosis_type (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_tuberculosis_type_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_community_ovc_type (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_ovc_type_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/****************** END FRM_PHARM_COMMUNITY tables ************************************************/
+
+CREATE TABLE report_care (
+  `id` int NOT NULL,
+  `generation_date` datetime NOT NULL,
+  `period` int,
+  `id_pharmacy` int NOT NULL,
+  `number_of_clients_with_prescription_male_younger_15` int default 0,
+  `number_of_clients_with_prescription_female_younger_15` int default 0,
+  `number_of_clients_with_prescription_male_from_15` int default 0,
+  `number_of_clients_with_prescription_female_from_15` int default 0,
+  `number_of_dispensed_drugs` int,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE report_pharm_community (
+CREATE TABLE report_community (
   `id` int NOT NULL,
+  `generation_date` datetime NOT NULL,
+  `period` int,
+  `id_pharmacy` int NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -404,14 +619,14 @@ alter table patient
 
 
 
-alter table form_pharm_care
-    add constraint fk_form_pharm_care_id_patient foreign key (id_patient)
-        references patient(id) on delete set NULL;
+alter table frm_care
+    add constraint fk_frm_care_id_patient foreign key (id_patient)
+        references patient(id);
 
 
-alter table form_pharm_community
-    add constraint fk_form_pharm_community_id_patient foreign key (id_patient)
-        references patient(id) on delete set NULL;
+alter table frm_community
+    add constraint fk_frm_community_id_patient foreign key (id_patient)
+        references patient(id);
 
 alter table pharmacy_dictionary
     add constraint fk_pharmacy_dictionary_type_id_pharmacy_dictionary_type foreign key (id_pharmacy_dictionary_type)
@@ -419,9 +634,192 @@ alter table pharmacy_dictionary
 
 
 
+alter table frm_care_med_error_type
+    add constraint fk_frm_care_med_error_type_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_med_error_type
+    add constraint fk_frm_care_med_error_type_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_med_adh_problem
+    add constraint fk_frm_care_med_adh_problem_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_med_adh_problem
+    add constraint fk_frm_care_med_adh_problem_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_adh_intervention
+    add constraint fk_frm_care_adh_intervention_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_adh_intervention
+    add constraint fk_frm_care_adh_intervention_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_adh_intervention_outcome
+    add constraint fk_frm_care_adh_intervention_outcome_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_adh_intervention_outcome
+    add constraint fk_frm_care_adh_intervention_outcome_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_adr_severity
+    add constraint fk_frm_care_adr_severity_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_adr_severity
+    add constraint fk_frm_care_adr_severity_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
 
 
-insert into admin(id, login, password, is_active,role) values (1, 'admin', MD5('admin'), 1, 'pharmacy_manager');
+alter table frm_care_suspected_adr_hepatic
+    add constraint fk_frm_care_suspected_adr_hepatic_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_suspected_adr_hepatic
+    add constraint fk_frm_care_suspected_adr_hepatic_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_suspected_adr_nervous
+    add constraint fk_frm_care_suspected_adr_nervous_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_suspected_adr_nervous
+    add constraint fk_frm_care_suspected_adr_nervous_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_suspected_adr_cardiovascular
+    add constraint fk_frm_care_suspected_adr_cardiovascular_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_suspected_adr_cardiovascular
+    add constraint fk_frm_care_suspected_adr_cardiovascular_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_suspected_adr_skin
+    add constraint fk_frm_care_suspected_adr_skin_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_suspected_adr_skin
+    add constraint fk_frm_care_suspected_adr_skin_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_suspected_adr_metabolic
+    add constraint fk_frm_care_suspected_adr_metabolic_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_suspected_adr_metabolic
+    add constraint fk_frm_care_suspected_adr_metabolic_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_suspected_adr_musculoskeletal
+    add constraint fk_frm_care_suspected_adr_musculoskeletal_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_suspected_adr_musculoskeletal
+    add constraint fk_frm_care_suspected_adr_musculoskeletal_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_suspected_adr_general
+    add constraint fk_frm_care_suspected_adr_general_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_suspected_adr_general
+    add constraint fk_frm_care_suspected_adr_general_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_adr_intervention
+    add constraint fk_frm_care_adr_intervention_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_adr_intervention
+    add constraint fk_frm_care_adr_intervention_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+
+
+
+alter table frm_community_referred_in
+    add constraint fk_frm_community_referred_in_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_referred_in
+    add constraint fk_frm_community_referred_in_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_community_referred_out
+    add constraint fk_frm_community_referred_out_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_referred_out
+    add constraint fk_frm_community_referred_out_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_community_htc_result
+    add constraint fk_frm_community_htc_result_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_htc_result
+    add constraint fk_frm_community_htc_result_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_community_palliative_care_type
+    add constraint fk_frm_community_palliative_care_type_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_palliative_care_type
+    add constraint fk_frm_community_palliative_care_type_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_community_sti_type
+    add constraint fk_frm_community_sti_type_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_sti_type
+    add constraint fk_frm_community_sti_type_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_community_reproductive_health_type
+    add constraint fk_frm_community_reproductive_health_type_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_reproductive_health_type
+    add constraint fk_frm_community_reproductive_health_type_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_community_tuberculosis_type
+    add constraint fk_frm_community_tuberculosis_type_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_tuberculosis_type
+    add constraint fk_frm_community_tuberculosis_type_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_community_ovc_type
+    add constraint fk_frm_community_ovc_type_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_ovc_type
+    add constraint fk_frm_community_ovc_type_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+
+
+alter table report_care
+    add constraint fk_report_care_id_pharmacy foreign key (id_pharmacy)
+        references pharmacy(id);
+
+alter table report_community
+    add constraint fk_report_community_id_pharmacy foreign key (id_pharmacy)
+        references pharmacy(id);
+
+
+
+
+insert into user(id, login, password, is_active,role) values (1, 'admin', MD5('admin'), 1, 'pharmacy_manager');
 
 INSERT INTO db_sequence(name,value) VALUES ('log4php_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('pharmacy_id_seq', 1);
@@ -435,10 +833,35 @@ INSERT INTO db_sequence(name,value) VALUES ('lga_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('pharmacy_dictionary_type_id_seq', 100);
 INSERT INTO db_sequence(name,value) VALUES ('pharmacy_dictionary_id_seq', 1000);
 
-INSERT INTO db_sequence(name,value) VALUES ('form_pharm_care_id_seq', 1);
-INSERT INTO db_sequence(name,value) VALUES ('form_pharm_community_id_seq', 1);
-INSERT INTO db_sequence(name,value) VALUES ('report_pharm_care_id_seq', 1);
-INSERT INTO db_sequence(name,value) VALUES ('report_pharm_community_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_error_type', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_adh_problem', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention_outcome', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_adr_severity', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_hepatic', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_nervous', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_cardiovascular', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_skin', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_metabolic', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_musculoskeletal', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_general', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_adr_intervention', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_in', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_out', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_htc_result', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_palliative_care_type', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_sti_type', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_reproductive_health_type', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_tuberculosis_type', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_ovc_type', 1);
+
+
+
+
+INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
 insert into db_version values (1, 20120914, 1);
