@@ -2,7 +2,7 @@
 /**
  * 
  * Alexey Kononykhin
- * akononyhin@list.ru
+ * alexey.kononykhin@gmail.com
  * 
  */
 class ZendX_Validate_NotEmpty extends Zend_Validate_NotEmpty

@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TrustCare\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-23 23:59+0400\n"
+"PO-Revision-Date: 2012-09-24 00:06+0400\n"
+"Last-Translator: Alexey Kononykhin <alexey.kononykhin@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: C:\\work\\oDesk\\VernOhaya\\trustcare\\src\\trunk\n"
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:62
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:143
+msgid "Reports"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:120
+msgid "SMS"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:127
+msgid "Voice"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:149
+msgid "Generate"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:174
+msgid "Prefixes"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:179
+msgid "Moscow for iConnect"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:186
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:231
+msgid "Create"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:194
+msgid "View"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:202
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:239
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:281
+msgid "Edit"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:214
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:267
+msgid "System"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:219
+msgid "Administration"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:224
+msgid "Users"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:251
+msgid "Logs"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:257
+msgid "Access"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:262
+msgid "Objects"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:276
+msgid "Settings"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:289
+msgid "Logout"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/include/ZendX/Controller/Action.php:38
+msgid "Access Denied"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/include/ZendX/Validate/NotEmpty.php:11
+msgid "Necessary to enter value"
+msgstr ""
+
+#, fuzzy
+#~ msgid "FMC Billing Administrator"
+#~ msgstr "FMC Administrator"
+
+#, fuzzy
+#~ msgid "Administrators"
+#~ msgstr "FMC Administrator"
+#~ msgid "FMC Administrator"
+#~ msgstr "FMC Administrator"
+

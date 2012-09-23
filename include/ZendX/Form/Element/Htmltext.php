@@ -1,6 +1,6 @@
 <?php
 /**
- * Alexey Kononykhin (konon@astelnet.net)
+ * Alexey Kononykhin (alexey.kononykhin@gmail.com)
  * 05.10.2010
  */
 
