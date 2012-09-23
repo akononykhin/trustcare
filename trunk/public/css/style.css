@@ -1,0 +1,94 @@
+body {
+    font-size: 12px;
+    FONT-FAMILY: Arial, Helvetica, sans-serif;
+}
+
+div.form_errors {
+    color: #cc0000;
+}
+
+div.error {
+    color: #cc0000;
+}
+
+.inner_title {
+    FONT-SIZE: 120%; FONT-WEIGHT: bold; COLOR: #323e4b; FONT-FAMILY: Arial, Helvetica, sans-serif;
+}
+.inner_title2 {
+    FONT-SIZE: 100%; FONT-WEIGHT: bold; COLOR: #bd5050; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.zend_form {
+    MARGIN-TOP: 10px; 
+}
+.zend_form FORM {
+    PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px;
+}
+.zend_form TABLE TR TD {
+    VERTICAL-ALIGN: top;
+}
+
+.zend_form TABLE TD .required {
+    COLOR: #d13b3b;
+}
+.zend_form TABLE TD .description {
+    PADDING-LEFT: 3px; COLOR: #666666;
+}
+.zend_form TABLE TD .errors {
+    COLOR: #cc0000;
+}
+
+.entity_list {
+    MARGIN-TOP: 10px
+}
+
+.entity_list .current a {
+    display:block;
+    float:left;
+}
+
+.entity_list tbody tr.marked td {
+    FONT-WEIGHT: bold;
+}
+
+.entity_list THEAD TR TD {
+    PADDING-RIGHT: 8px; PADDING-LEFT: 7px; BACKGROUND: #6F4014; PADDING-BOTTOM: 6px; VERTICAL-ALIGN: top; BORDER-LEFT: #a88185 1px solid; COLOR: white; PADDING-TOP: 6px;
+}
+.entity_list THEAD TR TD {
+    TEXT-ALIGN: left
+}
+.entity_list THEAD TR TD.current {
+    PADDING-LEFT: 10px; BACKGROUND: #6F4014; BORDER-LEFT: medium none; TEXT-ALIGN: left
+}
+.entity_list TBODY TR TD {
+    BACKGROUND: #ede1c0;
+}
+.entity_list TR TD DIV.arrow_t,.entity_list TR TD img.arrow_t {
+    FLOAT: right; CURSOR: pointer; PADDING-TOP: 0.55em
+}
+.entity_list TR TD {
+    PADDING-RIGHT: 5px;
+    PADDING-LEFT: 10px;
+    PADDING-TOP: 2px;
+    TEXT-ALIGN: left;
+    VERTICAL-ALIGN: top;
+}
+.entity_list TR {
+    BACKGROUND: transparent;
+}
+.entity_list TR TD.first {
+    PADDING-LEFT: 10px; TEXT-ALIGN: left
+}
+
+.filterForm {
+    PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 13px 0px 5px; PADDING-TOP: 0px
+}
+.filter_form_enter {
+    MARGIN-TOP: 0px; FONT-SIZE: 90%;
+}
+.filter_form_enter_multiple {
+    MARGIN-TOP: 0px; FONT-SIZE: 90%;
+}
+.filterForm TD {
+    PADDING-BOTTOM: 2px; COLOR: #333333
+}
