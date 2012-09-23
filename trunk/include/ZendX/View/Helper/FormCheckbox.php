@@ -2,7 +2,7 @@
 /**
  * 
  * Alexey Kononykhin
- * akononyhin@list.ru
+ * alexey.kononykhin@gmail.com
  *
  * Checkbox may have special 'label' attributes and label_comment attribute to be added after checkbox control
  */

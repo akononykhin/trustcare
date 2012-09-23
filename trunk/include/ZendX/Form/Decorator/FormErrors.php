@@ -2,7 +2,7 @@
 /**
  * 
  * Alexey Kononykhin
- * akononyhin@list.ru
+ * alexey.kononykhin@gmail.com
  * 
  */
 require_once 'Zend/Form/Decorator/Abstract.php';

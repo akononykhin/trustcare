@@ -2,7 +2,7 @@
 /**
  *
  * Alexey Kononykhin
- * akononyhin@list.ru
+ * alexey.kononykhin@gmail.com
  *
  */
  

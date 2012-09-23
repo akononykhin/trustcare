@@ -6,7 +6,7 @@
  * License version 2.0, a copy of which has been included with this
  * distribution in the LICENSE file.
  *
- * 11.03.2009 -- Alexey Kononykhin (akononyhin@list.ru) - processing of 'filter' section
+ * 11.03.2009 -- Alexey Kononykhin (alexey.kononykhin@gmail.com) - processing of 'filter' section
  * @package log4php
  * @subpackage config
  */

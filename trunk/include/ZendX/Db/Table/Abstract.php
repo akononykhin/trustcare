@@ -1,6 +1,6 @@
 <?php
 /**
- * Alexey Kononykhin (akononyhin@list.ru)
+ * Alexey Kononykhin (alexey.kononykhin@gmail.com)
  * 01.10.2010
  */
 

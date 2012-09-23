@@ -8,7 +8,7 @@
  * 
  * @package log4php
  * 
- * 13.03.2009 -- Alexey Kononykhin (akononyhin@list.ru) modified to allow caching of configured LoggerHierarchy
+ * 13.03.2009 -- Alexey Kononykhin (alexey.kononykhin@gmail.com) modified to allow caching of configured LoggerHierarchy
  */
 
 /**
