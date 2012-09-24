@@ -11,7 +11,7 @@
     };
     $test_url = str_replace('remote_test.php', 'visual_test.php', $base_uri);
 
-    $test = &new GroupTest('Remote tests');
+    $test = new GroupTest('Remote tests');
     $test->addTestCase(new RemoteTestCase(
             $test_url . '?xml=yes',
             $test_url . '?xml=yes&dry=yes'));

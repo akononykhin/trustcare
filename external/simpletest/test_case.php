@@ -1,9 +1,9 @@
 <?php
     /**
-     *	Base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	UnitTester
-     *	@version	$Id: test_case.php,v 1.21 2006/02/06 06:13:43 lastcraft Exp $
+     *  Base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage UnitTester
+     *  @version    $Id: test_case.php,v 1.21 2006/02/06 06:13:43 lastcraft Exp $
      */
 
     /**#@+
@@ -36,8 +36,8 @@
      *    suite. It searches for
      *    all methods that start with the the string "test" and
      *    runs them. Working test cases extend this class.
-	 *    @package		SimpleTest
-	 *    @subpackage	UnitTester
+     *    @package      SimpleTest
+     *    @subpackage   UnitTester
      */
     class SimpleTestCase {
         var $_label = false;
@@ -71,9 +71,9 @@
          *    @access public
          */
         function &createInvoker() {
-            $invoker = &new SimpleErrorTrappingInvoker(new SimpleInvoker($this));
+            $invoker = new SimpleErrorTrappingInvoker(new SimpleInvoker($this));
             if (version_compare(phpversion(), '5') >= 0) {
-                $invoker = &new SimpleExceptionTrappingInvoker($invoker);
+                $invoker = new SimpleExceptionTrappingInvoker($invoker);
             }
             return $invoker;
         }
@@ -284,10 +284,10 @@
         }
 
         /**
-         *	  @deprecated
+         *    @deprecated
          */
         function assertExpectation(&$expectation, $compare, $message = '%s') {
-        	return $this->assert($expectation, $compare, $message);
+            return $this->assert($expectation, $compare, $message);
         }
 
         /**
@@ -387,8 +387,8 @@
      *    This is a composite test class for combining
      *    test cases and other RunnableTest classes into
      *    a group test.
-	 *    @package		SimpleTest
-	 *    @subpackage	UnitTester
+     *    @package      SimpleTest
+     *    @subpackage   UnitTester
      */
     class GroupTest {
         var $_label;
@@ -441,7 +441,7 @@
          */
         function addTestClass($class) {
             if ($this->_getBaseTestCase($class) == 'grouptest') {
-                $this->_test_cases[] = &new $class();
+                $this->_test_cases[] = new $class();
             } else {
                 $this->_test_cases[] = $class;
             }
@@ -554,7 +554,7 @@
          */
         function &_createGroupFromClasses($title, $classes) {
             SimpleTest::ignoreParentsIfIgnored($classes);
-            $group = &new GroupTest($title);
+            $group = new GroupTest($title);
             foreach ($classes as $class) {
                 if (! SimpleTest::isIgnored($class)) {
                     $group->addTestClass($class);
@@ -601,7 +601,7 @@
             for ($i = 0, $count = count($this->_test_cases); $i < $count; $i++) {
                 if (is_string($this->_test_cases[$i])) {
                     $class = $this->_test_cases[$i];
-                    $test = &new $class();
+                    $test = new $class();
                     $test->run($reporter);
                 } else {
                     $this->_test_cases[$i]->run($reporter);
@@ -632,8 +632,8 @@
     /**
      *    This is a failing group test for when a test suite hasn't
      *    loaded properly.
-	 *    @package		SimpleTest
-	 *    @subpackage	UnitTester
+     *    @package      SimpleTest
+     *    @subpackage   UnitTester
      */
     class BadGroupTest {
         var $_label;

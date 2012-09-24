@@ -1,13 +1,13 @@
 <?php
     /**
-     *	Base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id: user_agent.php,v 1.55 2005/12/07 18:04:58 lastcraft Exp $
+     *  Base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id: user_agent.php,v 1.55 2005/12/07 18:04:58 lastcraft Exp $
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/cookies.php');
     require_once(dirname(__FILE__) . '/http.php');
@@ -26,8 +26,8 @@
     /**
      *    Fetches web pages whilst keeping track of
      *    cookies and authentication.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleUserAgent {
         var $_cookie_jar;
@@ -45,8 +45,8 @@
          *    @access public
          */
         function SimpleUserAgent() {
-            $this->_cookie_jar = &new SimpleCookieJar();
-            $this->_authenticator = &new SimpleAuthenticator();
+            $this->_cookie_jar = new SimpleCookieJar();
+            $this->_authenticator = new SimpleAuthenticator();
         }
         
         /**
@@ -177,7 +177,7 @@
             if ((strncmp($proxy, 'http://', 7) != 0) && (strncmp($proxy, 'https://', 8) != 0)) {
                 $proxy = 'http://'. $proxy;
             }
-            $this->_proxy = &new SimpleUrl($proxy);
+            $this->_proxy = new SimpleUrl($proxy);
             $this->_proxy_username = $username;
             $this->_proxy_password = $password;
         }
@@ -296,7 +296,7 @@
          *    @access protected
          */
         function &_createHttpRequest($url, $encoding) {
-            $request = &new SimpleHttpRequest($this->_createRoute($url), $encoding);
+            $request = new SimpleHttpRequest($this->_createRoute($url), $encoding);
             return $request;
         }
         
@@ -308,13 +308,13 @@
          */
         function &_createRoute($url) {
             if ($this->_proxy) {
-                $route = &new SimpleProxyRoute(
+                $route = new SimpleProxyRoute(
                         $url,
                         $this->_proxy,
                         $this->_proxy_username,
                         $this->_proxy_password);
             } else {
-                $route = &new SimpleRoute($url);
+                $route = new SimpleRoute($url);
             }
             return $route;
         }

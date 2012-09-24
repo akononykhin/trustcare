@@ -1,13 +1,13 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id: http.php,v 1.112 2005/12/07 18:04:58 lastcraft Exp $
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id: http.php,v 1.112 2005/12/07 18:04:58 lastcraft Exp $
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/socket.php');
     require_once(dirname(__FILE__) . '/cookies.php');
@@ -17,8 +17,8 @@
     /**
      *    Creates HTTP headers for the end point of
      *    a HTTP request.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleRoute {
         var $_url;
@@ -98,9 +98,9 @@
          */
         function &_createSocket($scheme, $host, $port, $timeout) {
             if (in_array($scheme, array('https'))) {
-                $socket = &new SimpleSecureSocket($host, $port, $timeout);
+                $socket = new SimpleSecureSocket($host, $port, $timeout);
             } else {
-                $socket = &new SimpleSocket($host, $port, $timeout);
+                $socket = new SimpleSocket($host, $port, $timeout);
             }
             return $socket;
         }
@@ -109,8 +109,8 @@
     /**
      *    Creates HTTP headers for the end point of
      *    a HTTP request via a proxy server.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleProxyRoute extends SimpleRoute {
         var $_proxy;
@@ -190,8 +190,8 @@
     /**
      *    HTTP request for a web page. Factory for
      *    HttpResponse object.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleHttpRequest {
         var $_route;
@@ -279,7 +279,7 @@
          *    @access protected
          */
         function &_createResponse(&$socket) {
-            $response = &new SimpleHttpResponse(
+            $response = new SimpleHttpResponse(
                     $socket,
                     $this->_route->getUrl(),
                     $this->_encoding);
@@ -289,8 +289,8 @@
     
     /**
      *    Collection of header lines in the response.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleHttpHeaders {
         var $_raw_headers;
@@ -457,7 +457,7 @@
          *    @access private
          */
         function _parseCookie($cookie_line) {
-            $parts = split(";", $cookie_line);
+            $parts = preg_split("/;/", $cookie_line);
             $cookie = array();
             preg_match('/\s*(.*?)\s*=(.*)/', array_shift($parts), $cookie);
             foreach ($parts as $part) {
@@ -475,8 +475,8 @@
     
     /**
      *    Basic HTTP response.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleHttpResponse extends SimpleStickyError {
         var $_url;
@@ -516,13 +516,13 @@
         function _parse($raw) {
             if (! $raw) {
                 $this->_setError('Nothing fetched');
-                $this->_headers = &new SimpleHttpHeaders('');
+                $this->_headers = new SimpleHttpHeaders('');
             } elseif (! strstr($raw, "\r\n\r\n")) {
                 $this->_setError('Could not split headers from content');
-                $this->_headers = &new SimpleHttpHeaders($raw);
+                $this->_headers = new SimpleHttpHeaders($raw);
             } else {
-                list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
-                $this->_headers = &new SimpleHttpHeaders($headers);
+                list($headers, $this->_content) = preg_split("/\r\n\r\n/", $raw, 2);
+                $this->_headers = new SimpleHttpHeaders($headers);
             }
         }
         
