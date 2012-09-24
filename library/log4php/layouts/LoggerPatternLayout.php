@@ -240,10 +240,10 @@ class LoggerPatternLayout extends LoggerLayout {
         LoggerLog::debug("LoggerPatternLayout::format()");    
     
         // Reset working stringbuffer
-        $this->sbuf = '';
+        $sbuf = '';
         $c = $this->head;
         while($c !== null) {
-            $c->format($this->sbuf, $event);
+            $c->format($sbuf, $event);
             $c = $c->next;
         }
         if ($event->getLevel()->isGreaterOrEqual(LoggerLevel::getLevelFatal())) {
@@ -254,14 +254,14 @@ class LoggerPatternLayout extends LoggerLayout {
                 $trace[] = sprintf("\t\t#%d: %s (%s, %s)", $i, $traceStack[$i]['file'], $traceStack[$i]['line'], $traceStack[$i]['function']);
             }
             $stackStr = LOG4PHP_LINE_SEP.join(LOG4PHP_LINE_SEP, $trace).LOG4PHP_LINE_SEP;
-            $this->sbuf = str_replace('--stack--', $stackStr, $this->sbuf);
+            $sbuf = str_replace('--stack--', $stackStr, $sbuf);
         }
         else {
-            $this->sbuf = str_replace('--stack--', '', $this->sbuf);
+            $sbuf = str_replace('--stack--', '', $sbuf);
         }
-        //$this->sbuf .= LOG4PHP_LINE_SEP;
+        //$sbuf .= LOG4PHP_LINE_SEP;
         
-        return $this->sbuf;
+        return $sbuf;
     }
     
 }

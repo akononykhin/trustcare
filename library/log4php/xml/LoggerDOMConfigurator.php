@@ -129,11 +129,12 @@ class LoggerDOMConfigurator implements LoggerConfigurator {
      * @param string $url
      * @static
      */
-    public static function configure($url = '') {
+    public static function configure($url = '', &$repository) {
         $configurator = new LoggerDOMConfigurator();
-        $repository =& LoggerManager::getLoggerRepository();
+        //$repository = LoggerManager::getLoggerRepository();
         return $configurator->doConfigure($url, $repository);
     }
+
     
     /**
      * Configure the given <b>repository</b> using the resource pointed by <b>url</b>.
@@ -177,7 +178,7 @@ class LoggerDOMConfigurator implements LoggerConfigurator {
     function parse($xmlData, &$repository)
     {
         // LoggerManager::resetConfiguration();
-        $this->repository =& $repository;
+        $this->repository = $repository;
 
         $parser = xml_parser_create_ns();
     
@@ -245,7 +246,7 @@ class LoggerDOMConfigurator implements LoggerConfigurator {
                 
                 LoggerLog::debug("LoggerDOMConfigurator::tagOpen():tag=[$tag]:name=[$name]:class=[$class]");
                 
-                $this->appender =& LoggerAppender::singleton($name, $class);
+                $this->appender = LoggerAppender::singleton($name, $class);
                 if ($this->appender === null) {
                     LoggerLog::warn("LoggerDOMConfigurator::tagOpen() APPENDER cannot instantiate appender '$name'");
                 }
@@ -263,7 +264,7 @@ class LoggerDOMConfigurator implements LoggerConfigurator {
                     
                     LoggerLog::debug("LoggerDOMConfigurator::tagOpen() APPENDER-REF ref='$appenderName'");        
                     
-                    $appender =& LoggerAppender::singleton($appenderName);
+                    $appender = LoggerAppender::singleton($appenderName);
                     if ($appender !== null) {
                         switch (end($this->state)) {
                             case LOG4PHP_LOGGER_DOM_CONFIGURATOR_LOGGER_STATE:
@@ -331,7 +332,7 @@ class LoggerDOMConfigurator implements LoggerConfigurator {
                     
                     $class = $this->subst(@$attribs['CLASS']);
                     if (empty($class)) {
-                        $this->logger =& $this->repository->getLogger($loggerName);
+                        $this->logger = $this->repository->getLogger($loggerName);
                     } else {
                         $className = basename($class);
                         if (!class_exists($className))  
@@ -344,7 +345,7 @@ class LoggerDOMConfigurator implements LoggerConfigurator {
                         } else {
                         
                             if (in_array('getlogger', get_class_methods($className))) {
-                                $this->logger =& call_user_func(array($className, 'getlogger'), $loggerName);
+                                $this->logger = call_user_func(array($className, 'getlogger'), $loggerName);
                             } else {
                                 LoggerLog::warn(
                                     "LoggerDOMConfigurator::tagOpen() LOGGER. ".
@@ -484,7 +485,7 @@ class LoggerDOMConfigurator implements LoggerConfigurator {
             
                 LoggerLog::debug("LoggerDOMConfigurator::tagOpen() ROOT");
                 
-                $this->logger =& LoggerManager::getRootLogger();
+                $this->logger = LoggerManager::getRootLogger();
                 
                 $this->state[] = LOG4PHP_LOGGER_DOM_CONFIGURATOR_ROOT_STATE;
                 break;
