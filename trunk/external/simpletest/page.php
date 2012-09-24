@@ -1,13 +1,13 @@
 <?php
     /**
-     *	Base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id: page.php,v 1.131 2006/02/05 01:07:49 lastcraft Exp $
+     *  Base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id: page.php,v 1.131 2006/02/05 01:07:49 lastcraft Exp $
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/http.php');
     require_once(dirname(__FILE__) . '/parser.php');
@@ -19,8 +19,8 @@
     /**
      *    Creates tags and widgets given HTML tag
      *    attributes.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleTagBuilder {
 
@@ -113,8 +113,8 @@
     /**
      *    SAX event handler. Maintains a list of
      *    open tags and dispatches them as they close.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimplePageBuilder extends SimpleSaxListener {
         var $_tags;
@@ -162,7 +162,7 @@
          *    @access protected
          */
         function &_createPage($response) {
-            $page = &new SimplePage($response);
+            $page = new SimplePage($response);
             return $page;
         }
 
@@ -174,7 +174,7 @@
          *    @access protected
          */
         function &_createParser(&$listener) {
-            $parser = &new SimpleHtmlSaxParser($listener);
+            $parser = new SimpleHtmlSaxParser($listener);
             return $parser;
         }
         
@@ -187,7 +187,7 @@
          *    @access public
          */
         function startElement($name, $attributes) {
-            $factory = &new SimpleTagBuilder();
+            $factory = new SimpleTagBuilder();
             $tag = $factory->createTag($name, $attributes);
             if (! $tag) {
                 return true;
@@ -327,8 +327,8 @@
 
     /**
      *    A wrapper for a web page.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimplePage {
         var $_links;
@@ -628,7 +628,7 @@
          *    @access public
          */
         function acceptFormStart(&$tag) {
-            $this->_open_forms[] = &new SimpleForm($tag, $this->getUrl());
+            $this->_open_forms[] = new SimpleForm($tag, $this->getUrl());
         }
 
         /**

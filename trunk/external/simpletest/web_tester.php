@@ -190,7 +190,7 @@
          *    @access protected
          */
         function _findHeader($compare) {
-            $lines = split("\r\n", $compare);
+            $lines = preg_split("/\r\n/", $compare);
             foreach ($lines as $line) {
                 if ($this->_testHeaderLine($line)) {
                     return $line;
@@ -206,7 +206,7 @@
          *    @access private
          */
         function _testHeaderLine($line) {
-            if (count($parsed = split(':', $line, 2)) < 2) {
+            if (count($parsed = preg_split('/:/', $line, 2)) < 2) {
                 return false;
             }
             list($header, $value) = $parsed;
@@ -503,7 +503,7 @@
          *    @access public
          */
         function &createBrowser() {
-            $browser = &new SimpleBrowser();
+            $browser = new SimpleBrowser();
             return $browser;
         }
         

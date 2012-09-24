@@ -1,13 +1,13 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id: url.php,v 1.29 2006/01/14 02:45:34 lastcraft Exp $
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id: url.php,v 1.29 2006/01/14 02:45:34 lastcraft Exp $
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/encoding.php');
     /**#@-*/
@@ -19,8 +19,8 @@
      *    Guesses a bit trying to separate the host from
      *    the path and tries to keep a raw, possibly unparsable,
      *    request string as long as possible.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleUrl {
         var $_scheme;
@@ -106,7 +106,7 @@
             }
             if (preg_match('/(.*?)@(.*)/', $url, $matches)) {
                 $url = $prefix . $matches[2];
-                $parts = split(":", $matches[1]);
+                $parts = preg_split("/:/", $matches[1]);
                 return array(
                         urldecode($parts[0]),
                         isset($parts[1]) ? urldecode($parts[1]) : false);
@@ -379,7 +379,7 @@
          */
         function clearRequest() {
             $this->_raw = false;
-            $this->_request = &new SimpleGetEncoding();
+            $this->_request = new SimpleGetEncoding();
         }
         
         /**

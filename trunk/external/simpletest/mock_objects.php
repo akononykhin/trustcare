@@ -1,9 +1,9 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	MockObjects
-     *	@version	$Id: mock_objects.php,v 1.90 2006/02/05 19:35:31 lastcraft Exp $
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage MockObjects
+     *  @version    $Id: mock_objects.php,v 1.90 2006/02/05 19:35:31 lastcraft Exp $
      */
 
     /**#@+
@@ -28,8 +28,8 @@
 
     /**
      *    A wildcard expectation always matches.
-	 *    @package SimpleTest
-	 *    @subpackage MockObjects
+     *    @package SimpleTest
+     *    @subpackage MockObjects
      */
     class AnythingExpectation extends SimpleExpectation {
 
@@ -58,8 +58,8 @@
 
     /**
      *    Parameter comparison assertion.
-	 *    @package SimpleTest
-	 *    @subpackage MockObjects
+     *    @package SimpleTest
+     *    @subpackage MockObjects
      */
     class ParametersExpectation extends SimpleExpectation {
         var $_expected;
@@ -183,7 +183,7 @@
             $descriptions = array();
             if (is_array($args)) {
                 foreach ($args as $arg) {
-                    $dumper = &new SimpleDumper();
+                    $dumper = new SimpleDumper();
                     $descriptions[] = $dumper->describeValue($arg);
                 }
             }
@@ -323,8 +323,8 @@
     /**
      *    Retrieves values and references by searching the
      *    parameter lists until a match is found.
-	 *    @package SimpleTest
-	 *    @subpackage MockObjects
+     *    @package SimpleTest
+     *    @subpackage MockObjects
      */
     class CallMap {
         var $_map;
@@ -415,8 +415,8 @@
      *    calls upon them. The mock will assert the
      *    expectations against it's attached test case in
      *    addition to the server stub behaviour.
-	 *    @package SimpleTest
-	 *    @subpackage MockObjects
+     *    @package SimpleTest
+     *    @subpackage MockObjects
      */
     class SimpleMock {
         var $_wildcard = MOCK_ANYTHING;
@@ -484,11 +484,11 @@
          *    @access private
          */
         function _checkArgumentsIsArray($args, $task) {
-        	if (! is_array($args)) {
-        		trigger_error(
-        			"Cannot $task as \$args parameter is not an array",
-        			E_USER_ERROR);
-        	}
+            if (! is_array($args)) {
+                trigger_error(
+                    "Cannot $task as \$args parameter is not an array",
+                    E_USER_ERROR);
+            }
         }
 
         /**
@@ -918,8 +918,8 @@
     /**
      *    Static methods only service class for code generation of
      *    mock objects.
-	 *    @package SimpleTest
-	 *    @subpackage MockObjects
+     *    @package SimpleTest
+     *    @subpackage MockObjects
      */
     class Mock {
 
@@ -994,8 +994,8 @@
 
     /**
      *    Service class for code generation of mock objects.
-	 *    @package SimpleTest
-	 *    @subpackage MockObjects
+     *    @package SimpleTest
+     *    @subpackage MockObjects
      */
     class MockGenerator {
         var $_class;
@@ -1067,10 +1067,10 @@
             $implements = '';
             $interfaces = $this->_reflection->getInterfaces();
             if (function_exists('spl_classes')) {
-            	$interfaces = array_diff($interfaces, array('Traversable'));
+                $interfaces = array_diff($interfaces, array('Traversable'));
             }
             if (count($interfaces) > 0) {
-            	$implements = 'implements ' . implode(', ', $interfaces);
+                $implements = 'implements ' . implode(', ', $interfaces);
             }
             $code = "class " . $this->_mock_class . " extends " . $this->_mock_base . " $implements {\n";
             $code .= "    function " . $this->_mock_class . "() {\n";
@@ -1095,7 +1095,7 @@
             $code .= $this->_addMethodList($methods);
             $code .= "\n";
             $code .= "    function " . $this->_mock_class . "() {\n";
-            $code .= "        \$this->_mock = &new " . $this->_mock_base . "();\n";
+            $code .= "        \$this->_mock = new " . $this->_mock_base . "();\n";
             $code .= "        \$this->_mock->disableExpectationNameChecks();\n";
             $code .= "    }\n";
             $code .= $this->_chainMockReturns();
@@ -1114,7 +1114,7 @@
          *    @access private
          */
         function _createHandlerCode($methods) {
-        	$code = '';
+            $code = '';
             $methods = array_merge($methods, $this->_reflection->getMethods());
             foreach ($methods as $method) {
                 if ($this->_isConstructor($method)) {

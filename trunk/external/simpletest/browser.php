@@ -1,13 +1,13 @@
 <?php
     /**
-     *	Base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id: browser.php,v 1.162 2006/02/05 01:07:49 lastcraft Exp $
+     *  Base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id: browser.php,v 1.162 2006/02/05 01:07:49 lastcraft Exp $
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/simpletest.php');
     require_once(dirname(__FILE__) . '/http.php');
@@ -24,8 +24,8 @@
 
     /**
      *    Browser history list.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleBrowserHistory {
         var $_sequence;
@@ -154,8 +154,8 @@
      *    Simulated web browser. This is an aggregate of
      *    the user agent, the HTML parsing, request history
      *    and the last header set.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleBrowser {
         var $_user_agent;
@@ -177,7 +177,7 @@
                     SimpleTest::getDefaultProxy(),
                     SimpleTest::getDefaultProxyUsername(),
                     SimpleTest::getDefaultProxyPassword());
-            $this->_page = &new SimplePage();
+            $this->_page = new SimplePage();
             $this->_history = &$this->_createHistory();
             $this->_ignore_frames = false;
             $this->_maximum_nested_frames = DEFAULT_MAX_NESTED_FRAMES;
@@ -189,7 +189,7 @@
          *    @access protected
          */
         function &_createUserAgent() {
-            $user_agent = &new SimpleUserAgent();
+            $user_agent = new SimpleUserAgent();
             return $user_agent;
         }
 
@@ -199,7 +199,7 @@
          *    @access protected
          */
         function &_createHistory() {
-            $history = &new SimpleBrowserHistory();
+            $history = new SimpleBrowserHistory();
             return $history;
         }
 
@@ -250,7 +250,7 @@
             if ($this->_ignore_frames || ! $page->hasFrames() || ($depth > $this->_maximum_nested_frames)) {
                 return $page;
             }
-            $frameset = &new SimpleFrameset($page);
+            $frameset = new SimpleFrameset($page);
             foreach ($page->getFrameset() as $key => $url) {
                 $frame = &$this->_fetch($url, new SimpleGetEncoding(), $depth + 1);
                 $frameset->addFrame($frame, $key);
@@ -267,7 +267,7 @@
          *    @access protected
          */
         function &_buildPage($response) {
-            $builder = &new SimplePageBuilder();
+            $builder = new SimplePageBuilder();
             $page = &$builder->parse($response);
             $builder->free();
             unset($builder);
@@ -286,7 +286,7 @@
         function &_fetch($url, $encoding, $depth = 0) {
             $response = &$this->_user_agent->fetchResponse($url, $encoding);
             if ($response->isError()) {
-                $page = &new SimplePage($response);
+                $page = new SimplePage($response);
             } else {
                 $page = &$this->_parse($response, $depth);
             }

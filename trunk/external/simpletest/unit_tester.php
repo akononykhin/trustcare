@@ -1,13 +1,13 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	UnitTester
-     *	@version	$Id: unit_tester.php,v 1.31 2006/02/06 06:05:18 lastcraft Exp $
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage UnitTester
+     *  @version    $Id: unit_tester.php,v 1.31 2006/02/06 06:05:18 lastcraft Exp $
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/test_case.php');
     require_once(dirname(__FILE__) . '/dumper.php');
@@ -17,8 +17,8 @@
      *    Standard unit test class for day to day testing
      *    of PHP code XP style. Adds some useful standard
      *    assertions.
-	 *	  @package	SimpleTest
-	 *	  @subpackage	UnitTester
+     *    @package  SimpleTest
+     *    @subpackage   UnitTester
      */
     class UnitTestCase extends SimpleTestCase {
 
@@ -44,7 +44,7 @@
          *    @access public
          */
         function assertNull($value, $message = "%s") {
-            $dumper = &new SimpleDumper();
+            $dumper = new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($value) . "] should be null");
@@ -59,7 +59,7 @@
          *    @access public
          */
         function assertNotNull($value, $message = "%s") {
-            $dumper = &new SimpleDumper();
+            $dumper = new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($value) . "] should not be null");
@@ -208,7 +208,7 @@
          *    @access public
          */
         function assertReference(&$first, &$second, $message = "%s") {
-            $dumper = &new SimpleDumper();
+            $dumper = new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($first) .
@@ -230,13 +230,13 @@
          *    @access public
          */
         function assertClone(&$first, &$second, $message = "%s") {
-            $dumper = &new SimpleDumper();
+            $dumper = new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($first) .
                             "] and [" . $dumper->describeValue($second) .
                             "] should not be the same object");
-            $identical = &new IdenticalExpectation($first);
+            $identical = new IdenticalExpectation($first);
             return $this->assertTrue(
                     $identical->test($second) &&
                             ! SimpleTestCompatibility::isReference($first, $second),
@@ -247,7 +247,7 @@
          *    @deprecated
          */
         function assertCopy(&$first, &$second, $message = "%s") {
-            $dumper = &new SimpleDumper();
+            $dumper = new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($first) .
@@ -276,10 +276,10 @@
         }
 
         /**
-         *	  @deprecated
+         *    @deprecated
          */
         function assertWantedPattern($pattern, $subject, $message = "%s") {
-        	return $this->assertPattern($pattern, $subject, $message);
+            return $this->assertPattern($pattern, $subject, $message);
         }
 
         /**
@@ -300,10 +300,10 @@
         }
 
         /**
-         *	  @deprecated
+         *    @deprecated
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
-        	return $this->assertNoPattern($pattern, $subject, $message);
+            return $this->assertNoPattern($pattern, $subject, $message);
         }
 
         /**

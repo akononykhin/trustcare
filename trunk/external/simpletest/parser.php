@@ -1,9 +1,9 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	MockObjects
-     *	@version	$Id: parser.php,v 1.72 2006/01/04 03:15:05 lastcraft Exp $
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage MockObjects
+     *  @version    $Id: parser.php,v 1.72 2006/01/04 03:15:05 lastcraft Exp $
      */
 
     /**#@+
@@ -30,8 +30,8 @@
      *    Compounded regular expression. Any of
      *    the contained patterns could match and
      *    when one does, it's label is returned.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class ParallelRegex {
         var $_patterns;
@@ -126,8 +126,8 @@
     
     /**
      *    States for a stack machine.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleStateStack {
         var $_stack;
@@ -182,8 +182,8 @@
      *    content is only scanned by the PHP regex
      *    parser once. Lexer modes must not start
      *    with leading underscores.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleLexer {
         var $_regexes;
@@ -205,7 +205,7 @@
             $this->_case = $case;
             $this->_regexes = array();
             $this->_parser = &$parser;
-            $this->_mode = &new SimpleStateStack($start);
+            $this->_mode = new SimpleStateStack($start);
             $this->_mode_handlers = array($start => $start);
         }
         
@@ -452,8 +452,8 @@
     
     /**
      *    Breas HTML into SAX events.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleHtmlLexer extends SimpleLexer {
         
@@ -545,8 +545,8 @@
     
     /**
      *    Converts HTML tokens into selected SAX events.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleHtmlSaxParser {
         var $_lexer;
@@ -587,7 +587,7 @@
          *    @static
          */
         function &createLexer(&$parser) {
-            $lexer = &new SimpleHtmlLexer($parser);
+            $lexer = new SimpleHtmlLexer($parser);
             return $lexer;
         }
         
@@ -727,8 +727,8 @@
     
     /**
      *    SAX event handler.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      *    @abstract
      */
     class SimpleSaxListener {

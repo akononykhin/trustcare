@@ -1,9 +1,9 @@
 <?php
     /**
-     *	adapter for SimpleTest to use PEAR PHPUnit test cases
-     *	@package	SimpleTest
-     *	@subpackage Extensions
-     *	@version	$Id: pear_test_case.php,v 1.8 2005/08/03 23:25:19 lastcraft Exp $
+     *  adapter for SimpleTest to use PEAR PHPUnit test cases
+     *  @package    SimpleTest
+     *  @subpackage Extensions
+     *  @version    $Id: pear_test_case.php,v 1.8 2005/08/03 23:25:19 lastcraft Exp $
      */
     
     /**#@+
@@ -13,7 +13,7 @@
     require_once(dirname(__FILE__) . '/../compatibility.php');
     require_once(dirname(__FILE__) . '/../test_case.php');
     require_once(dirname(__FILE__) . '/../expectation.php');
-	/**#@-*/
+    /**#@-*/
    
     /**
      *    Adapter for PEAR PHPUnit test case to allow
@@ -44,9 +44,9 @@
          */
         function assertEquals($first, $second, $message = "%s", $delta = 0) {
             if ($this->_loosely_typed) {
-                $expectation = &new EqualExpectation($first);
+                $expectation = new EqualExpectation($first);
             } else {
-                $expectation = &new IdenticalExpectation($first);
+                $expectation = new IdenticalExpectation($first);
             }
             $this->assert($expectation, $second, $message);
         }
@@ -80,7 +80,7 @@
          *    @public
          */
         function assertSame(&$first, &$second, $message = "%s") {
-            $dumper = &new SimpleDumper();
+            $dumper = new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($first) .
@@ -100,7 +100,7 @@
          *    @public
          */
         function assertNotSame(&$first, &$second, $message = "%s") {
-            $dumper = &new SimpleDumper();
+            $dumper = new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($first) .
