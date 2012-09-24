@@ -10,7 +10,7 @@ require_once(LOG4PHP_DIR . '/LoggerLog.php');
 
 /**
  * Appends log events to a db table with predifined structure:
- * CREATE TABLE fmc_log4php (
+ * CREATE TABLE log4php (
  *    `id` bigint(20) NOT NULL,
  *    `timestamp` datetime NOT NULL,
  *    `logger` varchar(32),
@@ -189,7 +189,7 @@ class LoggerAppenderZendDb extends LoggerAppenderSkeleton {
 
             $query = sprintf("insert into %s(id, timestamp,logger,level,message,thread,file,line) values(%d,str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s'),'%s','%s','%s','%s','%s','%s');",
                              $this->getTable(),
-                             $this->dbAdapter->nextSequenceId('fmc_log4php_id_seq'),
+                             $this->dbAdapter->nextSequenceId('log4php_id_seq'),
                              gmdate("Y-m-d H:i:s"),
                              $event->getLoggerName(),
                              $event->getLevel()->toString(),
@@ -217,7 +217,7 @@ class LoggerAppenderZendDb extends LoggerAppenderSkeleton {
             		}
             		catch(Exception $ex1) {}
             	}
-            	$message = sprintf("[FMC] CAN'T SAVE LOG MESSAGE to DB:\n\t%s\nError: %s", $query, $ex->getMessage());
+            	$message = sprintf("CAN'T SAVE LOG MESSAGE to DB:\n\t%s\nError: %s", $query, $ex->getMessage());
             	$logger = LoggerManager::getLogger('DB_ERROR');
             	$logger->error($message);
             }

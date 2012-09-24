@@ -1,0 +1,7 @@
+<?php 
+foreach ($this->container as $page) {
+    if($this->navigation()->accept($page)) {
+        echo $this->navigation()->menu()->htmlify($page) . "&nbsp;|&nbsp";
+    }
+}
+?>

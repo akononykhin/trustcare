@@ -1,0 +1,55 @@
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>
+  <?php echo $this->headMeta(); ?>  
+  <?php echo $this->headTitle(); ?>
+  <?php echo $this->headLink()->appendStylesheet('/css/style.css'); ?>
+  <?php echo $this->headScript(); ?>
+</head> 
+<body>
+ <div style="width: 100%; background-color: #e6e6e6; padding:2px;">
+ <table width="100%">
+  <tr>
+   <td>
+    <div align="left" valign="top">
+<?php
+    /*if(Zend_Auth::getInstance()->hasIdentity()) {
+        echo $this->navigation()->menu()->renderPartial(null, 'top_menu.phtml');
+    }*/
+?>
+    </div>
+   </td>
+   <td>
+    <div align="right" valign="top">
+<?php
+    if(Zend_Auth::getInstance()->hasIdentity()) {
+//        printf("%s (%s)&nbsp;", Zend_Auth::getInstance()->getIdentity(), gmdate("Y-m-d H:i P"));
+        printf("%s&nbsp;", Zend_Auth::getInstance()->getIdentity());
+    }
+?>    
+    </div>
+   </td>
+  </tr>
+ </table>
+ </div>
+ <table border="0" cellspacing="2" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">
+<?php
+    if(Zend_Auth::getInstance()->hasIdentity()) {
+        echo $this->navigation()->menu()/*->setMinDepth(1)
+                                    ->setMaxDepth(2)
+                                    ->setRenderParents(false)
+                                    ->setOnlyActiveBranch(true)*/
+                                    ->renderMenu();
+    }
+?>
+    </td>
+    <td align="left" valign="top" width="100%">
+    <div class="inner_title"><?php echo $this->navigation()->breadcrumbs()->setRenderInvisible(true)->render();?></div>
+    <?php echo $this->layout()->content; ?>
+    </td>
+  </tr>
+ </table>
+</body>
+</html>

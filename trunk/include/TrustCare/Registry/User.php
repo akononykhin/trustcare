@@ -17,7 +17,7 @@ class TrustCare_Registry_User
     /**
      * @return TrustCare_Model_User
      */
-    public function getAdmin()
+    public function getUser()
     {
         if(!is_null($this->_user)) {
             return $this->_user;
@@ -27,7 +27,7 @@ class TrustCare_Registry_User
         if ($auth->hasIdentity()) {
             $identity = $auth->getIdentity();
             
-            $model = TrustCare_Model_User::findByName($identity);
+            $model = TrustCare_Model_User::findByLogin($identity);
             if(!is_null($model)) {
                 $this->_user = $model;
             }
