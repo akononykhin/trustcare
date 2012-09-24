@@ -215,7 +215,7 @@ class Logger {
      * @param mixed $message message
      * @see LoggerLoggingEvent          
      */
-    public function forcedLog($fqcn, $caller, $level, $message)
+    public function forcedLog(&$fqcn, &$caller, &$level, &$message)
     {
         // $fqcn = is_object($caller) ? get_class($caller) : (string)$caller;
         $event = new LoggerLoggingEvent($fqcn, $this, $level, $message);

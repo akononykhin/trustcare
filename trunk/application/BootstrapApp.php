@@ -73,6 +73,7 @@ class BootstrapApp extends BootstrapMain
     {
         $this->bootstrap('autoload');
         $this->bootstrap('db');
+        $this->bootstrap('logging');
         
         Zend_Registry::set("TrustCare_Registry_User", new TrustCare_Registry_User());
     }
@@ -84,24 +85,22 @@ class BootstrapApp extends BootstrapMain
         $acl->addRole(new Zend_Acl_Role('pharmacy_manager'));
         $acl->addRole(new Zend_Acl_Role('pharmacist'));
         
-        $acl->add(new Zend_Acl_Resource('resource:admin'));
+        $acl->add(new Zend_Acl_Resource('resource:form'));
+        $acl->add(new Zend_Acl_Resource('resource:report'));
+        $acl->add(new Zend_Acl_Resource('resource:admin.system_dict'));
+        $acl->add(new Zend_Acl_Resource('resource:admin.pharm_dict'));
         $acl->add(new Zend_Acl_Resource('resource:admin.user'));
-        $acl->add(new Zend_Acl_Resource('resource:admin.log'));
-        $acl->add(new Zend_Acl_Resource('resource:admin.cdr'));
-        $acl->add(new Zend_Acl_Resource('resource:admin.report'));
-        $acl->add(new Zend_Acl_Resource('resource:admin.report.iconnect'));        
-        $acl->add(new Zend_Acl_Resource('resource:admin.report.optiroam'));        
-        $acl->add(new Zend_Acl_Resource('resource:admin.prefix'));
+        $acl->add(new Zend_Acl_Resource('resource:admin.pharmacy'));        
+        $acl->add(new Zend_Acl_Resource('resource:admin.patient'));        
+        $acl->add(new Zend_Acl_Resource('resource:admin.system_logs'));
         
-        $acl->allow('superadmin');
+        $acl->allow('pharmacy_manager');
         
-        $acl->allow('admin');
-        $acl->deny('admin', 'resource:admin.user', array('create', 'edit', 'delete'));
-
-        $acl->allow('iconnect', 'resource:admin.cdr', array('view'));
-        $acl->allow('iconnect', 'resource:admin.report', array('view'));
-        $acl->allow('iconnect', 'resource:admin.report.iconnect', array('view'));
-        $acl->allow('iconnect', 'resource:admin.prefix');
+        $acl->allow('pharmacist');
+        $acl->deny('pharmacist', 'resource:admin.system_dict');
+        $acl->deny('pharmacist', 'resource:admin.user');
+        $acl->deny('pharmacist', 'resource:admin.pharmacy');
+        $acl->deny('pharmacist', 'resource:admin.system_logs');
         
         Zend_Registry::set('Zend_Acl', $acl);
     }
