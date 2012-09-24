@@ -11,7 +11,9 @@ require_once(dirname(__FILE__) . '/../../setup.php');
 class ModelGroupTest extends GroupTest {
     function ModelGroupTest() {
         $this->GroupTest('All Model tests');
-//        $this->addTestFile(dirname(__FILE__) . '/active_session_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/log_access_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/log_objects_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/user_tests.php');
     }
 }
 

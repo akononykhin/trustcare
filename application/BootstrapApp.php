@@ -84,15 +84,18 @@ class BootstrapApp extends BootstrapMain
         
         $acl->addRole(new Zend_Acl_Role('pharmacy_manager'));
         $acl->addRole(new Zend_Acl_Role('pharmacist'));
+        $acl->addRole(new Zend_Acl_Role('guest'));
         
         $acl->add(new Zend_Acl_Resource('resource:form'));
         $acl->add(new Zend_Acl_Resource('resource:report'));
+        $acl->add(new Zend_Acl_Resource('resource:admin'));
         $acl->add(new Zend_Acl_Resource('resource:admin.system_dict'));
         $acl->add(new Zend_Acl_Resource('resource:admin.pharm_dict'));
         $acl->add(new Zend_Acl_Resource('resource:admin.user'));
         $acl->add(new Zend_Acl_Resource('resource:admin.pharmacy'));        
+        $acl->add(new Zend_Acl_Resource('resource:admin.physician'));        
         $acl->add(new Zend_Acl_Resource('resource:admin.patient'));        
-        $acl->add(new Zend_Acl_Resource('resource:admin.system_logs'));
+        $acl->add(new Zend_Acl_Resource('resource:admin.system_log'));
         
         $acl->allow('pharmacy_manager');
         
@@ -100,7 +103,8 @@ class BootstrapApp extends BootstrapMain
         $acl->deny('pharmacist', 'resource:admin.system_dict');
         $acl->deny('pharmacist', 'resource:admin.user');
         $acl->deny('pharmacist', 'resource:admin.pharmacy');
-        $acl->deny('pharmacist', 'resource:admin.system_logs');
+        $acl->deny('pharmacist', 'resource:admin.physician');
+        $acl->deny('pharmacist', 'resource:admin.system_log');
         
         Zend_Registry::set('Zend_Acl', $acl);
     }
@@ -112,160 +116,411 @@ class BootstrapApp extends BootstrapMain
         
         $pages = array(
             array(
-                'label'         => "CDR",
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Counseling"),
                 'uri'           => "",
-                'pages'         => array(
+                'resource'      => 'resource:form',
+            	'pages'         => array(
                     array(
-                        'label'         => Zend_Registry::get("Zend_Translate")->_("SMS"),
-                        'controller'    => 'sms',
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmaceutical Care"),
+                        'controller'    => 'form',
                         'action'        => 'list',
-                        'resource'      => 'resource:admin.cdr',
-                        'privilege'     => 'view',
-                    ),
-                    array(
-                        'label'         => Zend_Registry::get("Zend_Translate")->_("Voice"),
-                        'controller'    => 'voice',
-                        'action'        => 'list',
-                        'resource'      => 'resource:admin.cdr',
-                        'privilege'     => 'view',
-                    ),
-                    array(
-                        'label'         => 'Raw CDR',
-                        'controller'    => 'voice',
-                        'action'        => 'list-raw',
-                        'resource'      => 'resource:admin.cdr',
-                        'privilege'     => 'view',
-                    ),
-                ),
-            ),
-            array(
-                'label'         => Zend_Registry::get("Zend_Translate")->_("Reports"),
-                'uri'           => "",
-                'resource'      => 'resource:admin.report',
-                'privilege'     => 'view',
-                'pages'         => array(
-                    array(
-                        'label'         => Zend_Registry::get("Zend_Translate")->_("Generate"),
-                        'controller'    => 'report',
-                        'action'        => 'generate',
-                        'resource'      => 'resource:admin.report',
-                        'privilege'     => 'create',
-                    ),
-                    array(
-                        'label'         => 'ICONNECT',
-                        'controller'    => 'report',
-                        'action'        => 'list',
-                        'params'        => array('type' => 'iconnect'),
-                        'resource'      => 'resource:admin.report.iconnect',
-                        'privilege'     => 'view',
-                    ),
-                    array(
-                        'label'         => 'OPTIROAM',
-                        'controller'    => 'report',
-                        'action'        => 'list',
-                        'params'        => array('type' => 'optiroam'),
-                        'resource'      => 'resource:admin.report.optiroam',
-                        'privilege'     => 'view',
-                    ),
-                ),
-            ),
-            array(
-                'label'         => Zend_Registry::get("Zend_Translate")->_("Prefixes"),
-                'uri'           => "",
-                'resource'      => 'resource:admin.prefix',
-                'pages'         => array(
-                    array(
-                        'label'         => Zend_Registry::get("Zend_Translate")->_("Moscow for iConnect"),
-                        'controller'    => 'prefixes',
-                        'action'        => 'moscow-list',
-                        'resource'      => 'resource:admin.prefix',
+                        'params'        => array('type' => 'care'),
+                    	'resource'      => 'resource:form',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'prefixes',
-                                'action'        => 'moscow-create',
+                                'controller'    => 'form',
+                                'action'        => 'create',
                                 'visible'       => false,
-                                'resource'      => 'resource:admin.prefix',
+                        		'params'        => array('type' => 'care'),
+                    			'resource'      => 'resource:form',
                                 'privilege'     => 'create'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                                'controller'    => 'prefixes',
-                                'action'        => 'moscow-view',
+                                'controller'    => 'form',
+                                'action'        => 'create',
                                 'visible'       => false,
-                                'resource'      => 'resource:admin.prefix',
+                        		'params'        => array('type' => 'care'),
+                    			'resource'      => 'resource:form',
                                 'privilege'     => 'view'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'prefixes',
-                                'action'        => 'moscow-edit',
+                                'controller'    => 'form',
+                                'action'        => 'create',
                                 'visible'       => false,
-                                'resource'      => 'resource:admin.prefix',
+                        		'params'        => array('type' => 'care'),
+                    			'resource'      => 'resource:form',
                                 'privilege'     => 'edit'
                             ),
                         ),
                     ),
-                ),
-            ),
-            array(
-                'label'         => Zend_Registry::get("Zend_Translate")->_("System"),
-                'uri'           => "",
-                'resource'      => 'resource:admin',
-                'pages'         => array(
                     array(
-                        'label'         => Zend_Registry::get("Zend_Translate")->_("Administration"),
-                        'uri'           => "",
-                        'resource'      => 'resource:admin',
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Community Pharmacy"),
+                        'controller'    => 'form',
+                        'action'        => 'list',
+                        'params'        => array('type' => 'community'),
+                    	'resource'      => 'resource:form',
+                        'privilege'     => 'view',
                         'pages'         => array(
                             array(
-                                'label'         => Zend_Registry::get("Zend_Translate")->_("Users"),
-                                'controller'    => 'admin',
-                                'action'        => 'users',
-                                'resource'      => 'resource:admin.user',
-                                'privilege'     => 'view',
-                                'pages'         => array(
-                                    array(
-                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                        'controller'    => 'admin',
-                                        'action'        => 'newuser',
-                                        'visible'       => false,
-                                        'resource'      => 'resource:admin.user',
-                                        'privilege'     => 'create'
-                                    ),
-                                    array(
-                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                        'controller'    => 'admin',
-                                        'action'        => 'edituser',
-                                        'visible'       => false,
-                                        'resource'      => 'resource:admin.user',
-                                        'privilege'     => 'edit'
-                                    ),
-                                )
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'controller'    => 'form',
+                                'action'        => 'create',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'community'),
+                    			'resource'      => 'resource:form',
+                                'privilege'     => 'create'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
+                                'controller'    => 'form',
+                                'action'        => 'create',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'community'),
+                    			'resource'      => 'resource:form',
+                                'privilege'     => 'view'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                'controller'    => 'form',
+                                'action'        => 'create',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'community'),
+                    			'resource'      => 'resource:form',
+                                'privilege'     => 'edit'
+                            ),
+                        ),
+                    ),
+                    
+                ),
+            ),
+            
+            array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Reports"),
+                'uri'           => "",
+                'resource'      => 'resource:report',
+            	'pages'         => array(
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmaceutical Care"),
+                        'controller'    => 'report',
+                        'action'        => 'list',
+                        'params'        => array('type' => 'care'),
+                    	'resource'      => 'resource:report',
+                        'privilege'     => 'view',
+                        'pages'         => array(
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'controller'    => 'report',
+                                'action'        => 'create',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'care'),
+                    			'resource'      => 'resource:report',
+                                'privilege'     => 'create'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
+                                'controller'    => 'report',
+                                'action'        => 'create',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'care'),
+                    			'resource'      => 'resource:report',
+                                'privilege'     => 'view'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                'controller'    => 'report',
+                                'action'        => 'create',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'care'),
+                    			'resource'      => 'resource:report',
+                                'privilege'     => 'edit'
                             ),
                         ),
                     ),
                     array(
-                        'label'         => Zend_Registry::get("Zend_Translate")->_("Logs"),
-                        'uri'           => "",
-                        'resource'      => 'resource:admin.log',
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Community Pharmacy"),
+                        'controller'    => 'report',
+                        'action'        => 'list',
+                        'params'        => array('type' => 'community'),
+                    	'resource'      => 'resource:report',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
-                                'label'         => Zend_Registry::get("Zend_Translate")->_("Access"),
-                                'controller'    => 'log',
-                                'action'        => 'access',
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'controller'    => 'report',
+                                'action'        => 'create',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'community'),
+                    			'resource'      => 'resource:report',
+                                'privilege'     => 'create'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
+                                'controller'    => 'report',
+                                'action'        => 'create',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'community'),
+                    			'resource'      => 'resource:report',
+                                'privilege'     => 'view'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                'controller'    => 'report',
+                                'action'        => 'create',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'community'),
+                    			'resource'      => 'resource:report',
+                                'privilege'     => 'edit'
+                            ),
+                        ),
+                    ),
+                    
+                ),
+            ),
+            
+            array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Administration"),
+                'uri'           => "",
+                'resource'      => 'resource:admin',
+                'pages'         => array(
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("System Dictionaries"),
+                		'uri'           => "",
+                        'resource'      => 'resource:admin.system_dict',
+                        'pages'         => array(
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Countries"),
+                                'controller'    => 'country',
+                                'action'        => 'list',
+                                'resource'      => 'resource:admin.system_dict',
+                                'privilege'     => 'view',
+                                'pages'         => array(
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                        'controller'    => 'country',
+                                        'action'        => 'create',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'create'
+                                    ),
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                        'controller'    => 'country',
+                                        'action'        => 'edit',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'edit'
+                                    ),
+                                ),
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("States"),
+                                'controller'    => 'state',
+                                'action'        => 'list',
+                                'resource'      => 'resource:admin.system_dict',
+                                'privilege'     => 'view',
+                                'pages'         => array(
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                        'controller'    => 'state',
+                                        'action'        => 'create',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'create'
+                                    ),
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                        'controller'    => 'state',
+                                        'action'        => 'edit',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'edit'
+                                    ),
+                                ),
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Facilities"),
+                                'controller'    => 'facility',
+                                'action'        => 'list',
+                                'resource'      => 'resource:admin.system_dict',
+                                'privilege'     => 'view',
+                                'pages'         => array(
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                        'controller'    => 'facility',
+                                        'action'        => 'create',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'create'
+                                    ),
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                        'controller'    => 'facility',
+                                        'action'        => 'edit',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'edit'
+                                    ),
+                                ),
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("LGAs"),
+                                'controller'    => 'lga',
+                                'action'        => 'list',
+                                'resource'      => 'resource:admin.system_dict',
+                                'privilege'     => 'view',
+                                'pages'         => array(
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                        'controller'    => 'lga',
+                                        'action'        => 'create',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'create'
+                                    ),
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                        'controller'    => 'lga',
+                                        'action'        => 'edit',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'edit'
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmacy Dictionaries"),
+                		'controller'    => "pharm_dict",
+                        'action'        => 'list',
+                    	'resource'      => 'resource:admin.pharm_dict',
+                    	'action'		=> 'view'
+                    ),
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Users"),
+                        'controller'    => 'user',
+                        'action'        => 'list',
+                        'resource'      => 'resource:admin.user',
+                        'privilege'     => 'view',
+                        'pages'         => array(
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'controller'    => 'user',
+                                'action'        => 'create',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.user',
+                                'privilege'     => 'create'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                'controller'    => 'user',
+                                'action'        => 'edit',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.user',
+                                'privilege'     => 'edit'
+                            ),
+                        )
+                    ),
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmacies"),
+                        'controller'    => 'pharmacy',
+                        'action'        => 'list',
+                        'resource'      => 'resource:admin.pharmacy',
+                        'privilege'     => 'view',
+                        'pages'         => array(
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'controller'    => 'pharmacy',
+                                'action'        => 'create',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.pharmacy',
+                                'privilege'     => 'create'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                'controller'    => 'pharmacy',
+                                'action'        => 'edit',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.pharmacy',
+                                'privilege'     => 'edit'
+                            ),
+                        )
+                    ),
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Physicians"),
+                        'controller'    => 'physician',
+                        'action'        => 'list',
+                        'resource'      => 'resource:admin.physician',
+                        'privilege'     => 'view',
+                        'pages'         => array(
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'controller'    => 'physician',
+                                'action'        => 'create',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.physician',
+                                'privilege'     => 'create'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                'controller'    => 'physician',
+                                'action'        => 'edit',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.physician',
+                                'privilege'     => 'edit'
+                            ),
+                        )
+                    ),
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Patients"),
+                        'controller'    => 'patient',
+                        'action'        => 'list',
+                        'resource'      => 'resource:admin.patient',
+                        'privilege'     => 'view',
+                        'pages'         => array(
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'controller'    => 'patient',
+                                'action'        => 'create',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.patient',
+                                'privilege'     => 'create'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                'controller'    => 'patient',
+                                'action'        => 'edit',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.patient',
+                                'privilege'     => 'edit'
+                            ),
+                        )
+                    ),
+                    
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("System Logs"),
+                        'uri'           => "",
+                        'resource'      => 'resource:admin.system_log',
+                        'privilege'     => 'view',
+                        'pages'         => array(
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Errors"),
+                                'controller'    => 'system_log',
+                                'action'        => 'error',
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Objects"),
-                                'controller'    => 'log',
-                                'action'        => 'objects',
+                                'controller'    => 'system_log',
+                                'action'        => 'object',
                             ),
                             array(
-                                'label'         => Zend_Registry::get("Zend_Translate")->_("System"),
-                                'controller'    => 'log',
-                                'action'        => 'system',
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Access"),
+                                'controller'    => 'system_log',
+                                'action'        => 'access',
                             ),
                         ),
                     ),
@@ -296,9 +551,9 @@ class BootstrapApp extends BootstrapMain
         
         Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(Zend_Registry::get("Zend_Acl"));
         $role = 'guest';
-        $modelAdmin = Zend_Registry::get("TrustCare_Registry_User")->getAdmin();
-        if(!is_null($modelAdmin)) {
-            $role = $modelAdmin->role;
+        $modelUser = Zend_Registry::get("TrustCare_Registry_User")->getUser();
+        if(!is_null($modelUser)) {
+            $role = $modelUser->role;
         }
         Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole((string)$role);
     }
