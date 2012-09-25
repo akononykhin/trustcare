@@ -24,7 +24,7 @@
 <?php
     if(Zend_Auth::getInstance()->hasIdentity()) {
 //        printf("%s (%s)&nbsp;", Zend_Auth::getInstance()->getIdentity(), gmdate("Y-m-d H:i P"));
-        printf("%s&nbsp;", Zend_Auth::getInstance()->getIdentity());
+        printf("%s&nbsp;[<a href='%s'>%s</a>]", Zend_Auth::getInstance()->getIdentity(), $this->url(array('controller' => 'sign', 'action' => "logout")), Zend_Registry::get("Zend_Translate")->_("Logout"));
     }
 ?>    
     </div>
@@ -33,6 +33,8 @@
  </table>
  </div>
  <table border="0" cellspacing="2" cellpadding="5" width="100%">
+  <tr>
+  </tr>
   <tr>
     <td valign="top">
 <?php
