@@ -90,6 +90,7 @@ class BootstrapApp extends BootstrapMain
         $this->bootstrap('view');
         $view = $this->getResource('view');
         $view->addHelperPath("ZendX/View/Helper", "ZendX_View_Helper");
+        $view->addHelperPath("ZendX/View/Helper/Navigation", "ZendX_View_Helper_Navigation");
     }
     
     protected function _initAppRegistry()
