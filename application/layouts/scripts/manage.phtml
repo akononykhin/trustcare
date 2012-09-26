@@ -4,53 +4,64 @@
   <?php echo $this->headMeta(); ?>  
   <?php echo $this->headTitle(); ?>
   <?php echo $this->headLink()->appendStylesheet('/css/style.css'); ?>
-  <?php echo $this->headScript(); ?>
+
+  <?php echo $this->headScript()->prependFile('/js/jquery/external/jquery.cookie.js')
+                                ->prependFile('/js/jquery/jquery-1.4.4.min.js') ?>
+
+<script language="JavaScript">
+  $.cookie('tz_offset', -(new Date()).getTimezoneOffset());
+</script>
 </head> 
 <body>
- <div style="width: 100%; background-color: #e6e6e6; padding:2px;">
- <table width="100%">
+ <table cellspacing="2" cellpadding="5" width="100%">
   <tr>
-   <td>
-    <div align="left" valign="top">
-<?php
-    /*if(Zend_Auth::getInstance()->hasIdentity()) {
-        echo $this->navigation()->menu()->renderPartial(null, 'top_menu.phtml');
-    }*/
-?>
-    </div>
-   </td>
-   <td>
-    <div align="right" valign="top">
 <?php
     if(Zend_Auth::getInstance()->hasIdentity()) {
-//        printf("%s (%s)&nbsp;", Zend_Auth::getInstance()->getIdentity(), gmdate("Y-m-d H:i P"));
-        printf("%s&nbsp;[<a href='%s'>%s</a>]", Zend_Auth::getInstance()->getIdentity(), $this->url(array('controller' => 'sign', 'action' => "logout")), Zend_Registry::get("Zend_Translate")->_("Logout"));
-    }
-?>    
-    </div>
-   </td>
-  </tr>
- </table>
- </div>
- <table border="0" cellspacing="2" cellpadding="5" width="100%">
-  <tr>
-  </tr>
-  <tr>
-    <td valign="top">
-<?php
-    if(Zend_Auth::getInstance()->hasIdentity()) {
+        echo "<td valign='top' width='15%'>";
         echo $this->navigation()->menu()/*->setMinDepth(1)
                                     ->setMaxDepth(2)
                                     ->setRenderParents(false)
                                     ->setOnlyActiveBranch(true)*/
                                     ->renderMenu();
+        echo "</td>";
     }
 ?>
-    </td>
-    <td align="left" valign="top" width="100%">
-    <div class="inner_title"><?php echo $this->navigation()->breadcrumbs()->setRenderInvisible(true)->render();?></div>
-    <?php echo $this->layout()->content; ?>
-    </td>
+   <td valign="top">
+     <table width="100%">
+      <tr>
+       <td>
+        <div style="width: 100%; background-color: #e6e6e6; padding:2px;">
+         <table width="100%">
+          <tr>
+           <td>
+           </td>
+           <td>
+            <div align="right" valign="top">
+<?php
+    if(Zend_Auth::getInstance()->hasIdentity()) {
+        $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
+        $date = new Zend_Date(gmdate("Y-m-d H:i:s").'Z', "yyyy-MM-dd HH:mm:ssZ");
+        $date->setTimezone($clientTZ);
+        $clientdate = $date->toString(Zend_Registry::getInstance()->dateTimeFormat . ' ZZZZ');
+    	
+        printf("%s (%s)&nbsp;[<a href='%s'>%s</a>]", Zend_Auth::getInstance()->getIdentity(), $clientdate, $this->url(array('controller' => 'sign', 'action' => "logout")), Zend_Registry::get("Zend_Translate")->_("Logout"));
+    }
+?>    
+            </div>
+           </td>
+          </tr>
+         </table>
+        </div>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <div class="inner_title"><?php echo $this->navigation()->breadcrumbs()->setRenderInvisible(true)->render();?></div>
+<?php echo $this->layout()->content; ?>
+       </td>
+      </tr>
+     </table>
+   </td>
   </tr>
  </table>
 </body>

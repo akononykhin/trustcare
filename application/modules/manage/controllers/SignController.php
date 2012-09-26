@@ -66,9 +66,9 @@ class SignController extends ZendX_Controller_Action
         $form->setMethod('post');
 
         $tabIndex = 1;
-        $username = $form->createElement('text', 'username', array('label' => Zend_Registry::get("Zend_Translate")->_("User Name"),
+        $login = $form->createElement('text', 'username', array('label' => Zend_Registry::get("Zend_Translate")->_("Login"),
                                                                    'tabindex' => $tabIndex++));
-        $username->setRequired(true);
+        $login->setRequired(true);
         
         $password = $form->createElement('password', 'password', array('label' => Zend_Registry::get("Zend_Translate")->_("Password"),
                                                                        'tabindex' => $tabIndex++));
@@ -81,7 +81,7 @@ class SignController extends ZendX_Controller_Action
         $signBtn = $form->createElement('submit', 'login', array('label' => Zend_Registry::get("Zend_Translate")->_("Sign In"),
                                                                  'tabindex' => $tabIndex++));
         
-        $form->addElement($username);
+        $form->addElement($login);
         $form->addElement($password);
         $form->addElement($remember);
         $form->addElement($signBtn);
@@ -90,7 +90,7 @@ class SignController extends ZendX_Controller_Action
     }
 
     
-    private function _hasAccess($username, $password)
+    private function _hasAccess($login, $password)
     {
         $auth = Zend_Auth::getInstance();
         $authAdapter = new Zend_Auth_Adapter_DbTable(
@@ -100,7 +100,7 @@ class SignController extends ZendX_Controller_Action
                             'password',
                             'MD5(?) and is_active=1'
                             );
-        $authAdapter->setIdentity($username);
+        $authAdapter->setIdentity($login);
         $authAdapter->setCredential($password);
 
         $result = $auth->authenticate($authAdapter);
