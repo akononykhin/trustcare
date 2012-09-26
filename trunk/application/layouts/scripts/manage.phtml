@@ -3,13 +3,21 @@
 <head>
   <?php echo $this->headMeta(); ?>  
   <?php echo $this->headTitle(); ?>
-  <?php echo $this->headLink()->appendStylesheet('/css/style.css'); ?>
+  <?php echo $this->headLink()->appendStylesheet('/css/style.css')
+  							  ->appendStylesheet('/js/jquery/plugin/superfish-1.4.8/css/superfish.css')
+  							  ->appendStylesheet('/js/jquery/plugin/superfish-1.4.8/css/superfish-vertical.css'); ?>
 
   <?php echo $this->headScript()->prependFile('/js/jquery/external/jquery.cookie.js')
-                                ->prependFile('/js/jquery/jquery-1.4.4.min.js') ?>
+                                ->prependFile('/js/jquery/jquery-1.4.4.min.js')
+                                ->appendFile('/js/jquery/plugin/superfish-1.4.8/js/hoverIntent.js')
+                                ->appendFile('/js/jquery/plugin/superfish-1.4.8/js/superfish.js'); ?>
 
 <script language="JavaScript">
   $.cookie('tz_offset', -(new Date()).getTimezoneOffset());
+  $(document).ready(function(){ 
+      $("ul.sf-menu").superfish(); 
+  }); 
+
 </script>
 </head> 
 <body>
@@ -18,11 +26,8 @@
 <?php
     if(Zend_Auth::getInstance()->hasIdentity()) {
         echo "<td valign='top' width='15%'>";
-        echo $this->navigation()->menu()/*->setMinDepth(1)
-                                    ->setMaxDepth(2)
-                                    ->setRenderParents(false)
-                                    ->setOnlyActiveBranch(true)*/
-                                    ->renderMenu();
+        echo $this->navigation()->dropDownMenu()->setUlClass("navigation sf-menu sf-vertical")/*->renderMenu()*/;
+        //echo $this->navigation()->menu()->setPartial("navigation_menu.phtml")->render();
         echo "</td>";
     }
 ?>
