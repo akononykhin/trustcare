@@ -51,6 +51,29 @@ class BootstrapApp extends BootstrapMain
 
     }
 
+    
+    protected function _initDatetimeSettings()
+    {
+        $this->bootstrap('Locale');
+
+        if('en' == Zend_Registry::get('Zend_Locale')) {
+            $dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+        }
+        else {
+            $dateTimeFormat = Zend_Locale_Data::getContent(Zend_Registry::get('Zend_Locale'), 'dateTime');
+        }
+        Zend_Registry::set('dateTimeFormat', $dateTimeFormat);
+
+        $tzOffset = (int)$_COOKIE['tz_offset'];
+        
+        $zone = "Etc/GMT";
+        $zone .= ($tzOffset < 0) ? "+" : "-";
+        $zone .= (int)abs($tzOffset / 60);      
+
+        Zend_Registry::set('clientTimeZoneOffset', $tzOffset);
+        Zend_Registry::set('clientTimeZone', $zone);
+    }
+    
     protected function _initDoctype()
     {
         $this->bootstrap('view');
@@ -59,7 +82,7 @@ class BootstrapApp extends BootstrapMain
         $view = $this->getResource('view');
         $view->doctype('XHTML1_STRICT');
         $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
-        $view->headTitle(Zend_Registry::get("Zend_Translate")->_("Reports"));
+        $view->headTitle(Zend_Registry::get("Zend_Translate")->_("TrustCare Application"));
     }
     
     protected function _initHelpers()
@@ -538,11 +561,6 @@ class BootstrapApp extends BootstrapMain
                         'visible'       => false,
                     ),
                 ),
-            ),
-            array(
-                'label'         => Zend_Registry::get("Zend_Translate")->_("Logout"),
-                'controller'    => 'sign',
-                'action'        => 'logout',
             ),
         );
         
