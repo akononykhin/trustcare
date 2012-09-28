@@ -3,12 +3,12 @@
 <head>
   <?php echo $this->headMeta(); ?>  
   <?php echo $this->headTitle(); ?>
-  <?php echo $this->headLink()->appendStylesheet('/css/style.css')
+  <?php echo $this->headLink()->prependStylesheet('/css/style.css')
   							  ->appendStylesheet('/js/jquery/plugin/superfish/css/superfish.css')
   							  ->appendStylesheet('/js/jquery/plugin/superfish/css/superfish-vertical.css'); ?>
 
   <?php echo $this->headScript()->prependFile('/js/jquery/external/jquery.cookie.js')
-                                ->prependFile('/js/jquery/jquery.min.js')
+                                ->prependFile('/js/jquery/jquery.js')
                                 ->appendFile('/js/jquery/plugin/superfish/js/hoverIntent.js')
                                 ->appendFile('/js/jquery/plugin/superfish/js/superfish.js'); ?>
 
