@@ -1,17 +1,17 @@
 <?php
-$this->headLink()->appendStylesheet('/js/jquery/plugin/DataTables/css/jquery.dataTables.css')
-                 ->appendStylesheet('/js/jquery/plugin/DataTables/extras/ColReorder/css/ColReorder.css')
-                 ->appendStylesheet('/js/jquery/plugin/DataTables/extras/ColVis/css/ColVis.css');
+$this->headLink()->appendStylesheet('/js/jquery/plugin/DataTables/css/jquery.dataTables.css');
+//                 ->appendStylesheet('/js/jquery/plugin/DataTables/extras/ColReorder/css/ColReorder.css')
+//                 ->appendStylesheet('/js/jquery/plugin/DataTables/extras/ColVis/css/ColVis.css');
                  
  $this->headScript()->appendFile('/js/jquery/plugin/DataTables/js/jquery.dataTables.js')
-                    ->appendFile('/js/jquery/plugin/DataTables/extras/ColReorder/js/ColReorder.js')
-                    ->appendFile('/js/jquery/plugin/DataTables/extras/ColVis/js/ColVis.js')
+//                    ->appendFile('/js/jquery/plugin/DataTables/extras/ColReorder/js/ColReorder.js')
+//                    ->appendFile('/js/jquery/plugin/DataTables/extras/ColVis/js/ColVis.js')
                     ->appendFile('/js/jquery/plugin/DataTables/extras/ColumnFilter/js/jquery.dataTables.columnFilter.js');
                     
-$sDom = "R";
-if($this->chooseColumnVisibility) {
-    $sDom .= 'C<"clear">';
-}
+//$sDom = "R";
+//if($this->DataTable['chooseColumnVisibility']) {
+//    $sDom .= 'C<"clear">';
+//}
 $sDom .= "lrtip";
                     
 ?>
@@ -20,6 +20,14 @@ $sDom .= "lrtip";
 .search_init { color: #999; }
 .FixedHeader_Cloned th { background-color: white; }
 thead th { text-align: left; }
+
+.icon-edit {
+    background-image:url(/img/actions/edit.gif) ! important;
+}
+.icon-delete {
+    background-image:url(/img/actions/delete.gif) ! important;
+}
+
 </style>
         
 <script type="text/javascript" charset="utf-8">
@@ -35,8 +43,38 @@ $(document).ready( function () {
     var aoColumns = new Array();
 
 <?php
+    $addActionColumn = array_key_exists('bActionsColumn', $this->DataTable) && $this->DataTable['bActionsColumn'] ? true : false;
+    
     $addFilterRow = false;
-    foreach($this->columnsInfo as $key => $column):
+    if($addActionColumn):
+?>
+    trHeader.append(jQuery('<th/>'));  /* column for actions */
+    aoColumns[aoColumns.length] = {
+            'mData'     : function ( source, type, val ) {return '';}
+           ,'mRender'   : function ( data, type, full ) {
+               var content = '';
+               jQuery.each(full.row_actions, function() {
+                   if(!this.askConfirm) {
+                       content += '<a class="'+this.type+'_action" href="'+this.url+'"><img src="/img/actions/'+this.type+'.gif" title="'+this.title+'"></a>';
+                   }
+                   else {
+                       var idPrefix = 'action_' + this.type + '_' + full.DT_RowId;
+
+                       content += '<a class="'+this.type+'_action" href="#" onclick="javascript:actionConfirmDlg(\''+idPrefix+'\');"><img src="/img/actions/'+this.type+'.gif" title="'+this.title+'"></a>';
+                       content += '<div class="ui-helper-hidden" id="'+idPrefix+'_message">'+this.askConfirm+'</div>'
+                       content += '<div class="ui-helper-hidden" id="'+idPrefix+'_url">'+this.url+'</div>'
+                   }
+               });
+            	               
+               return content;
+           }       
+           ,'bSortable' : false
+           ,'bVisible'  : true
+           ,'sWidth'    : '7%'
+    };
+<?php    
+    endif;
+    foreach($this->DataTable['columnsInfo'] as $key => $column):
 ?>
     trHeader.append(jQuery('<th/>', {'text' : '<?php echo $column['title'];?>'}));
     aoColumns[aoColumns.length] = {
@@ -53,10 +91,16 @@ $(document).ready( function () {
 
 <?php
     if(addFilterRow) :
+        if($addActionColumn):
+?>
+    trFilter.append(jQuery('<th/>')); /* column for actions */
+    filterParams[filterParams.length] = null;
+<?php    
+        endif;
     ?>
     bAddFilterRow = true;
     <?php    
-        foreach($this->columnsInfo as $key => $column) :
+        foreach($this->DataTable['columnsInfo'] as $key => $column) :
             $defText = '';
             $newElement = 'null';
             if(array_key_exists('filter', $column)) {
@@ -187,16 +231,20 @@ $(document).ready( function () {
         }
     }
              
-    
+
+    var defSortColumn = <?php echo array_key_exists('defSortColumn', $this->DataTable) ? $this->DataTable['defSortColumn'] : 1; ?>;
+    var defSortDir = '<?php echo array_key_exists('defSortDir', $this->DataTable) ? $this->DataTable['defSortDir'] : 'desc'; ?>';
     var oTable = $('#main_list').dataTable( {
          'sPaginationType'  : 'full_numbers'
         ,'iDisplayLength'   : '50'
         ,'sDom'             : '<?php echo $sDom; ?>'
+        ,'aaSorting'        : [[defSortColumn, defSortDir]]
         ,'bSortCellsTop'    : true
         ,'bProcessing'      : true
         ,'bServerSide'      : true
         ,'bServerMethod'    : 'POST'
-        ,'sAjaxSource'      : '/test.php'
+        ,'sAjaxSource'      : '<?php echo $this->DataTable['serverUrl'];?>'
+        ,'bDeferRender'     : true
         ,'fnServerData'     : fnDataTablesPipeline
         ,'fnServerParams'   : function ( aoData ) {
             aoData.push({
@@ -217,8 +265,32 @@ $(document).ready( function () {
             ,'aoColumns'    : filterParams
         });
     }
+    
 } );
+
+    function actionConfirmDlg(idPrefix)
+    {
+        var message = $('#' + idPrefix + '_message').text();
+        var url = $('#' + idPrefix + '_url').text();
+
+        $("#dialog-confirm").html(message);
+        $("#dialog-confirm").dialog({
+             modal: true
+            ,dialogClass: 'alert'
+            ,buttons: {
+                "OK": function() {
+                    window.location.href = url;
+                },
+                Cancel: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        })
+    };
 </script>                 
+
+<div id="dialog-confirm">
+</div>
 
 <div id="list_div">
 </div>

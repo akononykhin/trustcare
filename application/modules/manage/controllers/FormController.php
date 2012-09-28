@@ -56,10 +56,16 @@ class FormController extends ZendX_Controller_Action
                     'type' => 'text',
                 ),
             ),
-            );
+        );
 
-        $this->view->chooseColumnVisibility = true;
-        $this->view->columnsInfo = $columnsInfo;
+        $this->view->DataTable = array(
+            'serverUrl' => '/test.php',
+            'defSortColumn' => 1,
+            'defSortDir' => 'asc',
+            'chooseColumnVisibility' => true,
+            'columnsInfo' => $columnsInfo,
+            'bActionsColumn' => true
+        );
         $this->render('list');
         return;
     }
