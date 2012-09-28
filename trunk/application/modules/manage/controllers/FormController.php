@@ -22,43 +22,38 @@ class FormController extends ZendX_Controller_Action
     public function listAction()
     {
         $columnsInfo = array(
-            'engine' => array(
-                'title' => 'Engine',
-                'sortable' => true,
-                'visible' => true,
+            'tadig' => array(
+                'title' => 'TADIG',
                 'filter' => array(
-                    'def_text' => "Search engine ...",
-                    'type' => 'select',
-                    'values' => array('AAA', 'Gecko', 'Trident', 'KHTML', 'Misc', 'Presto', 'Webkit', 'Tasman')
-                ),
-            ),
-            'browser' => array(
-                'title' => 'Browser',
-                'sortable' => true,
-                'visible' => true,
-                'filter' => array(
-                    'def_text' => "Search browser ...",
                     'type' => 'text',
                 ),
             ),
-            'platform' => array(
-                'title' => 'Platform',
-                'sortable' => true,
-                'visible' => true,
+            'name' => array(
+                'title' => 'Name',
+                'filter' => array(
+                    'type' => 'text',
+                ),
             ),
-            'version' => array(
-                'title' => 'Engine version',
-                'sortable' => true,
+            'standard' => array(
+                'title' => 'Standard',
+                'filter' => array(
+                    'def_text' => "Search ...",
+                    'type' => 'text',
+                ),
+            ),
+            'url_site' => array(
+                'title' => 'Site',
                 'visible' => false,
                 'filter' => array(
+                    'def_text' => "Search ...",
                     'type' => 'text',
                 ),
             ),
-            'grade' => array(
-                'title' => 'CSS grade',
-                'sortable' => false,
-                'visible' => true,
+            'url_coverage' => array(
+                'title' => 'Coverage',
                 'filter' => array(
+                    'def_text' => "Search ...",
+                    'type' => 'text',
                 ),
             ),
             );

@@ -326,7 +326,7 @@ http://www.datatables.net/plug-ins/filtering
                     aoData.push({ "name": "sRangeSeparator", "value": properties.sRangeSeparator });
 
                     if (fnServerDataOriginal != null) {
-                        fnServerDataOriginal(sSource, aoData, fnCallback);
+                        fnServerDataOriginal(sSource, aoData, fnCallback, oTable.fnSettings());
                     }
                     else {
                         $.getJSON(sSource, aoData, function (json) {
