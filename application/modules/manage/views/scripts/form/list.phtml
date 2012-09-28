@@ -444,8 +444,8 @@ $(document).ready( function () {
     trHeader.append(jQuery('<th/>', {'text' : '<?php echo $column['title'];?>'}));
     aoColumns[aoColumns.length] = {
     	    'mData' : '<?php echo $key;?>'
-    	   ,'bSortable' : <?php echo array_key_exists('sortable', $column) && $column['sortable'] ? 'true' : 'false';?>
-           ,'bVisible'  : <?php echo array_key_exists('visible', $column) && $column['visible'] ? 'true' : 'false';?>
+    	   ,'bSortable' : <?php echo !array_key_exists('sortable', $column) || !$column['sortable'] ? 'false' : 'true';?>
+           ,'bVisible'  : <?php echo !array_key_exists('visible', $column) || !$column['visible'] ? 'false' : 'true';?>
     };
 <?php
         if(array_key_exists('filter', $column) && array_key_exists('type', $column['filter'])) {
