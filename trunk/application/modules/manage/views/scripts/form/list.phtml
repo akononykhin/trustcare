@@ -7,8 +7,9 @@ $this->headLink()->appendStylesheet('/js/jquery/plugin/DataTables/css/jquery.dat
 //                    ->appendFile('/js/jquery/plugin/DataTables/extras/ColReorder/js/ColReorder.js')
 //                    ->appendFile('/js/jquery/plugin/DataTables/extras/ColVis/js/ColVis.js')
                     ->appendFile('/js/jquery/plugin/DataTables/extras/ColumnFilter/js/jquery.dataTables.columnFilter.js');
-                    
-//$sDom = "R";
+
+$sDom = '<"#list_toolbar">';                    
+//$sDom .= "R";
 //if($this->DataTable['chooseColumnVisibility']) {
 //    $sDom .= 'C<"clear">';
 //}
@@ -24,6 +25,8 @@ thead th { text-align: left; }
 .icon-edit { background-image:url(/img/actions/edit.gif) ! important; }
 .icon-delete { background-image:url(/img/actions/delete.gif) ! important; }
 a.row_action { cursor: pointer; }
+#list_toolbar_container {padding-top: 15px; padding-bottom: 15px;}
+.list_toolbar_action {padding-right: 10px;}
 
 </style>
         
@@ -31,7 +34,7 @@ a.row_action { cursor: pointer; }
 
 
 $(document).ready( function () {
-    $('#list_div').html('<table cellpadding="0" cellspacing="0" border="0" id="main_list"></table>');
+    $('#list_div').html('<table cellpadding="0" cellspacing="0" border="0" id="list_table"></table>');
     var thead = jQuery('<thead/>');
     var trHeader = jQuery('<tr/>')
     var trFilter = jQuery('<tr/>')
@@ -52,7 +55,7 @@ $(document).ready( function () {
                var content = '';
                jQuery.each(full.row_actions, function() {
                    var idPrefix = 'action_' + this.type + '_' + full.DT_RowId;
-                   content += '<a class="row_action" onclick="this.blur();" id="' + idPrefix + '">';
+                   content += '<a class="row_action" id="' + idPrefix + '">';
                    content += '<img src="/img/actions/'+this.type+'.gif" title="'+this.title+'">';
                    content += '<div class="ui-helper-hidden" id="'+idPrefix+'_url">'+this.url+'</div>'
                    if(this.askConfirm) {
@@ -133,7 +136,7 @@ $(document).ready( function () {
     if(bAddFilterRow) {
         thead.append(trFilter);
     }
-    $('#main_list').append(thead);
+    $('#list_table').append(thead);
 
 
     var oCache = {
@@ -229,7 +232,7 @@ $(document).ready( function () {
 
     var defSortColumn = <?php echo array_key_exists('defSortColumn', $this->DataTable) ? $this->DataTable['defSortColumn'] : 1; ?>;
     var defSortDir = '<?php echo array_key_exists('defSortDir', $this->DataTable) ? $this->DataTable['defSortDir'] : 'desc'; ?>';
-    var oTable = $('#main_list').dataTable( {
+    var oTable = $('#list_table').dataTable( {
          'sPaginationType'  : 'full_numbers'
         ,'iDisplayLength'   : '50'
         ,'sDom'             : '<?php echo $sDom; ?>'
@@ -242,14 +245,18 @@ $(document).ready( function () {
         ,'bDeferRender'     : true
         ,'fnServerData'     : fnDataTablesPipeline
         ,'fnServerParams'   : function ( aoData ) {
+<?php
+    if(array_key_exists('params', $this->DataTable)) :
+        foreach($this->DataTable['params'] as $pName => $pValue) : 
+?>            
             aoData.push({
-                 'name' : "param_1"
-                ,'value': "param_1_value"
+                 'name' : '<?php echo $pName;?>'
+                ,'value': '<?php echo $pValue;?>'
             });
-            aoData.push({
-                'name' : "param_2"
-               ,'value': "param_2_value"
-           });
+<?php
+        endforeach;
+    endif;
+?>            
         }
         ,'aoColumns'        : aoColumns
      
@@ -260,8 +267,21 @@ $(document).ready( function () {
             ,'aoColumns'    : filterParams
         });
     }
+    
+<?php
+    if(array_key_exists('toolbar', $this->DataTable)) : ?>
+    var tContainer = $('<div id="list_toolbar_container"/>');
+<?php    
+    	foreach($this->DataTable['toolbar'] as $toolAction) :
+    	    $text = $toolAction['text'];
+    	    $url = $toolAction['url']; 
+?>
+    tContainer.append('<a class="list_toolbar_action" href="<?php echo $url;?>"><?php echo $text;?></a>');
+<?php  endforeach; ?>
+    $('#list_toolbar').append(tContainer);
+<?php endif; ?>            
 
-    $(document).on('click', '#main_list tbody tr a.row_action', function () {
+    $(document).on('click', '#list_table tbody tr a.row_action', function () {
         var idPrefix = this.id;
         var url = $('#' + idPrefix + '_url', this).text();
         var message = $('#' + idPrefix + '_message', this).text();

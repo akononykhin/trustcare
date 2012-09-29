@@ -60,6 +60,25 @@ class FormController extends ZendX_Controller_Action
 
         $this->view->DataTable = array(
             'serverUrl' => '/test.php',
+            'params' => array(
+                'param1' => '1_value',
+                'param2' => '2_value',
+                'param3' => '3_value',
+            ),
+            'toolbar' => array(
+                array(
+                    'text' => 'Create',
+                    'url' => '/create.php'
+                ),
+                array(
+                    'text' => 'Import',
+                    'url' => '/import.php'
+                ),
+                array(
+                    'text' => 'Export',
+                    'url' => '/export.php'
+                ),
+            ),
             'defSortColumn' => 1,
             'defSortDir' => 'asc',
             'chooseColumnVisibility' => true,
