@@ -21,12 +21,9 @@ $sDom .= "lrtip";
 .FixedHeader_Cloned th { background-color: white; }
 thead th { text-align: left; }
 
-.icon-edit {
-    background-image:url(/img/actions/edit.gif) ! important;
-}
-.icon-delete {
-    background-image:url(/img/actions/delete.gif) ! important;
-}
+.icon-edit { background-image:url(/img/actions/edit.gif) ! important; }
+.icon-delete { background-image:url(/img/actions/delete.gif) ! important; }
+a.row_action { cursor: pointer; }
 
 </style>
         
@@ -54,23 +51,21 @@ $(document).ready( function () {
            ,'mRender'   : function ( data, type, full ) {
                var content = '';
                jQuery.each(full.row_actions, function() {
-                   if(!this.askConfirm) {
-                       content += '<a class="'+this.type+'_action" href="'+this.url+'"><img src="/img/actions/'+this.type+'.gif" title="'+this.title+'"></a>';
-                   }
-                   else {
-                       var idPrefix = 'action_' + this.type + '_' + full.DT_RowId;
-
-                       content += '<a class="'+this.type+'_action" href="#" onclick="javascript:actionConfirmDlg(\''+idPrefix+'\');"><img src="/img/actions/'+this.type+'.gif" title="'+this.title+'"></a>';
+                   var idPrefix = 'action_' + this.type + '_' + full.DT_RowId;
+                   content += '<a class="row_action" onclick="this.blur();" id="' + idPrefix + '">';
+                   content += '<img src="/img/actions/'+this.type+'.gif" title="'+this.title+'">';
+                   content += '<div class="ui-helper-hidden" id="'+idPrefix+'_url">'+this.url+'</div>'
+                   if(this.askConfirm) {
                        content += '<div class="ui-helper-hidden" id="'+idPrefix+'_message">'+this.askConfirm+'</div>'
-                       content += '<div class="ui-helper-hidden" id="'+idPrefix+'_url">'+this.url+'</div>'
                    }
+                   content += '</a>';
                });
             	               
                return content;
            }       
            ,'bSortable' : false
            ,'bVisible'  : true
-           ,'sWidth'    : '7%'
+           ,'sWidth'    : '5%'
     };
 <?php    
     endif;
@@ -265,28 +260,34 @@ $(document).ready( function () {
             ,'aoColumns'    : filterParams
         });
     }
-    
+
+    $(document).on('click', '#main_list tbody tr a.row_action', function () {
+        var idPrefix = this.id;
+        var url = $('#' + idPrefix + '_url', this).text();
+        var message = $('#' + idPrefix + '_message', this).text();
+
+        if(!message) {
+        	$(location).attr('href', url);
+        }
+        else {
+            $("#dialog-confirm").html(message);
+            $("#dialog-confirm").dialog({
+                 modal: true
+                ,dialogClass: 'alert'
+                ,title: '<?php echo $this->translate(_("Warning"))?>'
+                ,buttons: {
+                    "OK": function() {
+                        $(location).attr('href', url);
+                    },
+                    Cancel: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            })
+        }
+    } );    
 } );
 
-    function actionConfirmDlg(idPrefix)
-    {
-        var message = $('#' + idPrefix + '_message').text();
-        var url = $('#' + idPrefix + '_url').text();
-
-        $("#dialog-confirm").html(message);
-        $("#dialog-confirm").dialog({
-             modal: true
-            ,dialogClass: 'alert'
-            ,buttons: {
-                "OK": function() {
-                    window.location.href = url;
-                },
-                Cancel: function() {
-                    $( this ).dialog( "close" );
-                }
-            }
-        })
-    };
 </script>                 
 
 <div id="dialog-confirm">
