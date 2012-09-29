@@ -30,7 +30,6 @@
     if(Zend_Auth::getInstance()->hasIdentity()) {
         echo "<td valign='top' width='15%'>";
         echo $this->navigation()->dropDownMenu()->setUlClass("navigation sf-menu sf-vertical")/*->renderMenu()*/;
-        //echo $this->navigation()->menu()->setPartial("navigation_menu.phtml")->render();
         echo "</td>";
     }
 ?>
