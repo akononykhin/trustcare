@@ -85,7 +85,7 @@ class FormController extends ZendX_Controller_Action
             'columnsInfo' => $columnsInfo,
             'bActionsColumn' => true
         );
-        $this->render('list');
+        $this->render('list', null, true);
         return;
     }
 }
