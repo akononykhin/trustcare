@@ -6,7 +6,7 @@
  * 
  */
 
-class TestOfCountry extends UnitTestCase {
+class TestOfState extends UnitTestCase {
     private $paramsAtDb = null;
     
     /**
@@ -19,10 +19,23 @@ class TestOfCountry extends UnitTestCase {
         $this->db = Zend_Registry::get('dbAdapter');
         
         try {
+            $fileName = sprintf("%s/_files/state_test.sql", dirname(__FILE__));
+            $fh = fopen($fileName, "r");
+            if ($fh) {
+                while (!feof($fh)) {
+                    $query = trim(fgets($fh, 4096));
+                    if(!empty($query)) {
+                        $res = $this->db->query($query);
+                    }
+                }
+
+                fclose($fh);
+            }
+            
             $params = array(
-                'id' => $this->db->nextSequenceId('country_id_seq'),
-            	'iso_3166' => 't1',
+                'id' => $this->db->nextSequenceId('state_id_seq'),
                 'name' => 'Test1',
+                'id_country' => 1000
             );
 
             $columns = array();
@@ -36,7 +49,7 @@ class TestOfCountry extends UnitTestCase {
                     $values[] = $this->db->quote($value, Zend_Db::INT_TYPE);
                 }
             }
-            $query = sprintf("insert into country(%s) values(%s);", join(",", $columns), join(",", $values));
+            $query = sprintf("insert into state(%s) values(%s);", join(",", $columns), join(",", $values));
             $res = $this->db->query($query);
             $this->paramsAtDb = $params;
         }
@@ -45,23 +58,26 @@ class TestOfCountry extends UnitTestCase {
 
 
     function tearDown() {
-        $query = sprintf("delete from country;");
+        $query = sprintf("delete from state;");
         $this->db->query($query);
         
-        $query = sprintf("update db_sequence set value=500 where name='country_id_seq';");
+        $query = sprintf("update db_sequence set value=1 where name='state_id_seq';");
+        $this->db->query($query);
+        
+        $query = sprintf("delete from country;");
         $this->db->query($query);
     }
     
 
     function testInitializing() {
         $params = array(
-            'id' => '111',
-            'iso_3166' => 't2',
+            'id' => '1',
+            'id_country' => '1000',
             'name' => 'Test2',
             'mapperOptions' => array('adapter' => $this->db)
         );
         
-        $model = new TrustCare_Model_Country($params);
+        $model = new TrustCare_Model_State($params);
 
         $this->_compareObjectAndParams($model, $params);
     }
@@ -70,66 +86,53 @@ class TestOfCountry extends UnitTestCase {
     }
 
     function testLoadExistingById() {
-        $model = TrustCare_Model_Country::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        $model = TrustCare_Model_State::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         $this->_compareObjectAndParams($model, $this->paramsAtDb);
     }
 
     function testLoadUnexistingById() {
-        $model = TrustCare_Model_Country::find(-1 * $this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        $model = TrustCare_Model_State::find(-1 * $this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         
         $this->assertNull($model, "This entity must not be loaded");
     }
 
 
-    function testLoadExistingByIso() {
-        $model = TrustCare_Model_Country::findByIso($this->paramsAtDb['iso_3166'], array('mapperOptions' => array('adapter' => $this->db)));
-        
-        $this->_compareObjectAndParams($model, $this->paramsAtDb);
-    }
-
-    function testLoadUnexistingByIso() {
-        $model = TrustCare_Model_Country::findByIso($this->paramsAtDb['iso_3166'] . '_unknown', array('mapperOptions' => array('adapter' => $this->db)));
-        
-        
-        $this->assertNull($model, "This entity must not be loaded");
-    }
-    
     function testSaveNew() {
         $params = array(
-            'iso_3166' => 't3',
+            'id_country' => '1000',
             'name' => 'Test3',
             );
         
         try {
-            $model = new TrustCare_Model_Country(array('mapperOptions' => array('adapter' => $this->db)));
+            $model = new TrustCare_Model_State(array('mapperOptions' => array('adapter' => $this->db)));
             $model->setOptions($params);
             $model->save();
             
             $id = $model->id;
             $params['id'] = $id;
             
-            $model1 = TrustCare_Model_Country::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $model1 = TrustCare_Model_State::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
             $this->_compareObjectAndParams($model1, $params);
         }
         catch(Exception $ex) {
             $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
         }
     }
-
+    
     function testChangeParameters() {
-        $model = TrustCare_Model_Country::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        $model = TrustCare_Model_State::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-        	$params['iso_3166'] = 't3' == $model->iso_3166 ? 't4' : 't3';
+        	$params['id_country'] = '1000' == $model->id_country ? '1001' : '1000';
         	$params['name'] = $model->name . '22';
         	 
             try {
                 $model->setOptions($this->paramsAtDb);
                 $model->save();
                 
-                $model1 = TrustCare_Model_Country::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $model1 = TrustCare_Model_State::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->_compareObjectAndParams($model1, $this->paramsAtDb);
             }
             catch(Exception $ex) {
@@ -142,12 +145,12 @@ class TestOfCountry extends UnitTestCase {
     }
     
     public function testDelete() {
-        $model = TrustCare_Model_Country::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        $model = TrustCare_Model_State::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         try {
             $model->delete();
             
-            $model1 = TrustCare_Model_Country::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $model1 = TrustCare_Model_State::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
             $this->assertNull($model1, "Entity hasn't been deleted: %s");
         }
         catch(Exception $ex) {
@@ -157,7 +160,7 @@ class TestOfCountry extends UnitTestCase {
     
     /**
      * 
-     * @param TrustCare_Model_Country $model
+     * @param TrustCare_Model_State $model
      * @param array $params
      * @return void|void
      */
@@ -172,7 +175,7 @@ class TestOfCountry extends UnitTestCase {
         }
         
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
-        $this->assertEqual($model->iso_3166, $params['iso_3166'], "Incorrect 'iso_3166': %s");
+        $this->assertEqual($model->id_country, $params['id_country'], "Incorrect 'id_country': %s");
         $this->assertEqual($model->name, $params['name'], "Incorrect 'name': %s");
     }
 }
