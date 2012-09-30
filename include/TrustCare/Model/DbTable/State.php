@@ -7,9 +7,9 @@
  */
 
 
-class TrustCare_Model_DbTable_LogObjects extends ZendX_Db_Table_Abstract
+class TrustCare_Model_DbTable_State extends ZendX_Db_Table_Abstract
 {
-    protected $_name    = 'log_objects';
+    protected $_name    = 'state';
     protected $_primary = 'id';
     
     protected $_metadata = array (
@@ -32,12 +32,13 @@ class TrustCare_Model_DbTable_LogObjects extends ZendX_Db_Table_Abstract
                     ),
               );
     
+    
     public function insert(array $data)
     {
-        if(!array_key_exists('timestamp', $data) || empty($data['timestamp'])) {
-            $data['timestamp'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", gmdate("Y-m-d H:i:s")));
-        }
-        
+        $db = Zend_Registry::get("Storage")->getPersistantDb(); 
+        $data['id'] = $db->nextSequenceId('state_id_seq');
+
         return parent::insert($data);
     }
+    
 }
