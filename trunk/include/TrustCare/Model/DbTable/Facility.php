@@ -7,16 +7,16 @@
  */
 
 
-class TrustCare_Model_DbTable_Country extends ZendX_Db_Table_Abstract
+class TrustCare_Model_DbTable_Facility extends ZendX_Db_Table_Abstract
 {
-    protected $_name    = 'country';
+    protected $_name    = 'facility';
     protected $_primary = 'id';
     
     protected $_metadata = array (
                 'id' => 
                     array (
                       'SCHEMA_NAME' => NULL,
-                      'TABLE_NAME' => 'country',
+                      'TABLE_NAME' => 'facility',
                       'COLUMN_NAME' => 'id',
                       'COLUMN_POSITION' => 1,
                       'DATA_TYPE' => 'int',
@@ -36,7 +36,7 @@ class TrustCare_Model_DbTable_Country extends ZendX_Db_Table_Abstract
     public function insert(array $data)
     {
         $db = Zend_Registry::get("Storage")->getPersistantDb(); 
-        $data['id'] = $db->nextSequenceId('country_id_seq');
+        $data['id'] = $db->nextSequenceId('facility_id_seq');
 
         return parent::insert($data);
     }
