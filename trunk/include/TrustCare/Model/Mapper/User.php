@@ -18,8 +18,17 @@ class TrustCare_Model_Mapper_User extends TrustCare_Model_Mapper_Abstract
         $data = array(
             'login'   => $model->getLogin(),
             'password' => $model->getPassword(),
+            'first_name'   => $model->getFirstName(),
+            'last_name'   => $model->getLastName(),
             'is_active' => $model->getIsActive() ? 1 : 0,
-            'role' => $model->getRole()
+            'role' => $model->getRole(),
+            'city' => $model->getCity(),
+            'zip' => $model->getZip(),
+            'address' => $model->getAddress(),
+            'phone' => $model->getPhone(),
+            'id_pharmacy' => $model->getIdPharmacy(),
+            'id_country' => $model->getIdCountry(),
+            'id_state' => $model->getIdState(),
         );
 
         if (null === ($id = $model->getId())) {
@@ -58,8 +67,17 @@ class TrustCare_Model_Mapper_User extends TrustCare_Model_Mapper_Abstract
         $model->setId($row->id)
               ->setLogin($row->login)
               ->setPassword($row->password)
-              ->setIsActive($row->is_active)
-              ->setRole($row->role);
+              ->setFirstName($row->first_name)
+              ->setLastName($row->last_name)
+              ->setRole($row->role)
+              ->setCity($row->city)
+              ->setAddress($row->address)
+              ->setZip($row->zip)
+              ->setPhone($row->phone)
+              ->setIdPharmacy($row->id_pharmacy)
+              ->setIdCountry($row->id_country)
+              ->setIdState($row->id_state)
+              ->setIsActive($row->is_active);
         $model->setSkipTrackChanges(false);
               
         return true;
