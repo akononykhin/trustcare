@@ -19,7 +19,7 @@ class TrustCare_Model_Country extends TrustCare_Model_Abstract
     public function setId($value)
     {
         $this->_parameterChanged('id', $value);
-    	$this->_id = (int) $value;
+        $this->_id = (int) $value;
         return $this;
     }
 
@@ -38,7 +38,7 @@ class TrustCare_Model_Country extends TrustCare_Model_Abstract
     public function setIso3166($value)
     {
         $this->_parameterChanged('iso_3166', $value);
-    	$this->_iso_3166 = (string) $value;
+        $this->_iso_3166 = (string) $value;
         return $this;
     }
 
@@ -57,7 +57,7 @@ class TrustCare_Model_Country extends TrustCare_Model_Abstract
     public function setName($value)
     {
         $this->_parameterChanged('name', $value);
-    	$this->_name = (string) $value;
+        $this->_name = (string) $value;
         return $this;
     }
 
@@ -69,6 +69,12 @@ class TrustCare_Model_Country extends TrustCare_Model_Abstract
         return $this->_name;
     }
     
+
+    
+    public function isExists() {
+        return !is_null($this->getId());
+    }
+
     
     /**
      * Find an entry by id
@@ -112,7 +118,7 @@ class TrustCare_Model_Country extends TrustCare_Model_Abstract
     
     public function delete()
     {
-    	parent::delete();
-    	$this->id = null;
+        parent::delete();
+        $this->id = null;
     }
 }

@@ -15,10 +15,13 @@ class TrustCare_Model_Mapper_State extends TrustCare_Model_Mapper_Abstract
      */
     public function save(TrustCare_Model_State &$model)
     {
-        $data = array(
-            'id_country'   => $model->getIdCountry(),
-            'name' => $model->getName(),
-        );
+        $data = array();
+        if(!$model->isExists() || $model->isParameterChanged('id_country')) {
+            $data['id_country'] = $model->getIdCountry();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('name')) {
+            $data['name'] = $model->getName();
+        }
 
         if (null === ($id = $model->getId())) {
             unset($data['id']);
