@@ -24,6 +24,7 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/patient_tests.php');
         */
         $this->addTestFile(dirname(__FILE__) . '/pharmacy_dictionary_type_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/pharmacy_dictionary_tests.php');
     }
 }
 
