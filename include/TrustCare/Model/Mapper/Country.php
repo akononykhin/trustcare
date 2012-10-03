@@ -15,11 +15,14 @@ class TrustCare_Model_Mapper_Country extends TrustCare_Model_Mapper_Abstract
      */
     public function save(TrustCare_Model_Country &$model)
     {
-        $data = array(
-            'iso_3166'   => $model->getIso3166(),
-            'name' => $model->getName(),
-        );
-
+        $data = array();
+        if(!$model->isExists() || $model->isParameterChanged('iso_3166')) {
+            $data['iso_3166'] = $model->getIso3166();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('name')) {
+            $data['name'] = $model->getName();
+        }
+        
         if (null === ($id = $model->getId())) {
             unset($data['id']);
             $primaryKey = $this->getDbTable()->insert($data);

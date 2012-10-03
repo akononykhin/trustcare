@@ -15,16 +15,31 @@ class TrustCare_Model_Mapper_Physician extends TrustCare_Model_Mapper_Abstract
      */
     public function save(TrustCare_Model_Physician &$model)
     {
-        $data = array(
-            'identifier'   => $model->getIdentifier(),
-            'first_name' => $model->getFirstName(),
-            'last_name' => $model->getLastName(),
-            'address' => $model->getAddress(),
-            'id_lga' => $model->getIdLga(),
-            'id_country' => $model->getIdCountry(),
-            'id_state' => $model->getIdState(),
-            'id_facility' => $model->getIdFacility(),
-        );
+        $data = array();
+        if(!$model->isExists() || $model->isParameterChanged('identifier')) {
+            $data['identifier'] = $model->getIdentifier();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('first_name')) {
+            $data['first_name'] = $model->getFirstName();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('last_name')) {
+            $data['last_name'] = $model->getLastName();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('address')) {
+            $data['address'] = $model->getAddress();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_country')) {
+            $data['id_country'] = $model->getIdCountry();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_state')) {
+            $data['id_state'] = $model->getIdState();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_lga')) {
+            $data['id_lga'] = $model->getIdLga();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_facility')) {
+            $data['id_facility'] = $model->getIdFacility();
+        }
 
         if (null === ($id = $model->getId())) {
             unset($data['id']);

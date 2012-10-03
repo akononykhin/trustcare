@@ -30,7 +30,7 @@ class TrustCare_Model_User extends TrustCare_Model_Abstract
     public function setId($value)
     {
         $this->_parameterChanged('id', $value);
-    	$this->_id = (int) $value;
+        $this->_id = (int) $value;
         return $this;
     }
 
@@ -49,7 +49,7 @@ class TrustCare_Model_User extends TrustCare_Model_Abstract
     public function setLogin($value)
     {
         $this->_parameterChanged('login', $value);
-    	$this->_login = (string) $value;
+        $this->_login = (string) $value;
         return $this;
     }
 
@@ -68,7 +68,7 @@ class TrustCare_Model_User extends TrustCare_Model_Abstract
     public function setPassword($value)
     {
         $this->_parameterChanged('password', $value, false, true);
-    	$this->_password = (string) $value;
+        $this->_password = (string) $value;
         return $this;
     }
 
@@ -126,7 +126,7 @@ class TrustCare_Model_User extends TrustCare_Model_Abstract
     public function setIsActive($value)
     {
         $this->_parameterChanged('is_active', $value, true);
-    	$this->_is_active = !empty($value) ? true : false;
+        $this->_is_active = !empty($value) ? true : false;
         return $this;
     }
 
@@ -146,7 +146,7 @@ class TrustCare_Model_User extends TrustCare_Model_Abstract
     public function setRole($value)
     {
         $this->_parameterChanged('role', $value);
-    	$this->_role = $value;
+        $this->_role = $value;
         return $this;
     }
 
@@ -292,6 +292,11 @@ class TrustCare_Model_User extends TrustCare_Model_Abstract
         return $this->_id_state;
     }
     
+    public function isExists()
+    {
+        return !is_null($this->getId());
+    }
+    
     /**
      * Find an entry by id
      *
@@ -334,7 +339,7 @@ class TrustCare_Model_User extends TrustCare_Model_Abstract
     
     public function delete()
     {
-    	parent::delete();
-    	$this->id = null;
+        parent::delete();
+        $this->id = null;
     }
 }

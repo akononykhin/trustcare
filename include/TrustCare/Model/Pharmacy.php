@@ -24,7 +24,7 @@ class TrustCare_Model_Pharmacy extends TrustCare_Model_Abstract
     public function setId($value)
     {
         $this->_parameterChanged('id', $value);
-    	$this->_id = (int) $value;
+        $this->_id = (int) $value;
         return $this;
     }
 
@@ -43,7 +43,7 @@ class TrustCare_Model_Pharmacy extends TrustCare_Model_Abstract
     public function setName($value)
     {
         $this->_parameterChanged('name', $value);
-    	$this->_name = (string) $value;
+        $this->_name = (string) $value;
         return $this;
     }
 
@@ -62,7 +62,7 @@ class TrustCare_Model_Pharmacy extends TrustCare_Model_Abstract
     public function setIsActive($value)
     {
         $this->_parameterChanged('is_active', $value, true);
-    	$this->_is_active = !empty($value) ? true : false;
+        $this->_is_active = !empty($value) ? true : false;
         return $this;
     }
 
@@ -171,6 +171,11 @@ class TrustCare_Model_Pharmacy extends TrustCare_Model_Abstract
         return $this->_id_facility;
     }
     
+    public function isExists()
+    {
+        return !is_null($this->getId());
+    }
+    
     /**
      * Find an entry by id
      *
@@ -213,7 +218,7 @@ class TrustCare_Model_Pharmacy extends TrustCare_Model_Abstract
     
     public function delete()
     {
-    	parent::delete();
-    	$this->id = null;
+        parent::delete();
+        $this->id = null;
     }
 }

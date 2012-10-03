@@ -15,6 +15,47 @@ class TrustCare_Model_Mapper_User extends TrustCare_Model_Mapper_Abstract
      */
     public function save(TrustCare_Model_User &$model)
     {
+        $data = array();
+        if(!$model->isExists() || $model->isParameterChanged('login')) {
+            $data['login'] = $model->getLogin();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('password')) {
+            $data['password'] = $model->getPassword();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('first_name')) {
+            $data['first_name'] = $model->getFirstName();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('last_name')) {
+            $data['last_name'] = $model->getLastName();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('is_active')) {
+            $data['is_active'] = $model->getIsActive() ? 1 : 0;
+        }
+        if(!$model->isExists() || $model->isParameterChanged('role')) {
+            $data['role'] = $model->getRole();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('city')) {
+            $data['city'] = $model->getCity();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('zip')) {
+            $data['zip'] = $model->getZip();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('address')) {
+            $data['address'] = $model->getAddress();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('phone')) {
+            $data['phone'] = $model->getPhone();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_country')) {
+            $data['id_country'] = $model->getIdCountry();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_state')) {
+            $data['id_state'] = $model->getIdState();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_pharmacy')) {
+            $data['id_pharmacy'] = $model->getIdPharmacy();
+        }
+        
         $data = array(
             'login'   => $model->getLogin(),
             'password' => $model->getPassword(),

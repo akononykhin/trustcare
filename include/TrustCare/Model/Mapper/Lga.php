@@ -15,10 +15,11 @@ class TrustCare_Model_Mapper_Lga extends TrustCare_Model_Mapper_Abstract
      */
     public function save(TrustCare_Model_Lga &$model)
     {
-        $data = array(
-            'name' => $model->getName(),
-        );
-
+        $data = array();
+        if(!$model->isExists() || $model->isParameterChanged('name')) {
+            $data['name'] = $model->getName();
+        }
+        
         if (null === ($id = $model->getId())) {
             unset($data['id']);
             $primaryKey = $this->getDbTable()->insert($data);
