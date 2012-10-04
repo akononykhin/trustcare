@@ -311,7 +311,7 @@ CREATE TABLE patient (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/****************** START FRM_PHARM_CARE tables ************************************************/
+/****************** START FRM_CARE tables ************************************************/
 CREATE TABLE frm_care (
   `id` int NOT NULL,
   `id_patient` int NOT NULL,
@@ -834,28 +834,28 @@ INSERT INTO db_sequence(name,value) VALUES ('pharmacy_dictionary_type_id_seq', 1
 INSERT INTO db_sequence(name,value) VALUES ('pharmacy_dictionary_id_seq', 1000);
 
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_id_seq', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_error_type', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_adh_problem', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention_outcome', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_adr_severity', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_hepatic', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_nervous', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_cardiovascular', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_skin', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_metabolic', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_musculoskeletal', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_general', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_adr_intervention', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_error_type_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_adh_problem_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention_outcome_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_adr_severity_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_hepatic_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_nervous_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_cardiovascular_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_skin_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_metabolic_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_musculoskeletal_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_general_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_adr_intervention_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_id_seq', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_in', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_out', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_community_htc_result', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_community_palliative_care_type', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_community_sti_type', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_community_reproductive_health_type', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_community_tuberculosis_type', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_community_ovc_type', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_in_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_out_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_htc_result_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_palliative_care_type_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_sti_type_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_reproductive_health_type_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_tuberculosis_type_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_ovc_type_id_seq', 1);
 
 
 
