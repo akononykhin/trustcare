@@ -56,22 +56,6 @@ class TrustCare_Model_Mapper_User extends TrustCare_Model_Mapper_Abstract
             $data['id_pharmacy'] = $model->getIdPharmacy();
         }
         
-        $data = array(
-            'login'   => $model->getLogin(),
-            'password' => $model->getPassword(),
-            'first_name'   => $model->getFirstName(),
-            'last_name'   => $model->getLastName(),
-            'is_active' => $model->getIsActive() ? 1 : 0,
-            'role' => $model->getRole(),
-            'city' => $model->getCity(),
-            'zip' => $model->getZip(),
-            'address' => $model->getAddress(),
-            'phone' => $model->getPhone(),
-            'id_pharmacy' => $model->getIdPharmacy(),
-            'id_country' => $model->getIdCountry(),
-            'id_state' => $model->getIdState(),
-        );
-
         if (null === ($id = $model->getId())) {
             unset($data['id']);
             $primaryKey = $this->getDbTable()->insert($data);
@@ -87,7 +71,7 @@ class TrustCare_Model_Mapper_User extends TrustCare_Model_Mapper_Abstract
     public function delete(TrustCare_Model_User $model)
     {
         $model->setObjectKeyInfo(array('id' => $model->getId()));
-    	if(!is_null($model->getId())) {
+        if(!is_null($model->getId())) {
             $this->getDbTable()->delete(sprintf("id=%d", $model->getId()));
         }
     }
