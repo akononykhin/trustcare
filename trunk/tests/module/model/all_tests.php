@@ -40,6 +40,7 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_care_adr_intervention_tests.php');
 */        
         $this->addTestFile(dirname(__FILE__) . '/frm_community_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/frm_community_referred_in_tests.php');
     }
 }
 
