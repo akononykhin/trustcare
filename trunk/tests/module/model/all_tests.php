@@ -36,6 +36,7 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_care_suspected_adr_skin_tests.php');
         */
         $this->addTestFile(dirname(__FILE__) . '/frm_care_suspected_adr_metabolic_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/frm_care_suspected_adr_musculoskeletal_tests.php');
     }
 }
 
