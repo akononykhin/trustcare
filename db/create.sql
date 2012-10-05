@@ -437,11 +437,11 @@ CREATE TABLE frm_care_adr_intervention (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/****************** END FRM_PHARM_CARE tables ************************************************/
+/****************** END FRM_CARE tables ************************************************/
 
 
 
-/****************** START FRM_PHARM_COMMUNITY tables ************************************************/
+/****************** START FRM_COMMUNITY tables ************************************************/
 
 CREATE TABLE frm_community (
   `id` int NOT NULL,
