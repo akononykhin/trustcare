@@ -11,6 +11,7 @@ require_once(dirname(__FILE__) . '/../../setup.php');
 class ModelGroupTest extends GroupTest {
     function ModelGroupTest() {
         $this->GroupTest('All Model tests');
+/*        
         $this->addTestFile(dirname(__FILE__) . '/log_access_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/log_objects_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/country_tests.php');
@@ -37,6 +38,8 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_care_suspected_adr_musculoskeletal_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_suspected_adr_general_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_adr_intervention_tests.php');
+*/        
+        $this->addTestFile(dirname(__FILE__) . '/frm_community_tests.php');
     }
 }
 
