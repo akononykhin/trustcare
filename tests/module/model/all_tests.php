@@ -11,7 +11,7 @@ require_once(dirname(__FILE__) . '/../../setup.php');
 class ModelGroupTest extends GroupTest {
     function ModelGroupTest() {
         $this->GroupTest('All Model tests');
-/*        
+        
         $this->addTestFile(dirname(__FILE__) . '/log_access_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/log_objects_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/country_tests.php');
@@ -44,10 +44,9 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_community_htc_result_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_palliative_care_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_sti_type_tests.php');
-        $this->addTestFile(dirname(__FILE__) . '/frm_community_sti_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_reproductive_health_type_tests.php');
-*/        
         $this->addTestFile(dirname(__FILE__) . '/frm_community_tuberculosis_type_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/frm_community_ovc_type_tests.php');
         
     }
 }

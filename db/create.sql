@@ -526,7 +526,7 @@ CREATE TABLE frm_community_ovc_type (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/****************** END FRM_PHARM_COMMUNITY tables ************************************************/
+/****************** END FRM_COMMUNITY tables ************************************************/
 
 CREATE TABLE report_care (
   `id` int NOT NULL,
