@@ -44,6 +44,7 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_community_htc_result_tests.php');
 */        
         $this->addTestFile(dirname(__FILE__) . '/frm_community_palliative_care_type_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/frm_community_sti_type_tests.php');
         
     }
 }
