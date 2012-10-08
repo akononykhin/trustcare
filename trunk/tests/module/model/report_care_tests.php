@@ -42,7 +42,7 @@ class TestOfReportCare extends UnitTestCase {
                 'number_of_clients_with_prescription_male_from_15' => 25,
                 'number_of_clients_with_prescription_female_from_15' => 30,
                 'number_of_dispensed_drugs' => 140,
-                'content' => 'test 111',
+                'filename' => 'test 111',
             );
 
             $columns = array();
@@ -87,7 +87,7 @@ class TestOfReportCare extends UnitTestCase {
             'number_of_clients_with_prescription_male_from_15' => 26,
             'number_of_clients_with_prescription_female_from_15' => 31,
             'number_of_dispensed_drugs' => 141,
-            'content' => 'test 111231',
+            'filename' => 'test 111231',
             'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -123,7 +123,7 @@ class TestOfReportCare extends UnitTestCase {
             'number_of_clients_with_prescription_male_from_15' => 26,
             'number_of_clients_with_prescription_female_from_15' => 31,
             'number_of_dispensed_drugs' => 141,
-            'content' => 'test 111231',
+            'filename' => 'test 111231',
         );
         
         try {
@@ -153,16 +153,16 @@ class TestOfReportCare extends UnitTestCase {
         	$params['number_of_clients_with_prescription_male_from_15'] = $model->number_of_clients_with_prescription_male_from_15 == 12 ? 22 : 12;
             $params['number_of_clients_with_prescription_female_from_15'] = $model->number_of_clients_with_prescription_female_from_15 == 13 ? 23 : 13;
             $params['number_of_dispensed_drugs'] = $model->number_of_dispensed_drugs == 14 ? 24 : 14;
-            $params['content'] = $model->content . '43';
+            $params['filename'] = $model->filename . '43';
             $params['id_pharmacy'] = '1' == $model->id_pharmacy ? '2' : '1';
             
             try {
                 $model->setOptions($this->paramsAtDb);
                 $model->save();
                 
-                $newContent = $params['content'];
+                $newFilename = $params['filename'];
                 $params = $this->paramsAtDb;
-                $params['content'] = $newContent;
+                $params['filename'] = $newFilename;
                 
                 $model1 = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->_compareObjectAndParams($model1, $this->paramsAtDb);
@@ -219,7 +219,7 @@ class TestOfReportCare extends UnitTestCase {
         $this->assertEqual($model->number_of_clients_with_prescription_male_from_15, $params['number_of_clients_with_prescription_male_from_15'], "Incorrect 'number_of_clients_with_prescription_male_from_15': %s");
         $this->assertEqual($model->number_of_clients_with_prescription_female_from_15, $params['number_of_clients_with_prescription_female_from_15'], "Incorrect 'number_of_clients_with_prescription_female_from_15': %s");
         $this->assertEqual($model->number_of_dispensed_drugs, $params['number_of_dispensed_drugs'], "Incorrect 'number_of_dispensed_drugs': %s");
-        $this->assertEqual($model->content, $params['content'], "Incorrect 'content': %s");
+        $this->assertEqual($model->filename, $params['filename'], "Incorrect 'filename': %s");
     }
 }
 

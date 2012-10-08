@@ -17,7 +17,7 @@ class TrustCare_Model_ReportCare extends TrustCare_Model_Abstract
     protected $_number_of_clients_with_prescription_male_from_15;
     protected $_number_of_clients_with_prescription_female_from_15;
     protected $_number_of_dispensed_drugs;
-    protected $_content;
+    protected $_filename;
     
     /**
      * @param  int $value 
@@ -197,19 +197,19 @@ class TrustCare_Model_ReportCare extends TrustCare_Model_Abstract
      * @param  string $value 
      * @return TrustCare_Model_ReportCare
      */
-    public function setContent($value)
+    public function setFilename($value)
     {
-        $this->_parameterChanged('content', $value);
-        $this->_content = (string) $value;
+        $this->_parameterChanged('filename', $value);
+        $this->_filename = (string) $value;
         return $this;
     }
 
     /**
      * @return null|string
      */
-    public function getContent()
+    public function getFilename()
     {
-        return $this->_content;
+        return $this->_filename;
     }
     
     

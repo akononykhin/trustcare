@@ -538,7 +538,7 @@ CREATE TABLE report_care (
   `number_of_clients_with_prescription_male_from_15` int default 0,
   `number_of_clients_with_prescription_female_from_15` int default 0,
   `number_of_dispensed_drugs` int,
-  `content` blob,
+  `filename` varchar(255),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -548,7 +548,7 @@ CREATE TABLE report_community (
   `generation_date` datetime NOT NULL,
   `period` int,
   `id_pharmacy` int NOT NULL,
-  `content` blob,
+  `filename` varchar(255),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

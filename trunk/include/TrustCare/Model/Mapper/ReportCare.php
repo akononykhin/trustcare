@@ -40,8 +40,8 @@ class TrustCare_Model_Mapper_ReportCare extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('number_of_dispensed_drugs')) {
             $data['number_of_dispensed_drugs'] = $model->getNumberOfDispensedDrugs();
         }
-        if(!$model->isExists() || $model->isParameterChanged('content')) {
-            $data['content'] = $model->getContent();
+        if(!$model->isExists() || $model->isParameterChanged('filename')) {
+            $data['filename'] = $model->getFilename();
         }
         
         if (null === ($id = $model->getId())) {
@@ -86,7 +86,7 @@ class TrustCare_Model_Mapper_ReportCare extends TrustCare_Model_Mapper_Abstract
               ->setNumberOfClientsWithPrescriptionMaleFrom15($row->number_of_clients_with_prescription_male_from_15)
               ->setNumberOfClientsWithPrescriptionFemaleFrom15($row->number_of_clients_with_prescription_female_from_15)
               ->setNumberOfDispensedDrugs($row->number_of_dispensed_drugs)
-              ->setContent($row->content);
+              ->setFilename($row->filename);
         $model->setSkipTrackChanges(false);
               
         return true;

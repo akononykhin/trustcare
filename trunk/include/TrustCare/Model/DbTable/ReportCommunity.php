@@ -51,7 +51,7 @@ class TrustCare_Model_DbTable_ReportCommunity extends ZendX_Db_Table_Abstract
     public function update(array $data, $where)
     {
         foreach($data as $key=>$value) {
-            if('content' != $key) {
+            if('filename' != $key) {
                 unset($data[$key]);
             }
         }
