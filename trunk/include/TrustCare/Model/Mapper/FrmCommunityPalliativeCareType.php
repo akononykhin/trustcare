@@ -32,13 +32,23 @@ class TrustCare_Model_Mapper_FrmCommunityPalliativeCareType extends TrustCare_Mo
             $this->getDbTable()->update($data, array('id = ?' => $id));
             $this->setLastOperationInsert(false);
         }
-        $model->setObjectKeyInfo(array('id' => $model->getId()));
+        $model->setObjectKeyInfo(
+            array(
+                'id' => $model->getId(),
+                'id_frm_community' => $model->getIdFrmCommunity()
+            )
+        );
     }
     
     public function delete(TrustCare_Model_FrmCommunityPalliativeCareType $model)
     {
-        $model->setObjectKeyInfo(array('id' => $model->getId()));
-    	if(!is_null($model->getId())) {
+        $model->setObjectKeyInfo(
+            array(
+                'id' => $model->getId(),
+                'id_frm_community' => $model->getIdFrmCommunity()
+            )
+        );
+        if(!is_null($model->getId())) {
             $this->getDbTable()->delete(sprintf("id=%d", $model->getId()));
         }
     }
