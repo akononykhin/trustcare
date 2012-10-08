@@ -32,13 +32,23 @@ class TrustCare_Model_Mapper_FrmCareSuspectedAdrHepatic extends TrustCare_Model_
             $this->getDbTable()->update($data, array('id = ?' => $id));
             $this->setLastOperationInsert(false);
         }
-        $model->setObjectKeyInfo(array('id' => $model->getId()));
+        $model->setObjectKeyInfo(
+            array(
+                'id' => $model->getId(),
+                'id_frm_care' => $model->getIdFrmCare()
+            )
+        );
     }
     
     public function delete(TrustCare_Model_FrmCareSuspectedAdrHepatic $model)
     {
-        $model->setObjectKeyInfo(array('id' => $model->getId()));
-    	if(!is_null($model->getId())) {
+        $model->setObjectKeyInfo(
+            array(
+                'id' => $model->getId(),
+                'id_frm_care' => $model->getIdFrmCare()
+            )
+        );
+        if(!is_null($model->getId())) {
             $this->getDbTable()->delete(sprintf("id=%d", $model->getId()));
         }
     }
