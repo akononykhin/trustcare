@@ -12,7 +12,7 @@ class TrustCare_Model_ReportCommunity extends TrustCare_Model_Abstract
     protected $_generation_date;
     protected $_period;
     protected $_id_pharmacy;
-    protected $_content;
+    protected $_filename;
     
     /**
      * @param  int $value 
@@ -94,19 +94,19 @@ class TrustCare_Model_ReportCommunity extends TrustCare_Model_Abstract
      * @param  string $value 
      * @return TrustCare_Model_ReportCommunity
      */
-    public function setContent($value)
+    public function setFilename($value)
     {
-        $this->_parameterChanged('content', $value);
-        $this->_content = (string) $value;
+        $this->_parameterChanged('filename', $value);
+        $this->_filename = (string) $value;
         return $this;
     }
 
     /**
      * @return null|string
      */
-    public function getContent()
+    public function getFilename()
     {
-        return $this->_content;
+        return $this->_filename;
     }
     
     

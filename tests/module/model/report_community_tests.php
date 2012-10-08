@@ -37,7 +37,7 @@ class TestOfReportCommunity extends UnitTestCase {
             	'generation_date' => '2012-10-01 11:23:45',
                 'period' => 201209,
                 'id_pharmacy' => 1,
-                'content' => 'test 111',
+                'filename' => 'test 111',
             );
 
             $columns = array();
@@ -77,7 +77,7 @@ class TestOfReportCommunity extends UnitTestCase {
             'generation_date' => '2012-09-01 11:23:45',
             'period' => 201208,
             'id_pharmacy' => 2,
-            'content' => 'test 111231',
+            'filename' => 'test 111231',
             'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -108,7 +108,7 @@ class TestOfReportCommunity extends UnitTestCase {
             'generation_date' => '2012-09-01 11:23:45',
             'period' => 201208,
             'id_pharmacy' => 2,
-            'content' => 'test 111231',
+            'filename' => 'test 111231',
         );
         
         try {
@@ -133,16 +133,16 @@ class TestOfReportCommunity extends UnitTestCase {
         if(!is_null($model)) {
         	$params['generation_date'] = $model->generation_date == '2012-09-01 01:01:01' ? '2012-10-01 01:01:01' : '2012-09-01 01:01:01';
         	$params['period'] = $model->period == 201208 ? 201209 : 201208;
-            $params['content'] = $model->content . '43';
+            $params['filename'] = $model->filename . '43';
             $params['id_pharmacy'] = '1' == $model->id_pharmacy ? '2' : '1';
             
             try {
                 $model->setOptions($this->paramsAtDb);
                 $model->save();
                 
-                $newContent = $params['content'];
+                $newFilename = $params['filename'];
                 $params = $this->paramsAtDb;
-                $params['content'] = $newContent;
+                $params['filename'] = $newFilename;
                 
                 $model1 = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->_compareObjectAndParams($model1, $this->paramsAtDb);
@@ -160,6 +160,9 @@ class TestOfReportCommunity extends UnitTestCase {
         $model = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         try {
+            if(is_null($model)) {
+                throw new Exception("Object not loaded!");
+            }
             $model->delete();
             
             $model1 = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
@@ -191,7 +194,7 @@ class TestOfReportCommunity extends UnitTestCase {
             $this->assertEqual($model->generation_date, $params['generation_date'], "Incorrect 'generation_date': %s");
         }
         $this->assertEqual($model->period, $params['period'], "Incorrect 'period': %s");
-        $this->assertEqual($model->content, $params['content'], "Incorrect 'content': %s");
+        $this->assertEqual($model->filename, $params['filename'], "Incorrect 'filename': %s");
     }
 }
 
