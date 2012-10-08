@@ -6,7 +6,7 @@
  * 
  */
 
-class TestOfReportCare extends UnitTestCase {
+class TestOfReportCommunity extends UnitTestCase {
     private $paramsAtDb = null;
     
     /**
@@ -19,7 +19,7 @@ class TestOfReportCare extends UnitTestCase {
         $this->db = Zend_Registry::get('dbAdapter');
         
         try {
-            $fileName = sprintf("%s/_files/report_care_test.sql", dirname(__FILE__));
+            $fileName = sprintf("%s/_files/report_community_test.sql", dirname(__FILE__));
             $fh = fopen($fileName, "r");
             if ($fh) {
                 while (!feof($fh)) {
@@ -33,15 +33,10 @@ class TestOfReportCare extends UnitTestCase {
             }
             
             $params = array(
-                'id' => $this->db->nextSequenceId('report_care_id_seq'),
+                'id' => $this->db->nextSequenceId('report_community_id_seq'),
             	'generation_date' => '2012-10-01 11:23:45',
                 'period' => 201209,
                 'id_pharmacy' => 1,
-                'number_of_clients_with_prescription_male_younger_15' => 10,
-                'number_of_clients_with_prescription_female_younger_15' => 15,
-                'number_of_clients_with_prescription_male_from_15' => 25,
-                'number_of_clients_with_prescription_female_from_15' => 30,
-                'number_of_dispensed_drugs' => 140,
                 'content' => 'test 111',
             );
 
@@ -56,7 +51,7 @@ class TestOfReportCare extends UnitTestCase {
                     $values[] = $this->db->quote($value, Zend_Db::INT_TYPE);
                 }
             }
-            $query = sprintf("insert into report_care(%s) values(%s);", join(",", $columns), join(",", $values));
+            $query = sprintf("insert into report_community(%s) values(%s);", join(",", $columns), join(",", $values));
             $res = $this->db->query($query);
             $this->paramsAtDb = $params;
         }
@@ -65,10 +60,10 @@ class TestOfReportCare extends UnitTestCase {
 
 
     function tearDown() {
-        $query = sprintf("delete from report_care;");
+        $query = sprintf("delete from report_community;");
         $this->db->query($query);
         
-        $query = sprintf("update db_sequence set value=1 where name='report_care_id_seq';");
+        $query = sprintf("update db_sequence set value=1 where name='report_community_id_seq';");
         $this->db->query($query);
         
         $query = sprintf("delete from pharmacy;");
@@ -82,16 +77,11 @@ class TestOfReportCare extends UnitTestCase {
             'generation_date' => '2012-09-01 11:23:45',
             'period' => 201208,
             'id_pharmacy' => 2,
-            'number_of_clients_with_prescription_male_younger_15' => 11,
-            'number_of_clients_with_prescription_female_younger_15' => 16,
-            'number_of_clients_with_prescription_male_from_15' => 26,
-            'number_of_clients_with_prescription_female_from_15' => 31,
-            'number_of_dispensed_drugs' => 141,
             'content' => 'test 111231',
             'mapperOptions' => array('adapter' => $this->db)
         );
         
-        $model = new TrustCare_Model_ReportCare($params);
+        $model = new TrustCare_Model_ReportCommunity($params);
 
         $this->_compareObjectAndParams($model, $params);
     }
@@ -100,13 +90,13 @@ class TestOfReportCare extends UnitTestCase {
     }
 
     function testLoadExistingById() {
-        $model = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        $model = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         $this->_compareObjectAndParams($model, $this->paramsAtDb);
     }
 
     function testLoadUnexistingById() {
-        $model = TrustCare_Model_ReportCare::find(-1 * $this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        $model = TrustCare_Model_ReportCommunity::find(-1 * $this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         
         $this->assertNull($model, "This entity must not be loaded");
@@ -118,23 +108,18 @@ class TestOfReportCare extends UnitTestCase {
             'generation_date' => '2012-09-01 11:23:45',
             'period' => 201208,
             'id_pharmacy' => 2,
-            'number_of_clients_with_prescription_male_younger_15' => 11,
-            'number_of_clients_with_prescription_female_younger_15' => 16,
-            'number_of_clients_with_prescription_male_from_15' => 26,
-            'number_of_clients_with_prescription_female_from_15' => 31,
-            'number_of_dispensed_drugs' => 141,
             'content' => 'test 111231',
         );
         
         try {
-            $model = new TrustCare_Model_ReportCare(array('mapperOptions' => array('adapter' => $this->db)));
+            $model = new TrustCare_Model_ReportCommunity(array('mapperOptions' => array('adapter' => $this->db)));
             $model->setOptions($params);
             $model->save();
             
             $id = $model->id;
             $params['id'] = $id;
             
-            $model1 = TrustCare_Model_ReportCare::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $model1 = TrustCare_Model_ReportCommunity::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
             $this->_compareObjectAndParams($model1, $params);
         }
         catch(Exception $ex) {
@@ -143,16 +128,11 @@ class TestOfReportCare extends UnitTestCase {
     }
 
     function testChangeParameters() {
-        $model = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        $model = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
         	$params['generation_date'] = $model->generation_date == '2012-09-01 01:01:01' ? '2012-10-01 01:01:01' : '2012-09-01 01:01:01';
         	$params['period'] = $model->period == 201208 ? 201209 : 201208;
-            $params['number_of_clients_with_prescription_male_younger_15'] = $model->number_of_clients_with_prescription_male_younger_15 == 10 ? 20 : 10;
-            $params['number_of_clients_with_prescription_female_younger_15'] = $model->number_of_clients_with_prescription_female_younger_15 == 11 ? 21 : 11;
-        	$params['number_of_clients_with_prescription_male_from_15'] = $model->number_of_clients_with_prescription_male_from_15 == 12 ? 22 : 12;
-            $params['number_of_clients_with_prescription_female_from_15'] = $model->number_of_clients_with_prescription_female_from_15 == 13 ? 23 : 13;
-            $params['number_of_dispensed_drugs'] = $model->number_of_dispensed_drugs == 14 ? 24 : 14;
             $params['content'] = $model->content . '43';
             $params['id_pharmacy'] = '1' == $model->id_pharmacy ? '2' : '1';
             
@@ -164,7 +144,7 @@ class TestOfReportCare extends UnitTestCase {
                 $params = $this->paramsAtDb;
                 $params['content'] = $newContent;
                 
-                $model1 = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $model1 = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->_compareObjectAndParams($model1, $this->paramsAtDb);
             }
             catch(Exception $ex) {
@@ -177,15 +157,12 @@ class TestOfReportCare extends UnitTestCase {
     }
     
     public function testDelete() {
-        $model = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        $model = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         try {
-            if(is_null($model)) {
-                throw new Exception("Object not loaded!");
-            }
             $model->delete();
             
-            $model1 = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $model1 = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
             $this->assertNull($model1, "Entity hasn't been deleted: %s");
         }
         catch(Exception $ex) {
@@ -195,7 +172,7 @@ class TestOfReportCare extends UnitTestCase {
     
     /**
      * 
-     * @param TrustCare_Model_ReportCare $model
+     * @param TrustCare_Model_ReportCommunity $model
      * @param array $params
      * @return void|void
      */
@@ -214,11 +191,6 @@ class TestOfReportCare extends UnitTestCase {
             $this->assertEqual($model->generation_date, $params['generation_date'], "Incorrect 'generation_date': %s");
         }
         $this->assertEqual($model->period, $params['period'], "Incorrect 'period': %s");
-        $this->assertEqual($model->number_of_clients_with_prescription_male_younger_15, $params['number_of_clients_with_prescription_male_younger_15'], "Incorrect 'number_of_clients_with_prescription_male_younger_15': %s");
-        $this->assertEqual($model->number_of_clients_with_prescription_female_younger_15, $params['number_of_clients_with_prescription_female_younger_15'], "Incorrect 'number_of_clients_with_prescription_female_younger_15': %s");
-        $this->assertEqual($model->number_of_clients_with_prescription_male_from_15, $params['number_of_clients_with_prescription_male_from_15'], "Incorrect 'number_of_clients_with_prescription_male_from_15': %s");
-        $this->assertEqual($model->number_of_clients_with_prescription_female_from_15, $params['number_of_clients_with_prescription_female_from_15'], "Incorrect 'number_of_clients_with_prescription_female_from_15': %s");
-        $this->assertEqual($model->number_of_dispensed_drugs, $params['number_of_dispensed_drugs'], "Incorrect 'number_of_dispensed_drugs': %s");
         $this->assertEqual($model->content, $params['content'], "Incorrect 'content': %s");
     }
 }
