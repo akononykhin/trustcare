@@ -98,6 +98,7 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
         $model->setId($row->id)
               ->setIdPatient($row->id_patient)
               ->setDateOfVisit($row->date_of_visit)
+              ->setDateOfVisitMonthIndex($row->date_of_visit_month_index)
               ->setIsPregnant($row->is_pregnant)
               ->setIsReceivePrescription($row->is_receive_prescription)
               ->setIsMedErrorScreened($row->is_med_error_screened)

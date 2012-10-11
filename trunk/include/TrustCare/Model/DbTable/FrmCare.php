@@ -39,11 +39,17 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
         $data['id'] = $db->nextSequenceId('frm_care_id_seq');
 
         if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['date_of_visit']) {
-            $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", gmdate("Y-m-d H:i:s")));
+            $dateOfVisit = gmdate("Y-m-d H:i:s");
         }
         else {
-            $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['date_of_visit']));
+            $dateOfVisit = $data['date_of_visit'];
         }
+        $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $dateOfVisit));
+        if(!preg_match('/^(\d{4})-(\d{2})-\d{2} \d{2}:\d{2}:\d{2}$/', $dateOfVisit, $matches)) {
+            throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
+        }
+        $data['date_of_visit_month_index'] = $matches[1].$matches[2];
+        
         if (!array_key_exists('adr_start_date', $data) || empty($data['adr_start_date'])) {
             $data['adr_start_date'] = new Zend_Db_Expr('NULL');
         }
@@ -75,11 +81,16 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
     {
         if(array_key_exists('date_of_visit', $data)) {
             if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['date_of_visit']) {
-                $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", gmdate("Y-m-d H:i:s")));
+                $dateOfVisit = gmdate("Y-m-d H:i:s");
             }
             else {
-                $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['date_of_visit']));
+                $dateOfVisit = $data['date_of_visit'];
             }
+            $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $dateOfVisit));
+            if(!preg_match('/^(\d{4})-(\d{2})-\d{2} \d{2}:\d{2}:\d{2}$/', $dateOfVisit, $matches)) {
+                throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
+            }
+            $data['date_of_visit_month_index'] = $matches[1].$matches[2];
         }
         if(array_key_exists('adr_start_date', $data)) {
             if(empty($data['adr_start_date'])) {

@@ -36,6 +36,7 @@ class TestOfFrmCare extends UnitTestCase {
                 'id' => $this->db->nextSequenceId('frm_care_id_seq'),
                 'id_patient' => 1,
                 'date_of_visit' => '2012-05-01 12:30:45',
+                'date_of_visit_month_index' => 201205,
                 'is_pregnant' => false,
                 'is_receive_prescription' => true,
                 'is_med_error_screened' => false,
@@ -84,9 +85,10 @@ class TestOfFrmCare extends UnitTestCase {
 
     function testInitializing() {
         $params = array(
-            'id' => '1',
+                'id' => '1',
                 'id_patient' => 1,
                 'date_of_visit' => '2012-05-01 12:30:45',
+                'date_of_visit_month_index' => 201206,
                 'is_pregnant' => false,
                 'is_receive_prescription' => true,
                 'is_med_error_screened' => false,
@@ -128,7 +130,7 @@ class TestOfFrmCare extends UnitTestCase {
     function testSaveNew() {
         $params = array(
                 'id_patient' => 2,
-                'date_of_visit' => '2012-05-02 12:30:45',
+                'date_of_visit' => '2012-07-02 12:30:45',
                 'is_pregnant' => true,
                 'is_receive_prescription' => true,
                 'is_med_error_screened' => false,
@@ -151,6 +153,7 @@ class TestOfFrmCare extends UnitTestCase {
             
             $id = $model->id;
             $params['id'] = $id;
+            $params['date_of_visit_month_index'] = 201207; /* it's filled indirectly */
             
             $model1 = TrustCare_Model_FrmCare::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
             $this->_compareObjectAndParams($model1, $params);
@@ -164,8 +167,9 @@ class TestOfFrmCare extends UnitTestCase {
         $model = TrustCare_Model_FrmCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
+            $dateOfVisit = '2011-03-01 01:01:01' == $model->date_of_visit ? '2011-04-02 01:01:01' : '2011-03-01 01:01:01';
         	$params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
-        	$params['date_of_visit'] = '2011-05-01 01:01:01' == $model->date_of_visit ? '2011-05-02 01:01:01' : '2011-05-01 01:01:01';
+        	$params['date_of_visit'] = $dateOfVisit;
         	$params['is_pregnant'] = !$model->is_pregnant;
         	$params['is_receive_prescription'] = !$model->is_receive_prescription;
         	$params['is_med_error_screened'] = !$model->is_med_error_screened;
@@ -181,11 +185,17 @@ class TestOfFrmCare extends UnitTestCase {
         	$params['is_nafdac_adr_filled'] = !$model->is_nafdac_adr_filled;
 
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
                 
+                $params['id'] = $model->id;
+                if(!preg_match('/^(\d{4})-(\d{2})-\d{2} \d{2}:\d{2}:\d{2}$/', $dateOfVisit, $matches)) {
+                    throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
+                }
+                $params['date_of_visit_month_index'] = $matches[1].$matches[2];
+
                 $model1 = TrustCare_Model_FrmCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
@@ -233,6 +243,7 @@ class TestOfFrmCare extends UnitTestCase {
             $this->assertEqual($model->adr_start_date, $params['adr_start_date'], "Incorrect 'adr_start_date': %s");
             $this->assertEqual($model->adr_stop_date, $params['adr_stop_date'], "Incorrect 'adr_stop_date': %s");
         }
+        $this->assertEqual($model->date_of_visit_month_index, $params['date_of_visit_month_index'], "Incorrect 'date_of_visit_month_index': %s");
         $this->assertIdentical($model->is_pregnant, !empty($params['is_pregnant']) ? true : false, "Incorrect 'is_pregnant': %s");
         $this->assertIdentical($model->is_receive_prescription, !empty($params['is_receive_prescription']) ? true : false, "Incorrect 'is_receive_prescription': %s");
         $this->assertIdentical($model->is_med_error_screened, !empty($params['is_med_error_screened']) ? true : false, "Incorrect 'is_med_error_screened': %s");

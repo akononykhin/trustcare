@@ -316,6 +316,7 @@ CREATE TABLE frm_care (
   `id` int NOT NULL,
   `id_patient` int NOT NULL,
   `date_of_visit` datetime NOT NULL,
+  `date_of_visit_month_index` int default NULL,
   `is_pregnant` int default 0,
   `is_receive_prescription` int,
   `is_med_error_screened` int,
@@ -447,6 +448,7 @@ CREATE TABLE frm_community (
   `id` int NOT NULL,
   `id_patient` int NOT NULL,
   `date_of_visit` datetime NOT NULL,
+  `date_of_visit_month_index` int default NULL,
   `is_referred_in` int,
   `is_referred_out` int,
   `is_referral_completed` int,
@@ -866,4 +868,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20121008, 1);
+insert into db_version values (1, 20121011, 1);

@@ -95,6 +95,7 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         $model->setId($row->id)
               ->setIdPatient($row->id_patient)
               ->setDateOfVisit($row->date_of_visit)
+              ->setDateOfVisitMonthIndex($row->date_of_visit_month_index)
               ->setIsReferredIn($row->is_referred_in)
               ->setIsReferredOut($row->is_referred_out)
               ->setIsReferralCompleted($row->is_referral_completed)

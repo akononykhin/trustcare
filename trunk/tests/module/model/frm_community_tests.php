@@ -36,6 +36,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'id' => $this->db->nextSequenceId('frm_community_id_seq'),
                 'id_patient' => 1,
                 'date_of_visit' => '2012-05-01 12:30:45',
+                'date_of_visit_month_index' => 201205,
                 'is_referred_in' => false,
                 'is_referred_out' => true,
                 'is_referral_completed' => false,
@@ -83,9 +84,10 @@ class TestOfFrmCommunity extends UnitTestCase {
 
     function testInitializing() {
         $params = array(
-            'id' => '1',
+                'id' => '1',
                 'id_patient' => 1,
                 'date_of_visit' => '2012-05-01 12:30:45',
+                'date_of_visit_month_index' => 201206,
                 'is_referred_in' => true,
                 'is_referred_out' => false,
                 'is_referral_completed' => true,
@@ -126,7 +128,7 @@ class TestOfFrmCommunity extends UnitTestCase {
     function testSaveNew() {
         $params = array(
                 'id_patient' => 2,
-                'date_of_visit' => '2012-05-02 12:30:45',
+                'date_of_visit' => '2012-07-02 12:30:45',
                 'is_referred_in' => true,
                 'is_referred_out' => true,
                 'is_referral_completed' => false,
@@ -148,6 +150,7 @@ class TestOfFrmCommunity extends UnitTestCase {
             
             $id = $model->id;
             $params['id'] = $id;
+            $params['date_of_visit_month_index'] = 201207; /* it's filled indirectly */
             
             $model1 = TrustCare_Model_FrmCommunity::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
             $this->_compareObjectAndParams($model1, $params);
@@ -161,9 +164,10 @@ class TestOfFrmCommunity extends UnitTestCase {
         $model = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-        	$params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
-        	$params['date_of_visit'] = '2011-05-01 01:01:01' == $model->date_of_visit ? '2011-05-02 01:01:01' : '2011-05-01 01:01:01';
-        	$params['is_referred_in'] = !$model->is_referred_in;
+            $dateOfVisit = '2011-03-01 01:01:01' == $model->date_of_visit ? '2011-04-02 01:01:01' : '2011-03-01 01:01:01';
+            $params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
+            $params['date_of_visit'] = $dateOfVisit;
+            $params['is_referred_in'] = !$model->is_referred_in;
         	$params['is_referred_out'] = !$model->is_referred_out;
         	$params['is_referral_completed'] = !$model->is_referral_completed;
         	$params['is_hiv_risk_assesment_done'] = !$model->is_hiv_risk_assesment_done;
@@ -177,11 +181,17 @@ class TestOfFrmCommunity extends UnitTestCase {
         	$params['is_ovc_services'] = !$model->is_ovc_services;
 
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
                 
+                $params['id'] = $model->id;
+                if(!preg_match('/^(\d{4})-(\d{2})-\d{2} \d{2}:\d{2}:\d{2}$/', $dateOfVisit, $matches)) {
+                    throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
+                }
+                $params['date_of_visit_month_index'] = $matches[1].$matches[2];
+                
                 $model1 = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
@@ -227,6 +237,7 @@ class TestOfFrmCommunity extends UnitTestCase {
         if($checkTime) {
             $this->assertEqual($model->date_of_visit, $params['date_of_visit'], "Incorrect 'date_of_visit': %s");
         }
+        $this->assertEqual($model->date_of_visit_month_index, $params['date_of_visit_month_index'], "Incorrect 'date_of_visit_month_index': %s");
         $this->assertIdentical($model->is_referred_in, !empty($params['is_referred_in']) ? true : false, "Incorrect 'is_referred_in': %s");
         $this->assertIdentical($model->is_referred_out, !empty($params['is_referred_out']) ? true : false, "Incorrect 'is_referred_out': %s");
         $this->assertIdentical($model->is_referral_completed, !empty($params['is_referral_completed']) ? true : false, "Incorrect 'is_referral_completed': %s");
