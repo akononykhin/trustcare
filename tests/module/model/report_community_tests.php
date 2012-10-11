@@ -34,7 +34,7 @@ class TestOfReportCommunity extends UnitTestCase {
             
             $params = array(
                 'id' => $this->db->nextSequenceId('report_community_id_seq'),
-            	'generation_date' => '2012-10-01 11:23:45',
+                'generation_date' => '2012-10-01 11:23:45',
                 'period' => 201209,
                 'id_pharmacy' => 1,
                 'filename' => 'test 111',
@@ -131,13 +131,13 @@ class TestOfReportCommunity extends UnitTestCase {
         $model = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-        	$params['generation_date'] = $model->generation_date == '2012-09-01 01:01:01' ? '2012-10-01 01:01:01' : '2012-09-01 01:01:01';
-        	$params['period'] = $model->period == 201208 ? 201209 : 201208;
+            $params['generation_date'] = $model->generation_date == '2012-09-01 01:01:01' ? '2012-10-01 01:01:01' : '2012-09-01 01:01:01';
+            $params['period'] = $model->period == 201208 ? 201209 : 201208;
             $params['filename'] = $model->filename . '43';
             $params['id_pharmacy'] = '1' == $model->id_pharmacy ? '2' : '1';
             
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
                 
                 $newFilename = $params['filename'];
@@ -145,7 +145,7 @@ class TestOfReportCommunity extends UnitTestCase {
                 $params['filename'] = $newFilename;
                 
                 $model1 = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));

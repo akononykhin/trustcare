@@ -83,7 +83,7 @@ class TestOfLogAccess extends UnitTestCase {
 
     function testLoadUnexistingById() {
         $model = TrustCare_Model_LogAccess::find(-1 * $this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-    	        
+                
         $this->assertNull($model->id, "This entity must not be loaded");
     }
 
@@ -96,12 +96,12 @@ class TestOfLogAccess extends UnitTestCase {
         );
         
         try {
-        	$model = new TrustCare_Model_LogAccess($params);
-        	$model->save();
-        	$params['id'] = $model->id;
+            $model = new TrustCare_Model_LogAccess($params);
+            $model->save();
+            $params['id'] = $model->id;
 
-        	$newObj = TrustCare_Model_LogAccess::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
-        	$this->_compareObjectAndParams($newObj, $params, false);
+            $newObj = TrustCare_Model_LogAccess::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $this->_compareObjectAndParams($newObj, $params, false);
         }
         catch(Exception $ex) {
             $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
@@ -121,6 +121,8 @@ class TestOfLogAccess extends UnitTestCase {
             try {
                 $newObj->setOptions($params);
                 $newObj->save();
+                
+                $params['id'] = $newObj->id;
 
                 $this->assertTrue(false, sprintf("Update must throw an exception"));
             }
@@ -156,16 +158,16 @@ class TestOfLogAccess extends UnitTestCase {
      * @return void|void
      */
     private function _compareObjectAndParams($model, $params, $checkTimestamp = true) {
-    	if (is_null($model)) {
-    		$this->assertTrue(false, "Entity not initialized");
-    		return;
-    	}
-    	if(is_null($params) || !is_array($params)) {
-    		$this->assertTrue(false, "Sample parameters not filled!");
-    		return;
-    	}
+        if (is_null($model)) {
+            $this->assertTrue(false, "Entity not initialized");
+            return;
+        }
+        if(is_null($params) || !is_array($params)) {
+            $this->assertTrue(false, "Sample parameters not filled!");
+            return;
+        }
 
-    	$this->assertEqual($model->author, $params['author'], "Incorrect author: %s");
+        $this->assertEqual($model->author, $params['author'], "Incorrect author: %s");
         $this->assertEqual($model->ip, $params['ip'], "Incorrect ip: %s");
         $this->assertEqual($model->action, $params['action'], "Incorrect action: %s");
     }
