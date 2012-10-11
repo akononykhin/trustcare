@@ -21,7 +21,7 @@ class TestOfCountry extends UnitTestCase {
         try {
             $params = array(
                 'id' => $this->db->nextSequenceId('country_id_seq'),
-            	'iso_3166' => 't1',
+                'iso_3166' => 't1',
                 'name' => 'Test1',
             );
 
@@ -122,15 +122,17 @@ class TestOfCountry extends UnitTestCase {
         $model = TrustCare_Model_Country::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-        	$params['iso_3166'] = 't3' == $model->iso_3166 ? 't4' : 't3';
-        	$params['name'] = $model->name . '22';
-        	 
+            $params['iso_3166'] = 't3' == $model->iso_3166 ? 't4' : 't3';
+            $params['name'] = $model->name . '22';
+             
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
                 
+                $params['id'] = $model->id;
+
                 $model1 = TrustCare_Model_Country::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));

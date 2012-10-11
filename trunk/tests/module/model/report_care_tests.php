@@ -34,7 +34,7 @@ class TestOfReportCare extends UnitTestCase {
             
             $params = array(
                 'id' => $this->db->nextSequenceId('report_care_id_seq'),
-            	'generation_date' => '2012-10-01 11:23:45',
+                'generation_date' => '2012-10-01 11:23:45',
                 'period' => 201209,
                 'id_pharmacy' => 1,
                 'number_of_clients_with_prescription_male_younger_15' => 10,
@@ -146,26 +146,27 @@ class TestOfReportCare extends UnitTestCase {
         $model = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-        	$params['generation_date'] = $model->generation_date == '2012-09-01 01:01:01' ? '2012-10-01 01:01:01' : '2012-09-01 01:01:01';
-        	$params['period'] = $model->period == 201208 ? 201209 : 201208;
+            $params['generation_date'] = $model->generation_date == '2012-09-01 01:01:01' ? '2012-10-01 01:01:01' : '2012-09-01 01:01:01';
+            $params['period'] = $model->period == 201208 ? 201209 : 201208;
             $params['number_of_clients_with_prescription_male_younger_15'] = $model->number_of_clients_with_prescription_male_younger_15 == 10 ? 20 : 10;
             $params['number_of_clients_with_prescription_female_younger_15'] = $model->number_of_clients_with_prescription_female_younger_15 == 11 ? 21 : 11;
-        	$params['number_of_clients_with_prescription_male_from_15'] = $model->number_of_clients_with_prescription_male_from_15 == 12 ? 22 : 12;
+            $params['number_of_clients_with_prescription_male_from_15'] = $model->number_of_clients_with_prescription_male_from_15 == 12 ? 22 : 12;
             $params['number_of_clients_with_prescription_female_from_15'] = $model->number_of_clients_with_prescription_female_from_15 == 13 ? 23 : 13;
             $params['number_of_dispensed_drugs'] = $model->number_of_dispensed_drugs == 14 ? 24 : 14;
             $params['filename'] = $model->filename . '43';
             $params['id_pharmacy'] = '1' == $model->id_pharmacy ? '2' : '1';
             
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
                 
                 $newFilename = $params['filename'];
                 $params = $this->paramsAtDb;
-                $params['filename'] = $newFilename;
+                $params['filename'] = $newFilename;                
+                $params['id'] = $model->id;
                 
                 $model1 = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));

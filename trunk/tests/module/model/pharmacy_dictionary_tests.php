@@ -125,15 +125,17 @@ class TestOfPharmacyDictionary extends UnitTestCase {
         $model = TrustCare_Model_PharmacyDictionary::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-        	$params['id_pharmacy_dictionary_type'] = 100 == $model->id_pharmacy_dictionary_type ? 101 : 100;
-        	$params['name'] = $model->name . '22';
-        	 
+            $params['id_pharmacy_dictionary_type'] = 100 == $model->id_pharmacy_dictionary_type ? 101 : 100;
+            $params['name'] = $model->name . '22';
+             
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
                 
+                $params['id'] = $model->id;
+                
                 $model1 = TrustCare_Model_PharmacyDictionary::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));

@@ -34,7 +34,7 @@ class TestOfUser extends UnitTestCase {
             
             $params = array(
                 'id' => $this->db->nextSequenceId('user_id_seq'),
-            	'login' => 'admin1',
+                'login' => 'admin1',
                 'password' => md5('admin1_pwd'),
                 'first_name' => 'First1_1',
                 'last_name' => 'Last1_1',
@@ -170,14 +170,14 @@ class TestOfUser extends UnitTestCase {
         $model = TrustCare_Model_User::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-        	$oldLogin = $model->login;
+            $oldLogin = $model->login;
 
-        	$params['login'] = $model->login . '11';
-        	$params['password'] = $model->password . '22';
+            $params['login'] = $model->login . '11';
+            $params['password'] = $model->password . '22';
             $params['first_name'] = $model->first_name . '112';
             $params['last_name'] = $model->last_name . '113';
             $params['is_active'] = ($model->is_active == 1) ? 0 : 1;
-        	$params['role'] = 'admin' == $model->role ? 'superadmin' : 'admin';
+            $params['role'] = 'admin' == $model->role ? 'superadmin' : 'admin';
             $params['city'] = $model->city . '41';
             $params['address'] = $model->address . '42';
             $params['zip'] = $model->zip . '43';
@@ -187,12 +187,13 @@ class TestOfUser extends UnitTestCase {
             $params['id_state'] = '2' == $model->id_state ? '1' : '2';
             
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
-                $params['login'] = $oldLogin;
+                $params['login'] = $oldLogin;                
+                $params['id'] = $model->id;
                 
                 $model1 = TrustCare_Model_User::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));

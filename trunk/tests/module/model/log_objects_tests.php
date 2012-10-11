@@ -138,6 +138,8 @@ class TestOfLogObjects extends UnitTestCase {
             try {
                 $newObj->setOptions($params);
                 $newObj->save();
+                
+                $params['id'] = $newObj->id;
 
                 $this->assertTrue(false, sprintf("Update must throw an exception"));
             }

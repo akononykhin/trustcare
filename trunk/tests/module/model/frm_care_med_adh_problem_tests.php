@@ -127,15 +127,17 @@ class TestOfFrmCareMedAdhProblem extends UnitTestCase {
         $model = TrustCare_Model_FrmCareMedAdhProblem::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-        	$params['id_frm_care'] = 1 == $model->id_frm_care ? 2 : 1;
-        	$params['id_pharmacy_dictionary'] = 2 == $model->id_pharmacy_dictionary ? 3 : 2;
-        	 
+            $params['id_frm_care'] = 1 == $model->id_frm_care ? 2 : 1;
+            $params['id_pharmacy_dictionary'] = 2 == $model->id_pharmacy_dictionary ? 3 : 2;
+             
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
                 
+                $params['id'] = $model->id;
+                
                 $model1 = TrustCare_Model_FrmCareMedAdhProblem::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));

@@ -111,13 +111,15 @@ class TestOfPharmacyDictionaryType extends UnitTestCase {
         if(!is_null($model)) {
             $params['ordernum'] = 15 == $model->ordernum ? 16 : 15;
             $params['name'] = $model->name . '22';
-        	 
+             
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
                 
+                $params['id'] = $model->id;
+                
                 $model1 = TrustCare_Model_PharmacyDictionaryType::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));

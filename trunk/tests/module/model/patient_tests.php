@@ -34,7 +34,7 @@ class TestOfPatient extends UnitTestCase {
             
             $params = array(
                 'id' => $this->db->nextSequenceId('patient_id_seq'),
-            	'identifier' => 'physic1',
+                'identifier' => 'physic1',
                 'first_name' => 'First1_1',
                 'last_name' => 'Last1_1',
                 'id_country' => 1000,
@@ -176,7 +176,7 @@ class TestOfPatient extends UnitTestCase {
         $model = TrustCare_Model_Patient::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-        	$params['identifier'] = $model->identifier . '11';
+            $params['identifier'] = $model->identifier . '11';
             $params['first_name'] = $model->first_name . '112';
             $params['last_name'] = $model->last_name . '113';
             $params['id_country'] = '1001' == $model->id_country ? '1000' : '1001';
@@ -191,11 +191,13 @@ class TestOfPatient extends UnitTestCase {
             $params['is_active'] = ($model->is_active == 1) ? 0 : 1;
             
             try {
-                $model->setOptions($this->paramsAtDb);
+                $model->setOptions($params);
                 $model->save();
                 
+                $params['id'] = $model->id;
+                
                 $model1 = TrustCare_Model_Patient::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $this->paramsAtDb);
+                $this->_compareObjectAndParams($model1, $params);
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
