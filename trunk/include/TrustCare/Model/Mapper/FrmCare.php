@@ -61,7 +61,13 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('is_nafdac_adr_filled')) {
             $data['is_nafdac_adr_filled'] = $model->getIsNafdacAdrFilled() ? 1 : 0;
         }
-
+        if(!$model->isExists() || $model->isParameterChanged('is_patient_younger_15')) {
+            $data['is_patient_younger_15'] = $model->getIsPatientYounger15() ? 1 : 0;
+        }
+        if(!$model->isExists() || $model->isParameterChanged('is_patient_male')) {
+            $data['is_patient_male'] = $model->getIsPatientMale() ? 1 : 0;
+        }
+        
         if (null === ($id = $model->getId())) {
             unset($data['id']);
             $primaryKey = $this->getDbTable()->insert($data);
@@ -111,8 +117,10 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
               ->setAdrStartDate($row->adr_start_date)
               ->setAdrStopDate($row->adr_stop_date)
               ->setIsAdrInterventionProvided($row->is_adr_intervention_provided)
-              ->setIsNafdacAdrFilled($row->is_nafdac_adr_filled);
-          $model->setSkipTrackChanges(false);
+              ->setIsNafdacAdrFilled($row->is_nafdac_adr_filled)
+              ->setIsPatientYounger15($row->is_patient_younger_15)
+              ->setIsPatientMale($row->is_patient_male);
+        $model->setSkipTrackChanges(false);
               
         return true;
     }

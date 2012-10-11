@@ -24,6 +24,8 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     protected $_is_reproductive_health_services;
     protected $_is_tuberculosis_services;
     protected $_is_ovc_services;
+    protected $_is_patient_younger_15;
+    protected $_is_patient_male;
     
     /**
      * @param  int $value 
@@ -329,6 +331,45 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     public function getIsOvcServices()
     {
         return !empty($this->_is_ovc_services) ? true : false;
+    }
+    
+    /**
+     * @param  bool $value 
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setIsPatientYounger15($value)
+    {
+        $this->_parameterChanged('is_patient_younger_15', $value, true);
+        $this->_is_patient_younger_15 = !empty($value) ? true : false;
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function getIsPatientYounger15()
+    {
+        return !empty($this->_is_patient_younger_15) ? true : false;
+    }
+    
+    
+    /**
+     * @param  bool $value 
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setIsPatientMale($value)
+    {
+        $this->_parameterChanged('is_patient_male', $value, true);
+        $this->_is_patient_male = !empty($value) ? true : false;
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function getIsPatientMale()
+    {
+        return !empty($this->_is_patient_male) ? true : false;
     }
     
     

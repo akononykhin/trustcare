@@ -330,8 +330,13 @@ CREATE TABLE frm_care (
   `adr_stop_date` datetime default NULL,
   `is_adr_intervention_provided` int,
   `is_nafdac_adr_filled` int,
+  `is_patient_younger_15` int default NULL,
+  `is_patient_male` int default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create index idx_frm_care_date_of_visit_month_index on frm_care(date_of_visit_month_index);
+
 
 CREATE TABLE frm_care_med_error_type (
   `id` int NOT NULL,
@@ -461,8 +466,12 @@ CREATE TABLE frm_community (
   `is_reproductive_health_services` int,
   `is_tuberculosis_services` int,
   `is_ovc_services` int,
+  `is_patient_younger_15` int default NULL,
+  `is_patient_male` int default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create index idx_frm_community_date_of_visit_month_index on frm_community(date_of_visit_month_index);
 
 CREATE TABLE frm_community_referred_in (
   `id` int NOT NULL,
@@ -868,4 +877,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20121011, 1);
+insert into db_version values (1, 20121011, 2);

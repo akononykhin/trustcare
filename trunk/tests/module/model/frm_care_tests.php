@@ -50,6 +50,8 @@ class TestOfFrmCare extends UnitTestCase {
                 'adr_stop_date' => '2012-06-08 01:01:01',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
+                'is_patient_younger_15' => true,
+                'is_patient_male' => false,
             );
 
             $columns = array();
@@ -102,6 +104,8 @@ class TestOfFrmCare extends UnitTestCase {
                 'adr_stop_date' => '2012-06-08 01:01:01',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
+                'is_patient_younger_15' => true,
+                'is_patient_male' => false,
                 'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -144,7 +148,9 @@ class TestOfFrmCare extends UnitTestCase {
                 'adr_stop_date' => '2012-06-08 01:01:01',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
-            );
+                'is_patient_younger_15' => true,
+                'is_patient_male' => false,
+        );
         
         try {
             $model = new TrustCare_Model_FrmCare(array('mapperOptions' => array('adapter' => $this->db)));
@@ -183,7 +189,9 @@ class TestOfFrmCare extends UnitTestCase {
             $params['adr_stop_date'] = '2011-07-01 01:01:01' == $model->adr_stop_date ? '2011-07-02 01:01:01' : '2011-07-01 01:01:01';
             $params['is_adr_intervention_provided'] = !$model->is_adr_intervention_provided;
         	$params['is_nafdac_adr_filled'] = !$model->is_nafdac_adr_filled;
-
+            $params['is_patient_younger_15'] = !$model->is_patient_younger_15;
+            $params['is_patient_male'] = !$model->is_patient_male;
+            
             try {
                 $model->setOptions($params);
                 $model->save();
@@ -255,7 +263,9 @@ class TestOfFrmCare extends UnitTestCase {
         $this->assertIdentical($model->is_adr_symptoms, !empty($params['is_adr_symptoms']) ? true : false, "Incorrect 'is_adr_symptoms': %s");
         $this->assertIdentical($model->is_adr_intervention_provided, !empty($params['is_adr_intervention_provided']) ? true : false, "Incorrect 'is_adr_intervention_provided': %s");
         $this->assertIdentical($model->is_nafdac_adr_filled, !empty($params['is_nafdac_adr_filled']) ? true : false, "Incorrect 'is_nafdac_adr_filled': %s");
-
+        $this->assertIdentical($model->is_patient_younger_15, !empty($params['is_patient_younger_15']) ? true : false, "Incorrect 'is_patient_younger_15': %s");
+        $this->assertIdentical($model->is_patient_male, !empty($params['is_patient_male']) ? true : false, "Incorrect 'is_patient_male': %s");
+        
     }
 }
 
