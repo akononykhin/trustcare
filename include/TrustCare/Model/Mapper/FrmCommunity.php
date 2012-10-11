@@ -58,6 +58,12 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         if(!$model->isExists() || $model->isParameterChanged('is_ovc_services')) {
             $data['is_ovc_services'] = $model->getIsOvcServices() ? 1 : 0;
         }
+        if(!$model->isExists() || $model->isParameterChanged('is_patient_younger_15')) {
+            $data['is_patient_younger_15'] = $model->getIsPatientYounger15() ? 1 : 0;
+        }
+        if(!$model->isExists() || $model->isParameterChanged('is_patient_male')) {
+            $data['is_patient_male'] = $model->getIsPatientMale() ? 1 : 0;
+        }
         
         if (null === ($id = $model->getId())) {
             unset($data['id']);
@@ -107,8 +113,10 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
               ->setIsStiServices($row->is_sti_services)
               ->setIsReproductiveHealthServices($row->is_reproductive_health_services)
               ->setIsTuberculosisServices($row->is_tuberculosis_services)
-              ->setIsOvcServices($row->is_ovc_services);
-          $model->setSkipTrackChanges(false);
+              ->setIsOvcServices($row->is_ovc_services)
+              ->setIsPatientYounger15($row->is_patient_younger_15)
+              ->setIsPatientMale($row->is_patient_male);
+        $model->setSkipTrackChanges(false);
               
         return true;
     }

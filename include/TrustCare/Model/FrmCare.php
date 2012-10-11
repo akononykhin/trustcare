@@ -25,6 +25,8 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     protected $_adr_stop_date;
     protected $_is_adr_intervention_provided;
     protected $_is_nafdac_adr_filled;
+    protected $_is_patient_younger_15;
+    protected $_is_patient_male;
     
     /**
      * @param  int $value 
@@ -350,7 +352,46 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     {
         return !empty($this->_is_nafdac_adr_filled) ? true : false;
     }
+
     
+    /**
+     * @param  bool $value 
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setIsPatientYounger15($value)
+    {
+        $this->_parameterChanged('is_patient_younger_15', $value, true);
+        $this->_is_patient_younger_15 = !empty($value) ? true : false;
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function getIsPatientYounger15()
+    {
+        return !empty($this->_is_patient_younger_15) ? true : false;
+    }
+    
+    
+    /**
+     * @param  bool $value 
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setIsPatientMale($value)
+    {
+        $this->_parameterChanged('is_patient_male', $value, true);
+        $this->_is_patient_male = !empty($value) ? true : false;
+        return $this;
+    }
+
+    /**
+     * @return null|bool
+     */
+    public function getIsPatientMale()
+    {
+        return !empty($this->_is_patient_male) ? true : false;
+    }
     
     public function isExists()
     {
