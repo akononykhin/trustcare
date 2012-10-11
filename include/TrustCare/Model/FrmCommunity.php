@@ -11,6 +11,7 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     protected $_id;
     protected $_id_patient;
     protected $_date_of_visit;
+    protected $_date_of_visit_month_index;
     protected $_is_referred_in;
     protected $_is_referred_out;
     protected $_is_referral_completed;
@@ -80,6 +81,26 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     {
         return $this->_date_of_visit;
     }
+    
+    /**
+     * @param  int $value 
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setDateOfVisitMonthIndex($value)
+    {
+        $this->_parameterChanged('date_of_visit_month_index', $value);
+        $this->_date_of_visit_month_index = (int) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getDateOfVisitMonthIndex()
+    {
+        return $this->_date_of_visit_month_index;
+    }
+    
     
     /**
      * @param  bool $value 

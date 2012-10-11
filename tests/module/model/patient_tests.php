@@ -210,6 +210,9 @@ class TestOfPatient extends UnitTestCase {
         $model = TrustCare_Model_Patient::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         try {
+            if(is_null($model)) {
+                throw new Exception("Object not loaded!");
+            }
             $model->delete();
             
             $model1 = TrustCare_Model_Patient::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
