@@ -38,7 +38,20 @@ class TrustCare_Model_DbTable_State extends ZendX_Db_Table_Abstract
         $db = Zend_Registry::get("Storage")->getPersistantDb(); 
         $data['id'] = $db->nextSequenceId('state_id_seq');
 
+        if(array_key_exists('id_country', $data) && empty($data['id_country'])) {
+            $data['id_country'] = new Zend_Db_Expr('NULL');
+        }
+
         return parent::insert($data);
+    }
+    
+    public function update(array $data, $where)
+    {
+        if(array_key_exists('id_country', $data) && empty($data['id_country'])) {
+            $data['id_country'] = new Zend_Db_Expr('NULL');
+        }
+        
+        return parent::update($data, $where);
     }
     
 }

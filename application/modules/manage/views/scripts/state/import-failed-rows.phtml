@@ -1,0 +1,17 @@
+<div id="inner_title"><span style="color:red"><?php echo $this->translate(_("Failed to import next rows:"));?></span></div>
+<br/>
+<?php
+foreach($this->failedRows as $row) {
+    echo $row . "<br/><br/>";
+} 
+?>
+
+<?php if(count($this->warningRows)) { ?>
+ <div id="inner_title"><?php echo $this->translate(_("Warnings:"));?></div>
+ <br/>
+<?php
+foreach($this->warningRows as $row) {
+    echo $row . "<br/><br/>";
+} 
+?>
+<?php } ?>

@@ -140,6 +140,22 @@ class TestOfState extends UnitTestCase {
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
             }
+
+            
+            /* Check null values */
+            try {
+                $params = array('id_country' => null);
+                $model->setOptions($params);
+                $model->save();
+                $params['id'] = $model->id;
+                
+                $model1 = TrustCare_Model_State::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->assertEqual($model->id_country, $params['id_country'], "Incorrect 'id_country': %s");
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
+
         }
         else {
             $this->assertTrue(false, "Can't initialize object");
