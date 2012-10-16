@@ -326,6 +326,7 @@ CREATE TABLE frm_care (
   `is_adh_intervention_provided` int,
   `is_adr_screened` int,
   `is_adr_symptoms` int,
+  `adr_severity_id` int default NULL,
   `adr_start_date` datetime default NULL,
   `adr_stop_date` datetime default NULL,
   `is_adr_intervention_provided` int,
@@ -367,14 +368,6 @@ CREATE TABLE frm_care_adh_intervention_outcome (
   `id_frm_care` int NOT NULL,
   `id_pharmacy_dictionary` int NOT NULL,
   UNIQUE KEY `cons_frm_care_adh_intervention_outcome_1` (`id_frm_care`, `id_pharmacy_dictionary`),
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE frm_care_adr_severity (
-  `id` int NOT NULL,
-  `id_frm_care` int NOT NULL,
-  `id_pharmacy_dictionary` int NOT NULL,
-  UNIQUE KEY `cons_frm_care_adr_severity_1` (`id_frm_care`, `id_pharmacy_dictionary`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -636,6 +629,11 @@ alter table frm_care
     add constraint fk_frm_care_id_patient foreign key (id_patient)
         references patient(id);
 
+alter table frm_care
+    add constraint fk_frm_care_adr_severity_id foreign key (adr_severity_id)
+        references pharmacy_dictionary(id) on delete set NULL;
+
+
 
 alter table frm_community
     add constraint fk_frm_community_id_patient foreign key (id_patient)
@@ -678,15 +676,6 @@ alter table frm_care_adh_intervention_outcome
 alter table frm_care_adh_intervention_outcome
     add constraint fk_frm_care_adh_intervention_outcome_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
         references pharmacy_dictionary(id);
-
-alter table frm_care_adr_severity
-    add constraint fk_frm_care_adr_severity_id_frm_care foreign key (id_frm_care)
-        references frm_care(id) on delete cascade;
-
-alter table frm_care_adr_severity
-    add constraint fk_frm_care_adr_severity_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
-        references pharmacy_dictionary(id);
-
 
 alter table frm_care_suspected_adr_hepatic
     add constraint fk_frm_care_suspected_adr_hepatic_id_frm_care foreign key (id_frm_care)
@@ -851,7 +840,6 @@ INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_error_type_id_seq', 1)
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_adh_problem_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention_outcome_id_seq', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_care_adr_severity_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_hepatic_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_nervous_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_cardiovascular_id_seq', 1);
@@ -877,4 +865,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20121011, 2);
+insert into db_version values (1, 20121016, 1);

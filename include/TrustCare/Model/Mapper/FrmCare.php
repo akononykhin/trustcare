@@ -49,6 +49,9 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('is_adr_symptoms')) {
             $data['is_adr_symptoms'] = $model->getIsAdrSymptoms() ? 1 : 0;
         }
+        if(!$model->isExists() || $model->isParameterChanged('adr_severity_id')) {
+            $data['adr_severity_id'] = $model->getAdrSeverityId();
+        }
         if(!$model->isExists() || $model->isParameterChanged('adr_start_date')) {
             $data['adr_start_date'] = $model->getAdrStartDate();
         }
@@ -114,6 +117,7 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
               ->setIsAdhInterventionProvided($row->is_adh_intervention_provided)
               ->setIsAdrScreened($row->is_adr_screened)
               ->setIsAdrSymptoms($row->is_adr_symptoms)
+              ->setAdrSeverityId($row->adr_severity_id)
               ->setAdrStartDate($row->adr_start_date)
               ->setAdrStopDate($row->adr_stop_date)
               ->setIsAdrInterventionProvided($row->is_adr_intervention_provided)

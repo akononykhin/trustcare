@@ -46,6 +46,7 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_adh_intervention_provided' => false,
                 'is_adr_screened' => true,
                 'is_adr_symptoms' => false,
+                'adr_severity_id' => 1,
                 'adr_start_date' => '2012-06-01 01:01:01',
                 'adr_stop_date' => '2012-06-08 01:01:01',
                 'is_adr_intervention_provided' => true,
@@ -100,7 +101,8 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_adh_intervention_provided' => false,
                 'is_adr_screened' => true,
                 'is_adr_symptoms' => false,
-                'adr_start_date' => '2012-06-01 01:01:01',
+                'adr_severity_id' => 2,
+        		'adr_start_date' => '2012-06-01 01:01:01',
                 'adr_stop_date' => '2012-06-08 01:01:01',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
@@ -144,7 +146,8 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_adh_intervention_provided' => false,
                 'is_adr_screened' => true,
                 'is_adr_symptoms' => false,
-                'adr_start_date' => '2012-06-01 01:01:01',
+                'adr_severity_id' => 3,
+        		'adr_start_date' => '2012-06-01 01:01:01',
                 'adr_stop_date' => '2012-06-08 01:01:01',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
@@ -185,6 +188,7 @@ class TestOfFrmCare extends UnitTestCase {
         	$params['is_adh_intervention_provided'] = !$model->is_adh_intervention_provided;
         	$params['is_adr_screened'] = !$model->is_adr_screened;
         	$params['is_adr_symptoms'] = !$model->is_adr_symptoms;
+        	$params['adr_severity_id'] = $model->adr_severity_id == 1 ? 2 : 1;
             $params['adr_start_date'] = '2011-06-01 01:01:01' == $model->adr_start_date ? '2011-06-02 01:01:01' : '2011-06-01 01:01:01';
             $params['adr_stop_date'] = '2011-07-01 01:01:01' == $model->adr_stop_date ? '2011-07-02 01:01:01' : '2011-07-01 01:01:01';
             $params['is_adr_intervention_provided'] = !$model->is_adr_intervention_provided;
@@ -261,6 +265,7 @@ class TestOfFrmCare extends UnitTestCase {
         $this->assertIdentical($model->is_adh_intervention_provided, !empty($params['is_adh_intervention_provided']) ? true : false, "Incorrect 'is_adh_intervention_provided': %s");
         $this->assertIdentical($model->is_adr_screened, !empty($params['is_adr_screened']) ? true : false, "Incorrect 'is_adr_screened': %s");
         $this->assertIdentical($model->is_adr_symptoms, !empty($params['is_adr_symptoms']) ? true : false, "Incorrect 'is_adr_symptoms': %s");
+        $this->assertEqual($model->adr_severity_id, $params['adr_severity_id'], "Incorrect 'adr_severity_id': %s");
         $this->assertIdentical($model->is_adr_intervention_provided, !empty($params['is_adr_intervention_provided']) ? true : false, "Incorrect 'is_adr_intervention_provided': %s");
         $this->assertIdentical($model->is_nafdac_adr_filled, !empty($params['is_nafdac_adr_filled']) ? true : false, "Incorrect 'is_nafdac_adr_filled': %s");
         $this->assertIdentical($model->is_patient_younger_15, !empty($params['is_patient_younger_15']) ? true : false, "Incorrect 'is_patient_younger_15': %s");
