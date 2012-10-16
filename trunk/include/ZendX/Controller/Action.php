@@ -173,6 +173,94 @@ class ZendX_Controller_Action extends Zend_Controller_Action
         
         return $filterValues;
     }
+    
+    /**
+     * Processing of standard list-load ajax query.
+     * Zend_Db_Select $select object has already been initiated outside. It's necessary to configure WHERE,ORDER,LIMIT parts
+     * Enter description here ...
+     * @param Zend_Db_Select $select
+     */
+    protected function processListLoadAjaxRequest(Zend_Db_Select $select)
+    {
+        /* Paging */
+        if(array_key_exists('iDisplayStart', $_REQUEST) && $_REQUEST['iDisplayLength'] != '-1' ) {
+            $select->limit($_REQUEST['iDisplayLength'], $_REQUEST['iDisplayStart']);
+        }
 
+        /*
+         * Ordering
+         */
+        $orderByArr = array();
+        if($_REQUEST['iSortingCols']) {
+            for($i = 0; $i < $_REQUEST['iSortingCols']; $i++) {
+                $columnIndex = $_REQUEST['iSortCol_'.$i];
+                $sortDirection = strtoupper($_REQUEST['sSortDir_'.$i]) == 'ASC' ? 'asc' : 'desc';
+                
+                $orderByArr[] = sprintf("%s %s", $_REQUEST['mDataProp_'.$columnIndex], $sortDirection);
+            }
+        }
+        if(count($orderByArr)) {
+                $select->order($orderByArr);
+        }
+
+        if($_REQUEST['iColumns']) {
+            for($i = 0; $i < $_REQUEST['iColumns']; $i++) {
+                if(!array_key_exists('mDataProp_'.$i, $_REQUEST)) {
+                    continue;
+                }
+                if(!array_key_exists('bSearchable_'.$i, $_REQUEST) || !$_REQUEST['bSearchable_'.$i]) {
+                    continue;
+                }
+                if(!array_key_exists('sSearch_'.$i, $_REQUEST) || empty($_REQUEST['sSearch_'.$i])) {
+                    continue;
+                }
+                $colName = $_REQUEST['mDataProp_'.$i];
+                $value = $_REQUEST['sSearch_'.$i];
+
+                
+                $notLike = false;
+                if(preg_match("/^!/", $value)) {
+                    $value =  preg_replace("/^!/", "", $value);
+                    $notLike = true;
+                    
+                    $operation = preg_match("/%/", $value) ? 'not like' : '!=';
+                }
+                else {
+                    $operation = preg_match("/%/", $value) ? 'like' : '=';
+                }
+
+                /* Array search */
+                if(preg_match("/;/", $value)) {
+                    $dda = array();
+                    foreach(preg_split("/;/", $value) as $k=>$v) {
+                        $dda[] = sprintf("%s %s %s",
+                                    Zend_Registry::getInstance()->dbAdapter->quoteIdentifier($colName),
+                                    $operation,
+                                    Zend_Registry::getInstance()->dbAdapter->quote($v));
+                    }
+                    $whereStr = !$notLike ? implode(" OR ",$dda) : implode(" AND ",$dda);
+                }
+                else {
+                    $whereStr = sprintf("%s %s %s",
+                                    Zend_Registry::getInstance()->dbAdapter->quoteIdentifier($colName),
+                                    $operation,
+                                    Zend_Registry::getInstance()->dbAdapter->quote($value));
+                }
+                $select->where($whereStr);
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param string $time Time at GMT timezone and YYYY-MM-DD HH:MI:SS format
+     */
+    protected function convertTimeToUserTimezone($time)
+    {
+            $zendDate  = new Zend_Date($time.'Z', "yyyy-MM-dd HH:mm:ssZ");
+            $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
+            $zendDate->setTimezone($clientTZ);
+            return $zendDate->toString(Zend_Registry::getInstance()->dateTimeFormat);
+    }
 }
 
