@@ -447,6 +447,7 @@ CREATE TABLE frm_community (
   `id_patient` int NOT NULL,
   `date_of_visit` datetime NOT NULL,
   `date_of_visit_month_index` int default NULL,
+  `is_first_visit_to_pharmacy` int default NULL,
   `is_referred_in` int,
   `is_referred_out` int,
   `is_referral_completed` int,
@@ -865,4 +866,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20121016, 1);
+insert into db_version values (1, 20121016, 2);
