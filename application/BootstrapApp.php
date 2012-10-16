@@ -338,6 +338,14 @@ class BootstrapApp extends BootstrapMain
                                         'resource'      => 'resource:admin.system_dict',
                                         'privilege'     => 'edit'
                                     ),
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Import"),
+                                        'controller'    => 'country',
+                                        'action'        => 'import',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'create'
+                                    ),
                                 ),
                             ),
                             array(
