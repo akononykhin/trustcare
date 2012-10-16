@@ -25,6 +25,9 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         if(!$model->isExists() || $model->isParameterChanged('is_referred_in')) {
             $data['is_referred_in'] = $model->getIsReferredIn() ? 1 : 0;
         }
+        if(!$model->isExists() || $model->isParameterChanged('is_first_visit_to_pharmacy')) {
+            $data['is_first_visit_to_pharmacy'] = $model->getIsFirstVisitToPharmacy() ? 1 : 0;
+        }
         if(!$model->isExists() || $model->isParameterChanged('is_referred_out')) {
             $data['is_referred_out'] = $model->getIsReferredOut() ? 1 : 0;
         }
@@ -102,6 +105,7 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
               ->setIdPatient($row->id_patient)
               ->setDateOfVisit($row->date_of_visit)
               ->setDateOfVisitMonthIndex($row->date_of_visit_month_index)
+              ->setIsFirstVisitToPharmacy($row->is_first_visit_to_pharmacy)
               ->setIsReferredIn($row->is_referred_in)
               ->setIsReferredOut($row->is_referred_out)
               ->setIsReferralCompleted($row->is_referral_completed)
