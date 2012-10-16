@@ -23,6 +23,7 @@ $sDom .= "lrtip";
 thead th { text-align: left; }
 
 .icon-edit { background-image:url(/img/actions/edit.gif) ! important; }
+.icon-view { background-image:url(/img/actions/view.gif) ! important; }
 .icon-delete { background-image:url(/img/actions/delete.gif) ! important; }
 a.row_action { cursor: pointer; }
 #list_toolbar_container {padding-top: 15px; padding-bottom: 15px;}
@@ -53,7 +54,7 @@ $(document).ready( function () {
             'mData'     : function ( source, type, val ) {return '';}
            ,'mRender'   : function ( data, type, full ) {
                var content = '';
-               jQuery.each(full.row_actions, function() {
+               jQuery.each(full._row_actions_, function() {
                    var idPrefix = 'action_' + this.type + '_' + full.DT_RowId;
                    content += '<a class="row_action" id="' + idPrefix + '">';
                    content += '<img src="/img/actions/'+this.type+'.gif" title="'+this.title+'">';
@@ -63,9 +64,11 @@ $(document).ready( function () {
                    }
                    content += '</a>';
                });
-            	               
+                               
                return content;
            }       
+           ,'sName'     : '__action__'
+           ,'bSearchable' : false
            ,'bSortable' : false
            ,'bVisible'  : true
            ,'sWidth'    : '5%'
@@ -76,7 +79,9 @@ $(document).ready( function () {
 ?>
     trHeader.append(jQuery('<th/>', {'text' : '<?php echo $column['title'];?>'}));
     aoColumns[aoColumns.length] = {
-            'mData' : '<?php echo $key;?>'
+            'mData'     : '<?php echo $key;?>'
+           ,'sName'     : '<?php echo $key;?>'
+           ,'sWidth'    : <?php echo array_key_exists('width', $column) ? "'".$column['width']."'" : 'null';?>
            ,'bSortable' : <?php echo !array_key_exists('sortable', $column) || $column['sortable'] ? 'true' : 'false';?>
            ,'bVisible'  : <?php echo !array_key_exists('visible', $column) || $column['visible'] ? 'true' : 'false';?>
     };
@@ -272,9 +277,9 @@ $(document).ready( function () {
     if(array_key_exists('toolbar', $this->DataTable)) : ?>
     var tContainer = $('<div id="list_toolbar_container"/>');
 <?php    
-    	foreach($this->DataTable['toolbar'] as $toolAction) :
-    	    $text = $toolAction['text'];
-    	    $url = $toolAction['url']; 
+        foreach($this->DataTable['toolbar'] as $toolAction) :
+            $text = $toolAction['text'];
+            $url = $toolAction['url']; 
 ?>
     tContainer.append('<a class="list_toolbar_action" href="<?php echo $url;?>"><?php echo $text;?></a>');
 <?php  endforeach; ?>
@@ -287,7 +292,7 @@ $(document).ready( function () {
         var message = $('#' + idPrefix + '_message', this).text();
 
         if(!message) {
-        	$(location).attr('href', url);
+            $(location).attr('href', url);
         }
         else {
             $("#dialog-confirm").html(message);

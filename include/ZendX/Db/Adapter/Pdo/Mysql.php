@@ -60,6 +60,29 @@ class ZendX_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
         }
         return $value;
     }
+    
+    /**
+     * Necessary to execute SELECT ... LIMIT query and return not only resulted records but the number of records the query would have returned without LIMIT
+     * 
+     * @param $selectQuery - query string
+     * @param $totalRecords - the number of records the query would have returned without LIMIT
+     * @return array Array of resulting records. Each record may be indexed array,associated array, object etc depending on the current fetch mode
+     */
+    public function selectWithLimit($selectQuery, &$totalRecords)
+    {
+        $records = array();
+        
+        $query = preg_replace('/^(select)\s+(.*)/i', '$1 SQL_CALC_FOUND_ROWS $2', $selectQuery);
+        $records = $this->fetchAll($query);
+        
+        $query1 = "select found_rows() as total_records;";
+        $info = $this->fetchAll($query1, null, Zend_Db::FETCH_ASSOC);
+        
+        $totalRecords = $info[0]['total_records'];
+        
+
+        return $records;
+    }
 }
 
  
