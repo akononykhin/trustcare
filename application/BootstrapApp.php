@@ -532,19 +532,19 @@ class BootstrapApp extends BootstrapMain
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
-                                'label'         => Zend_Registry::get("Zend_Translate")->_("Errors"),
-                                'controller'    => 'system_log',
-                                'action'        => 'error',
-                            ),
-                            array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Objects"),
                                 'controller'    => 'system_log',
-                                'action'        => 'object',
+                                'action'        => 'objects',
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Access"),
                                 'controller'    => 'system_log',
                                 'action'        => 'access',
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Errors"),
+                                'controller'    => 'system_log',
+                                'action'        => 'errors',
                             ),
                         ),
                     ),

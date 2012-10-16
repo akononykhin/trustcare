@@ -1,0 +1,22 @@
+<div class="inner_title"><?php echo $this->translate(_("Errors"));?></div>
+<form class="zend_form">
+<table>
+ <tr>
+  <td><?php echo $this->translate(_("Time"));?></td>
+  <td><?php echo $this->info['timestamp'];?></td>
+ </tr>
+ <tr>
+  <td>Logger</td>
+  <td><?php echo $this->info['logger'];?></td>
+ </tr>
+ <tr>
+  <td><?php echo $this->translate(_("Level"));?></td>
+  <td><?php echo $this->info['level'];?></td>
+ </tr>
+ <tr>
+  <td><?php echo $this->translate(_("Message"));?></td>
+  <td><?php echo preg_replace("/\t/", "&nbsp;&nbsp;&nbsp;&nbsp;", nl2br($this->escape($this->info['message'])));?></td>
+ </tr>
+</table>
+</form>
+

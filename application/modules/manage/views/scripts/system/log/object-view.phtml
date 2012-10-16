@@ -1,0 +1,34 @@
+<div class="inner_title"><?php echo $this->translate(_("Objects Log"));?></div>
+<form class="zend_form">
+<table>
+ <tr>
+  <td><?php echo $this->translate(_("Time"));?></td>
+  <td><?php echo $this->model->timestamp;?></td>
+ </tr>
+ <tr>
+  <td><?php echo $this->translate(_("Author"));?></td>
+  <td><?php echo $this->model->author;?></td>
+ </tr>
+ <tr>
+  <td>IP</td>
+  <td><?php echo $this->model->from_ip;?></td>
+ </tr>
+ <tr>
+  <td><?php echo $this->translate(_("Object"));?></td>
+  <td><?php echo $this->model->object_name;?></td>
+ </tr>
+ <tr>
+  <td><?php echo $this->translate(_("Key"));?></td>
+  <td><?php echo $this->model->key_info;?></td>
+ </tr>
+ <tr>
+  <td><?php echo $this->translate(_("Action"));?></td>
+  <td><?php echo preg_replace("/\t/", "&nbsp;&nbsp;&nbsp;&nbsp;", nl2br($this->escape($this->model->action)));?></td>
+ </tr>
+ <tr>
+  <td><?php echo $this->translate(_("Stack"));?></td>
+  <td><?php echo preg_replace("/\t/", "&nbsp;&nbsp;&nbsp;&nbsp;", nl2br($this->escape($this->model->stack)));?></td>
+ </tr>
+</table>
+</form>
+
