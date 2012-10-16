@@ -21,6 +21,7 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     protected $_is_adh_intervention_provided;
     protected $_is_adr_screened;
     protected $_is_adr_symptoms;
+    protected $_adr_severity_id;
     protected $_adr_start_date;
     protected $_adr_stop_date;
     protected $_is_adr_intervention_provided;
@@ -277,6 +278,27 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
         return !empty($this->_is_adr_symptoms) ? true : false;
     }
     
+    /**
+     * 
+     * @param int $value
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setAdrSeverityId($value)
+    {
+        $this->_parameterChanged('adr_severity_id', $value);
+        $this->_adr_severity_id = (int) $value;
+        return $this;
+    }
+    
+    /**
+     *
+     * @return null|int
+     */
+    public function getAdrSeverityId()
+    {
+        return $this->_adr_severity_id;
+    }
+     
     /**
      * @param  string $value 
      * @return TrustCare_Model_FrmCare
