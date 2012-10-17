@@ -1,6 +1,6 @@
 <?php
 
-class CountryController extends ZendX_Controller_Action
+class LgaController extends ZendX_Controller_Action
 {
 
     public function init()
@@ -21,13 +21,6 @@ class CountryController extends ZendX_Controller_Action
     public function listAction()
     {
         $columnsInfo = array(
-            'iso_3166' => array(
-                'title' => 'ISO-3166-1 alpha 2',
-                'width' => '15%',
-                'filter' => array(
-                    'type' => 'text',
-                ),
-            ),
             'name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Name"),
                 'filter' => array(
@@ -48,7 +41,7 @@ class CountryController extends ZendX_Controller_Action
                     'url' => $this->view->url(array('action' => 'import'))
                 ),
             ),
-            'defSortColumn' => 2,
+            'defSortColumn' => 1,
             'defSortDir' => 'asc',
             'columnsInfo' => $columnsInfo,
             'bActionsColumn' => true
@@ -66,14 +59,14 @@ class CountryController extends ZendX_Controller_Action
     
     public function listLoadAction()
     {
-        $select = Zend_Registry::getInstance()->dbAdapter->select()->from("country", array('count(id)'));
+        $select = Zend_Registry::getInstance()->dbAdapter->select()->from("lga", array('count(id)'));
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_NUM);
         $result = Zend_Registry::getInstance()->dbAdapter->fetchAll($select);
         $iTotal = $result[0][0];
         
         
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_ASSOC);
-        $select = Zend_Registry::getInstance()->dbAdapter->select()->from("country");
+        $select = Zend_Registry::getInstance()->dbAdapter->select()->from("lga");
 
         $this->processListLoadAjaxRequest($select);
         
@@ -124,17 +117,9 @@ class CountryController extends ZendX_Controller_Action
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
                 try {
                     $name = $form->getValue('name');
-                    $iso_3166 = $form->getValue('iso_3166');
                     
-                    $checkModel = TrustCare_Model_Country::findByIso($iso_3166);
-                    if(!is_null($checkModel)) {
-                        $errorMsg = sprintf(Zend_Registry::get("Zend_Translate")->_("ISO code %s has already been used"), $iso_3166);
-                        throw new Exception("");
-                    }
-                    
-                    $model = new TrustCare_Model_Country();
+                    $model = new TrustCare_Model_Lga();
                     $model->setName($name);
-                    $model->setIso3166($iso_3166);
                     $model->save();
 
                     $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
@@ -164,10 +149,10 @@ class CountryController extends ZendX_Controller_Action
         $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
         
         $id = $this->_getParam('id');
-        $model = TrustCare_Model_Country::find($id);
+        $model = TrustCare_Model_Lga::find($id);
         if(is_null($model)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown country with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Country")));
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown lga with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown LGA")));
             return;
         }
         
@@ -176,19 +161,8 @@ class CountryController extends ZendX_Controller_Action
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
                 try {
                     $name = $form->getValue('name');
-                    $iso_3166 = $form->getValue('iso_3166');
                     
-                    if($iso_3166 != $model->getIso3166()) {
-                        $checkModel = TrustCare_Model_Country::findByIso($iso_3166);
-                        if(!is_null($checkModel)) {
-                            $errorMsg = sprintf(Zend_Registry::get("Zend_Translate")->_("ISO code %s has already been used"), $iso_3166);
-                            throw new Exception("");
-                        }
-                    }
-                    
-                                        
                     $model->setName($name);
-                    $model->setIso3166($iso_3166);
                     $model->save();
                     
                     $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
@@ -205,7 +179,6 @@ class CountryController extends ZendX_Controller_Action
         else {
             $form->getElement("id")->setValue($id);
             $form->getElement("name")->setValue($model->name);
-            $form->getElement("iso_3166")->setValue($model->iso_3166);
         }
         
         $this->view->form = $form;
@@ -222,10 +195,10 @@ class CountryController extends ZendX_Controller_Action
     public function deleteAction()
     {
         $id = $this->_getParam('id');
-        $model = TrustCare_Model_Country::find($id);
+        $model = TrustCare_Model_Lga::find($id);
         if(is_null($model)) {
-            $this->getLogger()->error(sprintf("'%s' tries to delete unknown country with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Country")));
+            $this->getLogger()->error(sprintf("'%s' tries to delete unknown lga with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown LGA")));
             return;
         }
 
@@ -270,26 +243,19 @@ class CountryController extends ZendX_Controller_Action
                         while(($row = fgetcsv($fileHandle, 0, $separator))) {
 
                             try {
-                                if(2 > count($row)) {
+                                if(1 > count($row)) {
                                     throw new Exception(Zend_Registry::get("Zend_Translate")->_("Incorrect number of columns"));
                                 }
-                                $iso_3166 = $row[0];
-                                $name = $row[1];
+                                $name = $row[0];
                                 if('#' == $tadig{0}) {
                                     continue;
                                 }
                                 
-                                if(2 < strlen($iso_3166)) {
-                                    throw new Exception(sprintf(Zend_Registry::get("Zend_Translate")->_("Incorrect ISO code %s"), $iso_3166));
+                                if(empty($name)) {
+                                    throw new Exception(sprintf("Empty name isn't allowed."));
                                 }
                                 
-                                $checkModel = TrustCare_Model_Country::findByIso($iso_3166); 
-                                if(!is_null($checkModel)) {
-                                    throw new Exception(sprintf(Zend_Registry::get("Zend_Translate")->_("ISO code %s has already been created for '%s'"), $iso_3166, $checkModel->name));
-                                }
-
-                                $model = new TrustCare_Model_Country(array(
-                                    'iso_3166' => $iso_3166,
+                                $model = new TrustCare_Model_Lga(array(
                                     'name' => $name,
                                     'mapperOptions' => array('adapter' => $this->db),
                                 ));
@@ -343,14 +309,6 @@ class CountryController extends ZendX_Controller_Action
             'label'         => Zend_Registry::get("Zend_Translate")->_("Name"),
             'description'   => "",
             'size'          => 40,
-            'tabindex'      => $tabIndex++,
-            'required'      => true
-        ));
-        
-        $form->addElement('text', 'iso_3166', array(
-            'label'         => 'ISO-3166-1 alpha 2',
-            'description'   => "",
-            'size'          => 4,
             'tabindex'      => $tabIndex++,
             'required'      => true
         ));

@@ -437,6 +437,14 @@ class BootstrapApp extends BootstrapMain
                                         'resource'      => 'resource:admin.system_dict',
                                         'privilege'     => 'edit'
                                     ),
+                                    array(
+                                        'label'         => 'LGA',
+                                        'controller'    => 'lga',
+                                        'action'        => 'import',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'create'
+                                    ),
                                 ),
                             ),
                         ),

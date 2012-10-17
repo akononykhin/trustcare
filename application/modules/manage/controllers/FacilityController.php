@@ -270,7 +270,7 @@ class FacilityController extends ZendX_Controller_Action
                         if(count($failedRows) || count($warningRows)) {
                             $this->view->failedRows = $failedRows;
                             $this->view->warningRows = $warningRows;
-                            $this->render("import_failed_rows");
+                            $this->render('import_failed_rows', null, true);
                             return;
                         }
                         else {
