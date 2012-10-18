@@ -451,10 +451,36 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmacy Dictionaries"),
-                		'controller'    => "pharm_dict",
-                        'action'        => 'list',
+                		'controller'    => "pharm-dict",
+                        'action'        => 'types-list',
                     	'resource'      => 'resource:admin.pharm_dict',
-                    	'action'		=> 'view'
+                    	'privilege'		=> 'view',
+                    	'pages'			=> array(
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("List"),
+                                'controller'    => 'pharm-dict',
+                                'action'        => 'list',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.pharm_dict',
+                                'privilege'     => 'view'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'controller'    => 'pharm-dict',
+                                'action'        => 'create',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.pharm_dict',
+                                'privilege'     => 'create'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                'controller'    => 'pharm-dict',
+                                'action'        => 'edit',
+                                'visible'       => false,
+                                'resource'      => 'resource:admin.pharm_dict',
+                                'privilege'     => 'edit'
+                            ),
+                        ),
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Users"),
