@@ -285,7 +285,7 @@ class System_LogController extends ZendX_Controller_Action
 
         $this->view->DataTable = array(
             'serverUrl' => $this->view->url(array('action' => 'access-load')),
-            'defSortColumn' => 1,
+            'defSortColumn' => 0,
             'defSortDir' => 'desc',
             'columnsInfo' => $columnsInfo,
             'bActionsColumn' => false
