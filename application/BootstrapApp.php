@@ -64,7 +64,7 @@ class BootstrapApp extends BootstrapMain
         }
         Zend_Registry::set('dateTimeFormat', $dateTimeFormat);
 
-        $tzOffset = (int)$_COOKIE['tz_offset'];
+        $tzOffset = array_key_exists('tz_offset', $_COOKIE) ? (int)$_COOKIE['tz_offset'] : 0;
         
         $zone = "Etc/GMT";
         $zone .= ($tzOffset < 0) ? "+" : "-";
