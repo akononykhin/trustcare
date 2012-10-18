@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TrustCare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-23 23:59+0400\n"
-"PO-Revision-Date: 2012-09-24 00:06+0400\n"
-"Last-Translator: Alexey Kononykhin <alexey.kononykhin@gmail.com>\n"
+"POT-Creation-Date: 2012-10-18 10:38+0400\n"
+"PO-Revision-Date: 2012-10-18 10:39+0400\n"
+"Last-Translator: Alexey Kononykhin <konon@astelnet.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,77 +14,389 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: C:\\work\\oDesk\\VernOhaya\\trustcare\\src\\trunk\n"
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:62
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:85
+msgid "TrustCare Application"
+msgstr ""
+
 #: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:143
-msgid "Reports"
+msgid "Counseling"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:120
-msgid "SMS"
-msgstr ""
-
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:127
-msgid "Voice"
-msgstr ""
-
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:149
-msgid "Generate"
-msgstr ""
-
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:174
-msgid "Prefixes"
-msgstr ""
-
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:179
-msgid "Moscow for iConnect"
-msgstr ""
-
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:186
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:148
 #: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:231
-msgid "Create"
+msgid "Pharmaceutical Care"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:194
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:156
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:193
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:239
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:276
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:326
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:359
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:392
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:425
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:468
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:493
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:518
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:543
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:568
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:43
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:36
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:36
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:117
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:39
+msgid "Create"
+msgstr "Create"
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:165
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:202
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:248
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:285
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:80
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:93
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:225
 msgid "View"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:202
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:239
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:281
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:174
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:211
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:257
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:294
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:334
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:367
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:400
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:433
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:476
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:501
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:526
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:551
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:576
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:617
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:93
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:86
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:86
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:174
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:92
 msgid "Edit"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:214
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:267
-msgid "System"
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:185
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:268
+msgid "Community Pharmacy"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:219
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:226
+msgid "Reports"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:309
 msgid "Administration"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:224
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:314
+msgid "System Dictionaries"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:319
+msgid "Countries"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:342
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:375
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:408
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:47
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:398
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:40
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:356
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:40
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:356
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:43
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:385
+msgid "Import"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:352
+msgid "States"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:385
+msgid "Facilities"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:418
+msgid "LGAs"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:453
+msgid "Pharmacy Dictionaries"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:460
+msgid "List"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:486
 msgid "Users"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:251
-msgid "Logs"
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:511
+msgid "Pharmacies"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:257
-msgid "Access"
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:536
+msgid "Physicians"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:262
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:561
+msgid "Patients"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:587
+msgid "System Logs"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:593
 msgid "Objects"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:276
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:598
+msgid "Access"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:603
+msgid "Errors"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:612
 msgid "Settings"
 msgstr ""
 
-#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/BootstrapApp.php:289
-msgid "Logout"
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:32
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:343
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:25
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:309
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:25
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:309
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:29
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:106
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:328
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:25
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:323
+msgid "Name"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:98
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:91
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:91
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:179
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:97
+msgid "Delete"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:101
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:94
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:94
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:182
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:100
+#, php-format
+msgid "Are you sure you want to delete %s?"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:124
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:176
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:259
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:117
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:161
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:232
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/IndexController.php:25
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:117
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:161
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:232
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:208
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:259
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:123
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:169
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:243
+msgid "Internal Error"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:131
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:184
+#, php-format
+msgid "ISO code %s has already been used"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:170
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:228
+msgid "Unknown Country"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:250
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:223
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:223
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:234
+msgid "Upload Error"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:263
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:236
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:236
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:247
+msgid "Can't open uploaded CSV file"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:274
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:247
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:247
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:258
+msgid "Incorrect number of columns"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:283
+#, php-format
+msgid "Incorrect ISO code %s"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:288
+#, php-format
+msgid "ISO code %s has already been created for '%s'"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:359
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:317
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/IndexController.php:91
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:317
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:336
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:346
+msgid "Save"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:379
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:337
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:337
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:366
+msgid "Separator"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:387
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:345
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:345
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:374
+msgid "File"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/CountryController.php:392
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:350
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:350
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:379
+msgid "The maximum file size to import : "
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:155
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/FacilityController.php:201
+msgid "Unknown Facility"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/IndexController.php:30
+msgid "Passwords not match"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/IndexController.php:42
+msgid "Saved"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/IndexController.php:73
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/SignController.php:73
+msgid "Password"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/IndexController.php:79
+msgid "Confirm Password"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/IndexController.php:85
+msgid "Full Name"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:155
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/LgaController.php:201
+msgid "Unknown LGA"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:253
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/PharmDictController.php:304
+msgid "Unknown Pharmacy Dictionary row"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/SignController.php:40
+msgid "Invalid Credentials"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/SignController.php:69
+msgid "Login"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/SignController.php:77
+msgid "Remember me"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/SignController.php:81
+msgid "Sign In"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:31
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:338
+msgid "Country"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:163
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:212
+msgid "Unknown State"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/StateController.php:268
+#, php-format
+msgid "ISO code %s not found"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:26
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:147
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:266
+msgid "Date"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:29
+msgid "Level"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:35
+msgid "Message"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:128
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:248
+msgid "Unknown Record"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:151
+msgid "Author"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:155
+msgid "Object"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:162
+msgid "Key"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:169
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:282
+msgid "Action"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/controllers/System/LogController.php:270
+msgid "User"
 msgstr ""
 
 #: C:\work\oDesk\VernOhaya\trustcare\src\trunk/include/ZendX/Controller/Action.php:38
@@ -93,6 +405,48 @@ msgstr ""
 
 #: C:\work\oDesk\VernOhaya\trustcare\src\trunk/include/ZendX/Validate/NotEmpty.php:11
 msgid "Necessary to enter value"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/layouts/scripts/manage.phtml:54
+msgid "Logout"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/import-failed-rows.phtml:1
+msgid "Failed to import next rows:"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/import-failed-rows.phtml:10
+msgid "Warnings:"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/list.phtml:302
+msgid "Warning"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/country/import.phtml:1
+msgid "Necessary to import CSV file containing next columns: ISO-3166-1_alpha_2, Name"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/facility/import.phtml:1
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/lga/import.phtml:1
+msgid "Necessary to import CSV file containing next columns: Name"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/state/import.phtml:1
+msgid "Necessary to import CSV file containing next columns: Country_ISO_Code, Name"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/system/log/error-view.phtml:5
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/system/log/object-view.phtml:5
+msgid "Time"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/system/log/object-view.phtml:1
+msgid "Objects Log"
+msgstr ""
+
+#: C:\work\oDesk\VernOhaya\trustcare\src\trunk/application/modules/manage/views/scripts/system/log/object-view.phtml:29
+msgid "Stack"
 msgstr ""
 
 #, fuzzy
