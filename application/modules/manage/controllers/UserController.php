@@ -376,7 +376,7 @@ class UserController extends ZendX_Controller_Action
         $form->addElement('select', 'id_pharmacy', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmacy"),
             'tabindex'      => $tabIndex++,
-            'required'      => true,
+            'required'      => false,
             'multioptions'  => $pharmacyList,
             'description'   => '',
         ));
