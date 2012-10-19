@@ -203,6 +203,7 @@ class TestOfUser extends UnitTestCase {
             /* Check null values */
             try {
                 $params = array(
+                    'id_pharmacy' => null,
                     'id_country' => null,
                     'id_state' => null);
                 $model->setOptions($params);
