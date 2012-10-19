@@ -150,7 +150,7 @@ class TestOfState extends UnitTestCase {
                 $params['id'] = $model->id;
                 
                 $model1 = TrustCare_Model_State::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->assertEqual($model->id_country, $params['id_country'], "Incorrect 'id_country': %s");
+                $this->assertEqual($model1->id_country, $params['id_country'], "Incorrect 'id_country': %s");
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
