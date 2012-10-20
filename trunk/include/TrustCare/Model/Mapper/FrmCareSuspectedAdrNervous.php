@@ -104,10 +104,17 @@ class TrustCare_Model_Mapper_FrmCareSuspectedAdrNervous extends TrustCare_Model_
     /**
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll(array $clauses = array())
     {
         $entries   = array();
-        $query = sprintf("select * from %s order by id desc;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME));
+        
+        $where = array();
+        $where[] = '1=1';
+        foreach($clauses as $clause) {
+            $where[] = $clause;
+        }
+        
+        $query = sprintf("select * from %s where %s order by id desc;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
         $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
         $resultSet = $this->getDbAdapter()->fetchAll($query);
         foreach ($resultSet as $row) {

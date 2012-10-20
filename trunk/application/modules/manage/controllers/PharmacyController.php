@@ -1,6 +1,6 @@
 <?php
 
-class UserController extends ZendX_Controller_Action
+class PharmacyController extends ZendX_Controller_Action
 {
 
     public function init()
@@ -15,35 +15,45 @@ class UserController extends ZendX_Controller_Action
     
     public function listActionAccess()
     {
-       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.user", "view");
+       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharmacy", "view");
     }
     
     public function listAction()
     {
         $columnsInfo = array(
-            'login' => array(
-                'title' => Zend_Registry::get("Zend_Translate")->_("User ID"),
-            ),
-            'first_name' => array(
-                'title' => Zend_Registry::get("Zend_Translate")->_("First Name"),
+            'name' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("Name"),
                 'filter' => array(
                     'type' => 'text',
                 ),
             ),
-            'last_name' => array(
-                'title' => Zend_Registry::get("Zend_Translate")->_("Last Name"),
+            'lga_name' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("LGA"),
                 'filter' => array(
                     'type' => 'text',
                 ),
             ),
-            'pharmacy_name' => array(
-                'title' => Zend_Registry::get("Zend_Translate")->_("Pharmacy"),
+            'country_name' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("Country"),
+                'filter' => array(
+                    'type' => 'text',
+                ),
             ),
-            'role' => array(
-                'title' => Zend_Registry::get("Zend_Translate")->_("Role"),
+            'state_name' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("State"),
+                'filter' => array(
+                    'type' => 'text',
+                ),
+            ),
+            'facility_name' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("Facility"),
+                'filter' => array(
+                    'type' => 'text',
+                ),
             ),
             'is_active' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Is Active"),
+                'width' => '10%'
             ),
         );
 
@@ -67,7 +77,7 @@ class UserController extends ZendX_Controller_Action
     
     public function listLoadActionAccess()
     {
-       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.user", "view");
+       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharmacy", "view");
     }
     
     
@@ -76,9 +86,9 @@ class UserController extends ZendX_Controller_Action
         $user = Zend_Registry::get("TrustCare_Registry_User")->getUser();
         $pharmacyModel = TrustCare_Model_Pharmacy::find($user->getIdPharmacy());
         
-        $select = Zend_Registry::getInstance()->dbAdapter->select()->from("user", array('count(id)'));
+        $select = Zend_Registry::getInstance()->dbAdapter->select()->from("pharmacy", array('count(id)'));
         if(!is_null($pharmacyModel)) {
-            $select->where('id_pharmacy=?', $pharmacyModel->getId());
+            $select->where('id=?', $pharmacyModel->getId());
         }
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_NUM);
         $result = Zend_Registry::getInstance()->dbAdapter->fetchAll($select);
@@ -87,14 +97,18 @@ class UserController extends ZendX_Controller_Action
         
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_ASSOC);
         $select = Zend_Registry::getInstance()->dbAdapter->select()
-                                                         ->from("user",
-                                                                array('user.*'))
-                                                         ->joinLeft(array('pharmacy'), 'user.id_pharmacy = pharmacy.id', array('pharmacy_name' => 'pharmacy.name'));
+                                                         ->from("pharmacy",
+                                                                array('pharmacy.*'))
+                                                         ->joinLeft(array('lga'), 'pharmacy.id_lga = lga.id', array('lga_name' => 'lga.name'))
+                                                         ->joinLeft(array('country'), 'pharmacy.id_country = country.id', array('country_name' => 'country.name'))
+                                                         ->joinLeft(array('state'), 'pharmacy.id_state = state.id', array('state_name' => 'state.name'))
+                                                         ->joinLeft(array('facility'), 'pharmacy.id_facility = facility.id', array('facility_name' => 'facility.name'));
+                                                         
         if(!is_null($pharmacyModel)) {
-            $select->where('user.id_pharmacy=?', $pharmacyModel->getId());
+            $select->where('pharmacy.id=?', $pharmacyModel->getId());
         }
                                                          
-        $this->processListLoadAjaxRequest($select);
+        $this->processListLoadAjaxRequest($select, array('country_name' => 'country.name', 'state_name' => 'state.name', 'lga_name' => 'lga.name', 'facility_name' => 'facility.name'));
         
         $rows = Zend_Registry::getInstance()->dbAdapter->selectWithLimit($select->__toString(), $iFilteredTotal);
         
@@ -118,7 +132,7 @@ class UserController extends ZendX_Controller_Action
                     'title' => Zend_Registry::get("Zend_Translate")->_("Delete"),
                     'url' => $this->view->url(array('action' => 'delete', 'id' => $row['id'])),
                     'type' => 'delete',
-                    'askConfirm' => sprintf(Zend_Registry::get("Zend_Translate")->_("Are you sure you want to delete %s?"), $row['login'])
+                    'askConfirm' => sprintf(Zend_Registry::get("Zend_Translate")->_("Are you sure you want to delete %s?"), $row['name'])
                 ),
             );
             $output['aaData'][] = $row;
@@ -131,7 +145,7 @@ class UserController extends ZendX_Controller_Action
     
     public function createActionAccess()
     {
-       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.user", "create");
+       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharmacy", "create");
     }
     
     public function createAction()
@@ -143,28 +157,14 @@ class UserController extends ZendX_Controller_Action
                 
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
                 try {
-                    $password = $form->getValue('password');
-                    $c_password = $form->getValue('confirm_password');
-                    
-                    if(!empty($password) && $password != $c_password) {
-                        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Passwords not match");
-                        throw new Exception("");
-                    }
-                    
-                    $model = new TrustCare_Model_User();
-                    $model->setLogin($form->getValue('login'));
-                    $model->setPassword(md5($password));
+                    $model = new TrustCare_Model_Pharmacy();
+                    $model->setName($form->getValue('name'));
                     $model->setIsActive($form->getValue("is_active"));
-                    $model->setFirstName($form->getValue("first_name"));
-                    $model->setLastName($form->getValue("last_name"));
-                    $model->setRole($form->getValue("role"));
-                    $model->setIdPharmacy($form->getValue("id_pharmacy"));
                     $model->setIdCountry($form->getValue("id_country"));
                     $model->setIdState($form->getValue("id_state"));
-                    $model->setCity($form->getValue("city"));
                     $model->setAddress($form->getValue("address"));
-                    $model->setZip($form->getValue("zip"));
-                    $model->setPhone($form->getValue("phone"));
+                    $model->setIdLga($form->getValue("id_lga"));
+                    $model->setIdFacility($form->getValue("id_facility"));
                     $model->save();
 
                     $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
@@ -185,50 +185,33 @@ class UserController extends ZendX_Controller_Action
 
     public function editActionAccess()
     {
-       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.user", "edit");
+       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharmacy", "edit");
     }
     
     public function editAction()
     {
+        $form = $this->_getParametersForm();
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
+        
         $id = $this->_getParam('id');
-        $model = TrustCare_Model_User::find($id);
+        $model = TrustCare_Model_Pharmacy::find($id);
         if(is_null($model)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown user with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown User")));
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown pharmacy with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Pharmacy")));
             return;
         }
-        
-        $form = $this->_getParametersForm(false, $model->getIdPharmacy());
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
-        $form->getElement("login")->setAttrib('readonly', true);
         
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
                 try {
-                    $password = $form->getValue('password');
-                    $c_password = $form->getValue('confirm_password');
-                    
-                    if(!empty($password) && $password != $c_password) {
-                        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Passwords not match");
-                        throw new Exception("");
-                    }
-                    
-                    $model->setLogin($form->getValue('login'));
-                    if(!empty($password)) {
-                        $model->setPassword(md5($password));
-                    }
+                    $model->setName($form->getValue('name'));
                     $model->setIsActive($form->getValue("is_active"));
-                    $model->setFirstName($form->getValue("first_name"));
-                    $model->setLastName($form->getValue("last_name"));
-                    $model->setRole($form->getValue("role"));
-                    $model->setIdPharmacy($form->getValue("id_pharmacy"));
                     $model->setIdCountry($form->getValue("id_country"));
                     $model->setIdState($form->getValue("id_state"));
-                    $model->setCity($form->getValue("city"));
                     $model->setAddress($form->getValue("address"));
-                    $model->setZip($form->getValue("zip"));
-                    $model->setPhone($form->getValue("phone"));
+                    $model->setIdLga($form->getValue("id_lga"));
+                    $model->setIdFacility($form->getValue("id_facility"));
                     $model->save();
                                         
                     $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
@@ -244,18 +227,13 @@ class UserController extends ZendX_Controller_Action
         }
         else {
             $form->getElement("id")->setValue($id);
-            $form->getElement("login")->setValue($model->login);
+            $form->getElement("name")->setValue($model->name);
             $form->getElement("is_active")->setValue($model->is_active);
-            $form->getElement("first_name")->setValue($model->first_name);
-            $form->getElement("last_name")->setValue($model->last_name);
-            $form->getElement("role")->setValue($model->role);
-            $form->getElement("id_pharmacy")->setValue($model->id_pharmacy);
             $form->getElement("id_country")->setValue($model->id_country);
             $form->getElement("id_state")->setValue($model->id_state);
-            $form->getElement("city")->setValue($model->city);
             $form->getElement("address")->setValue($model->address);
-            $form->getElement("zip")->setValue($model->zip);
-            $form->getElement("phone")->setValue($model->phone);
+            $form->getElement("id_lga")->setValue($model->id_lga);
+            $form->getElement("id_facility")->setValue($model->id_facility);
         }
         
         $this->view->form = $form;
@@ -266,13 +244,13 @@ class UserController extends ZendX_Controller_Action
 
     public function deleteActionAccess()
     {
-       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.user", "delete");
+       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharmacy", "delete");
     }
     
     public function deleteAction()
     {
         $id = $this->_getParam('id');
-        $model = TrustCare_Model_User::find($id);
+        $model = TrustCare_Model_Pharmacy::find($id);
         if(is_null($model)) {
             $this->getLogger()->error(sprintf("'%s' tries to delete unknown user with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown User")));
@@ -290,19 +268,8 @@ class UserController extends ZendX_Controller_Action
     /**
      * @return Zend_Form
      */
-    private function _getParametersForm($isCreate = false, $currentIdPharmacy = null)
+    private function _getParametersForm($isCreate = false)
     {
-        $rolesList = array('' => '',
-        				   'pharmacy_manager' => 'pharmacy_manager',
-                           'pharmacist' => 'pharmacist');
-        
-        $pharmacyList = array();
-        $pharmacyList[''] = '';
-        foreach(Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies($currentIdPharmacy) as $id=>$name) {
-            $pharmacyList[$id] = $name;
-            
-        }
-        
         $countryList = array();
         $countryList[''] = '';
         $model = new TrustCare_Model_Country();
@@ -317,6 +284,20 @@ class UserController extends ZendX_Controller_Action
             $stateList[$obj->getId()] = $obj->getName();
         }
         
+        $lgaList = array();
+        $lgaList[''] = '';
+        $model = new TrustCare_Model_Lga();
+        foreach ($model->fetchAll() as $obj) {
+            $lgaList[$obj->getId()] = $obj->getName();
+        }
+        
+        $facilityList = array();
+        $facilityList[''] = '';
+        $model = new TrustCare_Model_Facility();
+        foreach ($model->fetchAll() as $obj) {
+            $facilityList[$obj->getId()] = $obj->getName();
+        }
+        
         
         $form = new ZendX_Form();
         $form->setMethod('post');
@@ -324,10 +305,10 @@ class UserController extends ZendX_Controller_Action
         $form->addElement('hidden', 'id');
         
         $tabIndex = 1;
-        $form->addElement('text', 'login', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("User ID"),
+        $form->addElement('text', 'name', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("Name"),
             'description'   => "",
-            'size'          => 16,
+            'size'          => 48,
             'tabindex'      => $tabIndex++,
             'required'      => true
         ));
@@ -335,44 +316,6 @@ class UserController extends ZendX_Controller_Action
             'label'         => Zend_Registry::get("Zend_Translate")->_("Is Active"),
             'tabindex'      => $tabIndex++,
             'checked'      => true
-        ));
-        $form->addElement('password', 'password', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("Password"),
-            'description'   => "",
-            'tabindex'      => $tabIndex++,
-            'required'		=> $isCreate
-        ));
-        
-        $form->addElement('password', 'confirm_password', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("Confirm Password"),
-            'description'   => "",
-            'tabindex'      => $tabIndex++,
-        ));
-        $form->addElement('text', 'first_name', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("First Name"),
-            'description'   => "",
-            'size'          => 32,
-            'tabindex'      => $tabIndex++,
-        ));
-        $form->addElement('text', 'last_name', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("Last Name"),
-            'description'   => "",
-            'size'          => 32,
-            'tabindex'      => $tabIndex++,
-        ));
-        $form->addElement('select', 'role', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("Role"),
-            'tabindex'      => $tabIndex++,
-            'required'      => true,
-            'multioptions'  => $rolesList,
-            'description'   => '',
-        ));
-        $form->addElement('select', 'id_pharmacy', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmacy"),
-            'tabindex'      => $tabIndex++,
-            'required'      => false,
-            'multioptions'  => $pharmacyList,
-            'description'   => '',
         ));
         $form->addElement('select', 'id_country', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("Country"),
@@ -388,13 +331,6 @@ class UserController extends ZendX_Controller_Action
             'multioptions'  => $stateList,
             'description'   => '',
         ));
-        $form->addElement('text', 'city', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("City"),
-            'description'   => "",
-            'size'          => 16,
-            'tabindex'      => $tabIndex++,
-            'required'      => false
-        ));
         $form->addElement('text', 'address', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("Address"),
             'description'   => "",
@@ -402,19 +338,19 @@ class UserController extends ZendX_Controller_Action
             'tabindex'      => $tabIndex++,
             'required'      => false
         ));
-        $form->addElement('text', 'zip', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("Zip"),
-            'description'   => "",
-            'size'          => 16,
+        $form->addElement('select', 'id_lga', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("LGA"),
             'tabindex'      => $tabIndex++,
-            'required'      => false
+            'required'      => false,
+            'multioptions'  => $lgaList,
+            'description'   => '',
         ));
-        $form->addElement('text', 'phone', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("Phone"),
-            'description'   => "",
-            'size'          => 16,
+        $form->addElement('select', 'id_facility', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("Facility"),
             'tabindex'      => $tabIndex++,
-            'required'      => false
+            'required'      => false,
+            'multioptions'  => $facilityList,
+            'description'   => '',
         ));
         
         
