@@ -37,14 +37,36 @@ class TrustCare_Model_DbTable_Physician extends ZendX_Db_Table_Abstract
         $db = Zend_Registry::get("Storage")->getPersistantDb(); 
         $data['id'] = $db->nextSequenceId('physician_id_seq');
 
+        if(array_key_exists('id_country', $data) && empty($data['id_country'])) {
+            $data['id_country'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_state', $data) && empty($data['id_state'])) {
+            $data['id_state'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_lga', $data) && empty($data['id_lga'])) {
+            $data['id_lga'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_facility', $data) && empty($data['id_facility'])) {
+            $data['id_facility'] = new Zend_Db_Expr('NULL');
+        }
+
         return parent::insert($data);
     }
     
     
     public function update(array $data, $where)
     {
-        if(array_key_exists('login', $data)) {
-            unset($data['login']);
+        if(array_key_exists('id_country', $data) && empty($data['id_country'])) {
+            $data['id_country'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_state', $data) && empty($data['id_state'])) {
+            $data['id_state'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_lga', $data) && empty($data['id_lga'])) {
+            $data['id_lga'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_facility', $data) && empty($data['id_facility'])) {
+            $data['id_facility'] = new Zend_Db_Expr('NULL');
         }
         return parent::update($data, $where);
     }

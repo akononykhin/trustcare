@@ -191,9 +191,11 @@ class TestOfPharmacy extends UnitTestCase {
                 $model->setOptions($params);
                 $model->save();
                 
-                $model1 = TrustCare_Model_User::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $model1 = TrustCare_Model_Pharmacy::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->assertEqual($model1->id_country, $params['id_country'], "Incorrect 'id_country': %s");
                 $this->assertEqual($model1->id_state, $params['id_state'], "Incorrect 'id_state': %s");
+                $this->assertEqual($model1->id_lga, $params['id_lga'], "Incorrect 'id_lga': %s");
+                $this->assertEqual($model1->id_facility, $params['id_facility'], "Incorrect 'id_facility': %s");
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
