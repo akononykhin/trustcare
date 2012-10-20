@@ -180,7 +180,7 @@ class ZendX_Controller_Action extends Zend_Controller_Action
      * Enter description here ...
      * @param Zend_Db_Select $select
      */
-    protected function processListLoadAjaxRequest(Zend_Db_Select $select)
+    protected function processListLoadAjaxRequest(Zend_Db_Select $select, $realColumnNames = array())
     {
         /* Paging */
         if(array_key_exists('iDisplayStart', $_REQUEST) && $_REQUEST['iDisplayLength'] != '-1' ) {
@@ -195,8 +195,13 @@ class ZendX_Controller_Action extends Zend_Controller_Action
             for($i = 0; $i < $_REQUEST['iSortingCols']; $i++) {
                 $columnIndex = $_REQUEST['iSortCol_'.$i];
                 $sortDirection = strtoupper($_REQUEST['sSortDir_'.$i]) == 'ASC' ? 'asc' : 'desc';
+
+                $colName = $_REQUEST['mDataProp_'.$columnIndex];
+                if(array_key_exists($colName, $realColumnNames)) {
+                    $colName = $realColumnNames[$colName];
+                }
                 
-                $orderByArr[] = sprintf("%s %s", $_REQUEST['mDataProp_'.$columnIndex], $sortDirection);
+                $orderByArr[] = sprintf("%s %s", $colName, $sortDirection);
             }
         }
         if(count($orderByArr)) {
@@ -215,6 +220,9 @@ class ZendX_Controller_Action extends Zend_Controller_Action
                     continue;
                 }
                 $colName = $_REQUEST['mDataProp_'.$i];
+                if(array_key_exists($colName, $realColumnNames)) {
+                    $colName = $realColumnNames[$colName];
+                }
                 $value = $_REQUEST['sSearch_'.$i];
 
                 

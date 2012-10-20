@@ -38,7 +38,7 @@ class TrustCare_Model_Mapper_Country extends TrustCare_Model_Mapper_Abstract
     public function delete(TrustCare_Model_Country $model)
     {
         $model->setObjectKeyInfo(array('id' => $model->getId()));
-    	if(!is_null($model->getId())) {
+        if(!is_null($model->getId())) {
             $this->getDbTable()->delete(sprintf("id=%d", $model->getId()));
         }
     }
@@ -87,16 +87,22 @@ class TrustCare_Model_Mapper_Country extends TrustCare_Model_Mapper_Abstract
     /**
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll(array $clauses = array())
     {
         $entries   = array();
         
-        $select = $this->getDbTable()->select();
-        $select->from($this->getDbTable(), array('id'));
-        $resultSet = $this->getDbTable()->fetchAll($select);
+        $where = array();
+        $where[] = '1=1';
+        foreach($clauses as $clause) {
+            $where[] = $clause;
+        }
+
+        $query = sprintf("select id from %s where %s;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
+        $resultSet = $this->getDbAdapter()->fetchAll($query);
         foreach ($resultSet as $row) {
             $entry = new TrustCare_Model_Country(array('mapperOptions' => array('adapter' => $this->getDbAdapter())));
-            $this->find($row['id'], $entry);
+            $this->find($row->id, $entry);
             
             $entries[] = $entry;
         }

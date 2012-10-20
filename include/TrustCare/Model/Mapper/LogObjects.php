@@ -80,18 +80,23 @@ class TrustCare_Model_Mapper_LogObjects extends TrustCare_Model_Mapper_Abstract
     /**
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll(array $clauses = array())
     {
         $entries   = array();
         
-        $select = $this->getDbTable()->select();
-        $select->from($this->getDbTable(), array('id'));
-        $select->order("date_of_change desc");
+        $where = array();
+        $where[] = '1=1';
+        foreach($clauses as $clause) {
+            $where[] = $clause;
+        }
         
-        $resultSet = $this->getDbTable()->fetchAll($select);
+        
+        $query = sprintf("select id from %s where %s order by date_of_change desc;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
+        $resultSet = $this->getDbAdapter()->fetchAll($query);
         foreach ($resultSet as $row) {
             $entry = new TrustCare_Model_LogObjects(array('mapperOptions' => array('adapter' => $this->getDbAdapter())));
-            $this->find($row['id'], $entry);
+            $this->find($row->id, $entry);
             
             $entries[] = $entry;
         }

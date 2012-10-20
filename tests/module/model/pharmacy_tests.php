@@ -180,6 +180,24 @@ class TestOfPharmacy extends UnitTestCase {
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
             }
+            
+            /* Check null values */
+            try {
+                $params = array(
+                    'id_lga' => null,
+                    'id_facility' => null,
+                    'id_country' => null,
+                    'id_state' => null);
+                $model->setOptions($params);
+                $model->save();
+                
+                $model1 = TrustCare_Model_User::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->assertEqual($model1->id_country, $params['id_country'], "Incorrect 'id_country': %s");
+                $this->assertEqual($model1->id_state, $params['id_state'], "Incorrect 'id_state': %s");
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
         }
         else {
             $this->assertTrue(false, "Can't initialize object");

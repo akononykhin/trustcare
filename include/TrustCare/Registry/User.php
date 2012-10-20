@@ -35,5 +35,41 @@ class TrustCare_Registry_User
         
         return $this->_user;
     }
+
+    /**
+     * 
+     * Get the list of pharmacies available for currently logged user.
+     * The list will contain active and directly specified (probably not active) pharmacies
+     */
+    public function getListOfAvailablePharmacies($ids = array())
+    {
+        $user = $this->getUser();
+        
+        if(!is_array($ids)) {
+            if(empty($ids)) {
+                $ids = array();
+            }
+            else {
+                $ids = array($ids);
+            }
+        }
+        
+        $pharmacyList = array();
+        $model = new TrustCare_Model_Pharmacy();
+        if(count($ids)) {
+            $clause = sprintf("(is_active=1 or id in (%s))", join(',', $ids));
+        }
+        else {
+            $clause = "is_active=1";
+        }
+        foreach ($model->fetchAll($clause) as $obj) {
+            if(!is_null($user) && $user->getIdPharmacy() != $obj->getId()) {
+                continue;
+            }
+            $pharmacyList[$obj->getId()] = $obj->getName();
+        }
+        
+        return $pharmacyList;
+    }
 }
 
