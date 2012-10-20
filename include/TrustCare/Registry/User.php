@@ -43,7 +43,7 @@ class TrustCare_Registry_User
      */
     public function getListOfAvailablePharmacies($ids = array())
     {
-        $user = $this->getUser();
+        $pharmacy = TrustCare_Model_Pharmacy::find($this->getUser()->getIdPharmacy());
         
         if(!is_array($ids)) {
             if(empty($ids)) {
@@ -63,7 +63,7 @@ class TrustCare_Registry_User
             $clause = "is_active=1";
         }
         foreach ($model->fetchAll($clause) as $obj) {
-            if(!is_null($user) && $user->getIdPharmacy() != $obj->getId()) {
+            if(!is_null($pharmacy) && $pharmacy->getId() != $obj->getId()) {
                 continue;
             }
             $pharmacyList[$obj->getId()] = $obj->getName();
