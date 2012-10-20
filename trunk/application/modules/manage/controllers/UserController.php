@@ -151,6 +151,14 @@ class UserController extends ZendX_Controller_Action
                         throw new Exception("");
                     }
                     
+                    $idPharmacy = $form->getValue('id_pharmacy');
+                    $currentUserPharmacy = TrustCare_Model_Pharmacy::find(Zend_Registry::get("TrustCare_Registry_User")->getUser()->getIdPharmacy());
+                    if(!is_null($currentUserPharmacy) && $idPharmacy != $currentUserPharmacy->getId()) {
+                        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Don't have enougth rights to assign this pharmacy");
+                        throw new Exception("");
+                    }
+                    
+                    
                     $model = new TrustCare_Model_User();
                     $model->setLogin($form->getValue('login'));
                     $model->setPassword(md5($password));
@@ -211,6 +219,13 @@ class UserController extends ZendX_Controller_Action
                     
                     if(!empty($password) && $password != $c_password) {
                         $errorMsg = Zend_Registry::get("Zend_Translate")->_("Passwords not match");
+                        throw new Exception("");
+                    }
+                    
+                    $idPharmacy = $form->getValue('id_pharmacy');
+                    $currentUserPharmacy = TrustCare_Model_Pharmacy::find(Zend_Registry::get("TrustCare_Registry_User")->getUser()->getIdPharmacy());
+                    if(!is_null($currentUserPharmacy) && $idPharmacy != $currentUserPharmacy->getId()) {
+                        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Don't have enougth rights to assign this pharmacy");
                         throw new Exception("");
                     }
                     
