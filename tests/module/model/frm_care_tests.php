@@ -222,6 +222,9 @@ class TestOfFrmCare extends UnitTestCase {
         $model = TrustCare_Model_FrmCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         try {
+            if(is_null($model)) {
+                throw new Exception("Object not loaded!");
+            }
             $model->delete();
             
             $model1 = TrustCare_Model_FrmCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
@@ -230,6 +233,28 @@ class TestOfFrmCare extends UnitTestCase {
         catch(Exception $ex) {
             $this->assertTrue(false, sprintf("Delete() thrown exception: %s", $ex->getMessage()));
         }
+    }
+    
+    public function testCheckFormsFromPatient()
+    {
+        try {
+            $patientId = $this->paramsAtDb['id_patient'];
+            $foundNum = TrustCare_Model_FrmCare::getNumberOfFormsForPatient($patientId, array('mapperOptions' => array('adapter' => $this->db)));
+            $this->assertEqual($foundNum, 1, sprintf("Incorrect number of forms for patient.id=%s found: %%s", $patientId));
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("%s - unexpected exception: %s", __METHOD__, $ex->getMessage()));
+        }
+        
+        try {
+            $patientId = $this->paramsAtDb['id_patient'] * -1;
+            $foundNum = TrustCare_Model_FrmCare::getNumberOfFormsForPatient($patientId, array('mapperOptions' => array('adapter' => $this->db)));
+            $this->assertEqual($foundNum, 0, sprintf("Incorrect number of forms for patient.id=%s found: %%s", $patientId));
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("%s - unexpected exception: %s", __METHOD__, $ex->getMessage()));
+        }
+        
     }
     
     /**

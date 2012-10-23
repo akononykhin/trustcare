@@ -419,6 +419,22 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
         return $newEntity;
     }
 
+
+    /**
+     * 
+     * Get the number of forms generated for specified patient
+     * 
+     * @param int $patientId
+     * @param array $options
+     */
+    public static function getNumberOfFormsForPatient($patientId, array $options = null)
+    {
+        $model = new TrustCare_Model_FrmCommunity($options);
+        $foundNum = $model->getMapper()->getNumberOfFormsForPatient($patientId);
+        
+        return $foundNum;
+        
+    }
     
     public function delete()
     {

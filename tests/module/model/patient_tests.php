@@ -43,7 +43,7 @@ class TestOfPatient extends UnitTestCase {
                 'address' => 'Addr1',
                 'zip' => 'Zip1',
                 'phone' => 'Phone1',
-                'birthdate' => '2010-09-08 12:12:14',
+                'birthdate' => '2010-09-08',
                 'id_physician' => 1,
                 'is_male' => 0,
                 'is_active' => 1,
@@ -98,7 +98,7 @@ class TestOfPatient extends UnitTestCase {
                 'address' => 'Addr1',
                 'zip' => 'Zip1',
                 'phone' => 'Phone1',
-                'birthdate' => '2010-09-08 12:12:14',
+                'birthdate' => '2010-09-08',
                 'id_physician' => 1,
                 'is_male' => false,
                 'is_active' => true,
@@ -150,7 +150,7 @@ class TestOfPatient extends UnitTestCase {
                 'address' => 'Addr13',
                 'zip' => 'Zip14',
                 'phone' => 'Phone15',
-                'birthdate' => '2011-09-08 12:12:14',
+                'birthdate' => '2011-09-08',
                 'id_physician' => 2,
                 'is_male' => true,
                 'is_active' => false,
@@ -186,7 +186,7 @@ class TestOfPatient extends UnitTestCase {
             $params['zip'] = $model->zip . '43';
             $params['phone'] = $model->phone . '44';
             $params['id_physician'] = '1' == $model->id_physician ? '2' : '1';
-            $params['birthdate'] = '2011-01-01 11:11:03' == $model->birthdate ? '2011-01-02 11:11:03' : '2011-01-01 11:11:03'; 
+            $params['birthdate'] = '2011-01-01' == $model->birthdate ? '2011-01-02' : '2011-01-01'; 
             $params['is_male'] = ($model->is_male == 1) ? 0 : 1;
             $params['is_active'] = ($model->is_active == 1) ? 0 : 1;
             
@@ -198,6 +198,24 @@ class TestOfPatient extends UnitTestCase {
                 
                 $model1 = TrustCare_Model_Patient::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->_compareObjectAndParams($model1, $params);
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
+            
+            /* Check null values */
+            try {
+                $params = array(
+                    'id_physician' => null,
+                    'id_country' => null,
+                    'id_state' => null);
+                $model->setOptions($params);
+                $model->save();
+                
+                $model1 = TrustCare_Model_Patient::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->assertEqual($model1->id_country, $params['id_country'], "Incorrect 'id_country': %s");
+                $this->assertEqual($model1->id_state, $params['id_state'], "Incorrect 'id_state': %s");
+                $this->assertEqual($model1->id_physician, $params['id_physician'], "Incorrect 'id_physician': %s");
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));

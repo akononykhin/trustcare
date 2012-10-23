@@ -104,11 +104,32 @@ class TrustCare_Model_Mapper_Patient extends TrustCare_Model_Mapper_Abstract
      */
     public function find($id, TrustCare_Model_Patient $model)
     {
-        $result = $this->getDbTable()->find($id);
+        $query = sprintf("
+        select
+  			id,
+  			is_active,
+  			identifier,
+  			first_name,
+  			last_name,
+  			id_country,
+  			id_state,
+  			city,
+  			address,
+  			zip,
+  			phone,
+            date_format(birthdate, '%%Y-%%m-%%d') as birthdate,
+  			is_male,
+  			id_physician
+		from %s
+        where id=?;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME));
+        
+        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
+        $result = $this->getDbAdapter()->fetchAll($query, $id);
         if (0 == count($result)) {
             return false;
         }
-        $row = $result->current();
+        $row = $result[0];
+                
         $this->_fillModelForFind($model, $row);
               
         return true;
@@ -123,7 +144,24 @@ class TrustCare_Model_Mapper_Patient extends TrustCare_Model_Mapper_Abstract
     {
         $where = array();
         $where[] = sprintf("identifier=%s", $this->getDbAdapter()->quote($value));
-        $query = sprintf("select * from %s where %s;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        $query = sprintf("
+        	select
+	  			id,
+  				is_active,
+  				identifier,
+  				first_name,
+	  			last_name,
+  				id_country,
+  				id_state,
+  				city,
+	  			address,
+  				zip,
+  				phone,
+            	date_format(birthdate, '%%Y-%%m-%%d') as birthdate,
+	  			is_male,
+  				id_physician
+			from %s where %s;
+        	", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
         
         $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
         $result = $this->getDbAdapter()->fetchAll($query);

@@ -41,11 +41,17 @@ class TrustCare_Model_DbTable_Patient extends ZendX_Db_Table_Abstract
             $data['birthdate'] = new Zend_Db_Expr('NULL');
         }
         else {
-            $data['birthdate'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['birthdate']));
+            $data['birthdate'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['birthdate']));
         }
-
-        return parent::insert($data);
-        
+        if(array_key_exists('id_country', $data) && empty($data['id_country'])) {
+            $data['id_country'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_state', $data) && empty($data['id_state'])) {
+            $data['id_state'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_physician', $data) && empty($data['id_physician'])) {
+            $data['id_physician'] = new Zend_Db_Expr('NULL');
+        }
 
         return parent::insert($data);
     }
@@ -58,8 +64,17 @@ class TrustCare_Model_DbTable_Patient extends ZendX_Db_Table_Abstract
                 $data['birthdate'] = new Zend_Db_Expr('NULL');
             }
             else {
-                $data['birthdate'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['birthdate']));
+                $data['birthdate'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['birthdate']));
             }
+        }
+        if(array_key_exists('id_country', $data) && empty($data['id_country'])) {
+            $data['id_country'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_state', $data) && empty($data['id_state'])) {
+            $data['id_state'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_physician', $data) && empty($data['id_physician'])) {
+            $data['id_physician'] = new Zend_Db_Expr('NULL');
         }
         
         return parent::update($data, $where);
