@@ -125,6 +125,22 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         return true;
     }
 
+    
+    /**
+     * 
+     * Get the number of forms generated for specified patient
+     * @param int $patientId
+     */
+    public function getNumberOfFormsForPatient($patientId)
+    {
+        $query = sprintf("select count(id) from %s where id_patient=%d;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), $patientId);
+        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_NUM);
+        $result = $this->getDbAdapter()->fetchAll($query);
+        
+        return $result[0][0];
+    }
+    
+    
     /**
      * @return array
      */
