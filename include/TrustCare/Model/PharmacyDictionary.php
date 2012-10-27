@@ -13,6 +13,7 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
     const DTYPE_ADH_INTERVENTION_PROVIDED = 3;
     const DTYPE_ADH_INTERVENTION_OUTCOME = 4;
     const DTYPE_ADR_SEVERITY_GRADE = 5;
+    const DTYPE_ADR_INTERVENTION_TYPE = 6;
     const DTYPE_HEPATIC = 7;
     const DTYPE_NERVOUS = 8;
     const DTYPE_CARDIOVASCULAR = 9;
