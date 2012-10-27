@@ -2,6 +2,13 @@
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
 $this->headLink()->appendStylesheet('/css/showLoading.css');
 ?>
+<style type="text/css" title="currentStyle">
+a {
+    cursor: pointer;
+    text-decoration: underline;
+}
+</style>
+
 <script type="text/javascript" charset="utf-8">
 	function patientsReload(){
   	    $.ajax({
@@ -104,6 +111,39 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
 		}
 	}
 
+	function checkIsMedAdhProblemScreened()
+	{
+		if(0 == $('input:radio[name=is_med_adh_problem_screened]:checked').val()) {
+            $('input[name = "is_med_adh_problem_identified"]').attr("disabled", 'disabled');
+            $('#is_med_adh_problem_identified_0').attr("checked", 'checked');
+		}
+		else {
+            $('input[name = "is_med_adh_problem_identified"]').removeAttr("disabled");
+		}
+		checkIsMedAdhProblemIdentified();
+	}
+
+	function checkIsMedAdhProblemIdentified()
+	{
+		if(0 == $('input:radio[name=is_med_adh_problem_identified]:checked').val()) {
+			$('#row_med_adh_problem').hide();
+		}
+		else {
+			$('#row_med_adh_problem').show();
+		}
+	}
+
+	function checkIsAdhInterventionProvided()
+	{
+		if(0 == $('input:radio[name=is_adh_intervention_provided]:checked').val()) {
+			$('#row_adh_intervention').hide();
+		}
+		else {
+			$('#row_adh_intervention').show();
+		}
+	}
+
+	
     function updateErrorInfo(dlgId, message) {
 	    var infoEl = $(dlgId + " .errorInfo");
 	    if('' != message) {
@@ -127,6 +167,8 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
 	$(document).ready(function() {
 	    patientsReload();
 	    dictEntitiesReload('#med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
+	    dictEntitiesReload('#med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
+	    dictEntitiesReload('#adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION;?>');
 
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
@@ -201,9 +243,21 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
 		    }).dialog('open');
 	        return false;
 	    });
-	    $("#link-add-med-error-type").click(function() {
+	    $("#link-add-med_error_type").click(function() {
 	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
 	    	$("#dlg-add-dict-entity").attr('list_element_id', 'med_error_type');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-med_adh_problem").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'med_adh_problem');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-adh_intervention").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'adh_intervention');
 	    	$("#dlg-add-dict-entity").dialog('open');
 	        return false;
 	    });
@@ -233,14 +287,27 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
 	        });			    	      
         });        
 
+/*** START Bind of OnChange ***/        
         $('input[name = "is_med_error_screened"]').bind('change', function(){
             checkIsMedErrorScreened();
         });
         $('input[name = "is_med_error_identified"]').bind('change', function(){
             checkIsMedErrorIdentified();
         });
+        $('input[name = "is_med_adh_problem_screened"]').bind('change', function(){
+            checkIsMedAdhProblemScreened();
+        });
+        $('input[name = "is_med_adh_problem_identified"]').bind('change', function(){
+            checkIsMedAdhProblemIdentified();
+        });
+        $('input[name = "is_adh_intervention_provided"]').bind('change', function(){
+        	checkIsAdhInterventionProvided();
+        });
+/*** END Bind of OnChange ***/        
         
         checkIsMedErrorScreened();
+        checkIsMedAdhProblemScreened();
+        checkIsAdhInterventionProvided();
 	});
 </script>
 
@@ -304,7 +371,7 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
    <td>
      <select name="med_error_type" id="med_error_type" multiple size="5">
      </select>&nbsp;
-     <a id="link-add-med-error-type" href="#"><?php echo $this->translate(_("Other"));?></a>
+     <a id="link-add-med_error_type"><?php echo $this->translate(_("Other"));?></a>
    </td>
   </tr>
  </table>
@@ -315,8 +382,52 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
 <div class="tab_header"><?php echo $this->translate(_("Adherence Tab"));?></div>
 <div class="tab_content">
  <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_med_adh_problem_screened"><?php echo $this->translate(_("Is patient screened for Medication Adherence Related problem(s) in this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_med_adh_problem_identified"><?php echo $this->translate(_("Is there Medication Adherence Related problem(s) identified at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_med_adh_problem_identified" id="is_med_adh_problem_identified_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_adh_problem_identified" id="is_med_adh_problem_identified_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_med_adh_problem">
+   <td valign="top"><div class="normal"><label for="med_adh_problem"><?php echo $this->translate(_("Type of Medication Adherence Related problem(s)"));?></label></div></td>
+   <td>
+     <select name="med_adh_problem" id="med_adh_problem" multiple size="3">
+     </select>&nbsp;
+     <a id="link-add-med_adh_problem"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
  </table>
 </div>
+
+<div class="tab_header"><?php echo $this->translate(_("Medication Error / Adherence Intervention Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adh_intervention_provided"><?php echo $this->translate(_("Medication Error / Adherence intervention provided at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adh_intervention_provided" id="is_adh_intervention_provided_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adh_intervention_provided" id="is_adh_intervention_provided_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_adh_intervention">
+   <td valign="top"><div class="normal"><label for="adh_intervention"><?php echo $this->translate(_("Type of Medication Error / Adherence intervention provided"));?></label></div></td>
+   <td>
+     <select name="adh_intervention" id="adh_intervention" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-adh_intervention"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+ 
 </form>
 
 
