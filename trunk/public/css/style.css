@@ -38,57 +38,10 @@ div.error {
     COLOR: #cc0000;
 }
 
-.entity_list {
-    MARGIN-TOP: 10px
-}
 
-.entity_list .current a {
-    display:block;
-    float:left;
-}
-
-.entity_list tbody tr.marked td {
-    FONT-WEIGHT: bold;
-}
-
-.entity_list THEAD TR TD {
-    PADDING-RIGHT: 8px; PADDING-LEFT: 7px; BACKGROUND: #6F4014; PADDING-BOTTOM: 6px; VERTICAL-ALIGN: top; BORDER-LEFT: #a88185 1px solid; COLOR: white; PADDING-TOP: 6px;
-}
-.entity_list THEAD TR TD {
-    TEXT-ALIGN: left
-}
-.entity_list THEAD TR TD.current {
-    PADDING-LEFT: 10px; BACKGROUND: #6F4014; BORDER-LEFT: medium none; TEXT-ALIGN: left
-}
-.entity_list TBODY TR TD {
-    BACKGROUND: #ede1c0;
-}
-.entity_list TR TD DIV.arrow_t,.entity_list TR TD img.arrow_t {
-    FLOAT: right; CURSOR: pointer; PADDING-TOP: 0.55em
-}
-.entity_list TR TD {
-    PADDING-RIGHT: 5px;
-    PADDING-LEFT: 10px;
-    PADDING-TOP: 2px;
-    TEXT-ALIGN: left;
-    VERTICAL-ALIGN: top;
-}
-.entity_list TR {
-    BACKGROUND: transparent;
-}
-.entity_list TR TD.first {
-    PADDING-LEFT: 10px; TEXT-ALIGN: left
-}
-
-.filterForm {
-    PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 13px 0px 5px; PADDING-TOP: 0px
-}
-.filter_form_enter {
-    MARGIN-TOP: 0px; FONT-SIZE: 90%;
-}
-.filter_form_enter_multiple {
-    MARGIN-TOP: 0px; FONT-SIZE: 90%;
-}
-.filterForm TD {
-    PADDING-BOTTOM: 2px; COLOR: #333333
+.tab_header {
+	BACKGROUND: #e6e6e6;
+	FONT-SIZE: 12px; FONT-WEIGHT: bold;
+	MARGIN-TOP: 10px; MARGIN-BOTTOM: 5px;
+	PADDING-LEFT: 10px; PADDING-TOP: 2px; PADDING-BOTTOM: 2px;
 }

@@ -58,12 +58,15 @@ class BootstrapApp extends BootstrapMain
 
         if('en' == Zend_Registry::get('Zend_Locale')) {
             $dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+            $dateFormat = "yyyy-MM-dd";
         }
         else {
             $dateTimeFormat = Zend_Locale_Data::getContent(Zend_Registry::get('Zend_Locale'), 'dateTime');
+            $dateFormat = Zend_Locale_Data::getContent(Zend_Registry::get('Zend_Locale'), 'date');
         }
         Zend_Registry::set('dateTimeFormat', $dateTimeFormat);
-
+        Zend_Registry::set('dateFormat', $dateFormat);
+        
         $tzOffset = array_key_exists('tz_offset', $_COOKIE) ? (int)$_COOKIE['tz_offset'] : 0;
         
         $zone = "Etc/GMT";

@@ -28,6 +28,11 @@ class ErrorController extends Zend_Controller_Action
     
     public function messageAction()
     {
+        $forDialog = $this->_getParam('for_dialog');
+        if(!empty($forDialog)) {
+            $this->_helper->layout()->disableLayout();
+        }
+        
         $this->view->error = $this->_getParam('message');
     }
 
