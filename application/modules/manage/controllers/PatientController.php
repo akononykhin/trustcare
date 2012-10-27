@@ -335,7 +335,6 @@ class PatientController extends ZendX_Controller_Action
         return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.patient", "view");
     }
     
-    
     public function loadArrayOfActiveAction()
     {
         $o = new stdClass();
@@ -363,6 +362,30 @@ class PatientController extends ZendX_Controller_Action
         $this->_helper->json($o);
     }
     
+    
+    public function checkIsMaleActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.patient", "view");
+    }
+    
+    public function checkIsMaleAction()
+    {
+        $o = new stdClass();
+        $o->success = false;
+        
+        try {
+            $id = $this->_getParam('id');
+            $model = TrustCare_Model_Patient::find($id);
+            $isMale = ($model && $model->getIsMale()) ? 1 : 0; 
+            
+            $o->success = true;
+            $o->is_male = $isMale;
+        }
+        catch(Exception $ex) {
+        }
+                                              
+        $this->_helper->json($o);
+    }
     
     /**
      * @return Zend_Form
