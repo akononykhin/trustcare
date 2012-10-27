@@ -1,6 +1,8 @@
 <?php
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
 $this->headLink()->appendStylesheet('/css/showLoading.css');
+
+$textForEmptyAdrStopDate = $this->translate(_("Ongoing"));
 ?>
 <style type="text/css" title="currentStyle">
 a {
@@ -142,7 +144,41 @@ a {
 			$('#row_adh_intervention').show();
 		}
 	}
+	
+	function checkIsAdrScreened()
+	{
+		if(0 == $('input:radio[name=is_adr_screened]:checked').val()) {
+            $('input[name = "is_adr_symptoms"]').attr("disabled", 'disabled');
+            $('#is_adr_symptoms_0').attr("checked", 'checked');
+		}
+		else {
+            $('input[name = "is_adr_symptoms"]').removeAttr("disabled");
+		}
+		checkIsAdrSymptoms();
+	}
 
+	function checkIsAdrSymptoms()
+	{
+		if(0 == $('input:radio[name=is_adr_symptoms]:checked').val()) {
+			$('#row_adr_severity_id').hide();
+		}
+		else {
+			$('#row_adr_severity_id').show();
+		}
+	}
+	
+
+	function checkAdrStopDate()
+	{
+		var val = $('#adr_stop_date').val();
+		if('' == val || '<?php echo $textForEmptyAdrStopDate;?>' == val) {
+			$('#adr_stop_date').val('<?php echo $textForEmptyAdrStopDate;?>');
+			$('#adr_stop_date').css('color', '#e6e6e6');
+		}
+		else {
+			$('#adr_stop_date').css('color', '#000000');
+		}
+	}
 	
     function updateErrorInfo(dlgId, message) {
 	    var infoEl = $(dlgId + " .errorInfo");
@@ -168,7 +204,16 @@ a {
 	    patientsReload();
 	    dictEntitiesReload('#med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
 	    dictEntitiesReload('#med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
-	    dictEntitiesReload('#adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION;?>');
+	    dictEntitiesReload('#adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
+	    dictEntitiesReload('#adh_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
+	    dictEntitiesReload('#adr_severity_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_SEVERITY_GRADE;?>');
+	    dictEntitiesReload('#suspected_adr_hepatic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
+	    dictEntitiesReload('#suspected_adr_nervous', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
+	    dictEntitiesReload('#suspected_adr_cardiovascular', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
+	    dictEntitiesReload('#suspected_adr_skin', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
+	    dictEntitiesReload('#suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
+	    dictEntitiesReload('#suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
+	    dictEntitiesReload('#suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
 
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
@@ -256,14 +301,60 @@ a {
 	        return false;
 	    });
 	    $("#link-add-adh_intervention").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION;?>');
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
 	    	$("#dlg-add-dict-entity").attr('list_element_id', 'adh_intervention');
 	    	$("#dlg-add-dict-entity").dialog('open');
 	        return false;
 	    });
+	    $("#link-add-adh_intervention_outcome").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'adh_intervention_outcome');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-suspected_adr_hepatic").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_hepatic');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-suspected_adr_nervous").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_nervous');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-suspected_adr_cardiovascular").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_cardiovascular');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-suspected_adr_skin").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_skin');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-suspected_adr_metabolic").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_metabolic');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-suspected_adr_musculoskeletal").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_musculoskeletal');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-suspected_adr_general").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_general');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
 /***   END OnClick events ***/		
-
-        $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd'});
 
         $('#id_patient').change(function() {
 	        $.ajax( {
@@ -303,12 +394,27 @@ a {
         $('input[name = "is_adh_intervention_provided"]').bind('change', function(){
         	checkIsAdhInterventionProvided();
         });
+        $('input[name = "is_adr_screened"]').bind('change', function(){
+            checkIsAdrScreened();
+        });
+        $('input[name = "is_adr_symptoms"]').bind('change', function(){
+            checkIsAdrSymptoms();
+        });
 /*** END Bind of OnChange ***/        
         
         checkIsMedErrorScreened();
         checkIsMedAdhProblemScreened();
         checkIsAdhInterventionProvided();
-	});
+        checkIsAdrScreened();
+        
+        $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+        $("#adr_start_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+        $("#adr_stop_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+	    $("#adr_stop_date").bind('change', function(){
+	        checkAdrStopDate();
+	    });
+        checkAdrStopDate();
+});
 </script>
 
 <form class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'create', 'type' => $this->type));?>">
@@ -427,7 +533,122 @@ a {
   </tr>
  </table>
 </div>
+
+<div class="tab_header"><?php echo $this->translate(_("Medication Error / Adherence Intervention Outcome Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr id="row_adh_intervention_outcome">
+   <td valign="top"><div class="normal"><label for="adh_intervention_outcome"><?php echo $this->translate(_("Type of Medication Error / Adherence intervention Outcome"));?></label></div></td>
+   <td>
+     <select name="adh_intervention_outcome" id="adh_intervention_outcome" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-adh_intervention_outcome"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
  
+<div class="tab_header"><?php echo $this->translate(_("Suspected Adverse Drug Reactions (ADRs) Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adr_screened"><?php echo $this->translate(_("Is patient screened for ADR symptoms at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adr_screened" id="is_adr_screened_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_screened" id="is_adr_screened_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adr_symptoms"><?php echo $this->translate(_("Any signs/symptoms indicating NEW adverse drug reactions (ADRs) at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_0" value="0" checked>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_1" value="1">&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_adr_severity_id">
+   <td valign="top"><div class="normal"><label for="adr_severity_id"><?php echo $this->translate(_("Types of ADRs severity grade"));?></label></div></td>
+   <td>
+     <select name="adr_severity_id" id="adr_severity_id">
+     </select>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="adr_start_date"><?php echo $this->translate(_("ADR Start Date"));?></label></div></td>
+   <td>
+     <input type="text" name="adr_start_date" id="adr_start_date">     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="adr_stop_date"><?php echo $this->translate(_("ADR Stop Date"));?></label></div></td>
+   <td>
+     <input type="text" name="adr_stop_date" id="adr_stop_date">     
+   </td>
+  </tr>
+ </table>
+</div>
+ 
+<div class="tab_header"><?php echo $this->translate(_("Suspected ADR in system-organ classification"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr id="row_suspected_adr_hepatic">
+   <td valign="top"><div class="normal"><label for="suspected_adr_hepatic"><?php echo $this->translate(_("GIT/Hepatic System"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_hepatic" id="suspected_adr_hepatic" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_hepatic"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_nervous">
+   <td valign="top"><div class="normal"><label for="suspected_adr_nervous"><?php echo $this->translate(_("Nervous System"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_nervous" id="suspected_adr_nervous" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_nervous"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_cardiovascular">
+   <td valign="top"><div class="normal"><label for="suspected_adr_cardiovascular"><?php echo $this->translate(_("Cardiovascular System"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_cardiovascular" id="suspected_adr_cardiovascular" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_cardiovascular"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_skin">
+   <td valign="top"><div class="normal"><label for="suspected_adr_skin"><?php echo $this->translate(_("Skin and Appendages"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_skin" id="suspected_adr_skin" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_skin"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_metabolic">
+   <td valign="top"><div class="normal"><label for="suspected_adr_metabolic"><?php echo $this->translate(_("Metabolic/Endocrine System"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_metabolic" id="suspected_adr_metabolic" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_metabolic"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_musculoskeletal">
+   <td valign="top"><div class="normal"><label for="suspected_adr_musculoskeletal"><?php echo $this->translate(_("Musculoskeletal"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_musculoskeletal" id="suspected_adr_musculoskeletal" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_musculoskeletal"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_general">
+   <td valign="top"><div class="normal"><label for="suspected_adr_general"><?php echo $this->translate(_("Systematic-General"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_general" id="suspected_adr_general" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_general"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
 </form>
 
 
