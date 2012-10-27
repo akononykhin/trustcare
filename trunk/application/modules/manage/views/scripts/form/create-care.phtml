@@ -166,6 +166,16 @@ a {
 			$('#row_adr_severity_id').show();
 		}
 	}
+
+	function checkIsAdrInterventionProvided()
+	{
+		if(0 == $('input:radio[name=is_adr_intervention_provided]:checked').val()) {
+			$('#row_adr_intervention').hide();
+		}
+		else {
+			$('#row_adr_intervention').show();
+		}
+	}
 	
 
 	function checkAdrStopDate()
@@ -214,6 +224,7 @@ a {
 	    dictEntitiesReload('#suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
 	    dictEntitiesReload('#suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
 	    dictEntitiesReload('#suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
+	    dictEntitiesReload('#adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
 
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
@@ -354,6 +365,12 @@ a {
 	    	$("#dlg-add-dict-entity").dialog('open');
 	        return false;
 	    });
+	    $("#link-add-adr_intervention").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'adr_intervention');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
 /***   END OnClick events ***/		
 
         $('#id_patient').change(function() {
@@ -400,12 +417,16 @@ a {
         $('input[name = "is_adr_symptoms"]').bind('change', function(){
             checkIsAdrSymptoms();
         });
+        $('input[name = "is_adr_intervention_provided"]').bind('change', function(){
+        	checkIsAdrInterventionProvided();
+        });
 /*** END Bind of OnChange ***/        
         
         checkIsMedErrorScreened();
         checkIsMedAdhProblemScreened();
         checkIsAdhInterventionProvided();
         checkIsAdrScreened();
+        checkIsAdrInterventionProvided();
         
         $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
         $("#adr_start_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
@@ -644,6 +665,34 @@ a {
      <select name="suspected_adr_general" id="suspected_adr_general" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_general"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("ADR Intervention Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adr_intervention_provided"><?php echo $this->translate(_("Adverse Drug Reaction intervention provided"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adr_intervention_provided" id="is_adr_intervention_provided_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_intervention_provided" id="is_adr_intervention_provided_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_adr_intervention">
+   <td valign="top"><div class="normal"><label for="adr_intervention"><?php echo $this->translate(_("Types of ADR intervention"));?></label></div></td>
+   <td>
+     <select name="adr_intervention" id="adr_intervention" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-adr_intervention"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_nafdac_adr_filled"><?php echo $this->translate(_("NAFDAC ADR reporting form filled"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_nafdac_adr_filled" id="is_nafdac_adr_filled_0" value="0" checked>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_nafdac_adr_filled" id="is_nafdac_adr_filled_1" value="1">&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
  </table>
