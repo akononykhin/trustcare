@@ -187,6 +187,7 @@ class FormController extends ZendX_Controller_Action
         
         $this->view->type = 'care';
         $this->view->allow_create_patient = Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.patient", "create");
+        $this->view->currentDate = $this->convertDateToUserTimezone(gmdate("Y-m-d"));
         $this->render('create-care');
         return;
     }

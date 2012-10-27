@@ -31,6 +31,35 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
 	  });
 	}
 
+	function dictEntitiesReload(ctrlId, dictTypeId){
+  	    $.ajax({
+	        url:'<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "load-array-for-type")); ?>'
+	        ,type:'POST'
+	        ,data: {
+		        type_id: dictTypeId
+		    }
+	        ,success: function(data){
+	            if(!data || !data.success) {
+	                return;
+	            }
+
+	            var select = $(ctrlId);
+	            if(select.prop) {
+	                var options = select.prop('options');
+	            }
+	            else {
+	                var options = select.attr('options');
+	            }
+	            $('option', select).remove();
+	            for (var key in data.rows){
+	                options[options.length] = new Option(data.rows[key], key);
+	            }
+	        }
+	        ,complete: function(jqXHR, textStatus) {
+	        }
+	  });
+	}
+	
 	function linkFormToDlg(dialogId) {
     	var form = $(dialogId + '>form');
     	if(form) {
@@ -53,9 +82,51 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
     	} 			    	  
 	}
 
+	function checkIsMedErrorScreened()
+	{
+		if(0 == $('input:radio[name=is_med_error_screened]:checked').val()) {
+            $('input[name = "is_med_error_identified"]').attr("disabled", 'disabled');
+            $('#is_med_error_identified_0').attr("checked", 'checked');
+		}
+		else {
+            $('input[name = "is_med_error_identified"]').removeAttr("disabled");
+		}
+		checkIsMedErrorIdentified();
+	}
+
+	function checkIsMedErrorIdentified()
+	{
+		if(0 == $('input:radio[name=is_med_error_identified]:checked').val()) {
+			$('#row_med_error_type').hide();
+		}
+		else {
+			$('#row_med_error_type').show();
+		}
+	}
+
+    function updateErrorInfo(dlgId, message) {
+	    var infoEl = $(dlgId + " .errorInfo");
+	    if('' != message) {
+	        infoEl.text(message).addClass("ui-state-highlight");
+	    }
+	    else {
+	        infoEl.text('').removeClass("ui-state-highlight");
+	    }
+	      
+	    setTimeout(function() {
+	        infoEl.removeClass("ui-state-highlight", 1500);
+	    }, 500 );
+	}
+
+    
+    function cleanErrorInfo(dlgId) {
+        updateErrorInfo(dlgId, '');
+        $('#add-dict-entity-name').val("").removeClass("ui-state-error");
+    }
 
 	$(document).ready(function() {
 	    patientsReload();
+	    dictEntitiesReload('#med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
 
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
@@ -68,23 +139,115 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
 				    patientsReload();
 			    }
         });
-		
 
-	    
+	    $("#dlg-add-dict-entity").dialog({
+	        dialogClass: 'dialog-content'
+	        ,autoOpen: false
+	        ,height: 200
+	        ,width: 300
+	        ,modal: true
+	        ,buttons: {
+	            '<?php echo $this->translate(_("Add"));?>': function() {
+                    var name = $('#add-dict-entity-name');
+	                if(!name.val()) {
+	                  name.addClass("ui-state-error");
+	                  updateErrorInfo('#dlg-add-dict-entity', '<?php echo $this->translate(_("Necessary to enter value"));?>');
+	                  return false;
+	                }
+	                var type_id = $(this).attr('type_id');
+	                var list_element_id = $(this).attr('list_element_id');
+	            
+	    	        $('#dlg-add-dict-entity').showLoading();
+ 	                $.ajax({
+	                     url: '<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "create-ajax")); ?>'
+	                    ,type:'POST'
+	              	    ,data: {
+	                         name : name.val()
+	                        ,type_id: type_id
+	                    }
+		                ,success: function(data) {
+		                    if (data && data.success){
+		                    	$('#dlg-add-dict-entity').dialog("close");
+	    	            	    dictEntitiesReload('#'+list_element_id, type_id);
+	            	        }
+	                	    else{
+	                    	    var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
+	                      	    if(data) {
+	                          	    errorMsg = data.error;
+	                            }
+	                            updateErrorInfo('#dlg-add-dict-entity', errorMsg);
+	                        }
+	                    }
+		    	        ,complete: function(jqXHR, textStatus) {
+		    	        	$('#dlg-add-dict-entity').hideLoading();
+		    	        }
+	                });
+	          }
+	          ,'<?php echo $this->translate(_("Cancel"));?>': function() {
+	              $(this).dialog("close");
+	          }
+	        }
+	        ,close: function() {
+	        }
+	        ,open: function() {
+	            cleanErrorInfo('#dlg-add-dict-entity');
+	        }
+	      });
+        
+/***   START OnClick events ***/		
 	    $("#link-add-patient").click(function() {
 	    	newPatientDlg.load('<?php echo $this->url(array("controller" => "patient", "action" => "create", "for_dialog" => 1)); ?>', function(){
 		    	linkFormToDlg("#dialog-add-patient");
 		    }).dialog('open');
 	        return false;
 	    });
-	    
+	    $("#link-add-med-error-type").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'med_error_type');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+/***   END OnClick events ***/		
+
+        $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd'});
+
+        $('#id_patient').change(function() {
+	        $.ajax( {
+	             type: "POST"
+	            ,url: '<?php echo $this->url(array("controller" => "patient", "action" => "check-is-male")); ?>'
+ 	            ,data: {
+ 	 	            id: $("#id_patient option:selected").val()
+ 	 	        }
+	            ,success: function(data) {
+		            if(!data || !data.success) {
+		                return;
+		            }
+		            if(0 != data.is_male) {
+			            $('input[name = "is_pregnant"]').attr("disabled", 'disabled');
+			            $('input[name = "is_pregnant"]').attr('checked', false);
+		            }
+		            else {
+			            $('input[name = "is_pregnant"]').removeAttr("disabled");
+		            }
+	            }
+	        });			    	      
+        });        
+
+        $('input[name = "is_med_error_screened"]').bind('change', function(){
+            checkIsMedErrorScreened();
+        });
+        $('input[name = "is_med_error_identified"]').bind('change', function(){
+            checkIsMedErrorIdentified();
+        });
+        
+        checkIsMedErrorScreened();
 	});
 </script>
 
 <form class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'create', 'type' => $this->type));?>">
-<div class="tab_header"><?php echo $this->translate(_("General"));?></div>
+<div class="tab_header"><?php echo $this->translate(_("General Tab"));?></div>
 <div class="tab_content">
- <table>
+ <table class="zend_form">
   <tr>
    <td valign="top"><div class="required"><label for="patient"><?php echo $this->translate(_("Patient"));?></label></div></td>
    <td>
@@ -95,7 +258,72 @@ $this->headLink()->appendStylesheet('/css/showLoading.css');
 <?php endif;?>     
    </td>
   </tr>
+  <tr>
+   <td valign="top"><div class="required"><label for="date_of_visit"><?php echo $this->translate(_("Date of Visit"));?></label></div></td>
+   <td>
+     <input type="text" name="date_of_visit" id="date_of_visit" value="<?php echo $this->currentDate;?>">     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_pregnant"><?php echo $this->translate(_("Is pregnant"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_pregnant" id="is_pregnant_0" value="0" checked>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_pregnant" id="is_pregnant_1" value="1">&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_receive_prescription"><?php echo $this->translate(_("Did client receive prescription in this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_receive_prescription" id="is_receive_prescription_0" value="0" checked>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_receive_prescription" id="is_receive_prescription_1" value="1">&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+ </table>
+</div>
+
+
+<div class="tab_header"><?php echo $this->translate(_("Medication Error Screening Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_med_error_screened"><?php echo $this->translate(_("Is patient screened for Medication Error in this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_med_error_screened" id="is_med_error_screened_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_error_screened" id="is_med_error_screened_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_med_error_identified"><?php echo $this->translate(_("Is there Medication Error identified at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_med_error_identified" id="is_med_error_identified_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_error_identified" id="is_med_error_identified_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_med_error_type">
+   <td valign="top"><div class="normal"><label for="med_error_type"><?php echo $this->translate(_("Type of Medication Error"));?></label></div></td>
+   <td>
+     <select name="med_error_type" id="med_error_type" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-med-error-type" href="#"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
+
+
+<div class="tab_header"><?php echo $this->translate(_("Adherence Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
  </table>
 </div>
 </form>
 
+
+<div id="dlg-add-dict-entity" title="<?php echo $this->translate(_("Add"));?>" type_id="" list_element_id="">
+  <p class="errorInfo"></p>
+  <form>
+    <label for="name"><?php echo $this->translate(_("Name"));?></label>
+    <input type="text" name="name" id="add-dict-entity-name" class="text ui-widget-content ui-corner-all" />
+  </form>
+</div>

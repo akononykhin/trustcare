@@ -8,6 +8,8 @@
 
 class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
 {
+    const DTYPE_MEDICATION_ERROR_TYPE = 1;
+    
     protected $_id;
     protected $_id_pharmacy_dictionary_type;
     protected $_name;

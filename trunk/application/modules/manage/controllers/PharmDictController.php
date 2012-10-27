@@ -311,6 +311,76 @@ class PharmDictController extends ZendX_Controller_Action
     }
     
     
+    public function loadArrayForTypeActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharm_dict", "view");
+    }
+    
+    public function loadArrayForTypeAction()
+    {
+        $typeId = $this->_getParam('type_id');
+        
+        $o = new stdClass();
+        $o->success = false;
+        
+        try {
+            $rows = array();
+            $model = new TrustCare_Model_PharmacyDictionary();
+            foreach($model->fetchAll(sprintf("id_pharmacy_dictionary_type=%d", $typeId)) as $obj) {
+                $rows[$obj->getId()] = $obj->getName();
+            }
+             
+            $o->rows = $rows;
+            $o->success = true;
+        }
+        catch(Exception $ex) {
+            
+        }
+
+                                              
+        $this->_helper->json($o);
+    }
+    
+    
+    public function createAjaxActionAccess()
+    {
+       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharm_dict", "create");
+    }
+    
+    public function createAjaxAction()
+    {
+        $o = new stdClass();
+        $o->success = false;
+        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+        
+        try {
+            $typeId = $this->_getParam('type_id');
+            $name = $this->_getParam('name');
+            
+            $typeModel = TrustCare_Model_PharmacyDictionaryType::find($typeId);
+            if(is_null($typeModel)) {
+                throw new Exception(sprintf("'%s' tries to create pharmacy dictionary entity with unknown id_pharmacy_dictionary_type=%s", Zend_Auth::getInstance()->getIdentity(), $typeId));
+            }
+            
+            $model = new TrustCare_Model_PharmacyDictionary();
+            $model->setName($name);
+            $model->setIdPharmacyDictionaryType($typeId);
+            $model->save();
+
+            $o->success = true;
+        }
+        catch(Exception $ex) {
+            $o->error = $errorMsg;
+            
+            $exMessage = $ex->getMessage();
+            if(!empty($exMessage)) {
+                $this->getLogger()->error($exMessage);
+            }
+        }
+
+                                              
+        $this->_helper->json($o);
+    }
     
     /**
      * @return Zend_Form
