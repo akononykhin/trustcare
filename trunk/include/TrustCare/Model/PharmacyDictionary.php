@@ -10,7 +10,16 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
 {
     const DTYPE_MEDICATION_ERROR_TYPE = 1;
     const DTYPE_MEDICATION_ADH_PROBLEM = 2;
-    const DTYPE_ADH_INTERVENTION = 3;
+    const DTYPE_ADH_INTERVENTION_PROVIDED = 3;
+    const DTYPE_ADH_INTERVENTION_OUTCOME = 4;
+    const DTYPE_ADR_SEVERITY_GRADE = 5;
+    const DTYPE_HEPATIC = 7;
+    const DTYPE_NERVOUS = 8;
+    const DTYPE_CARDIOVASCULAR = 9;
+    const DTYPE_SKIN = 10;
+    const DTYPE_METABOLIC = 11;
+    const DTYPE_MUSCULOSKELETAL = 12;
+    const DTYPE_GENERAL = 13;
     
     protected $_id;
     protected $_id_pharmacy_dictionary_type;
