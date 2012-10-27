@@ -1,0 +1,101 @@
+<?php
+$this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
+$this->headLink()->appendStylesheet('/css/showLoading.css');
+?>
+<script type="text/javascript" charset="utf-8">
+	function patientsReload(){
+  	    $.ajax({
+	        url:'<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
+	        ,type:'POST'
+	        ,data:''
+	        ,success: function(data){
+	            if(!data || !data.success) {
+	                return;
+	            }
+
+	            var select = $('#id_patient');
+	            if(select.prop) {
+	                var options = select.prop('options');
+	            }
+	            else {
+	                var options = select.attr('options');
+	            }
+	            $('option', select).remove();
+                options[options.length] = new Option('', '');
+	            for (var key in data.rows){
+	                options[options.length] = new Option(data.rows[key], key);
+	            }
+	        }
+	        ,complete: function(jqXHR, textStatus) {
+	        }
+	  });
+	}
+
+	function linkFormToDlg(dialogId) {
+    	var form = $(dialogId + '>form');
+    	if(form) {
+	    	form.submit(function(event) {
+    	        event.preventDefault();
+    	        $(dialogId).showLoading();
+    	        $.ajax( {
+    	             type: "POST"
+    	            ,url: $(this).attr('action')
+      	            ,data: $(this).serialize()
+    	            ,success: function(response) {
+    	        	    $(dialogId).html(response);
+    	        	    linkFormToDlg(dialogId);
+    	            }
+	    	        ,complete: function(jqXHR, textStatus) {
+	    	            $(dialogId).hideLoading();
+	    	        }
+    	        });			    	      
+    	    });
+    	} 			    	  
+	}
+
+
+	$(document).ready(function() {
+	    patientsReload();
+
+	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
+			     dialogClass: 'dialog-content'
+				,title: '<?php echo $this->translate(_("Add Patient"));?>'
+			    ,autoOpen: false
+		    	,height: 500
+			    ,width: 500
+			    ,modal: true
+			    ,close: function() {
+				    patientsReload();
+			    }
+        });
+		
+
+	    
+	    $("#link-add-patient").click(function() {
+	    	newPatientDlg.load('<?php echo $this->url(array("controller" => "patient", "action" => "create", "for_dialog" => 1)); ?>', function(){
+		    	linkFormToDlg("#dialog-add-patient");
+		    }).dialog('open');
+	        return false;
+	    });
+	    
+	});
+</script>
+
+<form class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'create', 'type' => $this->type));?>">
+<div class="tab_header"><?php echo $this->translate(_("General"));?></div>
+<div class="tab_content">
+ <table>
+  <tr>
+   <td valign="top"><div class="required"><label for="patient"><?php echo $this->translate(_("Patient"));?></label></div></td>
+   <td>
+     <select name="id_patient" id="id_patient">
+     </select>&nbsp;
+<?php if ($this->allow_create_patient) : ?>
+     <a id="link-add-patient" href="#"><?php echo $this->translate(_("Add Patient"));?></a>
+<?php endif;?>     
+   </td>
+  </tr>
+ </table>
+</div>
+</form>
+

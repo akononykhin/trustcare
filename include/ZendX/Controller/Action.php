@@ -270,5 +270,17 @@ class ZendX_Controller_Action extends Zend_Controller_Action
             $zendDate->setTimezone($clientTZ);
             return $zendDate->toString(Zend_Registry::getInstance()->dateTimeFormat);
     }
+
+    /**
+     * 
+     * @param string $date Date at GMT timezone and YYYY-MM-DD format
+     */
+    protected function convertDateToUserTimezone($date)
+    {
+            $zendDate  = new Zend_Date($date.'Z', "yyyy-MM-ddZ");
+            $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
+            $zendDate->setTimezone($clientTZ);
+            return $zendDate->toString(Zend_Registry::getInstance()->dateFormat);
+    }
 }
 
