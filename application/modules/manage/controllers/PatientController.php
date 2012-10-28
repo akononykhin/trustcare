@@ -468,7 +468,8 @@ class PatientController extends ZendX_Controller_Action
             'label'         => Zend_Registry::get("Zend_Translate")->_("Date of Birth"),
             'id'			=> 'id_birthdate',
             'description'   => "",
-            'validators'    => array($dateValidator),
+            'required'      => true,
+        	'validators'    => array($dateValidator),
         	'size'          => 10,
             'tabindex'      => $tabIndex++,
         ));

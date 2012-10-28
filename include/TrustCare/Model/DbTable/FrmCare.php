@@ -72,6 +72,10 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
                 $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['adr_stop_date']));
             }
         }
+
+        if(array_key_exists('adr_severity_id', $data) && empty($data['adr_severity_id'])) {
+            $data['adr_severity_id'] = new Zend_Db_Expr('NULL');
+        }
         
         return parent::insert($data);
     }
@@ -113,6 +117,10 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
             else {
                 $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['adr_stop_date']));
             }
+        }
+
+        if(array_key_exists('adr_severity_id', $data) && empty($data['adr_severity_id'])) {
+            $data['adr_severity_id'] = new Zend_Db_Expr('NULL');
         }
         
         return parent::update($data, $where);

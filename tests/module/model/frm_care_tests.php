@@ -102,7 +102,7 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_adr_screened' => true,
                 'is_adr_symptoms' => false,
                 'adr_severity_id' => 2,
-        		'adr_start_date' => '2012-06-01 01:01:01',
+                'adr_start_date' => '2012-06-01 01:01:01',
                 'adr_stop_date' => '2012-06-08 01:01:01',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
@@ -147,7 +147,7 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_adr_screened' => true,
                 'is_adr_symptoms' => false,
                 'adr_severity_id' => 3,
-        		'adr_start_date' => '2012-06-01 01:01:01',
+                'adr_start_date' => '2012-06-01 01:01:01',
                 'adr_stop_date' => '2012-06-08 01:01:01',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
@@ -177,22 +177,22 @@ class TestOfFrmCare extends UnitTestCase {
         
         if(!is_null($model)) {
             $dateOfVisit = '2011-03-01 01:01:01' == $model->date_of_visit ? '2011-04-02 01:01:01' : '2011-03-01 01:01:01';
-        	$params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
-        	$params['date_of_visit'] = $dateOfVisit;
-        	$params['is_pregnant'] = !$model->is_pregnant;
-        	$params['is_receive_prescription'] = !$model->is_receive_prescription;
-        	$params['is_med_error_screened'] = !$model->is_med_error_screened;
-        	$params['is_med_error_identified'] = !$model->is_med_error_identified;
-        	$params['is_med_adh_problem_screened'] = !$model->is_med_adh_problem_screened;
-        	$params['is_med_adh_problem_identified'] = !$model->is_med_adh_problem_identified;
-        	$params['is_adh_intervention_provided'] = !$model->is_adh_intervention_provided;
-        	$params['is_adr_screened'] = !$model->is_adr_screened;
-        	$params['is_adr_symptoms'] = !$model->is_adr_symptoms;
-        	$params['adr_severity_id'] = $model->adr_severity_id == 1 ? 2 : 1;
+            $params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
+            $params['date_of_visit'] = $dateOfVisit;
+            $params['is_pregnant'] = !$model->is_pregnant;
+            $params['is_receive_prescription'] = !$model->is_receive_prescription;
+            $params['is_med_error_screened'] = !$model->is_med_error_screened;
+            $params['is_med_error_identified'] = !$model->is_med_error_identified;
+            $params['is_med_adh_problem_screened'] = !$model->is_med_adh_problem_screened;
+            $params['is_med_adh_problem_identified'] = !$model->is_med_adh_problem_identified;
+            $params['is_adh_intervention_provided'] = !$model->is_adh_intervention_provided;
+            $params['is_adr_screened'] = !$model->is_adr_screened;
+            $params['is_adr_symptoms'] = !$model->is_adr_symptoms;
+            $params['adr_severity_id'] = $model->adr_severity_id == 1 ? 2 : 1;
             $params['adr_start_date'] = '2011-06-01 01:01:01' == $model->adr_start_date ? '2011-06-02 01:01:01' : '2011-06-01 01:01:01';
             $params['adr_stop_date'] = '2011-07-01 01:01:01' == $model->adr_stop_date ? '2011-07-02 01:01:01' : '2011-07-01 01:01:01';
             $params['is_adr_intervention_provided'] = !$model->is_adr_intervention_provided;
-        	$params['is_nafdac_adr_filled'] = !$model->is_nafdac_adr_filled;
+            $params['is_nafdac_adr_filled'] = !$model->is_nafdac_adr_filled;
             $params['is_patient_younger_15'] = !$model->is_patient_younger_15;
             $params['is_patient_male'] = !$model->is_patient_male;
             
@@ -208,6 +208,22 @@ class TestOfFrmCare extends UnitTestCase {
 
                 $model1 = TrustCare_Model_FrmCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->_compareObjectAndParams($model1, $params);
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
+
+            
+            /* Check null values */
+            try {
+                $params = array(
+                    'adr_severity_id' => null,
+                );
+                $model->setOptions($params);
+                $model->save();
+                
+                $model1 = TrustCare_Model_FrmCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->assertEqual($model1->adr_severity_id, $params['adr_severity_id'], "Incorrect 'adr_severity_id': %s");
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
