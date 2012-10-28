@@ -12,7 +12,16 @@ a {
 </style>
 
 <script type="text/javascript" charset="utf-8">
+	var g_selectedPatient = '<?php echo $this->id_patient?>';
+	var g_dictEntities = new Array();
+<?php foreach($this->dictEntities as $key=>$values) :?>
+    g_dictEntities[<?php echo $key;?>] = [<?php echo join(" , ", $values);?>];
+<?php endforeach; ?>
+	
 	function patientsReload(){
+		if($("#id_patient option").length) {
+			g_selectedPatient = $("#id_patient option:selected").val();
+		}
   	    $.ajax({
 	        url:'<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
 	        ,type:'POST'
@@ -32,7 +41,11 @@ a {
 	            $('option', select).remove();
                 options[options.length] = new Option('', '');
 	            for (var key in data.rows){
-	                options[options.length] = new Option(data.rows[key], key);
+		            var selectedFlag = false;
+		            if(key == g_selectedPatient) {
+			            selectedFlag = true;
+		            }
+	                options[options.length] = new Option(data.rows[key], key, selectedFlag);
 	            }
 	        }
 	        ,complete: function(jqXHR, textStatus) {
@@ -41,6 +54,12 @@ a {
 	}
 
 	function dictEntitiesReload(ctrlId, dictTypeId){
+		if($(ctrlId + " option").length) {
+			g_dictEntities[dictTypeId] = new Array();
+			$(ctrlId + " option:selected").each( function() {
+                g_dictEntities[dictTypeId][g_dictEntities[dictTypeId].length] = parseInt($(this).val(), 10);
+            });
+		}
   	    $.ajax({
 	        url:'<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "load-array-for-type")); ?>'
 	        ,type:'POST'
@@ -61,7 +80,11 @@ a {
 	            }
 	            $('option', select).remove();
 	            for (var key in data.rows){
-	                options[options.length] = new Option(data.rows[key], key);
+		            var selectedFlag = false;
+		            if(-1 != jQuery.inArray(parseInt(key, 10), g_dictEntities[dictTypeId])) { /* to check int with int */
+			            selectedFlag = true;
+		            }
+	                options[options.length] = new Option(data.rows[key], key, selectedFlag);
 	            }
 	        }
 	        ,complete: function(jqXHR, textStatus) {
@@ -95,7 +118,7 @@ a {
 	{
 		if(0 == $('input:radio[name=is_med_error_screened]:checked').val()) {
             $('input[name = "is_med_error_identified"]').attr("disabled", 'disabled');
-            $('#is_med_error_identified_0').attr("checked", 'checked');
+            $('#is_med_error_identified_0').attr('checked', 'checked');
 		}
 		else {
             $('input[name = "is_med_error_identified"]').removeAttr("disabled");
@@ -117,7 +140,7 @@ a {
 	{
 		if(0 == $('input:radio[name=is_med_adh_problem_screened]:checked').val()) {
             $('input[name = "is_med_adh_problem_identified"]').attr("disabled", 'disabled');
-            $('#is_med_adh_problem_identified_0').attr("checked", 'checked');
+            $('#is_med_adh_problem_identified_0').attr('checked', 'checked');
 		}
 		else {
             $('input[name = "is_med_adh_problem_identified"]').removeAttr("disabled");
@@ -149,7 +172,7 @@ a {
 	{
 		if(0 == $('input:radio[name=is_adr_screened]:checked').val()) {
             $('input[name = "is_adr_symptoms"]').attr("disabled", 'disabled');
-            $('#is_adr_symptoms_0').attr("checked", 'checked');
+            $('#is_adr_symptoms_0').attr('checked', 'checked');
 		}
 		else {
             $('input[name = "is_adr_symptoms"]').removeAttr("disabled");
@@ -211,6 +234,23 @@ a {
     }
 
 	$(document).ready(function() {
+    	$('#main_form').submit(function() {
+        	if(!$("#id_patient option:selected").val()) {
+            	alert('<?php echo $this->translate(_("Necessary to choose patient"));?>');
+            	$("#id_patient").focus();
+            	return false;
+        	}
+        	if(!$('#date_of_visit').val()) {
+            	alert('<?php echo $this->translate(_("Necessary to enter date of visit"));?>');
+            	$("#date_of_visit").focus();
+            	return false;
+        	}
+        	if('<?php echo $textForEmptyAdrStopDate?>' == $('#adr_stop_date').val()) {
+        		$('#adr_stop_date').val('');
+        	}
+        	return true;
+	    });
+		
 	    patientsReload();
 	    dictEntitiesReload('#med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
 	    dictEntitiesReload('#med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
@@ -386,7 +426,7 @@ a {
 		            }
 		            if(0 != data.is_male) {
 			            $('input[name = "is_pregnant"]').attr("disabled", 'disabled');
-			            $('input[name = "is_pregnant"]').attr('checked', false);
+			            $('#is_pregnant_0').attr('checked', 'checked');
 		            }
 		            else {
 			            $('input[name = "is_pregnant"]').removeAttr("disabled");
@@ -438,7 +478,10 @@ a {
 });
 </script>
 
-<form class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'create', 'type' => $this->type));?>">
+<?php if(!empty($this->error)) : ?>
+<div class="form_errors"><?php echo $this->error;?></div>
+<?php endif;?>
+<form id="main_form" class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'create', 'type' => $this->type));?>">
 <div class="tab_header"><?php echo $this->translate(_("General Tab"));?></div>
 <div class="tab_content">
  <table class="zend_form">
@@ -455,21 +498,21 @@ a {
   <tr>
    <td valign="top"><div class="required"><label for="date_of_visit"><?php echo $this->translate(_("Date of Visit"));?></label></div></td>
    <td>
-     <input type="text" name="date_of_visit" id="date_of_visit" value="<?php echo $this->currentDate;?>">     
+     <input type="text" name="date_of_visit" id="date_of_visit" value="<?php echo $this->dateOfVisit;?>">     
    </td>
   </tr>
   <tr>
    <td valign="top"><div class="normal"><label for="is_pregnant"><?php echo $this->translate(_("Is pregnant"));?></label></div></td>
    <td>
-     <input type="radio" name="is_pregnant" id="is_pregnant_0" value="0" checked>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
-     <input type="radio" name="is_pregnant" id="is_pregnant_1" value="1">&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_pregnant" id="is_pregnant_0" value="0" <?php if(!$this->isPregnant) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_pregnant" id="is_pregnant_1" value="1" <?php if($this->isPregnant) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
   <tr>
    <td valign="top"><div class="normal"><label for="is_receive_prescription"><?php echo $this->translate(_("Did client receive prescription in this visit?"));?></label></div></td>
    <td>
-     <input type="radio" name="is_receive_prescription" id="is_receive_prescription_0" value="0" checked>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
-     <input type="radio" name="is_receive_prescription" id="is_receive_prescription_1" value="1">&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_receive_prescription" id="is_receive_prescription_0" value="0" <?php if(!$this->isReceivePrescription) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_receive_prescription" id="is_receive_prescription_1" value="1" <?php if($this->isReceivePrescription) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
  </table>
@@ -482,21 +525,21 @@ a {
   <tr>
    <td valign="top"><div class="normal"><label for="is_med_error_screened"><?php echo $this->translate(_("Is patient screened for Medication Error in this visit?"));?></label></div></td>
    <td>
-     <input type="radio" name="is_med_error_screened" id="is_med_error_screened_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
-     <input type="radio" name="is_med_error_screened" id="is_med_error_screened_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_med_error_screened" id="is_med_error_screened_0" value="0" <?php if(!$this->isMedErrorScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_error_screened" id="is_med_error_screened_1" value="1" <?php if($this->isMedErrorScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
   <tr>
    <td valign="top"><div class="normal"><label for="is_med_error_identified"><?php echo $this->translate(_("Is there Medication Error identified at this visit?"));?></label></div></td>
    <td>
-     <input type="radio" name="is_med_error_identified" id="is_med_error_identified_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
-     <input type="radio" name="is_med_error_identified" id="is_med_error_identified_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_med_error_identified" id="is_med_error_identified_0" value="0" <?php if(!$this->isMedErrorIdentified) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_error_identified" id="is_med_error_identified_1" value="1" <?php if($this->isMedErrorIdentified) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
   <tr id="row_med_error_type">
    <td valign="top"><div class="normal"><label for="med_error_type"><?php echo $this->translate(_("Type of Medication Error"));?></label></div></td>
    <td>
-     <select name="med_error_type" id="med_error_type" multiple size="5">
+     <select name="med_error_type[]" id="med_error_type" multiple size="5">
      </select>&nbsp;
      <a id="link-add-med_error_type"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -512,21 +555,21 @@ a {
   <tr>
    <td valign="top"><div class="normal"><label for="is_med_adh_problem_screened"><?php echo $this->translate(_("Is patient screened for Medication Adherence Related problem(s) in this visit?"));?></label></div></td>
    <td>
-     <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
-     <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_0" value="0" <?php if(!$this->isMedAdhProblemScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_1" value="1" <?php if($this->isMedAdhProblemScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
   <tr>
    <td valign="top"><div class="normal"><label for="is_med_adh_problem_identified"><?php echo $this->translate(_("Is there Medication Adherence Related problem(s) identified at this visit?"));?></label></div></td>
    <td>
-     <input type="radio" name="is_med_adh_problem_identified" id="is_med_adh_problem_identified_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
-     <input type="radio" name="is_med_adh_problem_identified" id="is_med_adh_problem_identified_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_med_adh_problem_identified" id="is_med_adh_problem_identified_0" value="0" <?php if(!$this->isMedAdhProblemIdentified) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_adh_problem_identified" id="is_med_adh_problem_identified_1" value="1" <?php if($this->isMedAdhProblemIdentified) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
   <tr id="row_med_adh_problem">
    <td valign="top"><div class="normal"><label for="med_adh_problem"><?php echo $this->translate(_("Type of Medication Adherence Related problem(s)"));?></label></div></td>
    <td>
-     <select name="med_adh_problem" id="med_adh_problem" multiple size="3">
+     <select name="med_adh_problem[]" id="med_adh_problem" multiple size="3">
      </select>&nbsp;
      <a id="link-add-med_adh_problem"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -540,14 +583,14 @@ a {
   <tr>
    <td valign="top"><div class="normal"><label for="is_adh_intervention_provided"><?php echo $this->translate(_("Medication Error / Adherence intervention provided at this visit?"));?></label></div></td>
    <td>
-     <input type="radio" name="is_adh_intervention_provided" id="is_adh_intervention_provided_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
-     <input type="radio" name="is_adh_intervention_provided" id="is_adh_intervention_provided_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_adh_intervention_provided" id="is_adh_intervention_provided_0" value="0" <?php if(!$this->isAdhInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adh_intervention_provided" id="is_adh_intervention_provided_1" value="1" <?php if($this->isAdhInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
   <tr id="row_adh_intervention">
    <td valign="top"><div class="normal"><label for="adh_intervention"><?php echo $this->translate(_("Type of Medication Error / Adherence intervention provided"));?></label></div></td>
    <td>
-     <select name="adh_intervention" id="adh_intervention" multiple size="5">
+     <select name="adh_intervention[]" id="adh_intervention" multiple size="5">
      </select>&nbsp;
      <a id="link-add-adh_intervention"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -561,7 +604,7 @@ a {
   <tr id="row_adh_intervention_outcome">
    <td valign="top"><div class="normal"><label for="adh_intervention_outcome"><?php echo $this->translate(_("Type of Medication Error / Adherence intervention Outcome"));?></label></div></td>
    <td>
-     <select name="adh_intervention_outcome" id="adh_intervention_outcome" multiple size="5">
+     <select name="adh_intervention_outcome[]" id="adh_intervention_outcome" multiple size="5">
      </select>&nbsp;
      <a id="link-add-adh_intervention_outcome"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -575,15 +618,15 @@ a {
   <tr>
    <td valign="top"><div class="normal"><label for="is_adr_screened"><?php echo $this->translate(_("Is patient screened for ADR symptoms at this visit?"));?></label></div></td>
    <td>
-     <input type="radio" name="is_adr_screened" id="is_adr_screened_0" value="0">&nbsp;<?php echo $this->translate(_("No"));?><br/>     
-     <input type="radio" name="is_adr_screened" id="is_adr_screened_1" value="1" checked>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_adr_screened" id="is_adr_screened_0" value="0" <?php if(!$this->isAdrScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_screened" id="is_adr_screened_1" value="1" <?php if($this->isAdrScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
   <tr>
    <td valign="top"><div class="normal"><label for="is_adr_symptoms"><?php echo $this->translate(_("Any signs/symptoms indicating NEW adverse drug reactions (ADRs) at this visit?"));?></label></div></td>
    <td>
-     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_0" value="0" checked>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
-     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_1" value="1">&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_0" value="0" <?php if(!$this->isAdrSymptoms) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_1" value="1" <?php if($this->isAdrSymptoms) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
   <tr id="row_adr_severity_id">
@@ -596,13 +639,13 @@ a {
   <tr>
    <td valign="top"><div class="normal"><label for="adr_start_date"><?php echo $this->translate(_("ADR Start Date"));?></label></div></td>
    <td>
-     <input type="text" name="adr_start_date" id="adr_start_date">     
+     <input type="text" name="adr_start_date" id="adr_start_date" value="<?php echo $this->adrStartDate;?>">     
    </td>
   </tr>
   <tr>
    <td valign="top"><div class="normal"><label for="adr_stop_date"><?php echo $this->translate(_("ADR Stop Date"));?></label></div></td>
    <td>
-     <input type="text" name="adr_stop_date" id="adr_stop_date">     
+     <input type="text" name="adr_stop_date" id="adr_stop_date" value="<?php echo $this->adrStopDate;?>">     
    </td>
   </tr>
  </table>
@@ -614,7 +657,7 @@ a {
   <tr id="row_suspected_adr_hepatic">
    <td valign="top"><div class="normal"><label for="suspected_adr_hepatic"><?php echo $this->translate(_("GIT/Hepatic System"));?></label></div></td>
    <td>
-     <select name="suspected_adr_hepatic" id="suspected_adr_hepatic" multiple size="5">
+     <select name="suspected_adr_hepatic[]" id="suspected_adr_hepatic" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_hepatic"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -622,7 +665,7 @@ a {
   <tr id="row_suspected_adr_nervous">
    <td valign="top"><div class="normal"><label for="suspected_adr_nervous"><?php echo $this->translate(_("Nervous System"));?></label></div></td>
    <td>
-     <select name="suspected_adr_nervous" id="suspected_adr_nervous" multiple size="5">
+     <select name="suspected_adr_nervous[]" id="suspected_adr_nervous" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_nervous"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -630,7 +673,7 @@ a {
   <tr id="row_suspected_adr_cardiovascular">
    <td valign="top"><div class="normal"><label for="suspected_adr_cardiovascular"><?php echo $this->translate(_("Cardiovascular System"));?></label></div></td>
    <td>
-     <select name="suspected_adr_cardiovascular" id="suspected_adr_cardiovascular" multiple size="5">
+     <select name="suspected_adr_cardiovascular[]" id="suspected_adr_cardiovascular" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_cardiovascular"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -638,7 +681,7 @@ a {
   <tr id="row_suspected_adr_skin">
    <td valign="top"><div class="normal"><label for="suspected_adr_skin"><?php echo $this->translate(_("Skin and Appendages"));?></label></div></td>
    <td>
-     <select name="suspected_adr_skin" id="suspected_adr_skin" multiple size="5">
+     <select name="suspected_adr_skin[]" id="suspected_adr_skin" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_skin"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -646,7 +689,7 @@ a {
   <tr id="row_suspected_adr_metabolic">
    <td valign="top"><div class="normal"><label for="suspected_adr_metabolic"><?php echo $this->translate(_("Metabolic/Endocrine System"));?></label></div></td>
    <td>
-     <select name="suspected_adr_metabolic" id="suspected_adr_metabolic" multiple size="5">
+     <select name="suspected_adr_metabolic[]" id="suspected_adr_metabolic" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_metabolic"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -654,7 +697,7 @@ a {
   <tr id="row_suspected_adr_musculoskeletal">
    <td valign="top"><div class="normal"><label for="suspected_adr_musculoskeletal"><?php echo $this->translate(_("Musculoskeletal"));?></label></div></td>
    <td>
-     <select name="suspected_adr_musculoskeletal" id="suspected_adr_musculoskeletal" multiple size="5">
+     <select name="suspected_adr_musculoskeletal[]" id="suspected_adr_musculoskeletal" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_musculoskeletal"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -662,7 +705,7 @@ a {
   <tr id="row_suspected_adr_general">
    <td valign="top"><div class="normal"><label for="suspected_adr_general"><?php echo $this->translate(_("Systematic-General"));?></label></div></td>
    <td>
-     <select name="suspected_adr_general" id="suspected_adr_general" multiple size="5">
+     <select name="suspected_adr_general[]" id="suspected_adr_general" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_general"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -683,7 +726,7 @@ a {
   <tr id="row_adr_intervention">
    <td valign="top"><div class="normal"><label for="adr_intervention"><?php echo $this->translate(_("Types of ADR intervention"));?></label></div></td>
    <td>
-     <select name="adr_intervention" id="adr_intervention" multiple size="5">
+     <select name="adr_intervention[]" id="adr_intervention" multiple size="5">
      </select>&nbsp;
      <a id="link-add-adr_intervention"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -698,6 +741,7 @@ a {
  </table>
 </div>
 
+<input type="submit" name="save" value="<?php echo $this->translate(_("Save"));?>"/>     
 </form>
 
 
