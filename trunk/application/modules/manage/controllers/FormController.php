@@ -128,7 +128,7 @@ class FormController extends ZendX_Controller_Action
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("View"),
                     'url' => $this->view->url(array('action' => 'view', 'id' => $row['id'], 'type' => $type)),
-                    'type' => 'edit'
+                    'type' => 'view'
                 ),
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("Delete"),
@@ -486,7 +486,68 @@ class FormController extends ZendX_Controller_Action
     
     private function _createCommunityForm()
     {
+        if($this->getRequest()->isPost()) {
+            $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+            
+            $db_options = Zend_Registry::get('dbOptions');
+            $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+            $db->beginTransaction();
+            try {
+                $idPatient = $this->_getParam('id_patient');
+                if(empty($idPatient)) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose patient");
+                    throw new Exception('');
+                }
+                $dateOfVisit = $this->_getParam('date_of_visit');
+                if(empty($dateOfVisit)) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to enter date of visit");
+                    throw new Exception('');
+                }
+                
+                $patientModel = TrustCare_Model_Patient::find($idPatient);
+                if(is_null($patientModel)) {
+                    throw new Exception(sprintf("Trying to create form for unknown patient.id=%s", $idPatient));
+                }
+                
+                $frmModel = new TrustCare_Model_FrmCommunity(
+                    array(
+                		'id_patient' => $idPatient,
+                		'date_of_visit' => $dateOfVisit,
+                    	'mapperOptions' => array('adapter' => $db)
+                    )
+                );
+                $frmModel->save();
+                
+                
+                $db->commit();
+                $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
+            }
+            catch(Exception $ex) {
+                $db->rollback();
+                $message = $ex->getMessage();
+                if(!empty($message)) {
+                    $this->getLogger()->error($message);
+                }
+            }
+            $this->view->error = $errorMsg;
+        }
+        else {
+            $idPatient = null;
+            $dateOfVisit = $this->convertDateToUserTimezone(gmdate("Y-m-d"), 'yyyy-MM-dd');
+        }
         
+        $dictEntities = array(
+            );
+        
+        $this->view->type = 'community';
+        $this->view->allow_create_patient = Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.patient", "create");
+        
+        $this->view->id_patient = $idPatient;
+        $this->view->dateOfVisit = $dateOfVisit;
+        $this->view->dictEntities = $dictEntities;
+        
+        $this->render('create-community');
+        return;
     }
     
     
