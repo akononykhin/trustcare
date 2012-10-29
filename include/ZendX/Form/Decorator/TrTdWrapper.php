@@ -56,7 +56,7 @@ class ZendX_Form_Decorator_TrTdWrapper extends Zend_Form_Decorator_Abstract
 
         $output = '<tr>';
         if(!empty($label)) {
-            $output .= sprintf("<td><div class=\"%s\">%s</td>",
+            $output .= sprintf("<td><div class=\"%s\">%s</div></td>",
                             $element->isRequired() ? "required" : "normal",
                             $label);
         }
