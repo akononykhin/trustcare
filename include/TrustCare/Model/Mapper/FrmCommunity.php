@@ -95,11 +95,38 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
      */
     public function find($id, TrustCare_Model_FrmCommunity $model)
     {
-        $result = $this->getDbTable()->find($id);
+        $query = sprintf("
+        select
+            id,
+            id_patient,
+            date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit,
+            date_of_visit_month_index,
+            is_first_visit_to_pharmacy,
+            is_referred_in,
+            is_referred_out,
+            is_referral_completed,
+            is_hiv_risk_assesment_done,
+            is_htc_done,
+            is_client_received_htc,
+            is_htc_done_in_current_pharmacy,
+            is_palliative_services_to_plwha,
+            is_sti_services,
+            is_reproductive_health_services,
+            is_tuberculosis_services,
+            is_ovc_services,
+            is_patient_younger_15,
+            is_patient_male
+        from %s
+        where id=?;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME));
+        
+        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
+        $result = $this->getDbAdapter()->fetchAll($query, $id);
         if (0 == count($result)) {
             return false;
         }
-        $row = $result->current();
+        $row = $result[0];
+
+
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
               ->setIdPatient($row->id_patient)
