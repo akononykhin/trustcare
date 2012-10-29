@@ -453,6 +453,7 @@ CREATE TABLE frm_community (
   `is_referral_completed` int,
   `is_hiv_risk_assesment_done` int,
   `is_htc_done` int,
+  `htc_result_id` int default NULL,
   `is_client_received_htc` int,
   `is_htc_done_in_current_pharmacy` int,
   `is_palliative_services_to_plwha` int,
@@ -480,14 +481,6 @@ CREATE TABLE frm_community_referred_out (
   `id_frm_community` int NOT NULL,
   `id_pharmacy_dictionary` int NOT NULL,
   UNIQUE KEY `cons_frm_community_referred_out_1` (`id_frm_community`, `id_pharmacy_dictionary`),
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE frm_community_htc_result (
-  `id` int NOT NULL,
-  `id_frm_community` int NOT NULL,
-  `id_pharmacy_dictionary` int NOT NULL,
-  UNIQUE KEY `cons_frm_community_htc_result_1` (`id_frm_community`, `id_pharmacy_dictionary`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -761,14 +754,6 @@ alter table frm_community_referred_out
     add constraint fk_frm_community_referred_out_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
         references pharmacy_dictionary(id);
 
-alter table frm_community_htc_result
-    add constraint fk_frm_community_htc_result_id_frm_community foreign key (id_frm_community)
-        references frm_community(id) on delete cascade;
-
-alter table frm_community_htc_result
-    add constraint fk_frm_community_htc_result_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
-        references pharmacy_dictionary(id);
-
 alter table frm_community_palliative_care_type
     add constraint fk_frm_community_palliative_care_type_id_frm_community foreign key (id_frm_community)
         references frm_community(id) on delete cascade;
@@ -852,7 +837,6 @@ INSERT INTO db_sequence(name,value) VALUES ('frm_care_adr_intervention_id_seq', 
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_in_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_out_id_seq', 1);
-INSERT INTO db_sequence(name,value) VALUES ('frm_community_htc_result_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_palliative_care_type_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_sti_type_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_reproductive_health_type_id_seq', 1);
@@ -866,4 +850,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20121016, 2);
+insert into db_version values (1, 20121029, 2);

@@ -12,7 +12,6 @@ class ModelGroupTest extends GroupTest {
     function ModelGroupTest() {
         $this->GroupTest('All Model tests');
 
-/*
         $this->addTestFile(dirname(__FILE__) . '/log_access_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/log_objects_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/country_tests.php');
@@ -38,12 +37,9 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_care_suspected_adr_musculoskeletal_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_suspected_adr_general_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_adr_intervention_tests.php');
-*/
         $this->addTestFile(dirname(__FILE__) . '/frm_community_tests.php');
-/*
         $this->addTestFile(dirname(__FILE__) . '/frm_community_referred_in_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_referred_out_tests.php');
-        $this->addTestFile(dirname(__FILE__) . '/frm_community_htc_result_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_palliative_care_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_sti_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_reproductive_health_type_tests.php');
@@ -51,7 +47,6 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_community_ovc_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/report_care_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/report_community_tests.php');
-*/
         
     }
 }

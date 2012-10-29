@@ -40,6 +40,9 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         if(!$model->isExists() || $model->isParameterChanged('is_htc_done')) {
             $data['is_htc_done'] = $model->getIsHtcDone() ? 1 : 0;
         }
+        if(!$model->isExists() || $model->isParameterChanged('htc_result_id')) {
+            $data['htc_result_id'] = $model->getHtcResultId();
+        }
         if(!$model->isExists() || $model->isParameterChanged('is_client_received_htc')) {
             $data['is_client_received_htc'] = $model->getIsClientReceivedHtc() ? 1 : 0;
         }
@@ -107,6 +110,7 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
             is_referral_completed,
             is_hiv_risk_assesment_done,
             is_htc_done,
+            htc_result_id,
             is_client_received_htc,
             is_htc_done_in_current_pharmacy,
             is_palliative_services_to_plwha,
@@ -138,6 +142,7 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
               ->setIsReferralCompleted($row->is_referral_completed)
               ->setIsHivRiskAssesmentDone($row->is_hiv_risk_assesment_done)
               ->setIsHtcDone($row->is_htc_done)
+              ->setHtcResultId($row->htc_result_id)
               ->setIsClientReceivedHtc($row->is_client_received_htc)
               ->setIsHtcDoneInCurrentPharmacy($row->is_htc_done_in_current_pharmacy)
               ->setIsPalliativeServicesToPlwha($row->is_palliative_services_to_plwha)

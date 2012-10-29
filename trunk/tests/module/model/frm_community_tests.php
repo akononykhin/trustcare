@@ -43,6 +43,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_referral_completed' => false,
                 'is_hiv_risk_assesment_done' => true,
                 'is_htc_done' => false,
+                'htc_result_id' => 1,
                 'is_client_received_htc' => true,
                 'is_htc_done_in_current_pharmacy' => false,
                 'is_palliative_services_to_plwha' => true,
@@ -97,6 +98,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_referral_completed' => true,
                 'is_hiv_risk_assesment_done' => false,
                 'is_htc_done' => true,
+                'htc_result_id' => 2,
                 'is_client_received_htc' => false,
                 'is_htc_done_in_current_pharmacy' => true,
                 'is_palliative_services_to_plwha' => false,
@@ -141,6 +143,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_referral_completed' => false,
                 'is_hiv_risk_assesment_done' => true,
                 'is_htc_done' => false,
+                'htc_result_id' => 3,
                 'is_client_received_htc' => true,
                 'is_htc_done_in_current_pharmacy' => false,
                 'is_palliative_services_to_plwha' => true,
@@ -182,6 +185,7 @@ class TestOfFrmCommunity extends UnitTestCase {
             $params['is_referral_completed'] = !$model->is_referral_completed;
             $params['is_hiv_risk_assesment_done'] = !$model->is_hiv_risk_assesment_done;
             $params['is_htc_done'] = !$model->is_htc_done;
+            $params['htc_result_id'] = $model->htc_result_id == 1 ? 2 : 1;
             $params['is_client_received_htc'] = !$model->is_client_received_htc;
             $params['is_htc_done_in_current_pharmacy'] = !$model->is_htc_done_in_current_pharmacy;
             $params['is_palliative_services_to_plwha'] = !$model->is_palliative_services_to_plwha;
@@ -204,6 +208,22 @@ class TestOfFrmCommunity extends UnitTestCase {
                 
                 $model1 = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->_compareObjectAndParams($model1, $params);
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
+
+            
+            /* Check null values */
+            try {
+                $params = array(
+                    'htc_result_id' => null,
+                );
+                $model->setOptions($params);
+                $model->save();
+                
+                $model1 = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->assertEqual($model1->htc_result_id, $params['htc_result_id'], "Incorrect 'htc_result_id': %s");
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
@@ -281,6 +301,7 @@ class TestOfFrmCommunity extends UnitTestCase {
         $this->assertIdentical($model->is_htc_done, !empty($params['is_htc_done']) ? true : false, "Incorrect 'is_htc_done': %s");
         $this->assertIdentical($model->is_client_received_htc, !empty($params['is_client_received_htc']) ? true : false, "Incorrect 'is_client_received_htc': %s");
         $this->assertIdentical($model->is_htc_done_in_current_pharmacy, !empty($params['is_htc_done_in_current_pharmacy']) ? true : false, "Incorrect 'is_htc_done_in_current_pharmacy': %s");
+        $this->assertEqual($model->htc_result_id, $params['htc_result_id'], "Incorrect 'htc_result_id': %s");
         $this->assertIdentical($model->is_palliative_services_to_plwha, !empty($params['is_palliative_services_to_plwha']) ? true : false, "Incorrect 'is_palliative_services_to_plwha': %s");
         $this->assertIdentical($model->is_sti_services, !empty($params['is_sti_services']) ? true : false, "Incorrect 'is_sti_services': %s");
         $this->assertIdentical($model->is_reproductive_health_services, !empty($params['is_reproductive_health_services']) ? true : false, "Incorrect 'is_reproductive_health_services': %s");
