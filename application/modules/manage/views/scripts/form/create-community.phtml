@@ -115,6 +115,36 @@ a {
 	}
 
 
+	function checkIsReferredIn()
+	{
+		if(0 == $('input:radio[name=is_referred_in]:checked').val()) {
+			$('#row_referred_in').hide();
+		}
+		else {
+			$('#row_referred_in').show();
+		}
+	}
+
+	function checkIsReferredOut()
+	{
+		if(0 == $('input:radio[name=is_referred_out]:checked').val()) {
+			$('#row_referred_out').hide();
+		}
+		else {
+			$('#row_referred_out').show();
+		}
+	}
+
+	function checkIsHtcDone()
+	{
+		if(0 == $('input:radio[name=is_htc_done]:checked').val()) {
+			$('#row_htc_result').hide();
+		}
+		else {
+			$('#row_htc_result').show();
+		}
+	}
+
 
 	
     function updateErrorInfo(dlgId, message) {
@@ -156,6 +186,9 @@ a {
 	    });
 		
 	    patientsReload();
+	    dictEntitiesReload('#referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
+	    dictEntitiesReload('#referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
+	    dictEntitiesReload('#htc_result', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT;?>');
 	    
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
@@ -230,10 +263,35 @@ a {
 		    }).dialog('open');
 	        return false;
 	    });
+	    $("#link-add-referred_in").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'referred_in');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-referred_out").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'referred_out');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
 /***   END OnClick events ***/		
 
 /*** START Bind of OnChange ***/        
+        $('input[name = "is_referred_in"]').bind('change', function(){
+            checkIsReferredIn();
+        });
+        $('input[name = "is_referred_out"]').bind('change', function(){
+            checkIsReferredOut();
+        });
+        $('input[name = "is_htc_done"]').bind('change', function(){
+            checkIsHtcDone();
+        });
 /*** END Bind of OnChange ***/        
+        
+        checkIsReferredIn();
+        checkIsReferredOut();
+        checkIsHtcDone();
         
         $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
 });
@@ -261,6 +319,73 @@ a {
    <td valign="top"><div class="required"><label for="date_of_visit"><?php echo $this->translate(_("Date of Visit"));?></label></div></td>
    <td>
      <input type="text" name="date_of_visit" id="date_of_visit" value="<?php echo $this->dateOfVisit;?>">     
+   </td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("Referral Services Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_referred_in"><?php echo $this->translate(_("Referred in?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_referred_in" id="is_referred_in_0" value="0" <?php if(!$this->isReferredIn) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_referred_in" id="is_referred_in_1" value="1" <?php if($this->isReferredIn) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_referred_in">
+   <td colspan="2">
+     <select name="referred_in[]" id="referred_in" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-referred_in"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_referred_out"><?php echo $this->translate(_("Referred out?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_referred_out" id="is_referred_out_0" value="0" <?php if(!$this->isReferredOut) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_referred_out" id="is_referred_out_1" value="1" <?php if($this->isReferredOut) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_referred_out">
+   <td colspan="2">
+     <select name="referred_out[]" id="referred_out" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-referred_out"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_referral_completed"><?php echo $this->translate(_("Was the referral completed?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_referral_completed" id="is_referral_completed_0" value="0" <?php if(!$this->isReferralCompleted) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_referral_completed" id="is_referral_completed_1" value="1" <?php if($this->isReferralCompleted) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_hiv_risk_assesment_done"><?php echo $this->translate(_("HIV risk assessment & counseling done?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_hiv_risk_assesment_done" id="is_hiv_risk_assesment_done_0" value="0" <?php if(!$this->isHivRiskAssesmentDone) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_hiv_risk_assesment_done" id="is_hiv_risk_assesment_done_1" value="1" <?php if($this->isHivRiskAssesmentDone) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("HCT Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_htc_done"><?php echo $this->translate(_("HIV Testing done?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_htc_done" id="is_htc_done_0" value="0" <?php if(!$this->isHtcDone) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_htc_done" id="is_htc_done_1" value="1" <?php if($this->isHtcDone) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_htc_result">
+   <td colspan="2">
+     <select name="htc_result[]" id="htc_result">
+     </select>&nbsp;
    </td>
   </tr>
  </table>
