@@ -122,7 +122,7 @@ class FormController extends ZendX_Controller_Action
         );
         foreach ($rows as $row) {
             $row['DT_RowId'] = $row['id'];
-            $row['date_of_visit'] = $this->convertDateToUserTimezone($row['date_of_visit']);
+            //$row['date_of_visit'] = $this->convertDateToUserTimezone($row['date_of_visit']); /* We don't convert date before saving so it's not necessary to convert it back */
             
             $row['_row_actions_'] = array(
                 array(
@@ -228,7 +228,7 @@ class FormController extends ZendX_Controller_Action
                 $frmModel = new TrustCare_Model_FrmCare(
                     array(
                 		'id_patient' => $idPatient,
-                		'date_of_visit' => $dateOfVisit.' 00:00:00',
+                		'date_of_visit' => $dateOfVisit,
                 		'is_pregnant' => $isPregnant,
                 		'is_receive_prescription' => $isReceivePrescription,
                 		'is_med_error_screened' => $isMedErrorScreened,
@@ -238,7 +238,9 @@ class FormController extends ZendX_Controller_Action
                 		'is_adh_intervention_provided' => $isAdhInterventionProvided,
                 		'is_adr_screened' => $isAdrScreened,
                 		'is_adr_symptoms' => $isAdrSymptoms,
-                		'adr_severity_id' => $adrSeverityId,
+                        'adr_start_date' => $adrStartDate,
+                        'adr_stop_date' => $adrStopDate,
+                    	'adr_severity_id' => $adrSeverityId,
                 		'is_adr_intervention_provided' => $isAdrInterventionProvided,
                 		'is_nafdac_adr_filled' => $isNafdacAdrFilled,
                 		'is_patient_younger_15' => $isPatientYounger15,
@@ -246,12 +248,6 @@ class FormController extends ZendX_Controller_Action
                     	'mapperOptions' => array('adapter' => $db)
                     )
                 );
-                if(!empty($adrStartDate)) {
-                    $frmModel->setAdrStartDate($adrStartDate . ' 00:00:00');
-                }
-                if(!empty($adrStopDate)) {
-                    $frmModel->setAdrStopDate($adrStopDate . ' 00:00:00');
-                }
                 $frmModel->save();
                 
                 $medErrorTypes = $this->_getParam('med_error_type');
@@ -493,5 +489,217 @@ class FormController extends ZendX_Controller_Action
         
     }
     
+    
+    public function viewActionAccess()
+    {
+       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "view");
+    }
+    
+    public function viewAction()
+    {
+        $type = $this->_getParam('type');
+        if('care' == $type) {
+            return $this->_viewCareForm();; 
+        }
+        else if('community' == $type) {
+            return $this->_viewCommunityForm();; 
+        }
+        else {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Incorrect type of counseling")));
+            return;
+        }
+    }
+    
+    private function _viewCareForm()
+    {
+        $id = $this->_getParam('id');
+        $formModel = TrustCare_Model_FrmCare::find($id);
+        if(is_null($formModel)) {
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+            return;
+        }
+        
+        $patientModel = TrustCare_Model_Patient::find($formModel->getIdPatient());
+        if(is_null($patientModel)) {
+            $this->getLogger()->error(sprintf("Failed to load patient.id=%s specified for frm_care.id=%s", $formModel->getIdPatient(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+        
+        $medErrorTypes = array();
+        $model = new TrustCare_Model_FrmCareMedErrorType();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $medErrorTypes[] = $dict->getName();
+            }
+        }
+        
+        $medAdhProblems = array();
+        $model = new TrustCare_Model_FrmCareMedAdhProblem();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $medAdhProblems[] = $dict->getName();
+            }
+        }
+
+        $adhInterventions = array();
+        $model = new TrustCare_Model_FrmCareAdhIntervention();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $adhInterventions[] = $dict->getName();
+            }
+        }
+
+        $adhInterventionOutcomes = array();
+        $model = new TrustCare_Model_FrmCareAdhInterventionOutcome();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $adhInterventionOutcomes[] = $dict->getName();
+            }
+        }
+        
+        $severityName = '';
+        $dict = TrustCare_Model_PharmacyDictionary::find($formModel->getAdrSeverityId());
+        if(!is_null($dict)) {
+            $severityName = $dict->getName();
+        }
+        
+        $suspectedAdrHepatic = array();
+        $model = new TrustCare_Model_FrmCareSuspectedAdrHepatic();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $suspectedAdrHepatic[] = $dict->getName();
+            }
+        }
+        
+        $suspectedAdrNervous = array();
+        $model = new TrustCare_Model_FrmCareSuspectedAdrNervous();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $suspectedAdrNervous[] = $dict->getName();
+            }
+        }
+        
+        $suspectedAdrCardiovascular = array();
+        $model = new TrustCare_Model_FrmCareSuspectedAdrCardiovascular();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $suspectedAdrCardiovascular[] = $dict->getName();
+            }
+        }
+        
+        $suspectedAdrSkin = array();
+        $model = new TrustCare_Model_FrmCareSuspectedAdrSkin();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $suspectedAdrSkin[] = $dict->getName();
+            }
+        }
+        
+        $suspectedAdrMetabolic = array();
+        $model = new TrustCare_Model_FrmCareSuspectedAdrMetabolic();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $suspectedAdrMetabolic[] = $dict->getName();
+            }
+        }
+        
+        $suspectedAdrMusculoskeletal = array();
+        $model = new TrustCare_Model_FrmCareSuspectedAdrMusculoskeletal();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $suspectedAdrMusculoskeletal[] = $dict->getName();
+            }
+        }
+        
+        $suspectedAdrGeneral = array();
+        $model = new TrustCare_Model_FrmCareSuspectedAdrGeneral();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $suspectedAdrGeneral[] = $dict->getName();
+            }
+        }
+        
+        $adrInterventions = array();
+        $model = new TrustCare_Model_FrmCareAdrIntervention();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $adrInterventions[] = $dict->getName();
+            }
+        }
+        
+        $this->view->formModel = $formModel;
+        $this->view->patientModel = $patientModel;
+        $this->view->medErrorTypes = $medErrorTypes;
+        $this->view->medAdhProblems = $medAdhProblems;
+        $this->view->adhInterventions = $adhInterventions;
+        $this->view->adhInterventionOutcomes = $adhInterventionOutcomes;
+        $this->view->severityName = $severityName;
+        $this->view->suspectedAdrHepatic = $suspectedAdrHepatic;
+        $this->view->suspectedAdrNervous = $suspectedAdrNervous;
+        $this->view->suspectedAdrCardiovascular = $suspectedAdrCardiovascular;
+        $this->view->suspectedAdrSkin = $suspectedAdrSkin;
+        $this->view->suspectedAdrMetabolic = $suspectedAdrMetabolic;
+        $this->view->suspectedAdrMusculoskeletal = $suspectedAdrMusculoskeletal;
+        $this->view->suspectedAdrGeneral = $suspectedAdrGeneral;
+        $this->view->adrInterventions = $adrInterventions;
+        
+        $this->render('view-care');
+        return;
+    }
+    
+    private function _viewCommunityForm()
+    {
+        
+    }
 }
 

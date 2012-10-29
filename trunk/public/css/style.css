@@ -21,27 +21,32 @@ div.error {
 .zend_form {
     MARGIN-TOP: 10px; 
 }
-.zend_form FORM {
+.zend_form form {
     PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px;
 }
-.zend_form TABLE TR TD {
+table.zend_form tr td {
     VERTICAL-ALIGN: top;
+    PADDING: 2px 10px;
 }
 
-.zend_form TABLE TD .required {
-    COLOR: #d13b3b;
+table.zend_form td .normal {
+    font-weight: bold;
 }
-.zend_form TABLE TD .description {
+table.zend_form td .required {
+    COLOR: #d13b3b;
+    font-weight: bold;
+}
+table.zend_form td .description {
     PADDING-LEFT: 3px; COLOR: #666666;
 }
-.zend_form TABLE TD .errors {
+table.zend_form td .errors {
     COLOR: #cc0000;
 }
 
 
 .tab_header {
 	BACKGROUND: #e6e6e6;
-	FONT-SIZE: 12px; FONT-WEIGHT: bold;
+	FONT-SIZE: 14px; FONT-WEIGHT: bold;
 	MARGIN-TOP: 10px; MARGIN-BOTTOM: 5px;
 	PADDING-LEFT: 10px; PADDING-TOP: 2px; PADDING-BOTTOM: 2px;
 }
