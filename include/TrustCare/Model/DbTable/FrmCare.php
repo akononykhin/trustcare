@@ -39,13 +39,13 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
         $data['id'] = $db->nextSequenceId('frm_care_id_seq');
 
         if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['date_of_visit']) {
-            $dateOfVisit = gmdate("Y-m-d H:i:s");
+            $dateOfVisit = gmdate("Y-m-d");
         }
         else {
             $dateOfVisit = $data['date_of_visit'];
         }
-        $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $dateOfVisit));
-        if(!preg_match('/^(\d{4})-(\d{2})-\d{2} \d{2}:\d{2}:\d{2}$/', $dateOfVisit, $matches)) {
+        $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $dateOfVisit));
+        if(!preg_match('/^(\d{4})-(\d{2})-\d{2}$/', $dateOfVisit, $matches)) {
             throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
         }
         $data['date_of_visit_month_index'] = $matches[1].$matches[2];
@@ -55,10 +55,10 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
         }
         else {
             if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['adr_start_date']) {
-                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", gmdate("Y-m-d H:i:s")));
+                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", gmdate("Y-m-d")));
             }
             else {
-                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['adr_start_date']));
+                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['adr_start_date']));
             }
         }
         if (!array_key_exists('adr_stop_date', $data) || empty($data['adr_stop_date'])) {
@@ -66,10 +66,10 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
         }
         else {
             if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['adr_stop_date']) {
-                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", gmdate("Y-m-d H:i:s")));
+                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", gmdate("Y-m-d")));
             }
             else {
-                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['adr_stop_date']));
+                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['adr_stop_date']));
             }
         }
 
@@ -85,13 +85,13 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
     {
         if(array_key_exists('date_of_visit', $data)) {
             if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['date_of_visit']) {
-                $dateOfVisit = gmdate("Y-m-d H:i:s");
+                $dateOfVisit = gmdate("Y-m-d");
             }
             else {
                 $dateOfVisit = $data['date_of_visit'];
             }
-            $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $dateOfVisit));
-            if(!preg_match('/^(\d{4})-(\d{2})-\d{2} \d{2}:\d{2}:\d{2}$/', $dateOfVisit, $matches)) {
+            $data['date_of_visit'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $dateOfVisit));
+            if(!preg_match('/^(\d{4})-(\d{2})-\d{2}$/', $dateOfVisit, $matches)) {
                 throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
             }
             $data['date_of_visit_month_index'] = $matches[1].$matches[2];
@@ -101,10 +101,10 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
                 $data['adr_start_date'] = new Zend_Db_Expr('NULL');
             }
             else if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['adr_start_date']) {
-                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", gmdate("Y-m-d H:i:s")));
+                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", gmdate("Y-m-d")));
             }
             else {
-                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['adr_start_date']));
+                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['adr_start_date']));
             }
         }
         if(array_key_exists('adr_stop_date', $data)) {
@@ -112,10 +112,10 @@ class TrustCare_Model_DbTable_FrmCare extends ZendX_Db_Table_Abstract
                 $data['adr_stop_date'] = new Zend_Db_Expr('NULL');
             }
             else if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['adr_stop_date']) {
-                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", gmdate("Y-m-d H:i:s")));
+                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", gmdate("Y-m-d")));
             }
             else {
-                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['adr_stop_date']));
+                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['adr_stop_date']));
             }
         }
 

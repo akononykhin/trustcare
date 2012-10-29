@@ -167,20 +167,11 @@ class BootstrapApp extends BootstrapMain
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
                                 'controller'    => 'form',
-                                'action'        => 'create',
+                                'action'        => 'view',
                                 'visible'       => false,
                         		'params'        => array('type' => 'care'),
                     			'resource'      => 'resource:form',
                                 'privilege'     => 'view'
-                            ),
-                            array(
-                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'form',
-                                'action'        => 'create',
-                                'visible'       => false,
-                        		'params'        => array('type' => 'care'),
-                    			'resource'      => 'resource:form',
-                                'privilege'     => 'edit'
                             ),
                         ),
                     ),

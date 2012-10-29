@@ -35,7 +35,7 @@ class TestOfFrmCare extends UnitTestCase {
             $params = array(
                 'id' => $this->db->nextSequenceId('frm_care_id_seq'),
                 'id_patient' => 1,
-                'date_of_visit' => '2012-05-01 12:30:45',
+                'date_of_visit' => '2012-05-01',
                 'date_of_visit_month_index' => 201205,
                 'is_pregnant' => false,
                 'is_receive_prescription' => true,
@@ -47,8 +47,8 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_adr_screened' => true,
                 'is_adr_symptoms' => false,
                 'adr_severity_id' => 1,
-                'adr_start_date' => '2012-06-01 01:01:01',
-                'adr_stop_date' => '2012-06-08 01:01:01',
+                'adr_start_date' => '2012-06-01',
+                'adr_stop_date' => '2012-06-08',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
                 'is_patient_younger_15' => true,
@@ -90,7 +90,7 @@ class TestOfFrmCare extends UnitTestCase {
         $params = array(
                 'id' => '1',
                 'id_patient' => 1,
-                'date_of_visit' => '2012-05-01 12:30:45',
+                'date_of_visit' => '2012-05-01',
                 'date_of_visit_month_index' => 201206,
                 'is_pregnant' => false,
                 'is_receive_prescription' => true,
@@ -102,8 +102,8 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_adr_screened' => true,
                 'is_adr_symptoms' => false,
                 'adr_severity_id' => 2,
-                'adr_start_date' => '2012-06-01 01:01:01',
-                'adr_stop_date' => '2012-06-08 01:01:01',
+                'adr_start_date' => '2012-06-01',
+                'adr_stop_date' => '2012-06-08',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
                 'is_patient_younger_15' => true,
@@ -136,7 +136,7 @@ class TestOfFrmCare extends UnitTestCase {
     function testSaveNew() {
         $params = array(
                 'id_patient' => 2,
-                'date_of_visit' => '2012-07-02 12:30:45',
+                'date_of_visit' => '2012-07-02',
                 'is_pregnant' => true,
                 'is_receive_prescription' => true,
                 'is_med_error_screened' => false,
@@ -147,8 +147,8 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_adr_screened' => true,
                 'is_adr_symptoms' => false,
                 'adr_severity_id' => 3,
-                'adr_start_date' => '2012-06-01 01:01:01',
-                'adr_stop_date' => '2012-06-08 01:01:01',
+                'adr_start_date' => '2012-06-01',
+                'adr_stop_date' => '2012-06-08',
                 'is_adr_intervention_provided' => true,
                 'is_nafdac_adr_filled' => false,
                 'is_patient_younger_15' => true,
@@ -176,7 +176,7 @@ class TestOfFrmCare extends UnitTestCase {
         $model = TrustCare_Model_FrmCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-            $dateOfVisit = '2011-03-01 01:01:01' == $model->date_of_visit ? '2011-04-02 01:01:01' : '2011-03-01 01:01:01';
+            $dateOfVisit = '2011-03-01' == $model->date_of_visit ? '2011-04-02' : '2011-03-01';
             $params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
             $params['date_of_visit'] = $dateOfVisit;
             $params['is_pregnant'] = !$model->is_pregnant;
@@ -189,8 +189,8 @@ class TestOfFrmCare extends UnitTestCase {
             $params['is_adr_screened'] = !$model->is_adr_screened;
             $params['is_adr_symptoms'] = !$model->is_adr_symptoms;
             $params['adr_severity_id'] = $model->adr_severity_id == 1 ? 2 : 1;
-            $params['adr_start_date'] = '2011-06-01 01:01:01' == $model->adr_start_date ? '2011-06-02 01:01:01' : '2011-06-01 01:01:01';
-            $params['adr_stop_date'] = '2011-07-01 01:01:01' == $model->adr_stop_date ? '2011-07-02 01:01:01' : '2011-07-01 01:01:01';
+            $params['adr_start_date'] = '2011-06-01' == $model->adr_start_date ? '2011-06-02' : '2011-06-01';
+            $params['adr_stop_date'] = '2011-07-01' == $model->adr_stop_date ? '2011-07-02' : '2011-07-01';
             $params['is_adr_intervention_provided'] = !$model->is_adr_intervention_provided;
             $params['is_nafdac_adr_filled'] = !$model->is_nafdac_adr_filled;
             $params['is_patient_younger_15'] = !$model->is_patient_younger_15;
@@ -201,7 +201,7 @@ class TestOfFrmCare extends UnitTestCase {
                 $model->save();
                 
                 $params['id'] = $model->id;
-                if(!preg_match('/^(\d{4})-(\d{2})-\d{2} \d{2}:\d{2}:\d{2}$/', $dateOfVisit, $matches)) {
+                if(!preg_match('/^(\d{4})-(\d{2})-\d{2}$/', $dateOfVisit, $matches)) {
                     throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
                 }
                 $params['date_of_visit_month_index'] = $matches[1].$matches[2];
