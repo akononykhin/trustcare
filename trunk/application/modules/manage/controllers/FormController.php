@@ -701,5 +701,53 @@ class FormController extends ZendX_Controller_Action
     {
         
     }
+    
+    public function deleteActionAccess()
+    {
+       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "delete");
+    }
+    
+    public function deleteAction()
+    {
+        $type = $this->_getParam('type');
+        if('care' == $type) {
+            return $this->_deleteCareForm();; 
+        }
+        else if('community' == $type) {
+            return $this->_deleteCommunityForm();; 
+        }
+        else {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Incorrect type of counseling")));
+            return;
+        }
+    }
+    
+    private function _deleteCareForm()
+    {
+        $id = $this->_getParam('id');
+        $formModel = TrustCare_Model_FrmCare::find($id);
+        if(is_null($formModel)) {
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+            return;
+        }
+        
+        $formModel->delete();
+        $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
+    }
+    
+    private function _deleteCommunityForm()
+    {
+        $id = $this->_getParam('id');
+        $formModel = TrustCare_Model_FrmCommunity::find($id);
+        if(is_null($formModel)) {
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_community.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+            return;
+        }
+        
+        $formModel->delete();
+        $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
+    }
 }
 
