@@ -22,6 +22,10 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
     const DTYPE_MUSCULOSKELETAL = 12;
     const DTYPE_GENERAL = 13;
     
+    const DTYPE_REFERRED_IN = 14;
+    const DTYPE_REFERRED_OUT = 15;
+    const DTYPE_HTC_RESULT = 16;
+    
     protected $_id;
     protected $_id_pharmacy_dictionary_type;
     protected $_name;

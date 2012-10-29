@@ -35,7 +35,7 @@ class TestOfFrmCommunity extends UnitTestCase {
             $params = array(
                 'id' => $this->db->nextSequenceId('frm_community_id_seq'),
                 'id_patient' => 1,
-                'date_of_visit' => '2012-05-01 12:30:45',
+                'date_of_visit' => '2012-05-01',
                 'date_of_visit_month_index' => 201205,
                 'is_first_visit_to_pharmacy' => true,
                 'is_referred_in' => false,
@@ -89,10 +89,10 @@ class TestOfFrmCommunity extends UnitTestCase {
         $params = array(
                 'id' => '1',
                 'id_patient' => 1,
-                'date_of_visit' => '2012-05-01 12:30:45',
+                'date_of_visit' => '2012-05-01',
                 'date_of_visit_month_index' => 201206,
                 'is_first_visit_to_pharmacy' => false,
-        		'is_referred_in' => true,
+                'is_referred_in' => true,
                 'is_referred_out' => false,
                 'is_referral_completed' => true,
                 'is_hiv_risk_assesment_done' => false,
@@ -134,9 +134,9 @@ class TestOfFrmCommunity extends UnitTestCase {
     function testSaveNew() {
         $params = array(
                 'id_patient' => 2,
-                'date_of_visit' => '2012-07-02 12:30:45',
+                'date_of_visit' => '2012-07-02',
                 'is_first_visit_to_pharmacy' => false,
-        		'is_referred_in' => true,
+                'is_referred_in' => true,
                 'is_referred_out' => true,
                 'is_referral_completed' => false,
                 'is_hiv_risk_assesment_done' => true,
@@ -173,31 +173,31 @@ class TestOfFrmCommunity extends UnitTestCase {
         $model = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-            $dateOfVisit = '2011-03-01 01:01:01' == $model->date_of_visit ? '2011-04-02 01:01:01' : '2011-03-01 01:01:01';
+            $dateOfVisit = '2011-03-01' == $model->date_of_visit ? '2011-04-02' : '2011-03-01';
             $params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
             $params['date_of_visit'] = $dateOfVisit;
             $params['is_first_visit_to_pharmacy'] = !$model->is_first_visit_to_pharmacy;
             $params['is_referred_in'] = !$model->is_referred_in;
-        	$params['is_referred_out'] = !$model->is_referred_out;
-        	$params['is_referral_completed'] = !$model->is_referral_completed;
-        	$params['is_hiv_risk_assesment_done'] = !$model->is_hiv_risk_assesment_done;
-        	$params['is_htc_done'] = !$model->is_htc_done;
-        	$params['is_client_received_htc'] = !$model->is_client_received_htc;
-        	$params['is_htc_done_in_current_pharmacy'] = !$model->is_htc_done_in_current_pharmacy;
-        	$params['is_palliative_services_to_plwha'] = !$model->is_palliative_services_to_plwha;
-        	$params['is_sti_services'] = !$model->is_sti_services;
+            $params['is_referred_out'] = !$model->is_referred_out;
+            $params['is_referral_completed'] = !$model->is_referral_completed;
+            $params['is_hiv_risk_assesment_done'] = !$model->is_hiv_risk_assesment_done;
+            $params['is_htc_done'] = !$model->is_htc_done;
+            $params['is_client_received_htc'] = !$model->is_client_received_htc;
+            $params['is_htc_done_in_current_pharmacy'] = !$model->is_htc_done_in_current_pharmacy;
+            $params['is_palliative_services_to_plwha'] = !$model->is_palliative_services_to_plwha;
+            $params['is_sti_services'] = !$model->is_sti_services;
             $params['is_reproductive_health_services'] = !$model->is_reproductive_health_services;
-        	$params['is_tuberculosis_services'] = !$model->is_tuberculosis_services;
-        	$params['is_ovc_services'] = !$model->is_ovc_services;
+            $params['is_tuberculosis_services'] = !$model->is_tuberculosis_services;
+            $params['is_ovc_services'] = !$model->is_ovc_services;
             $params['is_patient_younger_15'] = !$model->is_patient_younger_15;
             $params['is_patient_male'] = !$model->is_patient_male;
-        	
+            
             try {
                 $model->setOptions($params);
                 $model->save();
                 
                 $params['id'] = $model->id;
-                if(!preg_match('/^(\d{4})-(\d{2})-\d{2} \d{2}:\d{2}:\d{2}$/', $dateOfVisit, $matches)) {
+                if(!preg_match('/^(\d{4})-(\d{2})-\d{2}$/', $dateOfVisit, $matches)) {
                     throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
                 }
                 $params['date_of_visit_month_index'] = $matches[1].$matches[2];
