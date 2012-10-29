@@ -49,7 +49,11 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
             throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
         }
         $data['date_of_visit_month_index'] = $matches[1].$matches[2];
-                
+
+        if(array_key_exists('htc_result_id', $data) && empty($data['htc_result_id'])) {
+            $data['htc_result_id'] = new Zend_Db_Expr('NULL');
+        }
+        
         return parent::insert($data);
     }
     
@@ -68,6 +72,10 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
                 throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
             }
             $data['date_of_visit_month_index'] = $matches[1].$matches[2];
+        }
+
+        if(array_key_exists('htc_result_id', $data) && empty($data['htc_result_id'])) {
+            $data['htc_result_id'] = new Zend_Db_Expr('NULL');
         }
         
         return parent::update($data, $where);

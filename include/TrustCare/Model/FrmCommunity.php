@@ -18,6 +18,7 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     protected $_is_referral_completed;
     protected $_is_hiv_risk_assesment_done;
     protected $_is_htc_done;
+    protected $_htc_result_id;
     protected $_is_client_received_htc;
     protected $_is_htc_done_in_current_pharmacy;
     protected $_is_palliative_services_to_plwha;
@@ -218,6 +219,26 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     public function getIsHtcDone()
     {
         return !empty($this->_is_htc_done) ? true : false;
+    }
+    
+    
+    /**
+     * @param  int $value 
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setHtcResultId($value)
+    {
+        $this->_parameterChanged('htc_result_id', $value);
+    	$this->_htc_result_id = (int) $value;
+        return $this;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getHtcResultId()
+    {
+        return $this->_htc_result_id;
     }
     
     /**
