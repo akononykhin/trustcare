@@ -36,7 +36,7 @@ class ZendX_Form extends Zend_Form {
         if (empty($decorators)) {
             $this->addDecorator('FormErrors')
                  ->addDecorator('FormElements')
-                 ->addDecorator('HtmlTag', array('tag' => 'table'))
+                 ->addDecorator('HtmlTag', array('tag' => 'table', 'class' => 'zend_form'))
                  ->addDecorator('Form', array('class' => 'zend_form'));
         }
     }
