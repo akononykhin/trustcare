@@ -1,0 +1,280 @@
+<?php
+$this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
+$this->headLink()->appendStylesheet('/css/showLoading.css');
+
+$textForEmptyAdrStopDate = $this->translate(_("Ongoing"));
+?>
+<style type="text/css" title="currentStyle">
+a {
+    cursor: pointer;
+    text-decoration: underline;
+}
+</style>
+
+<script type="text/javascript" charset="utf-8">
+	var g_selectedPatient = '<?php echo $this->id_patient?>';
+	var g_dictEntities = new Array();
+<?php foreach($this->dictEntities as $key=>$values) :?>
+    g_dictEntities[<?php echo $key;?>] = [<?php echo join(" , ", $values);?>];
+<?php endforeach; ?>
+	
+	function patientsReload(){
+		if($("#id_patient option").length) {
+			g_selectedPatient = $("#id_patient option:selected").val();
+		}
+  	    $.ajax({
+	        url:'<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
+	        ,type:'POST'
+	        ,data:''
+	        ,success: function(data){
+	            if(!data || !data.success) {
+	                return;
+	            }
+
+	            var select = $('#id_patient');
+	            if(select.prop) {
+	                var options = select.prop('options');
+	            }
+	            else {
+	                var options = select.attr('options');
+	            }
+	            $('option', select).remove();
+                options[options.length] = new Option('', '');
+	            for (var key in data.rows){
+		            var selectedFlag = false;
+		            if(key == g_selectedPatient) {
+			            selectedFlag = true;
+		            }
+	                options[options.length] = new Option(data.rows[key], key, selectedFlag);
+	            }
+	        }
+	        ,complete: function(jqXHR, textStatus) {
+	        }
+	  });
+	}
+
+	function dictEntitiesReload(ctrlId, dictTypeId){
+		if($(ctrlId + " option").length) {
+			g_dictEntities[dictTypeId] = new Array();
+			$(ctrlId + " option:selected").each( function() {
+                g_dictEntities[dictTypeId][g_dictEntities[dictTypeId].length] = parseInt($(this).val(), 10);
+            });
+		}
+  	    $.ajax({
+	        url:'<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "load-array-for-type")); ?>'
+	        ,type:'POST'
+	        ,data: {
+		        type_id: dictTypeId
+		    }
+	        ,success: function(data){
+	            if(!data || !data.success) {
+	                return;
+	            }
+
+	            var select = $(ctrlId);
+	            if(select.prop) {
+	                var options = select.prop('options');
+	            }
+	            else {
+	                var options = select.attr('options');
+	            }
+	            $('option', select).remove();
+	            for (var key in data.rows){
+		            var selectedFlag = false;
+		            if(-1 != jQuery.inArray(parseInt(key, 10), g_dictEntities[dictTypeId])) { /* to check int with int */
+			            selectedFlag = true;
+		            }
+	                options[options.length] = new Option(data.rows[key], key, selectedFlag);
+	            }
+	        }
+	        ,complete: function(jqXHR, textStatus) {
+	        }
+	  });
+	}
+	
+	function linkFormToDlg(dialogId) {
+    	var form = $(dialogId + '>form');
+    	if(form) {
+	    	form.submit(function(event) {
+    	        event.preventDefault();
+    	        $(dialogId).showLoading();
+    	        $.ajax( {
+    	             type: "POST"
+    	            ,url: $(this).attr('action')
+      	            ,data: $(this).serialize()
+    	            ,success: function(response) {
+    	        	    $(dialogId).html(response);
+    	        	    linkFormToDlg(dialogId);
+    	            }
+	    	        ,complete: function(jqXHR, textStatus) {
+	    	            $(dialogId).hideLoading();
+	    	        }
+    	        });			    	      
+    	    });
+    	} 			    	  
+	}
+
+
+
+	
+    function updateErrorInfo(dlgId, message) {
+	    var infoEl = $(dlgId + " .errorInfo");
+	    if('' != message) {
+	        infoEl.text(message).addClass("ui-state-highlight");
+	    }
+	    else {
+	        infoEl.text('').removeClass("ui-state-highlight");
+	    }
+	      
+	    setTimeout(function() {
+	        infoEl.removeClass("ui-state-highlight", 1500);
+	    }, 500 );
+	}
+
+    
+    function cleanErrorInfo(dlgId) {
+        updateErrorInfo(dlgId, '');
+        $('#add-dict-entity-name').val("").removeClass("ui-state-error");
+    }
+
+	$(document).ready(function() {
+    	$('#main_form').submit(function() {
+        	if(!$("#id_patient option:selected").val()) {
+            	alert('<?php echo $this->translate(_("Necessary to choose patient"));?>');
+            	$("#id_patient").focus();
+            	return false;
+        	}
+        	if(!$('#date_of_visit').val()) {
+            	alert('<?php echo $this->translate(_("Necessary to enter date of visit"));?>');
+            	$("#date_of_visit").focus();
+            	return false;
+        	}
+        	if('<?php echo $textForEmptyAdrStopDate?>' == $('#adr_stop_date').val()) {
+        		$('#adr_stop_date').val('');
+        	}
+        	return true;
+	    });
+		
+	    patientsReload();
+	    
+	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
+			     dialogClass: 'dialog-content'
+				,title: '<?php echo $this->translate(_("Add Patient"));?>'
+			    ,autoOpen: false
+		    	,height: 500
+			    ,width: 500
+			    ,modal: true
+			    ,close: function() {
+				    patientsReload();
+			    }
+        });
+
+	    $("#dlg-add-dict-entity").dialog({
+	        dialogClass: 'dialog-content'
+	        ,autoOpen: false
+	        ,height: 200
+	        ,width: 300
+	        ,modal: true
+	        ,buttons: {
+	            '<?php echo $this->translate(_("Add"));?>': function() {
+                    var name = $('#add-dict-entity-name');
+	                if(!name.val()) {
+	                  name.addClass("ui-state-error");
+	                  updateErrorInfo('#dlg-add-dict-entity', '<?php echo $this->translate(_("Necessary to enter value"));?>');
+	                  return false;
+	                }
+	                var type_id = $(this).attr('type_id');
+	                var list_element_id = $(this).attr('list_element_id');
+	            
+	    	        $('#dlg-add-dict-entity').showLoading();
+ 	                $.ajax({
+	                     url: '<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "create-ajax")); ?>'
+	                    ,type:'POST'
+	              	    ,data: {
+	                         name : name.val()
+	                        ,type_id: type_id
+	                    }
+		                ,success: function(data) {
+		                    if (data && data.success){
+		                    	$('#dlg-add-dict-entity').dialog("close");
+	    	            	    dictEntitiesReload('#'+list_element_id, type_id);
+	            	        }
+	                	    else{
+	                    	    var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
+	                      	    if(data) {
+	                          	    errorMsg = data.error;
+	                            }
+	                            updateErrorInfo('#dlg-add-dict-entity', errorMsg);
+	                        }
+	                    }
+		    	        ,complete: function(jqXHR, textStatus) {
+		    	        	$('#dlg-add-dict-entity').hideLoading();
+		    	        }
+	                });
+	          }
+	          ,'<?php echo $this->translate(_("Cancel"));?>': function() {
+	              $(this).dialog("close");
+	          }
+	        }
+	        ,close: function() {
+	        }
+	        ,open: function() {
+	            cleanErrorInfo('#dlg-add-dict-entity');
+	        }
+	      });
+        
+/***   START OnClick events ***/		
+	    $("#link-add-patient").click(function() {
+	    	newPatientDlg.load('<?php echo $this->url(array("controller" => "patient", "action" => "create", "for_dialog" => 1)); ?>', function(){
+		    	linkFormToDlg("#dialog-add-patient");
+		    }).dialog('open');
+	        return false;
+	    });
+/***   END OnClick events ***/		
+
+/*** START Bind of OnChange ***/        
+/*** END Bind of OnChange ***/        
+        
+        $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+});
+</script>	
+
+
+<?php if(!empty($this->error)) : ?>
+<div class="form_errors"><?php echo $this->error;?></div>
+<?php endif;?>
+<form id="main_form" class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'create', 'type' => $this->type));?>">
+<div class="tab_header"><?php echo $this->translate(_("General Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="required"><label for="patient"><?php echo $this->translate(_("Patient"));?></label></div></td>
+   <td>
+     <select name="id_patient" id="id_patient">
+     </select>&nbsp;
+<?php if ($this->allow_create_patient) : ?>
+     <a id="link-add-patient" href="#"><?php echo $this->translate(_("Add Patient"));?></a>
+<?php endif;?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="required"><label for="date_of_visit"><?php echo $this->translate(_("Date of Visit"));?></label></div></td>
+   <td>
+     <input type="text" name="date_of_visit" id="date_of_visit" value="<?php echo $this->dateOfVisit;?>">     
+   </td>
+  </tr>
+ </table>
+</div>
+
+
+<input type="submit" name="save" value="<?php echo $this->translate(_("Save"));?>"/>     
+</form>
+
+
+<div id="dlg-add-dict-entity" title="<?php echo $this->translate(_("Add"));?>" type_id="" list_element_id="">
+  <p class="errorInfo"></p>
+  <form>
+    <label for="name"><?php echo $this->translate(_("Name"));?></label>
+    <input type="text" name="name" id="add-dict-entity-name" class="text ui-widget-content ui-corner-all" />
+  </form>
+</div>
