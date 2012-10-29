@@ -203,6 +203,32 @@ class FormController extends ZendX_Controller_Action
                 $adrStopDate = $this->_getParam('adr_stop_date');
                 $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
                 $isNafdacAdrFilled = $this->_getParam('is_nafdac_adr_filled');
+                $medErrorTypes = $this->_getParam('med_error_type');
+                if(!$isMedErrorIdentified) {
+                    $medErrorTypes = array();
+                }
+                $medAdhProblems = $this->_getParam('med_adh_problem');
+                if(!$isMedAdhProblemIdentified) {
+                    $medAdhProblems = array();
+                }
+                $adhInterventions = $this->_getParam('adh_intervention');
+                if(!$isAdhInterventionProvided) {
+                    $adhInterventions = array();
+                }
+                $adhInterventionOutcomes = $this->_getParam('adh_intervention_outcome');
+                $suspectedAdrHepatic = $this->_getParam('suspected_adr_hepatic');
+                $suspectedAdrNervous = $this->_getParam('suspected_adr_nervous');
+                $suspectedAdrCardiovascular = $this->_getParam('suspected_adr_cardiovascular');
+                $suspectedAdrSkin = $this->_getParam('suspected_adr_skin');
+                $suspectedAdrMetabolic = $this->_getParam('suspected_adr_metabolic');
+                $suspectedAdrMusculoskeletal = $this->_getParam('suspected_adr_musculoskeletal');
+                $suspectedAdrGeneral = $this->_getParam('suspected_adr_general');
+                $adrInterventions = $this->_getParam('adr_intervention');
+                if(!$isAdrInterventionProvided) {
+                    $adrInterventions = array();
+                }
+                
+                
                 
                 if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $patientModel->getBirthdate(), $matches)) {
                     throw new Exception(sprintf("Failed to parse birthdate='%s' of patient.id=%s", $patientModel->getBirthdate(), $patientModel->getId()));
@@ -250,10 +276,6 @@ class FormController extends ZendX_Controller_Action
                 );
                 $frmModel->save();
                 
-                $medErrorTypes = $this->_getParam('med_error_type');
-                if(!$isMedErrorIdentified) {
-                    $medErrorTypes = array();
-                }
                 foreach($medErrorTypes  as $dictId) {
                     $model = new TrustCare_Model_FrmCareMedErrorType(
                         array(
@@ -265,10 +287,6 @@ class FormController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
-                $medAdhProblems = $this->_getParam('med_adh_problem');
-                if(!$isMedAdhProblemIdentified) {
-                    $medAdhProblems = array();
-                }
                 foreach($medAdhProblems  as $dictId) {
                     $model = new TrustCare_Model_FrmCareMedAdhProblem(
                         array(
@@ -280,10 +298,6 @@ class FormController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
-                $adhInterventions = $this->_getParam('adh_intervention');
-                if(!$isAdhInterventionProvided) {
-                    $adhInterventions = array();
-                }
                 foreach($adhInterventions  as $dictId) {
                     $model = new TrustCare_Model_FrmCareAdhIntervention(
                         array(
@@ -295,7 +309,6 @@ class FormController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
-                $adhInterventionOutcomes = $this->_getParam('adh_intervention_outcome');
                 foreach($adhInterventionOutcomes  as $dictId) {
                     $model = new TrustCare_Model_FrmCareAdhInterventionOutcome(
                         array(
@@ -307,7 +320,6 @@ class FormController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
-                $suspectedAdrHepatic = $this->_getParam('suspected_adr_hepatic');
                 foreach($suspectedAdrHepatic  as $dictId) {
                     $model = new TrustCare_Model_FrmCareSuspectedAdrHepatic(
                         array(
@@ -318,7 +330,6 @@ class FormController extends ZendX_Controller_Action
                     );
                     $model->save();
                 }
-                $suspectedAdrNervous = $this->_getParam('suspected_adr_nervous');
                 foreach($suspectedAdrNervous  as $dictId) {
                     $model = new TrustCare_Model_FrmCareSuspectedAdrNervous(
                         array(
@@ -329,7 +340,6 @@ class FormController extends ZendX_Controller_Action
                     );
                     $model->save();
                 }
-                $suspectedAdrCardiovascular = $this->_getParam('suspected_adr_cardiovascular');
                 foreach($suspectedAdrCardiovascular  as $dictId) {
                     $model = new TrustCare_Model_FrmCareSuspectedAdrCardiovascular(
                         array(
@@ -340,7 +350,6 @@ class FormController extends ZendX_Controller_Action
                     );
                     $model->save();
                 }
-                $suspectedAdrSkin = $this->_getParam('suspected_adr_skin');
                 foreach($suspectedAdrSkin  as $dictId) {
                     $model = new TrustCare_Model_FrmCareSuspectedAdrSkin(
                         array(
@@ -351,7 +360,6 @@ class FormController extends ZendX_Controller_Action
                     );
                     $model->save();
                 }
-                $suspectedAdrMetabolic = $this->_getParam('suspected_adr_metabolic');
                 foreach($suspectedAdrMetabolic  as $dictId) {
                     $model = new TrustCare_Model_FrmCareSuspectedAdrMetabolic(
                         array(
@@ -362,7 +370,6 @@ class FormController extends ZendX_Controller_Action
                     );
                     $model->save();
                 }
-                $suspectedAdrMusculoskeletal = $this->_getParam('suspected_adr_musculoskeletal');
                 foreach($suspectedAdrMusculoskeletal  as $dictId) {
                     $model = new TrustCare_Model_FrmCareSuspectedAdrMusculoskeletal(
                         array(
@@ -373,7 +380,6 @@ class FormController extends ZendX_Controller_Action
                     );
                     $model->save();
                 }
-                $suspectedAdrGeneral = $this->_getParam('suspected_adr_general');
                 foreach($suspectedAdrGeneral  as $dictId) {
                     $model = new TrustCare_Model_FrmCareSuspectedAdrGeneral(
                         array(
@@ -385,10 +391,6 @@ class FormController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
-                $adrInterventions = $this->_getParam('adr_intervention');
-                if(!$isAdrInterventionProvided) {
-                    $adrInterventions = array();
-                }
                 foreach($adrInterventions  as $dictId) {
                     $model = new TrustCare_Model_FrmCareAdrIntervention(
                         array(
@@ -508,16 +510,69 @@ class FormController extends ZendX_Controller_Action
                 if(is_null($patientModel)) {
                     throw new Exception(sprintf("Trying to create form for unknown patient.id=%s", $idPatient));
                 }
+
+                $isReferredIn = $this->_getParam('is_referred_in');
+                $isReferredOut = $this->_getParam('is_referred_out');
+                $isReferralCompleted = $this->_getParam('is_referral_completed');
+                $isHivRiskAssesmentDone = $this->_getParam('is_hiv_risk_assesment_done');
+                $referredInList = $this->_getParam('referred_in');
+                if(!$isReferredIn) {
+                    $referredInList = array();
+                }
+                $referredOutList = $this->_getParam('referred_out');
+                if(!$isReferredOut) {
+                    $referredOutList = array();
+                }
+                $isHtcDone = $this->_getParam('is_htc_done');
                 
                 $frmModel = new TrustCare_Model_FrmCommunity(
                     array(
                 		'id_patient' => $idPatient,
                 		'date_of_visit' => $dateOfVisit,
+                'is_first_visit_to_pharmacy' => false,
+                		'is_referred_in' => $isReferredIn,
+                		'is_referred_out' => $isReferredOut,
+                		'is_referral_completed' => $isReferralCompleted,
+                		'is_hiv_risk_assesment_done' => $isHivRiskAssesmentDone,
+                		'is_htc_done' => $isHtcDone,
+                'is_client_received_htc' => true,
+                'is_htc_done_in_current_pharmacy' => false,
+                'is_palliative_services_to_plwha' => true,
+                'is_sti_services' => false,
+                'is_reproductive_health_services' => true,
+                'is_tuberculosis_services' => false,
+                'is_ovc_services' => true,
+                'is_patient_younger_15' => false,
+                'is_patient_male' => true,
+                    
                     	'mapperOptions' => array('adapter' => $db)
                     )
                 );
                 $frmModel->save();
                 
+                foreach($referredInList  as $dictId) {
+                    $model = new TrustCare_Model_FrmCommunityReferredIn(
+                        array(
+          					'id_frm_community' => $frmModel->getId(),
+           					'id_pharmacy_dictionary' => $dictId,
+                           	'mapperOptions' => array('adapter' => $db)
+                        )
+                    );
+                    $model->save();
+                }
+                
+                foreach($referredOutList  as $dictId) {
+                    $model = new TrustCare_Model_FrmCommunityReferredOut(
+                        array(
+          					'id_frm_community' => $frmModel->getId(),
+           					'id_pharmacy_dictionary' => $dictId,
+                           	'mapperOptions' => array('adapter' => $db)
+                        )
+                    );
+                    $model->save();
+                }
+                
+                throw new Exception('');
                 
                 $db->commit();
                 $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
@@ -534,9 +589,18 @@ class FormController extends ZendX_Controller_Action
         else {
             $idPatient = null;
             $dateOfVisit = $this->convertDateToUserTimezone(gmdate("Y-m-d"), 'yyyy-MM-dd');
+            $isReferredIn = true;
+            $referredInList = array();
+            $isReferredOut = true;
+            $referredOutList = array();
+            $isReferralCompleted = false;
+            $isHivRiskAssesmentDone = false;
+            $isHtcDone = false;
         }
         
         $dictEntities = array(
+            TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN => $referredInList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT => $referredOutList,
             );
         
         $this->view->type = 'community';
@@ -544,6 +608,11 @@ class FormController extends ZendX_Controller_Action
         
         $this->view->id_patient = $idPatient;
         $this->view->dateOfVisit = $dateOfVisit;
+        $this->view->isReferredIn = $isReferredIn;
+        $this->view->isReferredOut = $isReferredOut;
+        $this->view->isReferralCompleted = $isReferralCompleted;
+        $this->view->isHivRiskAssesmentDone = $isHivRiskAssesmentDone;
+        $this->view->isHtcDone = $isHtcDone;
         $this->view->dictEntities = $dictEntities;
         
         $this->render('create-community');
