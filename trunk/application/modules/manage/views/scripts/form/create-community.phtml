@@ -185,6 +185,16 @@ a {
 		}
 	}
 
+	function checkIsOvcServices()
+	{
+		if(0 == $('input:radio[name=is_ovc_services]:checked').val()) {
+			$('#row_ovc_type').hide();
+		}
+		else {
+			$('#row_ovc_type').show();
+		}
+	}
+
 	
     function updateErrorInfo(dlgId, message) {
 	    var infoEl = $(dlgId + " .errorInfo");
@@ -232,6 +242,7 @@ a {
 	    dictEntitiesReload('#sti_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
 	    dictEntitiesReload('#reproductive_health_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE;?>');
 	    dictEntitiesReload('#tuberculosis_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
+	    dictEntitiesReload('#ovc_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
 	    
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
@@ -342,6 +353,12 @@ a {
 	    	$("#dlg-add-dict-entity").dialog('open');
 	        return false;
 	    });
+	    $("#link-add-ovc_type").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'ovc_type');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
 /***   END OnClick events ***/		
 
 /*** START Bind of OnChange ***/        
@@ -366,6 +383,9 @@ a {
         $('input[name = "is_tuberculosis_services"]').bind('change', function(){
             checkIsTuberculosisServices();
         });
+        $('input[name = "is_ovc_services"]').bind('change', function(){
+            checkIsOvcServices();
+        });
 /*** END Bind of OnChange ***/        
         
         checkIsReferredIn();
@@ -375,6 +395,7 @@ a {
         checkIsStiServices();
         checkIsReproductiveHealthServices();
         checkIsTuberculosisServices();
+        checkIsOvcServices();
         
         $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
 });
@@ -552,6 +573,21 @@ a {
      <select name="tuberculosis_type[]" id="tuberculosis_type" multiple size="5">
      </select>&nbsp;
      <a id="link-add-tuberculosis_type"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_ovc_services"><?php echo $this->translate(_("OVC Care and Support Services"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_ovc_services" id="is_ovc_services_0" value="0" <?php if(!$this->isOvcServices) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_ovc_services" id="is_ovc_services_1" value="1" <?php if($this->isOvcServices) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_ovc_type">
+   <td></td>
+   <td>
+     <select name="ovc_type[]" id="ovc_type" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-ovc_type"><?php echo $this->translate(_("Other"));?></a>
    </td>
   </tr>
  </table>
