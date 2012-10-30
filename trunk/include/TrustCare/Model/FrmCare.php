@@ -9,6 +9,7 @@
 class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
 {
     protected $_id;
+    protected $_id_pharmacy;
     protected $_id_patient;
     protected $_date_of_visit;
     protected $_date_of_visit_month_index;
@@ -36,7 +37,7 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     public function setId($value)
     {
         $this->_parameterChanged('id', $value);
-    	$this->_id = (int) $value;
+        $this->_id = (int) $value;
         return $this;
     }
 
@@ -47,6 +48,27 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     {
         return $this->_id;
     }
+
+    
+    /**
+     * @param  int $value 
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setIdPharmacy($value)
+    {
+        $this->_parameterChanged('id_pharmacy', $value);
+        $this->_id_pharmacy = (int) $value;
+        return $this;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getIdPharmacy()
+    {
+        return $this->_id_pharmacy;
+    }
+
     
     /**
      * @param  int $value 
@@ -55,7 +77,7 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     public function setIdPatient($value)
     {
         $this->_parameterChanged('id_patient', $value);
-    	$this->_id_patient = (int) $value;
+        $this->_id_patient = (int) $value;
         return $this;
     }
 
@@ -114,7 +136,7 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     public function setIsPregnant($value)
     {
         $this->_parameterChanged('is_pregnant', $value, true);
-    	$this->_is_pregnant = !empty($value) ? true : false;
+        $this->_is_pregnant = !empty($value) ? true : false;
         return $this;
     }
 
@@ -458,7 +480,7 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     
     public function delete()
     {
-    	parent::delete();
-    	$this->id = null;
+        parent::delete();
+        $this->id = null;
     }
 }
