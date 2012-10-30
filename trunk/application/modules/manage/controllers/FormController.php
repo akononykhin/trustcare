@@ -838,6 +838,14 @@ class FormController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
             return;
         }
+
+        
+        $pharmacyModel = TrustCare_Model_Pharmacy::find($formModel->getIdPharmacy());
+        if(is_null($pharmacyModel)) {
+            $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for frm_care.id=%s", $formModel->getIdPharmacy(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
         
         $medErrorTypes = array();
         $model = new TrustCare_Model_FrmCareMedErrorType();
@@ -991,6 +999,7 @@ class FormController extends ZendX_Controller_Action
         
         $this->view->formModel = $formModel;
         $this->view->patientModel = $patientModel;
+        $this->view->pharmacyName = $pharmacyModel->getName();
         $this->view->medErrorTypes = $medErrorTypes;
         $this->view->medAdhProblems = $medAdhProblems;
         $this->view->adhInterventions = $adhInterventions;
