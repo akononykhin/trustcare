@@ -145,6 +145,25 @@ a {
 		}
 	}
 
+	function checkIsPalliativeServicesToPlwha()
+	{
+		if(0 == $('input:radio[name=is_palliative_services_to_plwha]:checked').val()) {
+			$('#row_palliative_care_type').hide();
+		}
+		else {
+			$('#row_palliative_care_type').show();
+		}
+	}
+
+	function checkIsStiServices()
+	{
+		if(0 == $('input:radio[name=is_sti_services]:checked').val()) {
+			$('#row_sti_type').hide();
+		}
+		else {
+			$('#row_sti_type').show();
+		}
+	}
 
 	
     function updateErrorInfo(dlgId, message) {
@@ -189,6 +208,8 @@ a {
 	    dictEntitiesReload('#referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
 	    dictEntitiesReload('#referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
 	    dictEntitiesReload('#htc_result_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT;?>');
+	    dictEntitiesReload('#palliative_care_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE;?>');
+	    dictEntitiesReload('#sti_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
 	    
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
@@ -275,6 +296,18 @@ a {
 	    	$("#dlg-add-dict-entity").dialog('open');
 	        return false;
 	    });
+	    $("#link-add-palliative_care_type").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'palliative_care_type');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+	    $("#link-add-sti_type").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'sti_type');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
 /***   END OnClick events ***/		
 
 /*** START Bind of OnChange ***/        
@@ -287,11 +320,19 @@ a {
         $('input[name = "is_htc_done"]').bind('change', function(){
             checkIsHtcDone();
         });
+        $('input[name = "is_palliative_services_to_plwha"]').bind('change', function(){
+            checkIsPalliativeServicesToPlwha();
+        });
+        $('input[name = "is_sti_services"]').bind('change', function(){
+            checkIsStiServices();
+        });
 /*** END Bind of OnChange ***/        
         
         checkIsReferredIn();
         checkIsReferredOut();
         checkIsHtcDone();
+        checkIsPalliativeServicesToPlwha();
+        checkIsStiServices();
         
         $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
 });
@@ -403,6 +444,42 @@ a {
    <td>
      <input type="radio" name="is_htc_done_in_current_pharmacy" id="is_htc_done_in_current_pharmacy_0" value="0" <?php if(!$this->isHtcDoneInCurrentPharmacy) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
      <input type="radio" name="is_htc_done_in_current_pharmacy" id="is_htc_done_in_current_pharmacy_1" value="1" <?php if($this->isHtcDoneInCurrentPharmacy) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("Services Provided Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_palliative_services_to_plwha"><?php echo $this->translate(_("Palliative Care Services to PLWHAs"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_palliative_services_to_plwha" id="is_palliative_services_to_plwha_0" value="0" <?php if(!$this->isPalliativeServicesToPlwha) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_palliative_services_to_plwha" id="is_palliative_services_to_plwha_1" value="1" <?php if($this->isPalliativeServicesToPlwha) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_palliative_care_type">
+   <td></td>
+   <td>
+     <select name="palliative_care_type[]" id="palliative_care_type" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-palliative_care_type"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_sti_services"><?php echo $this->translate(_("STI Services"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_sti_services" id="is_sti_services_0" value="0" <?php if(!$this->isStiServices) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_sti_services" id="is_sti_services_1" value="1" <?php if($this->isStiServices) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_sti_type">
+   <td></td>
+   <td>
+     <select name="sti_type[]" id="sti_type" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-sti_type"><?php echo $this->translate(_("Other"));?></a>
    </td>
   </tr>
  </table>
