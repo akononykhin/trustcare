@@ -174,21 +174,9 @@ class FormController extends ZendX_Controller_Action
             $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
             $db->beginTransaction();
             try {
+                $idPharmacy = $this->_getParam('id_pharmacy');
                 $idPatient = $this->_getParam('id_patient');
-                if(empty($idPatient)) {
-                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose patient");
-                    throw new Exception('');
-                }
                 $dateOfVisit = $this->_getParam('date_of_visit');
-                if(empty($dateOfVisit)) {
-                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to enter date of visit");
-                    throw new Exception('');
-                }
-                
-                $patientModel = TrustCare_Model_Patient::find($idPatient);
-                if(is_null($patientModel)) {
-                    throw new Exception(sprintf("Trying to create form for unknown patient.id=%s", $idPatient));
-                }
                 $isPregnant = $this->_getParam('is_pregnant');
                 $isReceivePrescription = $this->_getParam('is_receive_prescription');
                 $isMedErrorScreened = $this->_getParam('is_med_error_screened');
@@ -228,6 +216,28 @@ class FormController extends ZendX_Controller_Action
                     $adrInterventions = array();
                 }
                 
+                if(empty($idPharmacy)) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose pharmacy");
+                    throw new Exception('');
+                }
+                if(empty($idPatient)) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose patient");
+                    throw new Exception('');
+                }
+                if(empty($dateOfVisit)) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to enter date of visit");
+                    throw new Exception('');
+                }
+                
+                $pharmacyModel = TrustCare_Model_Pharmacy::find($idPharmacy);
+                if(is_null($pharmacyModel)) {
+                    throw new Exception(sprintf("Trying to create form for unknown pharmacy.id=%s", $idPharmacy));
+                }
+                
+                $patientModel = TrustCare_Model_Patient::find($idPatient);
+                if(is_null($patientModel)) {
+                    throw new Exception(sprintf("Trying to create form for unknown patient.id=%s", $idPatient));
+                }
                 
                 
                 if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $patientModel->getBirthdate(), $matches)) {
@@ -253,7 +263,8 @@ class FormController extends ZendX_Controller_Action
                 
                 $frmModel = new TrustCare_Model_FrmCare(
                     array(
-                		'id_patient' => $idPatient,
+                        'id_pharmacy' => $idPharmacy,
+                    	'id_patient' => $idPatient,
                 		'date_of_visit' => $dateOfVisit,
                 		'is_pregnant' => $isPregnant,
                 		'is_receive_prescription' => $isReceivePrescription,
@@ -415,6 +426,7 @@ class FormController extends ZendX_Controller_Action
             $this->view->error = $errorMsg;
         }
         else {
+            $idPharmacy = null;
             $idPatient = null;
             $dateOfVisit = $this->convertDateToUserTimezone(gmdate("Y-m-d"), 'yyyy-MM-dd');
             $isPregnant = false;
@@ -460,10 +472,19 @@ class FormController extends ZendX_Controller_Action
             TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL => $suspectedAdrGeneral,
             TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE => $adrInterventions,
             );
+
         
+        $pharmaciesList = array();
+        $pharmModel = new TrustCare_Model_Pharmacy();
+        foreach($pharmModel->fetchAll("is_active != 0", "name") as $obj) {
+            $pharmaciesList[$obj->getId()] = $obj->getName();
+        }    
+            
         $this->view->type = 'care';
         $this->view->allow_create_patient = Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.patient", "create");
         
+        $this->view->idPharmacy = $idPharmacy;
+        $this->view->pharmacies = $pharmaciesList;
         $this->view->id_patient = $idPatient;
         $this->view->dateOfVisit = $dateOfVisit;
         $this->view->isPregnant = $isPregnant;
