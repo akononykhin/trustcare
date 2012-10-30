@@ -530,6 +530,16 @@ class FormController extends ZendX_Controller_Action
                 }
                 $isClientReceivedHtc = $this->_getParam('is_client_received_htc');
                 $isHtcDoneInCurrentPharmacy = $this->_getParam('is_htc_done_in_current_pharmacy');
+                $isPalliativeServicesToPlwha = $this->_getParam('is_palliative_services_to_plwha');
+                $palliativeCareTypeList = $this->_getParam('palliative_care_type');
+                if(!$isPalliativeServicesToPlwha) {
+                    $palliativeCareTypeList = array();
+                }
+                $isStiServices = $this->_getParam('is_sti_services');
+                $stiTypeList = $this->_getParam('sti_type');
+                if(!$isStiServices) {
+                    $stiTypeList = array();
+                }
                 
                 $frmModel = new TrustCare_Model_FrmCommunity(
                     array(
@@ -544,8 +554,8 @@ class FormController extends ZendX_Controller_Action
                         'htc_result_id' => $htcResultId,
                 		'is_client_received_htc' => $isClientReceivedHtc,
                 		'is_htc_done_in_current_pharmacy' => $isHtcDoneInCurrentPharmacy,
-                'is_palliative_services_to_plwha' => true,
-                'is_sti_services' => false,
+                		'is_palliative_services_to_plwha' => $isPalliativeServicesToPlwha,
+                		'is_sti_services' => $isStiServices,
                 'is_reproductive_health_services' => true,
                 'is_tuberculosis_services' => false,
                 'is_ovc_services' => true,
@@ -570,6 +580,28 @@ class FormController extends ZendX_Controller_Action
                 
                 foreach($referredOutList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityReferredOut(
+                        array(
+          					'id_frm_community' => $frmModel->getId(),
+           					'id_pharmacy_dictionary' => $dictId,
+                           	'mapperOptions' => array('adapter' => $db)
+                        )
+                    );
+                    $model->save();
+                }
+                
+                foreach($palliativeCareTypeList  as $dictId) {
+                    $model = new TrustCare_Model_FrmCommunityPalliativeCareType(
+                        array(
+          					'id_frm_community' => $frmModel->getId(),
+           					'id_pharmacy_dictionary' => $dictId,
+                           	'mapperOptions' => array('adapter' => $db)
+                        )
+                    );
+                    $model->save();
+                }
+                
+                foreach($stiTypeList  as $dictId) {
+                    $model = new TrustCare_Model_FrmCommunityStiType(
                         array(
           					'id_frm_community' => $frmModel->getId(),
            					'id_pharmacy_dictionary' => $dictId,
@@ -606,12 +638,18 @@ class FormController extends ZendX_Controller_Action
             $htcResultId = null;
             $isClientReceivedHtc = false;
             $isHtcDoneInCurrentPharmacy = false;
+            $isPalliativeServicesToPlwha = false;
+            $palliativeCareTypeList = array();
+            $isStiServices = false;
+            $stiTypeList = array();
         }
         
         $dictEntities = array(
             TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN => $referredInList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT => $referredOutList,
             TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT => array($htcResultId),
+            TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE => $palliativeCareTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE => $stiTypeList,
             );
         
         $this->view->type = 'community';
@@ -626,6 +664,8 @@ class FormController extends ZendX_Controller_Action
         $this->view->isHtcDone = $isHtcDone;
         $this->view->isClientReceivedHtc = $isClientReceivedHtc;
         $this->view->isHtcDoneInCurrentPharmacy = $isHtcDoneInCurrentPharmacy;
+        $this->view->isPalliativeServicesToPlwha = $isPalliativeServicesToPlwha;
+        $this->view->isStiServices = $isStiServices;
         $this->view->dictEntities = $dictEntities;
         
         $this->render('create-community');
