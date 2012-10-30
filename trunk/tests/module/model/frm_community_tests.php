@@ -34,6 +34,7 @@ class TestOfFrmCommunity extends UnitTestCase {
             
             $params = array(
                 'id' => $this->db->nextSequenceId('frm_community_id_seq'),
+                'id_pharmacy' => 2,
                 'id_patient' => 1,
                 'date_of_visit' => '2012-05-01',
                 'date_of_visit_month_index' => 201205,
@@ -83,12 +84,16 @@ class TestOfFrmCommunity extends UnitTestCase {
         
         $query = sprintf("delete from patient;");
         $this->db->query($query);
+        
+        $query = sprintf("delete from pharmacy;");
+        $this->db->query($query);
     }
     
 
     function testInitializing() {
         $params = array(
                 'id' => '1',
+                'id_pharmacy' => 2,
                 'id_patient' => 1,
                 'date_of_visit' => '2012-05-01',
                 'date_of_visit_month_index' => 201206,
@@ -135,7 +140,8 @@ class TestOfFrmCommunity extends UnitTestCase {
 
     function testSaveNew() {
         $params = array(
-                'id_patient' => 2,
+                'id_pharmacy' => 1,
+        		'id_patient' => 2,
                 'date_of_visit' => '2012-07-02',
                 'is_first_visit_to_pharmacy' => false,
                 'is_referred_in' => true,
@@ -177,6 +183,7 @@ class TestOfFrmCommunity extends UnitTestCase {
         
         if(!is_null($model)) {
             $dateOfVisit = '2011-03-01' == $model->date_of_visit ? '2011-04-02' : '2011-03-01';
+            $params['id_pharmacy'] = 2 == $model->id_pharmacy ? 1 : 2;
             $params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
             $params['date_of_visit'] = $dateOfVisit;
             $params['is_first_visit_to_pharmacy'] = !$model->is_first_visit_to_pharmacy;
@@ -288,6 +295,7 @@ class TestOfFrmCommunity extends UnitTestCase {
         }
 
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
+        $this->assertEqual($model->id_pharmacy, $params['id_pharmacy'], "Incorrect 'id_pharmacy': %s");
         $this->assertEqual($model->id_patient, $params['id_patient'], "Incorrect 'id_patient': %s");
         if($checkTime) {
             $this->assertEqual($model->date_of_visit, $params['date_of_visit'], "Incorrect 'date_of_visit': %s");

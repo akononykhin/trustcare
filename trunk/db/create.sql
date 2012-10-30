@@ -444,6 +444,7 @@ CREATE TABLE frm_care_adr_intervention (
 
 CREATE TABLE frm_community (
   `id` int NOT NULL,
+  `id_pharmacy` int default NULL,
   `id_patient` int NOT NULL,
   `date_of_visit` datetime NOT NULL,
   `date_of_visit_month_index` int default NULL,
@@ -850,4 +851,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20121029, 2);
+insert into db_version values (1, 20121030, 1);
