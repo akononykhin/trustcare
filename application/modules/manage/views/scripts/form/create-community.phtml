@@ -164,6 +164,16 @@ a {
 			$('#row_sti_type').show();
 		}
 	}
+	
+	function checkIsReproductiveHealthServices()
+	{
+		if(0 == $('input:radio[name=is_reproductive_health_services]:checked').val()) {
+			$('#row_reproductive_health_type').hide();
+		}
+		else {
+			$('#row_reproductive_health_type').show();
+		}
+	}
 
 	
     function updateErrorInfo(dlgId, message) {
@@ -210,6 +220,7 @@ a {
 	    dictEntitiesReload('#htc_result_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT;?>');
 	    dictEntitiesReload('#palliative_care_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE;?>');
 	    dictEntitiesReload('#sti_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
+	    dictEntitiesReload('#reproductive_health_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE;?>');
 	    
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
@@ -308,6 +319,12 @@ a {
 	    	$("#dlg-add-dict-entity").dialog('open');
 	        return false;
 	    });
+	    $("#link-add-reproductive_health_type").click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE;?>');
+	    	$("#dlg-add-dict-entity").attr('list_element_id', 'reproductive_health_type');
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
 /***   END OnClick events ***/		
 
 /*** START Bind of OnChange ***/        
@@ -326,6 +343,9 @@ a {
         $('input[name = "is_sti_services"]').bind('change', function(){
             checkIsStiServices();
         });
+        $('input[name = "is_reproductive_health_services"]').bind('change', function(){
+            checkIsReproductiveHealthServices();
+        });
 /*** END Bind of OnChange ***/        
         
         checkIsReferredIn();
@@ -333,6 +353,7 @@ a {
         checkIsHtcDone();
         checkIsPalliativeServicesToPlwha();
         checkIsStiServices();
+        checkIsReproductiveHealthServices();
         
         $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
 });
@@ -480,6 +501,21 @@ a {
      <select name="sti_type[]" id="sti_type" multiple size="5">
      </select>&nbsp;
      <a id="link-add-sti_type"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_reproductive_health_services"><?php echo $this->translate(_("Reproductive Health Services"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_reproductive_health_services" id="is_reproductive_health_services_0" value="0" <?php if(!$this->isReproductiveHealthServices) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_reproductive_health_services" id="is_reproductive_health_services_1" value="1" <?php if($this->isReproductiveHealthServices) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_reproductive_health_type">
+   <td></td>
+   <td>
+     <select name="reproductive_health_type[]" id="reproductive_health_type" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-reproductive_health_type"><?php echo $this->translate(_("Other"));?></a>
    </td>
   </tr>
  </table>
