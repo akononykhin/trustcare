@@ -545,6 +545,11 @@ class FormController extends ZendX_Controller_Action
                 if(!$isReproductiveHealthServices) {
                     $reproductiveHealthTypeList = array();
                 }
+                $isTuberculosisServices =  $this->_getParam('is_tuberculosis_services');
+                $tuberculosisTypeList = $this->_getParam('tuberculosis_type');
+                if(!$isTuberculosisServices) {
+                    $tuberculosisTypeList = array();
+                }
                 
                 $frmModel = new TrustCare_Model_FrmCommunity(
                     array(
@@ -562,7 +567,7 @@ class FormController extends ZendX_Controller_Action
                 		'is_palliative_services_to_plwha' => $isPalliativeServicesToPlwha,
                 		'is_sti_services' => $isStiServices,
                 		'is_reproductive_health_services' => $isReproductiveHealthServices,
-                'is_tuberculosis_services' => false,
+                		'is_tuberculosis_services' => $isTuberculosisServices,
                 'is_ovc_services' => true,
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
@@ -627,6 +632,17 @@ class FormController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
+                foreach($tuberculosisTypeList  as $dictId) {
+                    $model = new TrustCare_Model_FrmCommunityTuberculosisType(
+                        array(
+          					'id_frm_community' => $frmModel->getId(),
+           					'id_pharmacy_dictionary' => $dictId,
+                           	'mapperOptions' => array('adapter' => $db)
+                        )
+                    );
+                    $model->save();
+                }
+                
                 throw new Exception('');
                 
                 $db->commit();
@@ -660,6 +676,8 @@ class FormController extends ZendX_Controller_Action
             $stiTypeList = array();
             $isReproductiveHealthServices = false;
             $reproductiveHealthTypeList = array();
+            $isTuberculosisServices = false;
+            $tuberculosisTypeList = array();
         }
         
         $dictEntities = array(
@@ -669,6 +687,7 @@ class FormController extends ZendX_Controller_Action
             TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE => $palliativeCareTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE => $stiTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE => $reproductiveHealthTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE => $tuberculosisTypeList,
             );
         
         $this->view->type = 'community';
@@ -686,6 +705,7 @@ class FormController extends ZendX_Controller_Action
         $this->view->isPalliativeServicesToPlwha = $isPalliativeServicesToPlwha;
         $this->view->isStiServices = $isStiServices;
         $this->view->isReproductiveHealthServices = $isReproductiveHealthServices;
+        $this->view->isTuberculosisServices = $isTuberculosisServices;
         $this->view->dictEntities = $dictEntities;
         
         $this->render('create-community');
