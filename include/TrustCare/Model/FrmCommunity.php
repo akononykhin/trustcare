@@ -9,6 +9,7 @@
 class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
 {
     protected $_id;
+    protected $_id_pharmacy;
     protected $_id_patient;
     protected $_date_of_visit;
     protected $_date_of_visit_month_index;
@@ -46,6 +47,25 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     public function getId()
     {
         return $this->_id;
+    }
+    
+    /**
+     * @param  int $value 
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setIdPharmacy($value)
+    {
+        $this->_parameterChanged('id_pharmacy', $value);
+    	$this->_id_pharmacy = (int) $value;
+        return $this;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getIdPharmacy()
+    {
+        return $this->_id_pharmacy;
     }
     
     /**

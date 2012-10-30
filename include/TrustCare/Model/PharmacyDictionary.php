@@ -25,6 +25,11 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
     const DTYPE_REFERRED_IN = 14;
     const DTYPE_REFERRED_OUT = 15;
     const DTYPE_HTC_RESULT = 16;
+    const DTYPE_PALLIATIVE_CARE_TYPE = 17;
+    const DTYPE_REPRODUCTIVE_HEALTH_TYPE = 18;
+    const DTYPE_STI_TYPE = 19;
+    const DTYPE_TUBERCULOSIS_TYPE = 20;
+    const DTYPE_OVC_TYPE = 21;
     
     protected $_id;
     protected $_id_pharmacy_dictionary_type;
