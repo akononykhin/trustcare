@@ -16,6 +16,9 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
     public function save(TrustCare_Model_FrmCare &$model)
     {
         $data = array();
+        if(!$model->isExists() || $model->isParameterChanged('id_pharmacy')) {
+            $data['id_pharmacy'] = $model->getIdPharmacy();
+        }
         if(!$model->isExists() || $model->isParameterChanged('id_patient')) {
             $data['id_patient'] = $model->getIdPatient();
         }
@@ -101,6 +104,7 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
         $query = sprintf("
         select
             id,
+            id_pharmacy,
             id_patient,
             date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit,
             date_of_visit_month_index,
@@ -132,6 +136,7 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
 
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
+              ->setIdPharmacy($row->id_pharmacy)
               ->setIdPatient($row->id_patient)
               ->setDateOfVisit($row->date_of_visit)
               ->setDateOfVisitMonthIndex($row->date_of_visit_month_index)
