@@ -524,6 +524,12 @@ class FormController extends ZendX_Controller_Action
                     $referredOutList = array();
                 }
                 $isHtcDone = $this->_getParam('is_htc_done');
+                $htcResultId = $this->_getParam('htc_result_id');
+                if(!$isHtcDone) {
+                    $htcResultId = null;
+                }
+                $isClientReceivedHtc = $this->_getParam('is_client_received_htc');
+                $isHtcDoneInCurrentPharmacy = $this->_getParam('is_htc_done_in_current_pharmacy');
                 
                 $frmModel = new TrustCare_Model_FrmCommunity(
                     array(
@@ -535,8 +541,9 @@ class FormController extends ZendX_Controller_Action
                 		'is_referral_completed' => $isReferralCompleted,
                 		'is_hiv_risk_assesment_done' => $isHivRiskAssesmentDone,
                 		'is_htc_done' => $isHtcDone,
-                'is_client_received_htc' => true,
-                'is_htc_done_in_current_pharmacy' => false,
+                        'htc_result_id' => $htcResultId,
+                		'is_client_received_htc' => $isClientReceivedHtc,
+                		'is_htc_done_in_current_pharmacy' => $isHtcDoneInCurrentPharmacy,
                 'is_palliative_services_to_plwha' => true,
                 'is_sti_services' => false,
                 'is_reproductive_health_services' => true,
@@ -596,11 +603,15 @@ class FormController extends ZendX_Controller_Action
             $isReferralCompleted = false;
             $isHivRiskAssesmentDone = false;
             $isHtcDone = false;
+            $htcResultId = null;
+            $isClientReceivedHtc = false;
+            $isHtcDoneInCurrentPharmacy = false;
         }
         
         $dictEntities = array(
             TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN => $referredInList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT => $referredOutList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT => array($htcResultId),
             );
         
         $this->view->type = 'community';
@@ -613,6 +624,8 @@ class FormController extends ZendX_Controller_Action
         $this->view->isReferralCompleted = $isReferralCompleted;
         $this->view->isHivRiskAssesmentDone = $isHivRiskAssesmentDone;
         $this->view->isHtcDone = $isHtcDone;
+        $this->view->isClientReceivedHtc = $isClientReceivedHtc;
+        $this->view->isHtcDoneInCurrentPharmacy = $isHtcDoneInCurrentPharmacy;
         $this->view->dictEntities = $dictEntities;
         
         $this->render('create-community');

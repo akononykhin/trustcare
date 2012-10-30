@@ -138,10 +138,10 @@ a {
 	function checkIsHtcDone()
 	{
 		if(0 == $('input:radio[name=is_htc_done]:checked').val()) {
-			$('#row_htc_result').hide();
+			$('#row_htc_result_id').hide();
 		}
 		else {
-			$('#row_htc_result').show();
+			$('#row_htc_result_id').show();
 		}
 	}
 
@@ -188,7 +188,7 @@ a {
 	    patientsReload();
 	    dictEntitiesReload('#referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
 	    dictEntitiesReload('#referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
-	    dictEntitiesReload('#htc_result', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT;?>');
+	    dictEntitiesReload('#htc_result_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT;?>');
 	    
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
@@ -335,7 +335,8 @@ a {
    </td>
   </tr>
   <tr id="row_referred_in">
-   <td colspan="2">
+   <td></td>
+   <td>
      <select name="referred_in[]" id="referred_in" multiple size="5">
      </select>&nbsp;
      <a id="link-add-referred_in"><?php echo $this->translate(_("Other"));?></a>
@@ -349,7 +350,8 @@ a {
    </td>
   </tr>
   <tr id="row_referred_out">
-   <td colspan="2">
+   <td></td>
+   <td>
      <select name="referred_out[]" id="referred_out" multiple size="5">
      </select>&nbsp;
      <a id="link-add-referred_out"><?php echo $this->translate(_("Other"));?></a>
@@ -382,10 +384,25 @@ a {
      <input type="radio" name="is_htc_done" id="is_htc_done_1" value="1" <?php if($this->isHtcDone) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
-  <tr id="row_htc_result">
-   <td colspan="2">
-     <select name="htc_result[]" id="htc_result">
+  <tr id="row_htc_result_id">
+   <td></td>
+   <td>
+     <select name="htc_result_id" id="htc_result_id">
      </select>&nbsp;
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_client_received_htc"><?php echo $this->translate(_("Was the client Counseled, Tested & received results?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_client_received_htc" id="is_client_received_htc_0" value="0" <?php if(!$this->isClientReceivedHtc) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_client_received_htc" id="is_client_received_htc_1" value="1" <?php if($this->isClientReceivedHtc) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_htc_done_in_current_pharmacy"><?php echo $this->translate(_("Was the HCT done in your Pharmacy?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_htc_done_in_current_pharmacy" id="is_htc_done_in_current_pharmacy_0" value="0" <?php if(!$this->isHtcDoneInCurrentPharmacy) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_htc_done_in_current_pharmacy" id="is_htc_done_in_current_pharmacy_1" value="1" <?php if($this->isHtcDoneInCurrentPharmacy) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
  </table>
