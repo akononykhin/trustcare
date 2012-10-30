@@ -550,6 +550,33 @@ class FormController extends ZendX_Controller_Action
                 if(!$isTuberculosisServices) {
                     $tuberculosisTypeList = array();
                 }
+                $isOvcServices = $this->_getParam('is_ovc_services');
+                $ovcTypeList = $this->_getParam('ovc_type');
+                if(!$isOvcServices) {
+                    $ovcTypeList = array();
+                }
+                
+                
+                if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $patientModel->getBirthdate(), $matches)) {
+                    throw new Exception(sprintf("Failed to parse birthdate='%s' of patient.id=%s", $patientModel->getBirthdate(), $patientModel->getId()));
+                }
+                $patientYear = $matches[1];
+                $patientMonth = $matches[2];
+                $patientDay = $matches[3];
+                if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $dateOfVisit, $matches)) {
+                    throw new Exception(sprintf("Failed to parse date_of_visit='%s'", $dateOfVisit));
+                }
+                $visitYear = $matches[1];
+                $visitMonth = $matches[2];
+                $visitDay = $matches[3];
+                $diffYears = $visitYear - $patientYear;
+                if($visitMonth < $patientMonth) {
+                    $diffYears--;
+                }
+                else if($visitMonth == $patientMonth && $visitDay < $patientDay) {
+                    $diffYears--;
+                }
+                $isPatientYounger15 = ($diffYears < 15) ? true : false;
                 
                 $frmModel = new TrustCare_Model_FrmCommunity(
                     array(
@@ -568,10 +595,9 @@ class FormController extends ZendX_Controller_Action
                 		'is_sti_services' => $isStiServices,
                 		'is_reproductive_health_services' => $isReproductiveHealthServices,
                 		'is_tuberculosis_services' => $isTuberculosisServices,
-                'is_ovc_services' => true,
-                'is_patient_younger_15' => false,
-                'is_patient_male' => true,
-                    
+                		'is_ovc_services' => $isOvcServices,
+                		'is_patient_younger_15' => $isPatientYounger15,
+                		'is_patient_male' => $patientModel->getIsMale(),
                     	'mapperOptions' => array('adapter' => $db)
                     )
                 );
@@ -643,6 +669,17 @@ class FormController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
+                foreach($ovcTypeList  as $dictId) {
+                    $model = new TrustCare_Model_FrmCommunityOvcType(
+                        array(
+          					'id_frm_community' => $frmModel->getId(),
+           					'id_pharmacy_dictionary' => $dictId,
+                           	'mapperOptions' => array('adapter' => $db)
+                        )
+                    );
+                    $model->save();
+                }
+                
                 throw new Exception('');
                 
                 $db->commit();
@@ -678,6 +715,8 @@ class FormController extends ZendX_Controller_Action
             $reproductiveHealthTypeList = array();
             $isTuberculosisServices = false;
             $tuberculosisTypeList = array();
+            $isOvcServices = false;
+            $ovcTypeList = array();
         }
         
         $dictEntities = array(
@@ -688,6 +727,7 @@ class FormController extends ZendX_Controller_Action
             TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE => $stiTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE => $reproductiveHealthTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE => $tuberculosisTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE => $ovcTypeList,
             );
         
         $this->view->type = 'community';
@@ -706,6 +746,7 @@ class FormController extends ZendX_Controller_Action
         $this->view->isStiServices = $isStiServices;
         $this->view->isReproductiveHealthServices = $isReproductiveHealthServices;
         $this->view->isTuberculosisServices = $isTuberculosisServices;
+        $this->view->isOvcServices = $isOvcServices;
         $this->view->dictEntities = $dictEntities;
         
         $this->render('create-community');
