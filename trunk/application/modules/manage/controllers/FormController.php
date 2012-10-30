@@ -36,6 +36,12 @@ class FormController extends ZendX_Controller_Action
                 'title' => Zend_Registry::get("Zend_Translate")->_("Date of Visit"),
                 'width' => '15%',
             ),
+            'pharmacy_name' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("Pharmacy"),
+                'filter' => array(
+                    'type' => 'text',
+                ),
+            ),
             'patient_identifier' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Patient ID"),
                 'filter' => array(
@@ -104,9 +110,11 @@ class FormController extends ZendX_Controller_Action
                                                                     ))
                                                              ->joinLeft(array('patient'), $table.'.id_patient = patient.id', array('patient_identifier' => 'patient.identifier',
                                                                                                                                   'patient_first_name' => 'patient.first_name',
-                                                                                                                                  'patient_last_name' => 'patient.last_name'));
-
-            $this->processListLoadAjaxRequest($select, array('patient_identifier' => 'patient.identifier',
+                                                                                                                                  'patient_last_name' => 'patient.last_name'))
+                                                             ->joinLeft(array('pharmacy'), $table.'.id_pharmacy = pharmacy.id', array('pharmacy_name' => 'pharmacy.name'));
+                                                             
+            $this->processListLoadAjaxRequest($select, array('pharmacy_name' => 'pharmacy.name',
+            												 'patient_identifier' => 'patient.identifier',
                                                              'patient_first_name' => 'patient.first_name',
                                                              'patient_last_name' => 'patient.last_name'));
 
