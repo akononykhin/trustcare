@@ -218,6 +218,11 @@ a {
 
 	$(document).ready(function() {
     	$('#main_form').submit(function() {
+        	if(!$("#id_pharmacy option:selected").val()) {
+            	alert('<?php echo $this->translate(_("Necessary to choose pharmacy"));?>');
+            	$("#id_pharmacy").focus();
+            	return false;
+        	}
         	if(!$("#id_patient option:selected").val()) {
             	alert('<?php echo $this->translate(_("Necessary to choose patient"));?>');
             	$("#id_patient").focus();
@@ -410,7 +415,21 @@ a {
 <div class="tab_content">
  <table class="zend_form">
   <tr>
-   <td valign="top"><div class="required"><label for="patient"><?php echo $this->translate(_("Patient"));?></label></div></td>
+   <td valign="top"><div class="required"><label for="id_pharmacy"><?php echo $this->translate(_("Pharmacy"));?></label></div></td>
+   <td>
+     <select name="id_pharmacy" id="id_pharmacy">
+        <option value=''></option>
+<?php
+    foreach($this->pharmacies as $key=>$value) {
+        $selectedStr = ($key == $this->idPharmacy) ? 'selected' : '';
+        printf("<option value='%s' %s>%s</option>", $key, $selectedStr, $value);
+    }
+?>     
+     </select>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="required"><label for="id_patient"><?php echo $this->translate(_("Patient"));?></label></div></td>
    <td>
      <select name="id_patient" id="id_patient">
      </select>&nbsp;

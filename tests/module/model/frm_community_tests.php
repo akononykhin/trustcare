@@ -277,6 +277,38 @@ class TestOfFrmCommunity extends UnitTestCase {
         }
         
     }
+
+    
+    public function testCheckIsFirstVisitOfPatientToPharmacy()
+    {
+        $model = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        if(!is_null($model)) {
+            $model->delete();
+        }
+        
+        $patientId = 1;
+        $pharmacyId = 1;
+        try {
+            $params = array(
+                    'id_pharmacy' => $pharmacyId,
+            		'id_patient' => $patientId,
+                    'date_of_visit' => '2012-07-02',
+            );
+            $model = new TrustCare_Model_FrmCommunity(array('mapperOptions' => array('adapter' => $this->db)));
+            $model->setOptions($params);
+            $model->save();
+            
+
+            $ret = TrustCare_Model_FrmCommunity::isFirstVisitOfPatientToPharmacy($patientId, $pharmacyId, array('mapperOptions' => array('adapter' => $this->db)));
+            $this->assertTrue($ret, "Haven't found existing visit of patent to pharmacy");
+
+            $ret = TrustCare_Model_FrmCommunity::isFirstVisitOfPatientToPharmacy($patientId, -1 *$pharmacyId, array('mapperOptions' => array('adapter' => $this->db)));
+            $this->assertFalse($ret, "Have found not-existing visit of patent to pharmacy");
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("%s - unexpected exception: %s", __METHOD__, $ex->getMessage()));
+        }
+    }
     
     /**
      * 

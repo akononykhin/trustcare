@@ -172,12 +172,12 @@ abstract class TrustCare_Model_Abstract
      * 
      * @return array
      */
-    public function fetchAll($clauses = array())
+    public function fetchAll($clauses = array(), $orderClause = '')
     {
         if(!is_array($clauses)) {
             $clauses = array($clauses);
         }
-        return $this->getMapper()->fetchAll($clauses);
+        return $this->getMapper()->fetchAll($clauses, $orderClause);
     }
     
     private function prepareMethodName($name)

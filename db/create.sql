@@ -634,6 +634,10 @@ alter table frm_community
     add constraint fk_frm_community_id_patient foreign key (id_patient)
         references patient(id);
 
+alter table frm_community
+    add constraint fk_frm_community_id_pharmacy foreign key (id_pharmacy)
+        references pharmacy(id) on delete cascade;
+
 alter table pharmacy_dictionary
     add constraint fk_pharmacy_dictionary_type_id_pharmacy_dictionary_type foreign key (id_pharmacy_dictionary_type)
         references pharmacy_dictionary_type(id) on delete cascade;
@@ -851,4 +855,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20121030, 1);
+insert into db_version values (1, 20121030, 2);
