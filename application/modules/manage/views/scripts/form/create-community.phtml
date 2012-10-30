@@ -15,7 +15,7 @@ a {
 	var g_selectedPatient = '<?php echo $this->id_patient?>';
 	var g_dictEntities = new Array();
 <?php foreach($this->dictEntities as $key=>$values) :?>
-    g_dictEntities[<?php echo $key;?>] = [<?php echo join(" , ", $values);?>];
+    g_dictEntities[<?php echo $key;?>] = [<?php if(is_array($values)) echo join(" , ", $values);?>];
 <?php endforeach; ?>
 	
 	function patientsReload(){
