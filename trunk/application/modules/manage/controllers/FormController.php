@@ -495,22 +495,9 @@ class FormController extends ZendX_Controller_Action
             $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
             $db->beginTransaction();
             try {
+                $idPharmacy = $this->_getParam('id_pharmacy');
                 $idPatient = $this->_getParam('id_patient');
-                if(empty($idPatient)) {
-                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose patient");
-                    throw new Exception('');
-                }
                 $dateOfVisit = $this->_getParam('date_of_visit');
-                if(empty($dateOfVisit)) {
-                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to enter date of visit");
-                    throw new Exception('');
-                }
-                
-                $patientModel = TrustCare_Model_Patient::find($idPatient);
-                if(is_null($patientModel)) {
-                    throw new Exception(sprintf("Trying to create form for unknown patient.id=%s", $idPatient));
-                }
-
                 $isReferredIn = $this->_getParam('is_referred_in');
                 $isReferredOut = $this->_getParam('is_referred_out');
                 $isReferralCompleted = $this->_getParam('is_referral_completed');
@@ -556,6 +543,30 @@ class FormController extends ZendX_Controller_Action
                     $ovcTypeList = array();
                 }
                 
+                if(empty($idPharmacy)) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose pharmacy");
+                    throw new Exception('');
+                }
+                if(empty($idPatient)) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose patient");
+                    throw new Exception('');
+                }
+                if(empty($dateOfVisit)) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to enter date of visit");
+                    throw new Exception('');
+                }
+                
+                $pharmacyModel = TrustCare_Model_Pharmacy::find($idPharmacy);
+                if(is_null($pharmacyModel)) {
+                    throw new Exception(sprintf("Trying to create form for unknown pharmacy.id=%s", $idPharmacy));
+                }
+                
+                $patientModel = TrustCare_Model_Patient::find($idPatient);
+                if(is_null($patientModel)) {
+                    throw new Exception(sprintf("Trying to create form for unknown patient.id=%s", $idPatient));
+                }
+
+                
                 
                 if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $patientModel->getBirthdate(), $matches)) {
                     throw new Exception(sprintf("Failed to parse birthdate='%s' of patient.id=%s", $patientModel->getBirthdate(), $patientModel->getId()));
@@ -580,9 +591,10 @@ class FormController extends ZendX_Controller_Action
                 
                 $frmModel = new TrustCare_Model_FrmCommunity(
                     array(
+                        'id_pharmacy' => $idPharmacy,
                 		'id_patient' => $idPatient,
                 		'date_of_visit' => $dateOfVisit,
-                'is_first_visit_to_pharmacy' => false,
+                		'is_first_visit_to_pharmacy' => TrustCare_Model_FrmCommunity::isFirstVisitOfPatientToPharmacy($idPatient, $idPharmacy),
                 		'is_referred_in' => $isReferredIn,
                 		'is_referred_out' => $isReferredOut,
                 		'is_referral_completed' => $isReferralCompleted,
@@ -680,8 +692,6 @@ class FormController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
-                throw new Exception('');
-                
                 $db->commit();
                 $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
             }
@@ -695,6 +705,7 @@ class FormController extends ZendX_Controller_Action
             $this->view->error = $errorMsg;
         }
         else {
+            $idPharmacy = null;
             $idPatient = null;
             $dateOfVisit = $this->convertDateToUserTimezone(gmdate("Y-m-d"), 'yyyy-MM-dd');
             $isReferredIn = true;
@@ -728,11 +739,19 @@ class FormController extends ZendX_Controller_Action
             TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE => $reproductiveHealthTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE => $tuberculosisTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE => $ovcTypeList,
-            );
+        );
         
+        $pharmaciesList = array();
+        $pharmModel = new TrustCare_Model_Pharmacy();
+        foreach($pharmModel->fetchAll("is_active != 0", "name") as $obj) {
+            $pharmaciesList[$obj->getId()] = $obj->getName();
+        }    
+            
         $this->view->type = 'community';
         $this->view->allow_create_patient = Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.patient", "create");
         
+        $this->view->idPharmacy = $idPharmacy;
+        $this->view->pharmacies = $pharmaciesList;
         $this->view->id_patient = $idPatient;
         $this->view->dateOfVisit = $dateOfVisit;
         $this->view->isReferredIn = $isReferredIn;
