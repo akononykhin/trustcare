@@ -36,7 +36,8 @@ class TestOfReportCommunity extends UnitTestCase {
                 'id' => $this->db->nextSequenceId('report_community_id_seq'),
                 'generation_date' => '2012-10-01 11:23:45',
                 'period' => 201209,
-                'id_pharmacy' => 1,
+                'id_user' => 2,
+            	'id_pharmacy' => 1,
                 'filename' => 'test 111',
             );
 
@@ -66,6 +67,9 @@ class TestOfReportCommunity extends UnitTestCase {
         $query = sprintf("update db_sequence set value=1 where name='report_community_id_seq';");
         $this->db->query($query);
         
+        $query = sprintf("delete from user;");
+        $this->db->query($query);
+        
         $query = sprintf("delete from pharmacy;");
         $this->db->query($query);
     }
@@ -76,7 +80,8 @@ class TestOfReportCommunity extends UnitTestCase {
             'id' => '1',
             'generation_date' => '2012-09-01 11:23:45',
             'period' => 201208,
-            'id_pharmacy' => 2,
+            'id_user' => 1,
+        	'id_pharmacy' => 2,
             'filename' => 'test 111231',
             'mapperOptions' => array('adapter' => $this->db)
         );
@@ -107,7 +112,8 @@ class TestOfReportCommunity extends UnitTestCase {
         $params = array(
             'generation_date' => '2012-09-01 11:23:45',
             'period' => 201208,
-            'id_pharmacy' => 2,
+            'id_user' => 1,
+        	'id_pharmacy' => 2,
             'filename' => 'test 111231',
         );
         
@@ -125,6 +131,29 @@ class TestOfReportCommunity extends UnitTestCase {
         catch(Exception $ex) {
             $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
         }
+            
+        /* Check null values */
+        try {
+            $params = array(
+            	'generation_date' => '2012-09-01 11:23:45',
+                'period' => 201208,
+                'id_user' => null,
+            	'id_pharmacy' => 2,
+            	'filename' => 'test 111231',
+            );
+            $model = new TrustCare_Model_ReportCommunity(array('mapperOptions' => array('adapter' => $this->db)));
+            $model->setOptions($params);
+            $model->save();
+            
+            $id = $model->id;
+            $params['id'] = $id;
+            
+            $model1 = TrustCare_Model_ReportCommunity::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $this->assertEqual($model1->id_user, $params['id_user'], "Incorrect 'id_user': %s");
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+        }
     }
 
     function testChangeParameters() {
@@ -135,17 +164,40 @@ class TestOfReportCommunity extends UnitTestCase {
             $params['period'] = $model->period == 201208 ? 201209 : 201208;
             $params['filename'] = $model->filename . '43';
             $params['id_pharmacy'] = '1' == $model->id_pharmacy ? '2' : '1';
+            $params['id_user'] = '2' == $model->id_user ? '1' : '2';
             
             try {
                 $model->setOptions($params);
                 $model->save();
                 
                 $newFilename = $params['filename'];
-                $params = $this->paramsAtDb;
-                $params['filename'] = $newFilename;
+                $newIdUser = $params["id_user"];
+                $newGenerationDate = $params['generation_date']; 
                 
+                $params = $this->paramsAtDb;
+                
+                $params['filename'] = $newFilename;
+                $params["id_user"] = $newIdUser;
+                $params['generation_date'] = $newGenerationDate;                
+                $params['id'] = $model->id;
+                                
                 $model1 = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->_compareObjectAndParams($model1, $params);
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
+            
+            /* Check null values */
+            try {
+                $params = array(
+                    'id_user' => null
+                );
+                $model->setOptions($params);
+                $model->save();
+                
+                $model1 = TrustCare_Model_ReportCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->assertEqual($model1->id_user, $params['id_user'], "Incorrect 'id_user': %s");
             }
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
@@ -193,6 +245,8 @@ class TestOfReportCommunity extends UnitTestCase {
         if($checkTime) {
             $this->assertEqual($model->generation_date, $params['generation_date'], "Incorrect 'generation_date': %s");
         }
+        $this->assertEqual($model->id_user, $params['id_user'], "Incorrect 'id_user': %s");
+        $this->assertEqual($model->id_pharmacy, $params['id_pharmacy'], "Incorrect 'id_pharmacy': %s");
         $this->assertEqual($model->period, $params['period'], "Incorrect 'period': %s");
         $this->assertEqual($model->filename, $params['filename'], "Incorrect 'filename': %s");
     }

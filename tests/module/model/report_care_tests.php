@@ -36,6 +36,7 @@ class TestOfReportCare extends UnitTestCase {
                 'id' => $this->db->nextSequenceId('report_care_id_seq'),
                 'generation_date' => '2012-10-01 11:23:45',
                 'period' => 201209,
+                'id_user' => 2,
                 'id_pharmacy' => 1,
                 'number_of_clients_with_prescription_male_younger_15' => 10,
                 'number_of_clients_with_prescription_female_younger_15' => 15,
@@ -71,6 +72,9 @@ class TestOfReportCare extends UnitTestCase {
         $query = sprintf("update db_sequence set value=1 where name='report_care_id_seq';");
         $this->db->query($query);
         
+        $query = sprintf("delete from user;");
+        $this->db->query($query);
+        
         $query = sprintf("delete from pharmacy;");
         $this->db->query($query);
     }
@@ -81,7 +85,8 @@ class TestOfReportCare extends UnitTestCase {
             'id' => '1',
             'generation_date' => '2012-09-01 11:23:45',
             'period' => 201208,
-            'id_pharmacy' => 2,
+            'id_user' => 1,
+        	'id_pharmacy' => 2,
             'number_of_clients_with_prescription_male_younger_15' => 11,
             'number_of_clients_with_prescription_female_younger_15' => 16,
             'number_of_clients_with_prescription_male_from_15' => 26,
@@ -117,7 +122,8 @@ class TestOfReportCare extends UnitTestCase {
         $params = array(
             'generation_date' => '2012-09-01 11:23:45',
             'period' => 201208,
-            'id_pharmacy' => 2,
+            'id_user' => 1,
+        	'id_pharmacy' => 2,
             'number_of_clients_with_prescription_male_younger_15' => 11,
             'number_of_clients_with_prescription_female_younger_15' => 16,
             'number_of_clients_with_prescription_male_from_15' => 26,
@@ -140,6 +146,35 @@ class TestOfReportCare extends UnitTestCase {
         catch(Exception $ex) {
             $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
         }
+            
+        /* Check null values */
+        try {
+            $params = array(
+            	'generation_date' => '2012-09-01 11:23:45',
+                'period' => 201208,
+                'id_user' => null,
+            	'id_pharmacy' => 2,
+                'number_of_clients_with_prescription_male_younger_15' => 11,
+                'number_of_clients_with_prescription_female_younger_15' => 16,
+            	'number_of_clients_with_prescription_male_from_15' => 26,
+                'number_of_clients_with_prescription_female_from_15' => 31,
+                'number_of_dispensed_drugs' => 141,
+                'filename' => 'test 111231',
+            );
+            $model = new TrustCare_Model_ReportCare(array('mapperOptions' => array('adapter' => $this->db)));
+            $model->setOptions($params);
+            $model->save();
+            
+            $id = $model->id;
+            $params['id'] = $id;
+            
+            $model1 = TrustCare_Model_ReportCare::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $this->assertEqual($model1->id_user, $params['id_user'], "Incorrect 'id_user': %s");
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+        }
+
     }
 
     function testChangeParameters() {
@@ -155,14 +190,21 @@ class TestOfReportCare extends UnitTestCase {
             $params['number_of_dispensed_drugs'] = $model->number_of_dispensed_drugs == 14 ? 24 : 14;
             $params['filename'] = $model->filename . '43';
             $params['id_pharmacy'] = '1' == $model->id_pharmacy ? '2' : '1';
+            $params['id_user'] = '2' == $model->id_user ? '1' : '2';
             
             try {
                 $model->setOptions($params);
                 $model->save();
                 
                 $newFilename = $params['filename'];
+                $newIdUser = $params["id_user"];
+                $newGenerationDate = $params['generation_date']; 
+                
                 $params = $this->paramsAtDb;
-                $params['filename'] = $newFilename;                
+                
+                $params['filename'] = $newFilename;
+                $params["id_user"] = $newIdUser;
+                $params['generation_date'] = $newGenerationDate;                
                 $params['id'] = $model->id;
                 
                 $model1 = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
@@ -171,6 +213,22 @@ class TestOfReportCare extends UnitTestCase {
             catch(Exception $ex) {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
             }
+            
+            /* Check null values */
+            try {
+                $params = array(
+                    'id_user' => null
+                );
+                $model->setOptions($params);
+                $model->save();
+                
+                $model1 = TrustCare_Model_ReportCare::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->assertEqual($model1->id_user, $params['id_user'], "Incorrect 'id_user': %s");
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
+            
         }
         else {
             $this->assertTrue(false, "Can't initialize object");
@@ -214,6 +272,8 @@ class TestOfReportCare extends UnitTestCase {
         if($checkTime) {
             $this->assertEqual($model->generation_date, $params['generation_date'], "Incorrect 'generation_date': %s");
         }
+        $this->assertEqual($model->id_user, $params['id_user'], "Incorrect 'id_user': %s");
+        $this->assertEqual($model->id_pharmacy, $params['id_pharmacy'], "Incorrect 'id_pharmacy': %s");
         $this->assertEqual($model->period, $params['period'], "Incorrect 'period': %s");
         $this->assertEqual($model->number_of_clients_with_prescription_male_younger_15, $params['number_of_clients_with_prescription_male_younger_15'], "Incorrect 'number_of_clients_with_prescription_male_younger_15': %s");
         $this->assertEqual($model->number_of_clients_with_prescription_female_younger_15, $params['number_of_clients_with_prescription_female_younger_15'], "Incorrect 'number_of_clients_with_prescription_female_younger_15': %s");

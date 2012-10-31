@@ -25,6 +25,9 @@ class TrustCare_Model_Mapper_ReportCommunity extends TrustCare_Model_Mapper_Abst
         if(!$model->isExists() || $model->isParameterChanged('id_pharmacy')) {
             $data['id_pharmacy'] = $model->getIdPharmacy();
         }
+        if(!$model->isExists() || $model->isParameterChanged('id_user')) {
+            $data['id_user'] = $model->getIdUser();
+        }
         if(!$model->isExists() || $model->isParameterChanged('filename')) {
             $data['filename'] = $model->getFilename();
         }
@@ -65,6 +68,7 @@ class TrustCare_Model_Mapper_ReportCommunity extends TrustCare_Model_Mapper_Abst
         $model->setId($row->id)
               ->setGenerationDate($row->generation_date)
               ->setPeriod($row->period)
+              ->setIdUser($row->id_user)
               ->setIdPharmacy($row->id_pharmacy)
               ->setFilename($row->filename);
         $model->setSkipTrackChanges(false);

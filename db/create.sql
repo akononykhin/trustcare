@@ -532,6 +532,7 @@ CREATE TABLE report_care (
   `id` int NOT NULL,
   `generation_date` datetime NOT NULL,
   `period` int,
+  `id_user` int default NULL,
   `id_pharmacy` int NOT NULL,
   `number_of_clients_with_prescription_male_younger_15` int default 0,
   `number_of_clients_with_prescription_female_younger_15` int default 0,
@@ -547,6 +548,7 @@ CREATE TABLE report_community (
   `id` int NOT NULL,
   `generation_date` datetime NOT NULL,
   `period` int,
+  `id_user` int default NULL,
   `id_pharmacy` int NOT NULL,
   `filename` varchar(255),
   PRIMARY KEY  (`id`)
@@ -811,10 +813,17 @@ alter table report_care
     add constraint fk_report_care_id_pharmacy foreign key (id_pharmacy)
         references pharmacy(id);
 
+alter table report_care
+    add constraint fk_report_care_id_user foreign key (id_user)
+        references user(id) on delete set NULL;
+
 alter table report_community
     add constraint fk_report_community_id_pharmacy foreign key (id_pharmacy)
         references pharmacy(id);
 
+alter table report_community
+    add constraint fk_report_community_id_user foreign key (id_user)
+        references user(id) on delete set NULL;
 
 
 
@@ -861,4 +870,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20121030, 3);
+insert into db_version values (1, 20121031, 1);

@@ -11,6 +11,7 @@ class TrustCare_Model_ReportCommunity extends TrustCare_Model_Abstract
     protected $_id;
     protected $_generation_date;
     protected $_period;
+    protected $_id_user;
     protected $_id_pharmacy;
     protected $_filename;
     
@@ -69,6 +70,25 @@ class TrustCare_Model_ReportCommunity extends TrustCare_Model_Abstract
     public function getPeriod()
     {
         return $this->_period;
+    }
+    
+    /**
+     * @param  int $value 
+     * @return TrustCare_Model_ReportCommunity
+     */
+    public function setIdUser($value)
+    {
+        $this->_parameterChanged('id_user', $value);
+        $this->_id_user = (int) $value;
+        return $this;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getIdUser()
+    {
+        return $this->_id_user;
     }
     
     /**
