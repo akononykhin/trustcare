@@ -1143,6 +1143,7 @@ class FormController extends ZendX_Controller_Action
         $this->view->stiTypeList = $stiTypeList;
         $this->view->reproductiveHealthTypeList = $reproductiveHealthTypeList;
         $this->view->tuberculosisTypeList = $tuberculosisTypeList;
+        $this->view->ovcTypeList = $ovcTypeList;
         
         $this->render('view-community');
         return;
