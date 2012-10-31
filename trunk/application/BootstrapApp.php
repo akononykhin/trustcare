@@ -195,7 +195,7 @@ class BootstrapApp extends BootstrapMain
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
                                 'controller'    => 'form',
-                                'action'        => 'create',
+                                'action'        => 'view',
                                 'visible'       => false,
                         		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:form',
@@ -204,7 +204,7 @@ class BootstrapApp extends BootstrapMain
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
                                 'controller'    => 'form',
-                                'action'        => 'create',
+                                'action'        => 'edit',
                                 'visible'       => false,
                         		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:form',

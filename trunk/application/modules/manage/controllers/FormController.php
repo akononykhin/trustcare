@@ -1020,7 +1020,132 @@ class FormController extends ZendX_Controller_Action
     
     private function _viewCommunityForm()
     {
+        $id = $this->_getParam('id');
+        $formModel = TrustCare_Model_FrmCommunity::find($id);
+        if(is_null($formModel)) {
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_community.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+            return;
+        }
         
+        $patientModel = TrustCare_Model_Patient::find($formModel->getIdPatient());
+        if(is_null($patientModel)) {
+            $this->getLogger()->error(sprintf("Failed to load patient.id=%s specified for frm_community.id=%s", $formModel->getIdPatient(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+
+        
+        $pharmacyModel = TrustCare_Model_Pharmacy::find($formModel->getIdPharmacy());
+        if(is_null($pharmacyModel)) {
+            $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for frm_community.id=%s", $formModel->getIdPharmacy(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+        
+        $referredInList = array();
+        $model = new TrustCare_Model_FrmCommunityReferredIn();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $referredInList[] = $dict->getName();
+            }
+        }
+        
+        $referredOutList = array();
+        $model = new TrustCare_Model_FrmCommunityReferredOut();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $referredOutList[] = $dict->getName();
+            }
+        }
+        
+        $htcResultName = '';
+        $dict = TrustCare_Model_PharmacyDictionary::find($formModel->getHtcResultId());
+        if(!is_null($dict)) {
+            $htcResultName = $dict->getName();
+        }
+        
+        $palliativeCareTypeList = array();
+        $model = new TrustCare_Model_FrmCommunityPalliativeCareType();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $palliativeCareTypeList[] = $dict->getName();
+            }
+        }
+        
+        $stiTypeList = array();
+        $model = new TrustCare_Model_FrmCommunityStiType();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $stiTypeList[] = $dict->getName();
+            }
+        }
+        
+        $reproductiveHealthTypeList = array();
+        $model = new TrustCare_Model_FrmCommunityReproductiveHealthType();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $reproductiveHealthTypeList[] = $dict->getName();
+            }
+        }
+        
+        $tuberculosisTypeList = array();
+        $model = new TrustCare_Model_FrmCommunityTuberculosisType();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $tuberculosisTypeList[] = $dict->getName();
+            }
+        }
+        
+        $ovcTypeList = array();
+        $model = new TrustCare_Model_FrmCommunityOvcType();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $ovcTypeList[] = $dict->getName();
+            }
+        }
+        
+        $this->view->formModel = $formModel;
+        $this->view->patientModel = $patientModel;
+        $this->view->pharmacyName = $pharmacyModel->getName();
+        $this->view->referredInList = $referredInList;
+        $this->view->referredOutList = $referredOutList;
+        $this->view->htcResultName = $htcResultName;
+        $this->view->palliativeCareTypeList = $palliativeCareTypeList;
+        $this->view->stiTypeList = $stiTypeList;
+        $this->view->reproductiveHealthTypeList = $reproductiveHealthTypeList;
+        $this->view->tuberculosisTypeList = $tuberculosisTypeList;
+        
+        $this->render('view-community');
+        return;
     }
     
     public function deleteActionAccess()
