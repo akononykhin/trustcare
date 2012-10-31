@@ -1158,10 +1158,10 @@ class FormController extends ZendX_Controller_Action
     {
         $type = $this->_getParam('type');
         if('care' == $type) {
-            return $this->_deleteCareForm();; 
+            return $this->_deleteCareForm(); 
         }
         else if('community' == $type) {
-            return $this->_deleteCommunityForm();; 
+            return $this->_deleteCommunityForm(); 
         }
         else {
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Incorrect type of counseling")));
