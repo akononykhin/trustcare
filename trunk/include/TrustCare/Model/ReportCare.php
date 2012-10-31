@@ -11,6 +11,7 @@ class TrustCare_Model_ReportCare extends TrustCare_Model_Abstract
     protected $_id;
     protected $_generation_date;
     protected $_period;
+    protected $_id_user;
     protected $_id_pharmacy;
     protected $_number_of_clients_with_prescription_male_younger_15;
     protected $_number_of_clients_with_prescription_female_younger_15;
@@ -74,6 +75,25 @@ class TrustCare_Model_ReportCare extends TrustCare_Model_Abstract
     public function getPeriod()
     {
         return $this->_period;
+    }
+    
+    /**
+     * @param  int $value 
+     * @return TrustCare_Model_ReportCare
+     */
+    public function setIdUser($value)
+    {
+        $this->_parameterChanged('id_user', $value);
+        $this->_id_user = (int) $value;
+        return $this;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getIdUser()
+    {
+        return $this->_id_user;
     }
     
     /**

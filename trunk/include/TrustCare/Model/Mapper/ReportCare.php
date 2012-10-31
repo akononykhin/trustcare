@@ -22,6 +22,9 @@ class TrustCare_Model_Mapper_ReportCare extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('period')) {
             $data['period'] = $model->getPeriod();
         }
+        if(!$model->isExists() || $model->isParameterChanged('id_user')) {
+            $data['id_user'] = $model->getIdUser();
+        }
         if(!$model->isExists() || $model->isParameterChanged('id_pharmacy')) {
             $data['id_pharmacy'] = $model->getIdPharmacy();
         }
@@ -80,6 +83,7 @@ class TrustCare_Model_Mapper_ReportCare extends TrustCare_Model_Mapper_Abstract
         $model->setId($row->id)
               ->setGenerationDate($row->generation_date)
               ->setPeriod($row->period)
+              ->setIdUser($row->id_user)
               ->setIdPharmacy($row->id_pharmacy)
               ->setNumberOfClientsWithPrescriptionMaleYounger15($row->number_of_clients_with_prescription_male_younger_15)
               ->setNumberOfClientsWithPrescriptionFemaleYounger15($row->number_of_clients_with_prescription_female_younger_15)
