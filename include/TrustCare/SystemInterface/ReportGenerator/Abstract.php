@@ -82,7 +82,8 @@ abstract class TrustCare_SystemInterface_ReportGenerator_Abstract
         
         
         $commandParams = array();
-        $commandParams[] = sprintf("-Xmx8192m");
+        $commandParams[] = sprintf("-Xmx1024m");
+        //$commandParams[] = sprintf("-Xmx8192m");
         $commandParams[] = sprintf("-cp \"$BIRTCLASSPATH\"");
         $commandParams[] = sprintf("-DBIRT_HOME=\"%s\"", $BIRT_RE_HOME);
         $commandParams[] = "org.eclipse.birt.report.engine.api.ReportRunner";

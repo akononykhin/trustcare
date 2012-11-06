@@ -1,0 +1,58 @@
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Generation Date"));?></div></td>
+   <td>
+<?php
+    $zendDate  = new Zend_Date($this->reportModel->generation_date.'Z', "yyyy-MM-dd HH:mm:ssZ");
+    $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
+    $zendDate->setTimezone($clientTZ);
+    echo $zendDate->toString(Zend_Registry::getInstance()->dateTimeFormat);
+?>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Pharmacy"));?></div></td>
+   <td><?php echo $this->pharmacyName;?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("User Id"));?></div></td>
+   <td><?php echo $this->authorName;?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Period"));?></div></td>
+   <td>
+<?php
+    $period = $this->reportModel->getPeriod();
+    if(preg_match("/^(\d{4})(\d{2})$/", $period, $matches)) {
+        $period = $matches[1].'-'.$matches[2];
+    }
+    echo $period;
+?>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("The number of male (< 15 years) who received prescriptions"));?></div></td>
+   <td><?php echo $this->reportModel->getNumberOfClientsWithPrescriptionMaleYounger15();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("The number of female (< 15 years) who received prescriptions"));?></div></td>
+   <td><?php echo $this->reportModel->getNumberOfClientsWithPrescriptionFemaleYounger15();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("The number of male (>= 15 years) who received prescriptions"));?></div></td>
+   <td><?php echo $this->reportModel->getNumberOfClientsWithPrescriptionMaleFrom15();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("The number of female (>= 15 years) who received prescriptions"));?></div></td>
+   <td><?php echo $this->reportModel->getNumberOfClientsWithPrescriptionFemaleFrom15();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("The number of drugs dispensed in the reporting month"));?></div></td>
+   <td><?php echo $this->reportModel->getNumberOfDispensedDrugs();?></td>
+  </tr>
+  <tr>
+   <td valign="top" colspan="2"><a href="<?php echo $this->url(array('action' => 'load-report', 'type' => $this->type, 'id' => $this->id));?>"><?php echo $this->translate(_("View"));?></a></td>
+  </tr>
+ </table>
+</div>

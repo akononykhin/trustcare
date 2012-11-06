@@ -230,9 +230,9 @@ class BootstrapApp extends BootstrapMain
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
-                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Generate"),
                                 'controller'    => 'report',
-                                'action'        => 'create',
+                                'action'        => 'generate',
                                 'visible'       => false,
                         		'params'        => array('type' => 'care'),
                     			'resource'      => 'resource:report',
@@ -241,7 +241,16 @@ class BootstrapApp extends BootstrapMain
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
                                 'controller'    => 'report',
-                                'action'        => 'create',
+                                'action'        => 'view',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'care'),
+                    			'resource'      => 'resource:report',
+                                'privilege'     => 'view'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Load"),
+                                'controller'    => 'report',
+                                'action'        => 'load',
                                 'visible'       => false,
                         		'params'        => array('type' => 'care'),
                     			'resource'      => 'resource:report',
@@ -267,9 +276,9 @@ class BootstrapApp extends BootstrapMain
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
-                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Generate"),
                                 'controller'    => 'report',
-                                'action'        => 'create',
+                                'action'        => 'generate',
                                 'visible'       => false,
                         		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:report',
@@ -278,7 +287,16 @@ class BootstrapApp extends BootstrapMain
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
                                 'controller'    => 'report',
-                                'action'        => 'create',
+                                'action'        => 'view',
+                                'visible'       => false,
+                        		'params'        => array('type' => 'community'),
+                    			'resource'      => 'resource:report',
+                                'privilege'     => 'view'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Load"),
+                                'controller'    => 'report',
+                                'action'        => 'load',
                                 'visible'       => false,
                         		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:report',
