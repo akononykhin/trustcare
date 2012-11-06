@@ -57,8 +57,8 @@ class ReportController extends ZendX_Controller_Action
             ),
             'toolbar' => array(
                 array(
-                    'text' => Zend_Registry::get("Zend_Translate")->_("Create"),
-                    'url' => $this->view->url(array('action' => 'create', 'type' => $type))
+                    'text' => Zend_Registry::get("Zend_Translate")->_("Generate"),
+                    'url' => $this->view->url(array('action' => 'generate', 'type' => $type))
                 ),
             ),
             'defSortColumn' => 1,
@@ -120,6 +120,11 @@ class ReportController extends ZendX_Controller_Action
         foreach ($rows as $row) {
             $row['DT_RowId'] = $row['id'];
             $row['generation_date'] = $this->convertTimeToUserTimezone($row['generation_date']);
+            $period = $row['period'];
+            if(preg_match("/^(\d{4})(\d{2})$/", $period, $matches)) {
+                $row['period'] = $matches[1].'-'.$matches[2];
+            }
+
                         
             $row['_row_actions_'] = array(
                 array(
@@ -142,364 +147,84 @@ class ReportController extends ZendX_Controller_Action
     }
     
     
-    public function createActionAccess()
+    public function generateActionAccess()
     {
        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:report", "create");
     }
     
-    public function createAction()
+    public function generateAction()
     {
         $type = $this->_getParam('type');
         if('care' == $type) {
-            return $this->_createCareForm();; 
+            return $this->_generateCareReport(); 
         }
         else if('community' == $type) {
-            return $this->_createCommunityForm();; 
+            return $this->_createCommunityForm(); 
         }
         else {
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Incorrect type of counseling")));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Incorrect type of report")));
             return;
         }
     }
     
-    private function _createCareForm()
+    private function _generateCareReport()
     {
+        $form = $this->_getGenerateCareReportForm();
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/generate/type/" . $this->_getParam('type'));
+        
         if($this->getRequest()->isPost()) {
-            $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
-            
-            $db_options = Zend_Registry::get('dbOptions');
-            $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
-            $db->beginTransaction();
-            try {
-                $idPharmacy = $this->_getParam('id_pharmacy');
-                $idPatient = $this->_getParam('id_patient');
-                $dateOfVisit = $this->_getParam('date_of_visit');
-                $isPregnant = $this->_getParam('is_pregnant');
-                $isReceivePrescription = $this->_getParam('is_receive_prescription');
-                $isMedErrorScreened = $this->_getParam('is_med_error_screened');
-                $isMedErrorIdentified = $this->_getParam('is_med_error_identified');
-                $isMedAdhProblemScreened = $this->_getParam('is_med_adh_problem_screened');
-                $isMedAdhProblemIdentified = $this->_getParam('is_med_adh_problem_identified');
-                $isAdhInterventionProvided = $this->_getParam('is_adh_intervention_provided');
-                $isAdrScreened = $this->_getParam('is_adr_screened');
-                $isAdrSymptoms = $this->_getParam('is_adr_symptoms');
-                $adrSeverityId = $this->_getParam('adr_severity_id');
-                $adrStartDate = $this->_getParam('adr_start_date');
-                $adrStopDate = $this->_getParam('adr_stop_date');
-                $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
-                $isNafdacAdrFilled = $this->_getParam('is_nafdac_adr_filled');
-                $medErrorTypes = $this->_getParam('med_error_type');
-                if(!$isMedErrorIdentified) {
-                    $medErrorTypes = array();
-                }
-                $medAdhProblems = $this->_getParam('med_adh_problem');
-                if(!$isMedAdhProblemIdentified) {
-                    $medAdhProblems = array();
-                }
-                $adhInterventions = $this->_getParam('adh_intervention');
-                if(!$isAdhInterventionProvided) {
-                    $adhInterventions = array();
-                }
-                $adhInterventionOutcomes = $this->_getParam('adh_intervention_outcome');
-                $suspectedAdrHepatic = $this->_getParam('suspected_adr_hepatic');
-                $suspectedAdrNervous = $this->_getParam('suspected_adr_nervous');
-                $suspectedAdrCardiovascular = $this->_getParam('suspected_adr_cardiovascular');
-                $suspectedAdrSkin = $this->_getParam('suspected_adr_skin');
-                $suspectedAdrMetabolic = $this->_getParam('suspected_adr_metabolic');
-                $suspectedAdrMusculoskeletal = $this->_getParam('suspected_adr_musculoskeletal');
-                $suspectedAdrGeneral = $this->_getParam('suspected_adr_general');
-                $adrInterventions = $this->_getParam('adr_intervention');
-                if(!$isAdrInterventionProvided) {
-                    $adrInterventions = array();
-                }
+            if ($form->isValid($this->getRequest()->getPost())) {
                 
-                if(empty($idPharmacy)) {
-                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose pharmacy");
-                    throw new Exception('');
-                }
-                if(empty($idPatient)) {
-                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose patient");
-                    throw new Exception('');
-                }
-                if(empty($dateOfVisit)) {
-                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to enter date of visit");
-                    throw new Exception('');
-                }
-                
-                $pharmacyModel = TrustCare_Model_Pharmacy::find($idPharmacy);
-                if(is_null($pharmacyModel)) {
-                    throw new Exception(sprintf("Trying to create form for unknown pharmacy.id=%s", $idPharmacy));
-                }
-                
-                $patientModel = TrustCare_Model_Patient::find($idPatient);
-                if(is_null($patientModel)) {
-                    throw new Exception(sprintf("Trying to create form for unknown patient.id=%s", $idPatient));
-                }
-                
-                
-                if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $patientModel->getBirthdate(), $matches)) {
-                    throw new Exception(sprintf("Failed to parse birthdate='%s' of patient.id=%s", $patientModel->getBirthdate(), $patientModel->getId()));
-                }
-                $patientYear = $matches[1];
-                $patientMonth = $matches[2];
-                $patientDay = $matches[3];
-                if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $dateOfVisit, $matches)) {
-                    throw new Exception(sprintf("Failed to parse date_of_visit='%s'", $dateOfVisit));
-                }
-                $visitYear = $matches[1];
-                $visitMonth = $matches[2];
-                $visitDay = $matches[3];
-                $diffYears = $visitYear - $patientYear;
-                if($visitMonth < $patientMonth) {
-                    $diffYears--;
-                }
-                else if($visitMonth == $patientMonth && $visitDay < $patientDay) {
-                    $diffYears--;
-                }
-                $isPatientYounger15 = ($diffYears < 15) ? true : false;
-                
-                $frmModel = new TrustCare_Model_FrmCare(
-                    array(
-                        'id_pharmacy' => $idPharmacy,
-                    	'id_patient' => $idPatient,
-                		'date_of_visit' => $dateOfVisit,
-                		'is_pregnant' => $isPregnant,
-                		'is_receive_prescription' => $isReceivePrescription,
-                		'is_med_error_screened' => $isMedErrorScreened,
-                		'is_med_error_identified' => $isMedErrorIdentified,
-                		'is_med_adh_problem_screened' => $isMedAdhProblemScreened,
-                		'is_med_adh_problem_identified' => $isMedAdhProblemIdentified,
-                		'is_adh_intervention_provided' => $isAdhInterventionProvided,
-                		'is_adr_screened' => $isAdrScreened,
-                		'is_adr_symptoms' => $isAdrSymptoms,
-                        'adr_start_date' => $adrStartDate,
-                        'adr_stop_date' => $adrStopDate,
-                    	'adr_severity_id' => $adrSeverityId,
-                		'is_adr_intervention_provided' => $isAdrInterventionProvided,
-                		'is_nafdac_adr_filled' => $isNafdacAdrFilled,
-                		'is_patient_younger_15' => $isPatientYounger15,
-                		'is_patient_male' => $patientModel->getIsMale(),
-                    	'mapperOptions' => array('adapter' => $db)
-                    )
-                );
-                $frmModel->save();
-                
-                foreach($medErrorTypes  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareMedErrorType(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                
-                foreach($medAdhProblems  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareMedAdhProblem(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                
-                foreach($adhInterventions  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareAdhIntervention(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                
-                foreach($adhInterventionOutcomes  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareAdhInterventionOutcome(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                
-                foreach($suspectedAdrHepatic  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareSuspectedAdrHepatic(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                foreach($suspectedAdrNervous  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareSuspectedAdrNervous(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                foreach($suspectedAdrCardiovascular  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareSuspectedAdrCardiovascular(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                foreach($suspectedAdrSkin  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareSuspectedAdrSkin(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                foreach($suspectedAdrMetabolic  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareSuspectedAdrMetabolic(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                foreach($suspectedAdrMusculoskeletal  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareSuspectedAdrMusculoskeletal(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                foreach($suspectedAdrGeneral  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareSuspectedAdrGeneral(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                
-                foreach($adrInterventions  as $dictId) {
-                    $model = new TrustCare_Model_FrmCareAdrIntervention(
-                        array(
-          					'id_frm_care' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
-                        )
-                    );
-                    $model->save();
-                }
-                
-                $db->commit();
-                $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
-            }
-            catch(Exception $ex) {
-                $db->rollback();
-                $message = $ex->getMessage();
-                if(!empty($message)) {
-                    $this->getLogger()->error($message);
-                }
-            }
-            $this->view->error = $errorMsg;
-        }
-        else {
-            $idPharmacy = null;
-            $idPatient = null;
-            $dateOfVisit = $this->convertDateToUserTimezone(gmdate("Y-m-d"), 'yyyy-MM-dd');
-            $isPregnant = false;
-            $isReceivePrescription = true;
-            $isMedErrorScreened = true;
-            $isMedErrorIdentified = true;
-            $medErrorTypes = array();
-            $isMedAdhProblemScreened = true;
-            $isMedAdhProblemIdentified = true;
-            $medAdhProblems = array();
-            $isAdhInterventionProvided = true;
-            $adhInterventions = array();
-            $adhInterventionOutcomes = array();
-            $isAdrScreened = true;
-            $isAdrSymptoms = false;
-            $adrSeverityId = null;
-            $adrStartDate = '';
-            $adrStopDate = '';
-            $suspectedAdrHepatic = array();
-            $suspectedAdrNervous = array();
-            $suspectedAdrCardiovascular = array();
-            $suspectedAdrSkin = array();
-            $suspectedAdrMetabolic = array();
-            $suspectedAdrMusculoskeletal = array();
-            $suspectedAdrGeneral = array();
-            $isAdrInterventionProvided = true;
-            $adrInterventions = array();
-            $isNafdacAdrFilled = false;
-        }
-        
-        $dictEntities = array(
-            TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE => $medErrorTypes,
-            TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM => $medAdhProblems,
-            TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED => $adhInterventions,
-            TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME => $adhInterventionOutcomes,
-            TrustCare_Model_PharmacyDictionary::DTYPE_ADR_SEVERITY_GRADE => array($adrSeverityId),
-            TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC => $suspectedAdrHepatic,
-            TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS => $suspectedAdrNervous,
-            TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR => $suspectedAdrCardiovascular,
-            TrustCare_Model_PharmacyDictionary::DTYPE_SKIN => $suspectedAdrSkin,
-            TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC => $suspectedAdrMetabolic,
-            TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL => $suspectedAdrMusculoskeletal,
-            TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL => $suspectedAdrGeneral,
-            TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE => $adrInterventions,
-            );
+                $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+                try {
+                    $idPharmacy = $form->getValue('id_pharmacy');
+                    $period = $form->getValue('period');
+                    if(!preg_match("/^(\d{4})-(\d{2})$/", $period, $matches)) {
+                        throw new Exception(sprintf("Incorrect period=%s for generating report.", $period));
+                    }
+                    $month = $matches[2];
+                    $year = $matches[1];
+                    $male_younger_15 = $form->getValue('male_younger_15');
+                    $female_younger_15 = $form->getValue('female_younger_15');
+                    $male_from_15 = $form->getValue('male_from_15');
+                    $female_from_15 = $form->getValue('female_from_15');
+                    $drugs = $form->getValue('drugs');
+                    
+                    $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_CARE);
+                    
+                    $obj = $generator->generate(array(
+                                'id_user' => Zend_Registry::get("TrustCare_Registry_User")->getUser()->getId(),
+                                'id_pharmacy' => $idPharmacy,
+                                'year' => $year,
+                                'month' => $month,
+                                'male_younger_15' => $male_younger_15,
+                                'female_younger_15' => $female_younger_15,
+                                'male_from_15' => $male_from_15,
+                                'female_from_15' => $female_from_15,
+                                'drugs' => $drugs
+                    ));
+                    $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $obj->getFilename());
+                    
+                    if(!file_exists($fileReportOutput)) {
+                        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Report file not found");
+                        throw new Exception(sprintf("Report file '%s' not found", $fileReportOutput));
+                    }
 
-        
-        $pharmaciesList = array();
-        $pharmModel = new TrustCare_Model_Pharmacy();
-        foreach($pharmModel->fetchAll("is_active != 0", "name") as $obj) {
-            $pharmaciesList[$obj->getId()] = $obj->getName();
-        }    
-            
-        $this->view->type = 'care';
-        $this->view->allow_create_patient = Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.patient", "create");
-        
-        $this->view->idPharmacy = $idPharmacy;
-        $this->view->pharmacies = $pharmaciesList;
-        $this->view->id_patient = $idPatient;
-        $this->view->dateOfVisit = $dateOfVisit;
-        $this->view->isPregnant = $isPregnant;
-        $this->view->isReceivePrescription = $isReceivePrescription;
-        $this->view->isMedErrorScreened = $isMedErrorScreened;
-        $this->view->isMedErrorIdentified = $isMedErrorIdentified;
-        $this->view->isMedAdhProblemScreened = $isMedAdhProblemScreened;
-        $this->view->isMedAdhProblemIdentified = $isMedAdhProblemIdentified;
-        $this->view->isAdhInterventionProvided = $isAdhInterventionProvided;
-        $this->view->isAdrScreened = $isAdrScreened;
-        $this->view->isAdrSymptoms = $isAdrSymptoms;
-        $this->view->adrStartDate = $adrStartDate;
-        $this->view->adrStopDate = $adrStopDate;
-        $this->view->isAdrInterventionProvided = $isAdrInterventionProvided;
-        $this->view->isNafdacAdrFilled = $isNafdacAdrFilled;
-        $this->view->dictEntities = $dictEntities;
-        
-        $this->render('create-care');
+                    $this->outputFileAsAttachment($fileReportOutput);
+                    return;
+                }
+                catch(Exception $ex) {
+                    $message = $ex->getMessage();
+                    if(!empty($message)) {
+                        $this->getLogger()->error($message);
+                    }
+                }
+                $form->addError($errorMsg);
+            }
+        }
+                
+        $this->view->form = $form;
+        $this->render('general-form', null, true);
         return;
     }
     
@@ -607,12 +332,12 @@ class ReportController extends ZendX_Controller_Action
                 }
                 $isPatientYounger15 = ($diffYears < 15) ? true : false;
                 
-                $frmModel = new TrustCare_Model_FrmCommunity(
+                $frmModel = new TrustCare_Model_ReportCommunity(
                     array(
                         'id_pharmacy' => $idPharmacy,
                 		'id_patient' => $idPatient,
                 		'date_of_visit' => $dateOfVisit,
-                		'is_first_visit_to_pharmacy' => TrustCare_Model_FrmCommunity::isFirstVisitOfPatientToPharmacy($idPatient, $idPharmacy),
+                		'is_first_visit_to_pharmacy' => TrustCare_Model_ReportCommunity::isFirstVisitOfPatientToPharmacy($idPatient, $idPharmacy),
                 		'is_referred_in' => $isReferredIn,
                 		'is_referred_out' => $isReferredOut,
                 		'is_referral_completed' => $isReferralCompleted,
@@ -634,7 +359,7 @@ class ReportController extends ZendX_Controller_Action
                 $frmModel->save();
                 
                 foreach($referredInList  as $dictId) {
-                    $model = new TrustCare_Model_FrmCommunityReferredIn(
+                    $model = new TrustCare_Model_ReportCommunityReferredIn(
                         array(
           					'id_frm_community' => $frmModel->getId(),
            					'id_pharmacy_dictionary' => $dictId,
@@ -645,7 +370,7 @@ class ReportController extends ZendX_Controller_Action
                 }
                 
                 foreach($referredOutList  as $dictId) {
-                    $model = new TrustCare_Model_FrmCommunityReferredOut(
+                    $model = new TrustCare_Model_ReportCommunityReferredOut(
                         array(
           					'id_frm_community' => $frmModel->getId(),
            					'id_pharmacy_dictionary' => $dictId,
@@ -656,7 +381,7 @@ class ReportController extends ZendX_Controller_Action
                 }
                 
                 foreach($palliativeCareTypeList  as $dictId) {
-                    $model = new TrustCare_Model_FrmCommunityPalliativeCareType(
+                    $model = new TrustCare_Model_ReportCommunityPalliativeCareType(
                         array(
           					'id_frm_community' => $frmModel->getId(),
            					'id_pharmacy_dictionary' => $dictId,
@@ -667,7 +392,7 @@ class ReportController extends ZendX_Controller_Action
                 }
                 
                 foreach($stiTypeList  as $dictId) {
-                    $model = new TrustCare_Model_FrmCommunityStiType(
+                    $model = new TrustCare_Model_ReportCommunityStiType(
                         array(
           					'id_frm_community' => $frmModel->getId(),
            					'id_pharmacy_dictionary' => $dictId,
@@ -678,7 +403,7 @@ class ReportController extends ZendX_Controller_Action
                 }
                 
                 foreach($reproductiveHealthTypeList  as $dictId) {
-                    $model = new TrustCare_Model_FrmCommunityReproductiveHealthType(
+                    $model = new TrustCare_Model_ReportCommunityReproductiveHealthType(
                         array(
           					'id_frm_community' => $frmModel->getId(),
            					'id_pharmacy_dictionary' => $dictId,
@@ -689,7 +414,7 @@ class ReportController extends ZendX_Controller_Action
                 }
                 
                 foreach($tuberculosisTypeList  as $dictId) {
-                    $model = new TrustCare_Model_FrmCommunityTuberculosisType(
+                    $model = new TrustCare_Model_ReportCommunityTuberculosisType(
                         array(
           					'id_frm_community' => $frmModel->getId(),
            					'id_pharmacy_dictionary' => $dictId,
@@ -700,7 +425,7 @@ class ReportController extends ZendX_Controller_Action
                 }
                 
                 foreach($ovcTypeList  as $dictId) {
-                    $model = new TrustCare_Model_FrmCommunityOvcType(
+                    $model = new TrustCare_Model_ReportCommunityOvcType(
                         array(
           					'id_frm_community' => $frmModel->getId(),
            					'id_pharmacy_dictionary' => $dictId,
@@ -800,10 +525,10 @@ class ReportController extends ZendX_Controller_Action
     {
         $type = $this->_getParam('type');
         if('care' == $type) {
-            return $this->_viewCareForm();; 
+            return $this->_viewCareReport();; 
         }
         else if('community' == $type) {
-            return $this->_viewCommunityForm();; 
+            return $this->_viewCommunityReport();; 
         }
         else {
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Incorrect type of counseling")));
@@ -811,230 +536,59 @@ class ReportController extends ZendX_Controller_Action
         }
     }
     
-    private function _viewCareForm()
+    private function _viewCareReport()
     {
         $id = $this->_getParam('id');
-        $formModel = TrustCare_Model_FrmCare::find($id);
-        if(is_null($formModel)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
-            return;
-        }
-        
-        $patientModel = TrustCare_Model_Patient::find($formModel->getIdPatient());
-        if(is_null($patientModel)) {
-            $this->getLogger()->error(sprintf("Failed to load patient.id=%s specified for frm_care.id=%s", $formModel->getIdPatient(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+        $reportModel = TrustCare_Model_ReportCare::find($id);
+        if(is_null($reportModel)) {
+            $this->getLogger()->error(sprintf("'%s' tries to view unknown report_care.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Report")));
             return;
         }
 
-        
-        $pharmacyModel = TrustCare_Model_Pharmacy::find($formModel->getIdPharmacy());
+        $pharmacyModel = TrustCare_Model_Pharmacy::find($reportModel->getIdPharmacy());
         if(is_null($pharmacyModel)) {
-            $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for frm_care.id=%s", $formModel->getIdPharmacy(), $id));
+            $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for report_care.id=%s", $reportModel->getIdPharmacy(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+
+        $authorModel = TrustCare_Model_User::find($reportModel->getIdUser());
+        if(is_null($pharmacyModel)) {
+            $this->getLogger()->error(sprintf("Failed to load user.id=%s specified for report_care.id=%s", $reportModel->getIdUser(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
             return;
         }
         
-        $medErrorTypes = array();
-        $model = new TrustCare_Model_FrmCareMedErrorType();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $medErrorTypes[] = $dict->getName();
-            }
-        }
-        
-        $medAdhProblems = array();
-        $model = new TrustCare_Model_FrmCareMedAdhProblem();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $medAdhProblems[] = $dict->getName();
-            }
-        }
-
-        $adhInterventions = array();
-        $model = new TrustCare_Model_FrmCareAdhIntervention();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $adhInterventions[] = $dict->getName();
-            }
-        }
-
-        $adhInterventionOutcomes = array();
-        $model = new TrustCare_Model_FrmCareAdhInterventionOutcome();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $adhInterventionOutcomes[] = $dict->getName();
-            }
-        }
-        
-        $severityName = '';
-        $dict = TrustCare_Model_PharmacyDictionary::find($formModel->getAdrSeverityId());
-        if(!is_null($dict)) {
-            $severityName = $dict->getName();
-        }
-        
-        $suspectedAdrHepatic = array();
-        $model = new TrustCare_Model_FrmCareSuspectedAdrHepatic();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $suspectedAdrHepatic[] = $dict->getName();
-            }
-        }
-        
-        $suspectedAdrNervous = array();
-        $model = new TrustCare_Model_FrmCareSuspectedAdrNervous();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $suspectedAdrNervous[] = $dict->getName();
-            }
-        }
-        
-        $suspectedAdrCardiovascular = array();
-        $model = new TrustCare_Model_FrmCareSuspectedAdrCardiovascular();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $suspectedAdrCardiovascular[] = $dict->getName();
-            }
-        }
-        
-        $suspectedAdrSkin = array();
-        $model = new TrustCare_Model_FrmCareSuspectedAdrSkin();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $suspectedAdrSkin[] = $dict->getName();
-            }
-        }
-        
-        $suspectedAdrMetabolic = array();
-        $model = new TrustCare_Model_FrmCareSuspectedAdrMetabolic();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $suspectedAdrMetabolic[] = $dict->getName();
-            }
-        }
-        
-        $suspectedAdrMusculoskeletal = array();
-        $model = new TrustCare_Model_FrmCareSuspectedAdrMusculoskeletal();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $suspectedAdrMusculoskeletal[] = $dict->getName();
-            }
-        }
-        
-        $suspectedAdrGeneral = array();
-        $model = new TrustCare_Model_FrmCareSuspectedAdrGeneral();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $suspectedAdrGeneral[] = $dict->getName();
-            }
-        }
-        
-        $adrInterventions = array();
-        $model = new TrustCare_Model_FrmCareAdrIntervention();
-        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
-            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
-            if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
-            }
-            else {
-                $adrInterventions[] = $dict->getName();
-            }
-        }
-        
-        $this->view->formModel = $formModel;
-        $this->view->patientModel = $patientModel;
+        $this->view->type = $this->_getParam('type');
+        $this->view->id = $this->_getParam('id');
+        $this->view->reportModel = $reportModel;
         $this->view->pharmacyName = $pharmacyModel->getName();
-        $this->view->medErrorTypes = $medErrorTypes;
-        $this->view->medAdhProblems = $medAdhProblems;
-        $this->view->adhInterventions = $adhInterventions;
-        $this->view->adhInterventionOutcomes = $adhInterventionOutcomes;
-        $this->view->severityName = $severityName;
-        $this->view->suspectedAdrHepatic = $suspectedAdrHepatic;
-        $this->view->suspectedAdrNervous = $suspectedAdrNervous;
-        $this->view->suspectedAdrCardiovascular = $suspectedAdrCardiovascular;
-        $this->view->suspectedAdrSkin = $suspectedAdrSkin;
-        $this->view->suspectedAdrMetabolic = $suspectedAdrMetabolic;
-        $this->view->suspectedAdrMusculoskeletal = $suspectedAdrMusculoskeletal;
-        $this->view->suspectedAdrGeneral = $suspectedAdrGeneral;
-        $this->view->adrInterventions = $adrInterventions;
-        
+        $this->view->authorName = $authorModel->getLogin();
         $this->render('view-care');
         return;
     }
     
-    private function _viewCommunityForm()
+    private function _viewCommunityReport()
     {
         $id = $this->_getParam('id');
-        $formModel = TrustCare_Model_FrmCommunity::find($id);
-        if(is_null($formModel)) {
+        $reportModel = TrustCare_Model_ReportCommunity::find($id);
+        if(is_null($reportModel)) {
             $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_community.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
             return;
         }
         
-        $patientModel = TrustCare_Model_Patient::find($formModel->getIdPatient());
-        if(is_null($patientModel)) {
-            $this->getLogger()->error(sprintf("Failed to load patient.id=%s specified for frm_community.id=%s", $formModel->getIdPatient(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
-            return;
-        }
-
-        
-        $pharmacyModel = TrustCare_Model_Pharmacy::find($formModel->getIdPharmacy());
+        $pharmacyModel = TrustCare_Model_Pharmacy::find($reportModel->getIdPharmacy());
         if(is_null($pharmacyModel)) {
-            $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for frm_community.id=%s", $formModel->getIdPharmacy(), $id));
+            $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for frm_community.id=%s", $reportModel->getIdPharmacy(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
             return;
         }
         
         $referredInList = array();
-        $model = new TrustCare_Model_FrmCommunityReferredIn();
-        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+        $model = new TrustCare_Model_ReportCommunityReferredIn();
+        foreach($model->fetchAllForFrmCommunity($reportModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
                 $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
@@ -1045,8 +599,8 @@ class ReportController extends ZendX_Controller_Action
         }
         
         $referredOutList = array();
-        $model = new TrustCare_Model_FrmCommunityReferredOut();
-        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+        $model = new TrustCare_Model_ReportCommunityReferredOut();
+        foreach($model->fetchAllForFrmCommunity($reportModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
                 $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
@@ -1057,14 +611,14 @@ class ReportController extends ZendX_Controller_Action
         }
         
         $htcResultName = '';
-        $dict = TrustCare_Model_PharmacyDictionary::find($formModel->getHtcResultId());
+        $dict = TrustCare_Model_PharmacyDictionary::find($reportModel->getHtcResultId());
         if(!is_null($dict)) {
             $htcResultName = $dict->getName();
         }
         
         $palliativeCareTypeList = array();
-        $model = new TrustCare_Model_FrmCommunityPalliativeCareType();
-        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+        $model = new TrustCare_Model_ReportCommunityPalliativeCareType();
+        foreach($model->fetchAllForFrmCommunity($reportModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
                 $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
@@ -1075,8 +629,8 @@ class ReportController extends ZendX_Controller_Action
         }
         
         $stiTypeList = array();
-        $model = new TrustCare_Model_FrmCommunityStiType();
-        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+        $model = new TrustCare_Model_ReportCommunityStiType();
+        foreach($model->fetchAllForFrmCommunity($reportModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
                 $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
@@ -1087,8 +641,8 @@ class ReportController extends ZendX_Controller_Action
         }
         
         $reproductiveHealthTypeList = array();
-        $model = new TrustCare_Model_FrmCommunityReproductiveHealthType();
-        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+        $model = new TrustCare_Model_ReportCommunityReproductiveHealthType();
+        foreach($model->fetchAllForFrmCommunity($reportModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
                 $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
@@ -1099,8 +653,8 @@ class ReportController extends ZendX_Controller_Action
         }
         
         $tuberculosisTypeList = array();
-        $model = new TrustCare_Model_FrmCommunityTuberculosisType();
-        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+        $model = new TrustCare_Model_ReportCommunityTuberculosisType();
+        foreach($model->fetchAllForFrmCommunity($reportModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
                 $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
@@ -1111,8 +665,8 @@ class ReportController extends ZendX_Controller_Action
         }
         
         $ovcTypeList = array();
-        $model = new TrustCare_Model_FrmCommunityOvcType();
-        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+        $model = new TrustCare_Model_ReportCommunityOvcType();
+        foreach($model->fetchAllForFrmCommunity($reportModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
                 $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
@@ -1122,7 +676,7 @@ class ReportController extends ZendX_Controller_Action
             }
         }
         
-        $this->view->formModel = $formModel;
+        $this->view->reportModel = $reportModel;
         $this->view->patientModel = $patientModel;
         $this->view->pharmacyName = $pharmacyModel->getName();
         $this->view->referredInList = $referredInList;
@@ -1138,6 +692,51 @@ class ReportController extends ZendX_Controller_Action
         return;
     }
     
+    
+    
+    public function loadReportActionAccess()
+    {
+       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:report", "view");
+    }
+    
+    public function loadReportAction()
+    {
+        $type = $this->_getParam('type');
+        if('care' == $type) {
+            return $this->_loadCareReport();; 
+        }
+        else if('community' == $type) {
+            return $this->_loadCommunityReport();; 
+        }
+        else {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Incorrect type of counseling")));
+            return;
+        }
+    }
+    
+    
+    private function _loadCareReport()
+    {
+        $id = $this->_getParam('id');
+        $model = TrustCare_Model_ReportCare::find($id);
+        if(is_null($model)) {
+            $this->getLogger()->error(sprintf("'%s' tries to load unknown report_care.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Report")));
+            return;
+        }
+
+        $fileReportOutput = sprintf("%s/%s", TrustCare_SystemInterface_ReportGenerator_Abstract::reportsDirectory(), $model->getFilename());
+
+        if(!file_exists($fileReportOutput)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Report file not found")));
+            return;
+        }
+
+        $this->outputFileAsAttachment($fileReportOutput);
+        return;
+    }
+    
+    
     public function deleteActionAccess()
     {
        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:report", "delete");
@@ -1147,10 +746,10 @@ class ReportController extends ZendX_Controller_Action
     {
         $type = $this->_getParam('type');
         if('care' == $type) {
-            return $this->_deleteCareForm(); 
+            return $this->_deleteCareReport(); 
         }
         else if('community' == $type) {
-            return $this->_deleteCommunityForm(); 
+            return $this->_deleteCommunityReport(); 
         }
         else {
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Incorrect type of counseling")));
@@ -1158,32 +757,127 @@ class ReportController extends ZendX_Controller_Action
         }
     }
     
-    private function _deleteCareForm()
+    private function _deleteCareReport()
     {
         $id = $this->_getParam('id');
-        $formModel = TrustCare_Model_FrmCare::find($id);
-        if(is_null($formModel)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+        $reportModel = TrustCare_Model_ReportCare::find($id);
+        if(is_null($reportModel)) {
+            $this->getLogger()->error(sprintf("'%s' tries to delete unknown report_care.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Report")));
             return;
         }
+        $fileName = $reportModel->getFilename();
         
-        $formModel->delete();
+        $reportModel->delete();
+        TrustCare_SystemInterface_ReportGenerator_Abstract::removeReportFile($fileName);
+        
         $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
     }
     
-    private function _deleteCommunityForm()
+    private function _deleteCommunityReport()
     {
         $id = $this->_getParam('id');
-        $formModel = TrustCare_Model_FrmCommunity::find($id);
-        if(is_null($formModel)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_community.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+        $reportModel = TrustCare_Model_ReportCommunity::find($id);
+        if(is_null($reportModel)) {
+            $this->getLogger()->error(sprintf("'%s' tries to delete unknown report_community.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Report")));
             return;
         }
         
-        $formModel->delete();
+        $reportModel->delete();
         $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
+    }
+
+    
+    /**
+     * @return Zend_Form
+     */
+    private function _getGenerateCareReportForm()
+    {
+        $pharmacyList = array();
+        $pharmacyList[''] = '';
+        $model = new TrustCare_Model_Pharmacy();
+        foreach($model->fetchAll(array("is_active!=0"), 'name') as $obj) {
+            $pharmacyList[$obj->getId()] = $obj->getName();
+        }
+        
+        $periodList = array();
+        for($i = 0; $i <= 11; $i++) {
+            $time = gmmktime(0, 0, 0, gmdate("m") - $i, gmdate("d"), gmdate("Y"));
+            $periodList[gmdate("Y-m", $time)] = gmdate("Y-m", $time);
+        }
+        
+        $numberValidator = new Zend_Validate_Regex('/^\d+$/');
+        $numberValidator->setMessage(Zend_Registry::get("Zend_Translate")->_("Necessary to enter positive value"));
+        
+        
+        $form = new ZendX_Form();
+        $form->setMethod('post');
+
+        $form->addElement('hidden', 'id');
+        
+        $tabIndex = 1;
+        $form->addElement('select', 'id_pharmacy', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmacy"),
+            'tabindex'      => $tabIndex++,
+            'required'      => true,
+            'multioptions'  => $pharmacyList,
+        ));
+        $form->addElement('select', 'period', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("Period"),
+            'tabindex'      => $tabIndex++,
+            'required'      => true,
+            'value'         => gmdate("Y-m", gmmktime(0, 0, 0, gmdate("m"), gmdate("d"), gmdate("Y"))),
+            'multioptions'  => $periodList,
+        ));
+        $form->addElement('text', 'male_younger_15', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("The number of male (< 15 years) who received prescriptions"),
+            'description'   => "",
+            'tabindex'      => $tabIndex++,
+            'size'			=> 5,
+            'required'      => true,
+            'validators'    => array($numberValidator)
+        ));
+        $form->addElement('text', 'female_younger_15', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("The number of female (< 15 years) who received prescriptions"),
+            'description'   => "",
+            'tabindex'      => $tabIndex++,
+            'size'			=> 5,
+        	'required'      => true,
+            'validators'    => array($numberValidator)
+        ));
+        $form->addElement('text', 'male_from_15', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("The number of male (>= 15 years) who received prescriptions"),
+            'description'   => "",
+            'tabindex'      => $tabIndex++,
+            'size'			=> 5,
+        	'required'      => true,
+            'validators'    => array($numberValidator)
+        ));
+        $form->addElement('text', 'female_from_15', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("The number of female (>= 15 years) who received prescriptions"),
+            'description'   => "",
+            'tabindex'      => $tabIndex++,
+            'size'			=> 5,
+        	'required'      => true,
+            'validators'    => array($numberValidator)
+        ));
+        $form->addElement('text', 'drugs', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("The number of drugs dispensed in the reporting month"),
+            'description'   => "",
+            'tabindex'      => $tabIndex++,
+            'size'			=> 5,
+        	'required'      => true,
+            'validators'    => array($numberValidator)
+        ));
+        
+        
+        $form->addElement('submit', 'send', array(
+            'label'     => Zend_Registry::get("Zend_Translate")->_("Generate"),
+            'tabindex'  => $tabIndex++,
+        ));
+        
+        return $form;
     }
 }
 

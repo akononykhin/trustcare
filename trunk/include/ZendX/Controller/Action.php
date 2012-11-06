@@ -148,6 +148,84 @@ class ZendX_Controller_Action extends Zend_Controller_Action
         return;
     }
     
+    protected function outputFileAsAttachment($fullFilePath)
+    {
+        $path_parts = pathinfo($fullFilePath);
+        $filename = $path_parts['basename'];
+        $extension = $path_parts['extension'];
+        switch (strtoupper($extension)) {
+            case "PDF":
+                $contentType = "application/pdf";
+                break;
+            case "XLS":
+                $contentType = "application/vnd.ms-excel";
+                break;
+            case "HTML":
+                $contentType = "text/html";
+                break;
+            default:
+                $contentType = "application/octet-stream";
+        
+        }
+        
+        $userAgent = $this->getRequest()->getServer('HTTP_USER_AGENT');
+        $browser_agent = "";
+        if (preg_match('/OPERA(\/| )(\d\.\d{1,2})/', strtoupper($userAgent))) {
+            $browser_agent = 'OPERA';
+        }
+        else if (preg_match('/MSIE (\d\.\d{1,2})/',strtoupper($userAgent))) {
+            $browser_agent = 'IE';
+        }
+        else if (preg_match('/OMNIWEB\/(\d\.\d{1,2})/', strtoupper($userAgent))) {
+            $browser_agent = 'OMNIWEB';
+        }
+        else if (preg_match('/MOZILLA\/(\d\.\d{1,2})/', strtoupper($userAgent))) {
+            $browser_agent = 'MOZILLA';
+        }
+        else if (preg_match('/KONQUEROR\/(\d\.\d{1,2})/', strtoupper($userAgent))) {
+            $browser_agent = 'KONQUEROR';
+        }
+        else {
+            $browser_agent = 'OTHER';
+        }
+
+        $length = filesize($fullFilePath);
+        $now = gmdate('D, d M Y H:i:s') . ' GMT';
+
+        require_once 'Zend/Controller/Action/HelperBroker.php';
+        Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
+
+        require_once 'Zend/Layout.php';
+        $layout = Zend_Layout::getMvcInstance();
+        if ($layout instanceof Zend_Layout) {
+            $layout->disableLayout();
+        }
+        ob_get_clean(); /* to cancel output buffering started in dispatcher */
+        
+        header('Content-Type: '.$contentType);
+        header('Expires: '.$now);
+        header('Content-Length: '.$length);
+        header('Content-Disposition: '.sprintf('attachment; filename="%s"', $filename));
+
+        if ($browser_agent == 'IE') {
+            //header('Content-Disposition: '.sprintf('inline; filename="%s"', $filename));
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+        }
+        else {
+            header('Pragma: no-cache');
+        }
+
+        /* In case of large file sometimes it's impossible to load it in memory */
+        $f = fopen($fullFilePath, 'r');
+        while(!feof($f)) {
+            echo fread($f, 65536);
+            flush();
+        }
+        fclose($f);
+        die;        
+    }
+
     /**
      * 
      * @param string $sessionPostfix
