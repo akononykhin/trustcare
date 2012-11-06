@@ -13,6 +13,7 @@ class TrustCare_SystemInterface_ReportGenerator_Community extends TrustCare_Syst
     
     public function generate($params, $format = '')
     {
+        $id_user = array_key_exists('id_user', $params) ? $params['id_user'] : null;
         $year = array_key_exists('year', $params) ? $params['year'] : -1;
         $month = array_key_exists('month', $params) ? $params['month'] : -1;
         $id_pharmacy = array_key_exists('id_pharmacy', $params) ? $params['id_pharmacy'] : -1;
@@ -28,7 +29,7 @@ class TrustCare_SystemInterface_ReportGenerator_Community extends TrustCare_Syst
         $fileName = sprintf("%s_%s%s_%s_%s.%s", $this->getCode(), $year, $month, gmdate("Ymd"), rand(0, 1000), strtolower($format));
         $fileReportOutput = sprintf("%s/%s", $this->reportsDirectory(), $fileName);
         
-        $designFile= "care.rptdesign";
+        $designFile= "community.rptdesign";
         $parameters = array();
         $parameters[] = sprintf('jdbc_driver_url=jdbc:mysql://%s/%s', $dbOptions['params']['host'], $dbOptions['params']['dbname']);
         $parameters[] = sprintf('jdbc_username=%s', $dbOptions['params']['username']);
@@ -40,7 +41,9 @@ class TrustCare_SystemInterface_ReportGenerator_Community extends TrustCare_Syst
         $this->_generateReportFile($designFile, $fileReportOutput, $parameters, $format);
 
         $obj = new TrustCare_Model_ReportCommunity(array(
-                'period' => sprintf("%04d%02d", $year, $month),
+                'id_user' => $id_user,
+                'generation_date' => ZendX_Db_Table_Abstract::LABEL_NOW,
+        		'period' => sprintf("%04d%02d", $year, $month),
                 'id_pharmacy' => $id_pharmacy,
                 'filename' => $fileName,
         ));
