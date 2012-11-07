@@ -248,28 +248,36 @@ where id=?]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -284,25 +292,25 @@ where id=?]]></xml-property>
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -320,6 +328,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
       is_first_visit_to_pharmacy=1
     group by
       is_male,is_younger_15
@@ -353,28 +362,36 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -389,25 +406,25 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -425,6 +442,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
       1!=ifnull(is_first_visit_to_pharmacy,0)
     group by
       is_male,is_younger_15
@@ -458,28 +476,36 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -494,25 +520,25 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -530,6 +556,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
 	  is_hiv_risk_assesment_done=1
     group by
       is_male,is_younger_15
@@ -563,28 +590,36 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -599,25 +634,25 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -635,6 +670,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
 	  is_client_received_htc=1
     group by
       is_male,is_younger_15
@@ -668,28 +704,36 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -704,25 +748,25 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -740,6 +784,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
 	  is_palliative_services_to_plwha=1
     group by
       is_male,is_younger_15
@@ -773,28 +818,36 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -809,25 +862,25 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -845,6 +898,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
 	  is_sti_services=1
     group by
       is_male,is_younger_15
@@ -878,28 +932,36 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -914,25 +976,25 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -950,6 +1012,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
 	  is_reproductive_health_services=1
     group by
       is_male,is_younger_15
@@ -983,28 +1046,36 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -1019,25 +1090,25 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -1055,6 +1126,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
 	  is_tuberculosis_services=1
     group by
       is_male,is_younger_15
@@ -1088,28 +1160,36 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -1124,25 +1204,25 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -1160,6 +1240,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
 	  is_ovc_services=1
     group by
       is_male,is_younger_15
@@ -1193,28 +1274,36 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
@@ -1229,25 +1318,25 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_older_15</property>
                     <property name="nativeName">female_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -1265,6 +1354,7 @@ from
       frm_community
     where
       date_of_visit_month_index=?? and
+      frm_community.id_pharmacy=? and
 	  is_referral_completed=1
     group by
       is_male,is_younger_15
