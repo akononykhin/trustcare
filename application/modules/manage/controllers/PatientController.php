@@ -109,6 +109,7 @@ class PatientController extends ZendX_Controller_Action
                                                          ->joinLeft(array('state'), 'patient.id_state = state.id', array('state_name' => 'state.name'));
                                                                  
         $this->processListLoadAjaxRequest($select, array(
+                                                    'address' => 'patient.address',
         											'country_name' => 'country.name',
         											'state_name' => 'state.name',
         											'physician_name' => 'physician.identifier',
