@@ -108,7 +108,12 @@ class PharmacyController extends ZendX_Controller_Action
             $select->where('pharmacy.id=?', $pharmacyModel->getId());
         }
                                                          
-        $this->processListLoadAjaxRequest($select, array('country_name' => 'country.name', 'state_name' => 'state.name', 'lga_name' => 'lga.name', 'facility_name' => 'facility.name'));
+        $this->processListLoadAjaxRequest($select, array(
+        											'name' => 'pharmacy.name',
+        											'country_name' => 'country.name',
+        											'state_name' => 'state.name',
+        											'lga_name' => 'lga.name',
+        											'facility_name' => 'facility.name'));
         
         $rows = Zend_Registry::getInstance()->dbAdapter->selectWithLimit($select->__toString(), $iFilteredTotal);
         
