@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.22" id="1">
     <property name="createdBy">Eclipse BIRT Designer Version 2.6.2.r262_v20110209 Build &lt;2.6.2.v20110214-1523></property>
-    <list-property name="propertyBindings">
-        <structure>
-            <property name="name">queryText</property>
-            <property name="id">1225</property>
-        </structure>
-        <structure>
-            <property name="name">queryTimeOut</property>
-            <property name="id">1225</property>
-        </structure>
-        <structure>
-            <property name="name">queryText</property>
-            <property name="id">1469</property>
-        </structure>
-        <structure>
-            <property name="name">queryTimeOut</property>
-            <property name="id">1469</property>
-        </structure>
-    </list-property>
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="layoutPreference">fixed layout</property>
     <property name="bidiLayoutOrientation">ltr</property>
@@ -374,6 +356,14 @@ where id=?]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -465,7 +455,9 @@ from
     from
     frm_care
     where
-    ifnull(is_receive_prescription,0)!=1 and date_of_visit_month_index=??
+    ifnull(is_receive_prescription,0)!=1 and
+    date_of_visit_month_index=?? and
+    frm_care.id_pharmacy=?
     group by
     is_male,is_younger_15
  ) as t
@@ -479,28 +471,6 @@ from
                     <property name="name">total</property>
                     <expression name="expression">row["male_younger_15"]+row["male_older_15"]+row["female_younger_15"]+row["female_pregnant_older_15"]+row["female_notpregnant_older_15"]</expression>
                     <property name="dataType">integer</property>
-                </structure>
-            </list-property>
-            <list-property name="columnHints">
-                <structure>
-                    <property name="columnName">male_younger_15</property>
-                    <property name="alias">male_younger_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">male_older_15</property>
-                    <property name="alias">male_older_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">female_younger_15</property>
-                    <property name="alias">female_younger_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">female_pregnant_older_15</property>
-                    <property name="alias">female_pregnant_older_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">female_notpregnant_older_15</property>
-                    <property name="alias">female_notpregnant_older_15</property>
                 </structure>
             </list-property>
             <list-property name="parameters">
@@ -520,33 +490,41 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
@@ -561,31 +539,31 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -605,6 +583,7 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
+    frm_care.id_pharmacy=? and
     (is_med_error_identified=1 or is_med_adh_problem_identified=1 or is_adr_symptoms=1)
     group by
     is_male,is_younger_15,is_pregnant
@@ -621,28 +600,6 @@ from
                     <property name="dataType">integer</property>
                 </structure>
             </list-property>
-            <list-property name="columnHints">
-                <structure>
-                    <property name="columnName">male_younger_15</property>
-                    <property name="alias">male_younger_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">female_younger_15</property>
-                    <property name="alias">female_younger_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">male_older_15</property>
-                    <property name="alias">male_older_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">female_pregnant_older_15</property>
-                    <property name="alias">female_pregnant_older_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">female_notpregnant_older_15</property>
-                    <property name="alias">female_notpregnant_older_15</property>
-                </structure>
-            </list-property>
             <list-property name="parameters">
                 <structure>
                     <property name="name">param_1</property>
@@ -660,33 +617,41 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
@@ -701,31 +666,31 @@ from
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -745,6 +710,7 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
+    frm_care.id_pharmacy=? and
     is_med_error_screened=1
     group by
     is_male,is_younger_15,is_pregnant
@@ -778,6 +744,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -863,6 +837,7 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
+    frm_care.id_pharmacy=? and
     is_med_error_identified=1
     group by
     is_male,is_younger_15,is_pregnant
@@ -896,6 +871,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -981,7 +964,8 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
-    is_med_adh_problem_identified=1
+    is_med_adh_problem_identified=1 and
+    id_pharmacy=?
     group by
     is_male,is_younger_15,is_pregnant
  ) as t
@@ -1014,6 +998,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1099,7 +1091,8 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
-    is_adh_intervention_provided=1
+    is_adh_intervention_provided=1 and
+    id_pharmacy=?
     group by
     is_male,is_younger_15,is_pregnant
  ) as t
@@ -1132,6 +1125,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1217,7 +1218,8 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
-    is_adr_screened=1
+    is_adr_screened=1 and
+    id_pharmacy=?
     group by
     is_male,is_younger_15,is_pregnant
  ) as t
@@ -1250,6 +1252,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1335,7 +1345,8 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
-    is_adr_symptoms=1
+    is_adr_symptoms=1 and
+    id_pharmacy=?
     group by
     is_male,is_younger_15,is_pregnant
  ) as t
@@ -1368,6 +1379,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1453,6 +1472,7 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
+    frm_care.id_pharmacy=? and
     is_nafdac_adr_filled=1
     group by
     is_male,is_younger_15,is_pregnant
@@ -1486,6 +1506,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1571,7 +1599,8 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
-    is_adr_intervention_provided=1
+    is_adr_intervention_provided=1 and
+    id_pharmacy=?
     group by
     is_male,is_younger_15,is_pregnant
  ) as t
@@ -1601,6 +1630,14 @@ from
                     <property name="paramName">month</property>
                     <property name="dataType">integer</property>
                     <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -1689,6 +1726,7 @@ from
       frm_care
     where
       date_of_visit_month_index=?? and
+      frm_care.id_pharmacy=? and
       (1=is_med_error_screened=1 and 1!=IFNULL(is_med_error_identified,0) and 1=is_med_adh_problem_screened and 1!=IFNULL(is_med_adh_problem_identified,0))
     group by
       is_male,is_younger_15,is_pregnant
@@ -1722,6 +1760,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1807,6 +1853,7 @@ from
       frm_care
     where
       date_of_visit_month_index=?? and
+	  frm_care.id_pharmacy=? and
       (1=is_med_adh_problem_screened and 1!=IFNULL(is_med_adh_problem_identified,0))
     group by
       is_male,is_younger_15,is_pregnant
@@ -1840,6 +1887,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1851,27 +1906,27 @@ from
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
@@ -1892,31 +1947,31 @@ from
                     <property name="position">2</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -1949,6 +2004,7 @@ from
         frm_care_med_error_type
         where
         date_of_visit_month_index=?? and
+        frm_care.id_pharmacy=? and
         frm_care.id=frm_care_med_error_type.id_frm_care
         group by
         is_male,is_younger_15,is_pregnant,frm_care_med_error_type.id_pharmacy_dictionary
@@ -1984,6 +2040,14 @@ where
                     <property name="paramName">month</property>
                     <property name="dataType">integer</property>
                     <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2096,6 +2160,7 @@ from
         frm_care_med_adh_problem
         where
         date_of_visit_month_index=?? and
+        frm_care.id_pharmacy=? and
         frm_care.id=frm_care_med_adh_problem.id_frm_care
         group by
         is_male,is_younger_15,is_pregnant,frm_care_med_adh_problem.id_pharmacy_dictionary
@@ -2134,33 +2199,41 @@ where
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
@@ -2175,39 +2248,39 @@ where
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
-  sum(if(1=is_male and 1=is_younger_15, number, 0)) as male_younger_15,
-  sum(if(1!=is_male and 1=is_younger_15, number, 0)) as female_younger_15,
-  sum(if(1=is_male and 1!=is_younger_15, number, 0)) as male_older_15,
-  sum(if(1!=is_male and 1!=is_younger_15 and 1=is_pregnant, number, 0)) as female_pregnant_older_15,
-  sum(if(1!=is_male and 1!=is_younger_15 and 1!=is_pregnant, number, 0)) as female_notpregnant_older_15
+  ifnull(sum(if(1=is_male and 1=is_younger_15, number, 0)),0) as male_younger_15,
+  ifnull(sum(if(1!=is_male and 1=is_younger_15, number, 0)),0) as female_younger_15,
+  ifnull(sum(if(1=is_male and 1!=is_younger_15, number, 0)),0) as male_older_15,
+  ifnull(sum(if(1!=is_male and 1!=is_younger_15 and 1=is_pregnant, number, 0)),0) as female_pregnant_older_15,
+  ifnull(sum(if(1!=is_male and 1!=is_younger_15 and 1!=is_pregnant, number, 0)),0) as female_notpregnant_older_15
 from
   (
     select
@@ -2219,6 +2292,7 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
+    frm_care.id_pharmacy=? and
     1!=ifnull(is_adh_intervention_provided,0)
     group by
     is_male,is_younger_15,is_pregnant
@@ -2252,6 +2326,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -2263,27 +2345,27 @@ from
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
@@ -2304,31 +2386,31 @@ from
                     <property name="position">2</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -2361,6 +2443,7 @@ from
         frm_care_adh_intervention
         where
         date_of_visit_month_index=?? and
+        frm_care.id_pharmacy=? and
         frm_care.id=frm_care_adh_intervention.id_frm_care
         group by
         is_male,is_younger_15,is_pregnant,frm_care_adh_intervention.id_pharmacy_dictionary
@@ -2399,6 +2482,14 @@ where
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -2410,27 +2501,27 @@ where
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
@@ -2451,31 +2542,31 @@ where
                     <property name="position">2</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -2508,6 +2599,7 @@ from
         frm_care_adh_intervention_outcome
         where
         date_of_visit_month_index=?? and
+        frm_care.id_pharmacy=? and
         frm_care.id=frm_care_adh_intervention_outcome.id_frm_care
         group by
         is_male,is_younger_15,is_pregnant,frm_care_adh_intervention_outcome.id_pharmacy_dictionary
@@ -2546,33 +2638,41 @@ where
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
@@ -2587,31 +2687,31 @@ where
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -2631,6 +2731,7 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
+    frm_care.id_pharmacy=? and
     1=is_adr_screened and 1!=ifnull(is_adr_symptoms,0)
     group by
     is_male,is_younger_15,is_pregnant
@@ -2645,36 +2746,6 @@ from
                     <property name="name">total</property>
                     <expression name="expression">row["male_younger_15"]+row["female_younger_15"]+row["male_older_15"]+row["female_pregnant_older_15"]+row["female_notpregnant_older_15"]</expression>
                     <property name="dataType">integer</property>
-                </structure>
-            </list-property>
-            <list-property name="columnHints">
-                <structure>
-                    <property name="columnName">dict_name</property>
-                    <property name="alias">dict_name</property>
-                </structure>
-                <structure>
-                    <property name="columnName">male_younger_15</property>
-                    <property name="alias">male_younger_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">female_younger_15</property>
-                    <property name="alias">female_younger_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">male_older_15</property>
-                    <property name="alias">male_older_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">female_pregnant_older_15</property>
-                    <property name="alias">female_pregnant_older_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">female_notpregnant_older_15</property>
-                    <property name="alias">female_notpregnant_older_15</property>
-                </structure>
-                <structure>
-                    <property name="columnName">total</property>
-                    <property name="alias">total</property>
                 </structure>
             </list-property>
             <list-property name="parameters">
@@ -2695,10 +2766,18 @@ from
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
+                    <property name="name">param_15</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
                     <property name="name">param_3</property>
                     <property name="paramName">year</property>
                     <property name="dataType">integer</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2706,7 +2785,15 @@ from
                     <property name="name">param_4</property>
                     <property name="paramName">month</property>
                     <property name="dataType">integer</property>
-                    <property name="position">4</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_16</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">6</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2714,7 +2801,7 @@ from
                     <property name="name">param_5</property>
                     <property name="paramName">year</property>
                     <property name="dataType">integer</property>
-                    <property name="position">5</property>
+                    <property name="position">7</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2722,7 +2809,15 @@ from
                     <property name="name">param_6</property>
                     <property name="paramName">month</property>
                     <property name="dataType">integer</property>
-                    <property name="position">6</property>
+                    <property name="position">8</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_17</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">9</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2730,7 +2825,7 @@ from
                     <property name="name">param_7</property>
                     <property name="paramName">year</property>
                     <property name="dataType">integer</property>
-                    <property name="position">7</property>
+                    <property name="position">10</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2738,7 +2833,15 @@ from
                     <property name="name">param_8</property>
                     <property name="paramName">month</property>
                     <property name="dataType">integer</property>
-                    <property name="position">8</property>
+                    <property name="position">11</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_18</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">12</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2746,7 +2849,7 @@ from
                     <property name="name">param_9</property>
                     <property name="paramName">year</property>
                     <property name="dataType">integer</property>
-                    <property name="position">9</property>
+                    <property name="position">13</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2754,7 +2857,15 @@ from
                     <property name="name">param_10</property>
                     <property name="paramName">month</property>
                     <property name="dataType">integer</property>
-                    <property name="position">10</property>
+                    <property name="position">14</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_19</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">15</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2762,7 +2873,7 @@ from
                     <property name="name">param_11</property>
                     <property name="paramName">year</property>
                     <property name="dataType">integer</property>
-                    <property name="position">11</property>
+                    <property name="position">16</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2770,7 +2881,15 @@ from
                     <property name="name">param_12</property>
                     <property name="paramName">month</property>
                     <property name="dataType">integer</property>
-                    <property name="position">12</property>
+                    <property name="position">17</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_20</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">18</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2778,7 +2897,7 @@ from
                     <property name="name">param_13</property>
                     <property name="paramName">year</property>
                     <property name="dataType">integer</property>
-                    <property name="position">13</property>
+                    <property name="position">19</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2786,7 +2905,15 @@ from
                     <property name="name">param_14</property>
                     <property name="paramName">month</property>
                     <property name="dataType">integer</property>
-                    <property name="position">14</property>
+                    <property name="position">20</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_21</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">21</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -2801,27 +2928,27 @@ from
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
@@ -2842,31 +2969,31 @@ from
                     <property name="position">2</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -2899,6 +3026,7 @@ from
             frm_care_suspected_adr_hepatic as t0
         where
             date_of_visit_month_index=?? and
+	        frm_care.id_pharmacy=? and
             frm_care.id=t0.id_frm_care
         group by
             is_male,is_younger_15,is_pregnant,t0.id_pharmacy_dictionary
@@ -2941,6 +3069,7 @@ from
             frm_care_suspected_adr_nervous as t0
         where
             date_of_visit_month_index=?? and
+	        frm_care.id_pharmacy=? and
             frm_care.id=t0.id_frm_care
         group by
             is_male,is_younger_15,is_pregnant,t0.id_pharmacy_dictionary
@@ -2983,6 +3112,7 @@ from
             frm_care_suspected_adr_cardiovascular as t0
         where
             date_of_visit_month_index=?? and
+	        frm_care.id_pharmacy=? and
             frm_care.id=t0.id_frm_care
         group by
             is_male,is_younger_15,is_pregnant,t0.id_pharmacy_dictionary
@@ -3025,6 +3155,7 @@ from
             frm_care_suspected_adr_skin as t0
         where
             date_of_visit_month_index=?? and
+	        frm_care.id_pharmacy=? and
             frm_care.id=t0.id_frm_care
         group by
             is_male,is_younger_15,is_pregnant,t0.id_pharmacy_dictionary
@@ -3067,6 +3198,7 @@ from
             frm_care_suspected_adr_metabolic as t0
         where
             date_of_visit_month_index=?? and
+	        frm_care.id_pharmacy=? and
             frm_care.id=t0.id_frm_care
         group by
             is_male,is_younger_15,is_pregnant,t0.id_pharmacy_dictionary
@@ -3109,6 +3241,7 @@ from
             frm_care_suspected_adr_musculoskeletal as t0
         where
             date_of_visit_month_index=?? and
+	        frm_care.id_pharmacy=? and
             frm_care.id=t0.id_frm_care
         group by
             is_male,is_younger_15,is_pregnant,t0.id_pharmacy_dictionary
@@ -3151,6 +3284,7 @@ from
             frm_care_suspected_adr_general as t0
         where
             date_of_visit_month_index=?? and
+	        frm_care.id_pharmacy=? and
             frm_care.id=t0.id_frm_care
         group by
             is_male,is_younger_15,is_pregnant,t0.id_pharmacy_dictionary
@@ -3191,33 +3325,41 @@ where
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
@@ -3232,31 +3374,31 @@ where
                     <property name="position">1</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -3276,6 +3418,7 @@ from
     frm_care
     where
     date_of_visit_month_index=?? and
+    frm_care.id_pharmacy=? and
     1!=ifnull(is_adr_intervention_provided,0)
     group by
     is_male,is_younger_15,is_pregnant
@@ -3309,6 +3452,14 @@ from
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">id_pharmacy</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -3320,27 +3471,27 @@ from
                     <structure>
                         <property name="position">2</property>
                         <property name="name">male_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
                         <property name="name">female_younger_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
                         <property name="name">male_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">female_pregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
                         <property name="name">female_notpregnant_older_15</property>
-                        <property name="dataType">integer</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
@@ -3361,31 +3512,31 @@ from
                     <property name="position">2</property>
                     <property name="name">male_younger_15</property>
                     <property name="nativeName">male_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">female_younger_15</property>
                     <property name="nativeName">female_younger_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">male_older_15</property>
                     <property name="nativeName">male_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">female_pregnant_older_15</property>
                     <property name="nativeName">female_pregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">female_notpregnant_older_15</property>
                     <property name="nativeName">female_notpregnant_older_15</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
@@ -3418,6 +3569,7 @@ from
             frm_care_adr_intervention as t0
         where
             date_of_visit_month_index=?? and
+	        frm_care.id_pharmacy=? and
             frm_care.id=t0.id_frm_care
         group by
             is_male,is_younger_15,is_pregnant,t0.id_pharmacy_dictionary
@@ -3481,7 +3633,7 @@ where
             <property name="borderRightStyle">solid</property>
             <property name="borderTopColor">#000000</property>
             <property name="borderTopStyle">solid</property>
-            <property name="height">17.041666666666668in</property>
+            <property name="height">23.364583333333332in</property>
             <property name="width">10.395833333333334in</property>
             <column id="1058">
                 <property name="width">52%</property>
@@ -5818,7 +5970,7 @@ where
                 </cell>
             </row>
             <row id="1440">
-                <property name="height">1.48in</property>
+                <property name="height">2.8958333333333335in</property>
                 <property name="borderTopColor">#000000</property>
                 <property name="borderTopStyle">solid</property>
                 <property name="borderTopWidth">thin</property>
@@ -6014,7 +6166,7 @@ where
                 </cell>
             </row>
             <row id="1432">
-                <property name="height">0.3958333333333333in</property>
+                <property name="height">1.09375in</property>
                 <cell id="1433">
                     <property name="colSpan">7</property>
                     <property name="rowSpan">1</property>
@@ -6095,6 +6247,9 @@ where
                                 <property name="borderBottomColor">#000000</property>
                                 <property name="borderBottomStyle">solid</property>
                                 <property name="borderBottomWidth">thin</property>
+                                <property name="borderTopColor">#000000</property>
+                                <property name="borderTopStyle">solid</property>
+                                <property name="borderTopWidth">thin</property>
                                 <cell id="1783">
                                     <property name="fontWeight">bold</property>
                                     <property name="borderBottomColor">#000000</property>
@@ -6349,7 +6504,7 @@ where
                 </cell>
             </row>
             <row id="1704">
-                <property name="height">0.7708333333333334in</property>
+                <property name="height">1.53125in</property>
                 <cell id="1705">
                     <property name="colSpan">7</property>
                     <property name="rowSpan">1</property>
@@ -6556,7 +6711,7 @@ where
                 </cell>
             </row>
             <row id="1813">
-                <property name="height">0.40625in</property>
+                <property name="height">1.2604166666666667in</property>
                 <cell id="1814">
                     <property name="colSpan">7</property>
                     <property name="rowSpan">1</property>
@@ -6897,7 +7052,7 @@ where
                 </cell>
             </row>
             <row id="1903">
-                <property name="height">3.3333333333333335in</property>
+                <property name="height">5.927083333333333in</property>
                 <cell id="1904">
                     <property name="colSpan">7</property>
                     <property name="rowSpan">1</property>
