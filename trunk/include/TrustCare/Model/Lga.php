@@ -9,6 +9,7 @@
 class TrustCare_Model_Lga extends TrustCare_Model_Abstract
 {
     protected $_id;
+    protected $_id_state;
     protected $_name;
     
     /**
@@ -28,6 +29,26 @@ class TrustCare_Model_Lga extends TrustCare_Model_Abstract
     public function getId()
     {
         return $this->_id;
+    }
+
+    
+    /**
+     * @param  int|null $value
+     * @return TrustCare_Model_Lga
+     */
+    public function setIdState($value)
+    {
+        $this->_parameterChanged('id_state', $value);
+        $this->_id_state = !is_null($value) ? (int) $value : null;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getIdState()
+    {
+        return $this->_id_state;
     }
     
     /**

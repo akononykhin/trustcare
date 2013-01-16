@@ -19,6 +19,13 @@ class TrustCare_Model_Mapper_Lga extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('name')) {
             $data['name'] = $model->getName();
         }
+        if(!$model->isExists() || $model->isParameterChanged('id_state')) {
+            $data['id_state'] = $model->getIdState();
+        }
+        
+        if(!count($data)) {
+            return;
+        }
         
         if (null === ($id = $model->getId())) {
             unset($data['id']);
@@ -54,6 +61,7 @@ class TrustCare_Model_Mapper_Lga extends TrustCare_Model_Mapper_Abstract
         $row = $result->current();
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
+              ->setIdState($row->id_state)  
               ->setName($row->name);
         $model->setSkipTrackChanges(false);
               

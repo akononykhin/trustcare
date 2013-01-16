@@ -19,9 +19,23 @@ class TestOfLga extends UnitTestCase {
         $this->db = Zend_Registry::get('dbAdapter');
         
         try {
+            $fileName = sprintf("%s/_files/lga_test.sql", dirname(__FILE__));
+            $fh = fopen($fileName, "r");
+            if ($fh) {
+                while (!feof($fh)) {
+                    $query = trim(fgets($fh, 4096));
+                    if(!empty($query)) {
+                        $res = $this->db->query($query);
+                    }
+                }
+
+                fclose($fh);
+            }
+            
             $params = array(
                 'id' => $this->db->nextSequenceId('lga_id_seq'),
                 'name' => 'Test1',
+                'id_state' => 1,        
             );
 
             $columns = array();
@@ -47,6 +61,9 @@ class TestOfLga extends UnitTestCase {
         $query = sprintf("delete from lga;");
         $this->db->query($query);
         
+        $query = sprintf("delete from state;");
+        $this->db->query($query);
+        
         $query = sprintf("update db_sequence set value=1 where name='lga_id_seq';");
         $this->db->query($query);
     }
@@ -56,6 +73,7 @@ class TestOfLga extends UnitTestCase {
         $params = array(
             'id' => '111',
             'name' => 'Test2',
+            'id_state' => 2,
             'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -84,7 +102,8 @@ class TestOfLga extends UnitTestCase {
     function testSaveNew() {
         $params = array(
             'name' => 'Test3',
-            );
+            'id_state' => 1,
+        );
         
         try {
             $model = new TrustCare_Model_Lga(array('mapperOptions' => array('adapter' => $this->db)));
@@ -107,6 +126,7 @@ class TestOfLga extends UnitTestCase {
         
         if(!is_null($model)) {
             $params['name'] = $model->name . '22';
+            $params['id_state'] = (2 == $model->id_state) ? 1 : 2;
              
             try {
                 $model->setOptions($params);
@@ -130,6 +150,9 @@ class TestOfLga extends UnitTestCase {
         $model = TrustCare_Model_Lga::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         try {
+            if(is_null($model)) {
+                throw new Exception("Entity not initialized");
+            }
             $model->delete();
             
             $model1 = TrustCare_Model_Lga::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
@@ -158,6 +181,7 @@ class TestOfLga extends UnitTestCase {
         
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
         $this->assertEqual($model->name, $params['name'], "Incorrect 'name': %s");
+        $this->assertEqual($model->id_state, $params['id_state'], "Incorrect 'id_state': %s");
     }
 }
 
