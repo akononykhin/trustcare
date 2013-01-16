@@ -10,6 +10,9 @@ class TrustCare_Model_Facility extends TrustCare_Model_Abstract
 {
     protected $_id;
     protected $_name;
+    protected $_sn;
+    protected $_id_lga;
+    protected $_id_facility_type;
     
     /**
      * @param  int $value 
@@ -49,7 +52,85 @@ class TrustCare_Model_Facility extends TrustCare_Model_Abstract
         return $this->_name;
     }
 
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_Facility
+     */
+    public function setSn($value)
+    {
+        $this->_parameterChanged('sn', $value);
+        $this->_sn = (string) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getSn()
+    {
+        return $this->_sn;
+    }
+    
+    
+    /**
+     * @param  int|null $value
+     * @return TrustCare_Model_Lga
+     */
+    public function setIdLga($value)
+    {
+        $this->_parameterChanged('id_lga', $value);
+        $this->_id_lga = !is_null($value) ? (int) $value : null;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getIdLga()
+    {
+        return $this->_id_lga;
+    }
+    
 
+    
+    /**
+     * @param  int|null $value
+     * @return TrustCare_Model_Lga
+     */
+    public function setIdFacilityType($value)
+    {
+        $this->_parameterChanged('id_facility_type', $value);
+        $this->_id_facility_type = !is_null($value) ? (int) $value : null;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getIdFacilityType()
+    {
+        return $this->_id_facility_type;
+    }
+    
+    /**
+     * @param  int|null $value
+     * @return TrustCare_Model_Lga
+     */
+    public function setIdFacilityLevel($value)
+    {
+        $this->_parameterChanged('id_facility_level', $value);
+        $this->_id_facility_level = !is_null($value) ? (int) $value : null;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getIdFacilityLevel()
+    {
+        return $this->_id_facility_level;
+    }
     
     public function isExists()
     {
