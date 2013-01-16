@@ -19,7 +19,23 @@ class TrustCare_Model_Mapper_Facility extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('name')) {
             $data['name'] = $model->getName();
         }
-                
+        if(!$model->isExists() || $model->isParameterChanged('sn')) {
+            $data['sn'] = $model->getSn();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_lga')) {
+            $data['id_lga'] = $model->getIdLga();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_facility_type')) {
+            $data['id_facility_type'] = $model->getIdFacilityType();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_facility_level')) {
+            $data['id_facility_level'] = $model->getIdFacilityLevel();
+        }
+        
+        if(!count($data)) {
+            return;
+        }
+        
         if (null === ($id = $model->getId())) {
             unset($data['id']);
             $primaryKey = $this->getDbTable()->insert($data);
@@ -54,6 +70,10 @@ class TrustCare_Model_Mapper_Facility extends TrustCare_Model_Mapper_Abstract
         $row = $result->current();
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
+              ->setSn($row->sn)
+              ->setIdFacilityType($row->id_facility_type)
+              ->setIdFacilityLevel($row->id_facility_level)
+              ->setIdLga($row->id_lga)
               ->setName($row->name);
         $model->setSkipTrackChanges(false);
               

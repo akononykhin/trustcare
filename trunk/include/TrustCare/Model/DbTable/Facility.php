@@ -38,7 +38,34 @@ class TrustCare_Model_DbTable_Facility extends ZendX_Db_Table_Abstract
         $db = Zend_Registry::get("Storage")->getPersistantDb(); 
         $data['id'] = $db->nextSequenceId('facility_id_seq');
 
+        if(array_key_exists('id_lga', $data) && empty($data['id_lga'])) {
+            $data['id_lga'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_facility_type', $data) && empty($data['id_facility_type'])) {
+            $data['id_facility_type'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_facility_level', $data) && empty($data['id_facility_level'])) {
+            $data['id_facility_level'] = new Zend_Db_Expr('NULL');
+        }
+        
         return parent::insert($data);
     }
+    
+    
+    public function update(array $data, $where)
+    {
+        if(array_key_exists('id_lga', $data) && empty($data['id_lga'])) {
+            $data['id_lga'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_facility_type', $data) && empty($data['id_facility_type'])) {
+            $data['id_facility_type'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_facility_level', $data) && empty($data['id_facility_level'])) {
+            $data['id_facility_level'] = new Zend_Db_Expr('NULL');
+        }
+        
+        return parent::update($data, $where);
+    }
+    
     
 }
