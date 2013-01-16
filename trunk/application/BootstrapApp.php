@@ -394,39 +394,6 @@ class BootstrapApp extends BootstrapMain
                                 ),
                             ),
                             array(
-                                'label'         => Zend_Registry::get("Zend_Translate")->_("Facilities"),
-                                'controller'    => 'facility',
-                                'action'        => 'list',
-                                'resource'      => 'resource:admin.system_dict',
-                                'privilege'     => 'view',
-                                'pages'         => array(
-                                    array(
-                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                        'controller'    => 'facility',
-                                        'action'        => 'create',
-                                        'visible'       => false,
-                                        'resource'      => 'resource:admin.system_dict',
-                                        'privilege'     => 'create'
-                                    ),
-                                    array(
-                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                        'controller'    => 'facility',
-                                        'action'        => 'edit',
-                                        'visible'       => false,
-                                        'resource'      => 'resource:admin.system_dict',
-                                        'privilege'     => 'edit'
-                                    ),
-                                    array(
-                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Import"),
-                                        'controller'    => 'facility',
-                                        'action'        => 'import',
-                                        'visible'       => false,
-                                        'resource'      => 'resource:admin.system_dict',
-                                        'privilege'     => 'create'
-                                    ),
-                                ),
-                            ),
-                            array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("LGAs"),
                                 'controller'    => 'lga',
                                 'action'        => 'list',
@@ -452,6 +419,39 @@ class BootstrapApp extends BootstrapMain
                                     array(
                                         'label'         => 'LGA',
                                         'controller'    => 'lga',
+                                        'action'        => 'import',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'create'
+                                    ),
+                                ),
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Facilities"),
+                                'controller'    => 'facility',
+                                'action'        => 'list',
+                                'resource'      => 'resource:admin.system_dict',
+                                'privilege'     => 'view',
+                                'pages'         => array(
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                        'controller'    => 'facility',
+                                        'action'        => 'create',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'create'
+                                    ),
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                        'controller'    => 'facility',
+                                        'action'        => 'edit',
+                                        'visible'       => false,
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'edit'
+                                    ),
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Import"),
+                                        'controller'    => 'facility',
                                         'action'        => 'import',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
