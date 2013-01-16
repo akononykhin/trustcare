@@ -38,7 +38,21 @@ class TrustCare_Model_DbTable_Lga extends ZendX_Db_Table_Abstract
         $db = Zend_Registry::get("Storage")->getPersistantDb(); 
         $data['id'] = $db->nextSequenceId('lga_id_seq');
 
+        if(array_key_exists('id_state', $data) && empty($data['id_state'])) {
+            $data['id_state'] = new Zend_Db_Expr('NULL');
+        }
+        
         return parent::insert($data);
+    }
+    
+    
+    public function update(array $data, $where)
+    {
+        if(array_key_exists('id_state', $data) && empty($data['id_state'])) {
+            $data['id_state'] = new Zend_Db_Expr('NULL');
+        }
+    
+        return parent::update($data, $where);
     }
     
 }

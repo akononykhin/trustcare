@@ -121,6 +121,71 @@ class TestOfLga extends UnitTestCase {
         }
     }
 
+    function testSaveNewWithNullValues() {
+        /* Missing */
+        try {
+            $params = array(
+                    'name' => 'Test3',
+            );
+            $model = new TrustCare_Model_Lga(array('mapperOptions' => array('adapter' => $this->db)));
+            $model->setOptions($params);
+            $model->save();
+    
+            $id = $model->id;
+            $params['id'] = $id;
+            $params['id_state'] = null;
+    
+            $model1 = TrustCare_Model_Lga::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $this->_compareObjectAndParams($model1, $params);
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
+        }
+        
+        /* Empty */
+        try {
+            $params = array(
+                'name' => 'Test3',
+                'id_state' => '',
+            );
+            $model = new TrustCare_Model_Lga(array('mapperOptions' => array('adapter' => $this->db)));
+            $model->setOptions($params);
+            $model->save();
+    
+            $id = $model->id;
+            $params['id'] = $id;
+            $params['id_state'] = null;
+    
+            $model1 = TrustCare_Model_Lga::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $this->_compareObjectAndParams($model1, $params);
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
+        }
+        
+        /* Null */
+        try {
+            $params = array(
+                    'name' => 'Test3',
+                    'id_state' => null,
+            );
+            $model = new TrustCare_Model_Lga(array('mapperOptions' => array('adapter' => $this->db)));
+            $model->setOptions($params);
+            $model->save();
+        
+            $id = $model->id;
+            $params['id'] = $id;
+            $params['id_state'] = null;
+        
+            $model1 = TrustCare_Model_Lga::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $this->_compareObjectAndParams($model1, $params);
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
+        }
+        
+    }
+    
     function testChangeParameters() {
         $model = TrustCare_Model_Lga::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
@@ -134,6 +199,56 @@ class TestOfLga extends UnitTestCase {
                 
                 $params['id'] = $model->id;
                 
+                $model1 = TrustCare_Model_Lga::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->_compareObjectAndParams($model1, $params);
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
+        }
+        else {
+            $this->assertTrue(false, "Can't initialize object");
+        }
+    }
+
+    
+    function testChangeParametersToEmpty() {
+        $model = TrustCare_Model_Lga::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        if(!is_null($model)) {
+            $params['name'] = $model->name . '22';
+            $params['id_state'] = '';
+             
+            try {
+                $model->setOptions($params);
+                $model->save();
+    
+                $params['id'] = $model->id;
+                $params['id_state'] = null;
+    
+                $model1 = TrustCare_Model_Lga::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->_compareObjectAndParams($model1, $params);
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
+        }
+        else {
+            $this->assertTrue(false, "Can't initialize object");
+        }
+    }
+    
+    function testChangeParametersToNull() {
+        $model = TrustCare_Model_Lga::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        if(!is_null($model)) {
+            $params['name'] = $model->name . '22';
+            $params['id_state'] = null;
+             
+            try {
+                $model->setOptions($params);
+                $model->save();
+    
+                $params['id'] = $model->id;
+    
                 $model1 = TrustCare_Model_Lga::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->_compareObjectAndParams($model1, $params);
             }
