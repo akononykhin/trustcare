@@ -66,15 +66,32 @@ CREATE TABLE state (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE facility (
+CREATE TABLE lga (
   `id` int NOT NULL,
+  `id_state` int default NULL,
   `name` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE lga (
+CREATE TABLE facility_type (
   `id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE facility_level (
+  `id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE facility (
+  `id` int NOT NULL,
+  `id_lga` int default NULL,
   `name` text NOT NULL,
+  `id_facility_type` int default NULL,
+  `id_facility_level` int default NULL,
+  `sn` varchar(128) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -561,6 +578,22 @@ alter table state
     add constraint fk_state_id_country foreign key (id_country)
         references country(id) on delete cascade;
 
+alter table lga
+    add constraint fk_lga_id_state foreign key (id_state)
+        references state(id) on delete set NULL;
+
+alter table facility
+    add constraint fk_facility_id_lga foreign key (id_lga)
+        references lga(id) on delete set NULL;
+
+alter table facility
+    add constraint fk_facility_id_facility_type foreign key (id_facility_type)
+        references facility_type(id) on delete set NULL;
+
+alter table facility
+    add constraint fk_facility_id_facility_level foreign key (id_facility_level)
+        references facility_level(id) on delete set NULL;
+
 
 alter table pharmacy
     add constraint fk_pharmacy_id_lga foreign key (id_lga)
@@ -836,6 +869,8 @@ INSERT INTO db_sequence(name,value) VALUES ('physician_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('patient_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('country_id_seq', 300);
 INSERT INTO db_sequence(name,value) VALUES ('state_id_seq', 300);
+INSERT INTO db_sequence(name,value) VALUES ('facility_type_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('facility_level_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('facility_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('lga_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('pharmacy_dictionary_type_id_seq', 100);
@@ -863,11 +898,8 @@ INSERT INTO db_sequence(name,value) VALUES ('frm_community_reproductive_health_t
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_tuberculosis_type_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_ovc_type_id_seq', 1);
 
-
-
-
 INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20121031, 1);
+insert into db_version values (1, 20130116, 1);
