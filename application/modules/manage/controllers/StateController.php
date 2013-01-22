@@ -136,6 +136,13 @@ class StateController extends ZendX_Controller_Action
                     $name = $form->getValue('name');
                     $idCountry = $form->getValue('id_country');
                     
+                    
+                    $checkModel = TrustCare_Model_State::findByName($name);
+                    if(!is_null($checkModel)) {
+                        $errorMsg = sprintf(Zend_Registry::get("Zend_Translate")->_("State '%s' has already been used"), $name);
+                        throw new Exception("");
+                    }
+                    
                     $model = new TrustCare_Model_State();
                     $model->setName($name);
                     $model->setIdCountry($idCountry);
@@ -181,6 +188,15 @@ class StateController extends ZendX_Controller_Action
                 try {
                     $name = $form->getValue('name');
                     $idCountry = $form->getValue('id_country');
+                    
+                    
+                    if($name != $model->getName()) {
+                        $checkModel = TrustCare_Model_State::findByName($name);
+                        if(!is_null($checkModel)) {
+                            $errorMsg = sprintf(Zend_Registry::get("Zend_Translate")->_("State '%s' has already been used"), $name);
+                            throw new Exception("");
+                        }
+                    }
                     
                     $model->setName($name);
                     $model->setIdCountry($idCountry);
@@ -278,6 +294,13 @@ class StateController extends ZendX_Controller_Action
                                 if(is_null($countryModel)) {
                                     throw new Exception(sprintf(Zend_Registry::get("Zend_Translate")->_("ISO code %s not found"), $iso));
                                 }
+                                
+                                
+                                $checkModel = TrustCare_Model_State::findByName($name);
+                                if(!is_null($checkModel)) {
+                                    throw new Exception(sprintf(Zend_Registry::get("Zend_Translate")->_("State '%s' has already been created"), $name));
+                                }
+                                
 
                                 $model = new TrustCare_Model_State(array(
                                     'name' => $name,
@@ -339,7 +362,7 @@ class StateController extends ZendX_Controller_Action
         ));
 
         $countryModel = new TrustCare_Model_Country();
-        $objs = $countryModel->fetchAll();
+        $objs = $countryModel->fetchAll(array(), "name");
         $countryList = array();
         $countryList[] = '';
         foreach($objs as $obj) {
