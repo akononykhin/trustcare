@@ -80,6 +80,20 @@ class TestOfFacilityType extends UnitTestCase {
         $this->assertNull($model, "This entity must not be loaded");
     }
 
+    
+    function testLoadExistingByName() {
+        $model = TrustCare_Model_FacilityType::findByName($this->paramsAtDb['name'], array('mapperOptions' => array('adapter' => $this->db)));
+    
+        $this->_compareObjectAndParams($model, $this->paramsAtDb);
+    }
+    
+    function testLoadUnexistingByName() {
+        $model = TrustCare_Model_FacilityType::findByName($this->paramsAtDb['name'] . '_unknown', array('mapperOptions' => array('adapter' => $this->db)));
+    
+    
+        $this->assertNull($model, "This entity must not be loaded");
+    }
+    
 
     function testSaveNew() {
         $params = array(

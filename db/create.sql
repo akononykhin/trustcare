@@ -61,27 +61,31 @@ CREATE TABLE country (
 
 CREATE TABLE state (
   `id` int NOT NULL,
-  `name` text NOT NULL,
+  `name` varchar(255) NOT NULL,
   `id_country` int default NULL,
+  UNIQUE KEY `cons_state_name` (`name`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE lga (
   `id` int NOT NULL,
   `id_state` int default NULL,
-  `name` text NOT NULL,
+  `name` varchar(255) NOT NULL,
+  UNIQUE KEY `cons_lga_name` (`name`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE facility_type (
   `id` int NOT NULL,
   `name` varchar(255) NOT NULL,
+  UNIQUE KEY `cons_facility_type_name` (`name`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE facility_level (
   `id` int NOT NULL,
   `name` varchar(255) NOT NULL,
+  UNIQUE KEY `cons_facility_level_name` (`name`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -902,4 +906,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20130116, 1);
+insert into db_version values (1, 20130122, 1);

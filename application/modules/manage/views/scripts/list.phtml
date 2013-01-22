@@ -122,7 +122,16 @@ $(document).ready( function () {
                                     $column['filter']['values'] = array($column['filter']['values']);
                                 }
                                 array_walk($column['filter']['values'], function (&$c){ $c = preg_replace("/'/", "/\\'/", $c); $c = "'".$c."'"; });
-                                $values = sprintf("[%s]", join(",", $column['filter']['values']));
+                                if(array_key_exists('use_keys', $column['filter']) && !empty($column['filter']['use_keys'])) {
+                                    $vals = array();
+                                    foreach($column['filter']['values'] as $key=>$value) {
+                                        $vals[] = $key.': '.$value;
+                                    }
+                                    $values = sprintf("{%s}", join(",", $vals));
+                                }
+                                else {
+                                    $values = sprintf("[%s]", join(",", $column['filter']['values']));
+                                }
                             }
                             $newElement = "{'type': 'select', 'values' : ".$values."}";
                             break;
@@ -314,10 +323,6 @@ $(document).ready( function () {
 } );
 
 </script>                 
-<p/>
-<?php if(!empty($this->title)) : ?>
-<div class="inner_title2"><?php echo $this->title;?></div>
-<?php endif;?>
 
 <div id="dialog-confirm">
 </div>
