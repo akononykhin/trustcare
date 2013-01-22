@@ -98,6 +98,20 @@ class TestOfLga extends UnitTestCase {
         $this->assertNull($model, "This entity must not be loaded");
     }
 
+    
+    function testLoadExistingByName() {
+        $model = TrustCare_Model_Lga::findByName($this->paramsAtDb['name'], array('mapperOptions' => array('adapter' => $this->db)));
+    
+        $this->_compareObjectAndParams($model, $this->paramsAtDb);
+    }
+    
+    function testLoadUnexistingByName() {
+        $model = TrustCare_Model_Lga::findByName($this->paramsAtDb['name'] . '_unknown', array('mapperOptions' => array('adapter' => $this->db)));
+    
+    
+        $this->assertNull($model, "This entity must not be loaded");
+    }
+    
 
     function testSaveNew() {
         $params = array(
@@ -125,7 +139,7 @@ class TestOfLga extends UnitTestCase {
         /* Missing */
         try {
             $params = array(
-                    'name' => 'Test3',
+                    'name' => 'Test31',
             );
             $model = new TrustCare_Model_Lga(array('mapperOptions' => array('adapter' => $this->db)));
             $model->setOptions($params);
@@ -145,7 +159,7 @@ class TestOfLga extends UnitTestCase {
         /* Empty */
         try {
             $params = array(
-                'name' => 'Test3',
+                'name' => 'Test32',
                 'id_state' => '',
             );
             $model = new TrustCare_Model_Lga(array('mapperOptions' => array('adapter' => $this->db)));
@@ -166,7 +180,7 @@ class TestOfLga extends UnitTestCase {
         /* Null */
         try {
             $params = array(
-                    'name' => 'Test3',
+                    'name' => 'Test33',
                     'id_state' => null,
             );
             $model = new TrustCare_Model_Lga(array('mapperOptions' => array('adapter' => $this->db)));

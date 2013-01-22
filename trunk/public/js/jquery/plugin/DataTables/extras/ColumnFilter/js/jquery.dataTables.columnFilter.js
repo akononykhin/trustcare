@@ -199,11 +199,22 @@ http://www.datatables.net/plug-ins/filtering
 
     function fnCreateSelect(aData) {
         var index = i;
-        var r = '<select class="search_init select_filter"><option value="" class="search_init">' + label + '</option>', j, iLen = aData.length;
+        var r = '<select class="search_init select_filter"><option value="" class="search_init">' + label + '</option>', j;
 
-        for (j = 0; j < iLen; j++) {
-            r += '<option value="' + aData[j] + '">' + aData[j] + '</option>';
+        switch (typeof aData) {
+            case ("object"):
+                for (var j in aData) {
+                    r += '<option value="' + j + '">' + aData[j] + '</option>';
+                }
+                break;
+            default:
+                var iLen = aData.length;
+                for (j = 0; j < iLen; j++) {
+                    r += '<option value="' + aData[j] + '">' + aData[j] + '</option>';
+                }
+                break;
         }
+
         var select = $(r + '</select>');
         th.html(select);
         th.wrapInner('<span class="filterColumn filter_select" />');
@@ -217,6 +228,7 @@ http://www.datatables.net/plug-ins/filtering
             oTable.fnFilter($(this).val(), index);
         });
     }
+
 
     function _fnRangeLabelPart(iPlace){
         switch(iPlace){

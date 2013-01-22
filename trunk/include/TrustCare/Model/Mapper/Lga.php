@@ -47,6 +47,17 @@ class TrustCare_Model_Mapper_Lga extends TrustCare_Model_Mapper_Abstract
         }
     }
 
+    
+    private function _fillModelForFind(TrustCare_Model_Lga $model, $row)
+    {
+        $model->setSkipTrackChanges(true);
+        $model->setId($row->id)
+              ->setIdState($row->id_state)  
+              ->setName($row->name);
+        $model->setSkipTrackChanges(false);
+    }
+    
+    
     /**
      * @param  int $id 
      * @param  TrustCare_Model_Lga $model 
@@ -59,15 +70,32 @@ class TrustCare_Model_Mapper_Lga extends TrustCare_Model_Mapper_Abstract
             return false;
         }
         $row = $result->current();
-        $model->setSkipTrackChanges(true);
-        $model->setId($row->id)
-              ->setIdState($row->id_state)  
-              ->setName($row->name);
-        $model->setSkipTrackChanges(false);
-              
+        $this->_fillModelForFind($model, $row);
+                      
         return true;
     }
 
+    
+    /**
+     * @param  string $value
+     * @param  TrustCare_Model_Lga $model
+     * @return void
+     */
+    public function findByName($value, TrustCare_Model_Lga $model)
+    {
+        $select = $this->getDbTable()->select();
+        $select->from($this->getDbTable(), array('*'))
+               ->where("name=?", $value);
+        $result = $this->getDbTable()->fetchAll($select);
+        if (0 == count($result)) {
+            return false;
+        }
+        $row = $result->current();
+        $this->_fillModelForFind($model, $row);
+    
+        return true;
+    }
+    
     /**
      * @return array
      */

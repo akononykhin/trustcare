@@ -20,6 +20,12 @@ class StateController extends ZendX_Controller_Action
     
     public function listAction()
     {
+        $countryModel = new TrustCare_Model_Country();
+        $countries = array();
+        foreach ($countryModel->fetchAll(array(), "name") as $obj) {
+            $countries[$obj->getId()] = $obj->getName();
+        }
+            
         $columnsInfo = array(
             'name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Name"),
@@ -29,6 +35,11 @@ class StateController extends ZendX_Controller_Action
             ),
             'country_name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Country"),
+                'filter' => array(
+                    'type' => 'select',
+                    'values' => $countries,
+                    'use_keys' => true,
+                ),
             ),
         );
 
@@ -74,7 +85,7 @@ class StateController extends ZendX_Controller_Action
                                                                 array('state.*'))
                                                          ->joinLeft(array('country'), 'state.id_country = country.id', array('country_name' => 'country.name'));
 
-        $this->processListLoadAjaxRequest($select);
+        $this->processListLoadAjaxRequest($select, array('country_name' => 'country.id'));
         
         $rows = Zend_Registry::getInstance()->dbAdapter->selectWithLimit($select->__toString(), $iFilteredTotal);
         

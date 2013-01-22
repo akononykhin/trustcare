@@ -43,6 +43,16 @@ class TrustCare_Model_Mapper_Country extends TrustCare_Model_Mapper_Abstract
         }
     }
 
+    
+    private function _fillModelForFind(TrustCare_Model_Country $model, $row)
+    {
+        $model->setSkipTrackChanges(true);
+        $model->setId($row->id)
+              ->setIso3166($row->iso_3166)
+              ->setName($row->name);
+        $model->setSkipTrackChanges(false);
+    }
+    
     /**
      * @param  int $id 
      * @param  TrustCare_Model_Country $model 
@@ -54,13 +64,10 @@ class TrustCare_Model_Mapper_Country extends TrustCare_Model_Mapper_Abstract
         if (0 == count($result)) {
             return false;
         }
+        
         $row = $result->current();
-        $model->setSkipTrackChanges(true);
-        $model->setId($row->id)
-              ->setIso3166($row->iso_3166)
-              ->setName($row->name);
-        $model->setSkipTrackChanges(false);
-              
+        $this->_fillModelForFind($model, $row);
+                      
         return true;
     }
 
@@ -72,22 +79,22 @@ class TrustCare_Model_Mapper_Country extends TrustCare_Model_Mapper_Abstract
     public function findByIso($value, TrustCare_Model_Country $model)
     {
         $select = $this->getDbTable()->select();
-        $select->from($this->getDbTable(), array('id'))
+        $select->from($this->getDbTable(), array('*'))
                ->where("iso_3166=?", $value);
         $result = $this->getDbTable()->fetchAll($select);
         if (0 == count($result)) {
             return false;
         }
         $row = $result->current();
-        $this->find($row['id'], $model);
-        
+        $this->_fillModelForFind($model, $row);
+                
         return true;
     }
     
     /**
      * @return array
      */
-    public function fetchAll(array $clauses = array())
+    public function fetchAll(array $clauses = array(), $orderClause = '')
     {
         $entries   = array();
         
@@ -97,7 +104,13 @@ class TrustCare_Model_Mapper_Country extends TrustCare_Model_Mapper_Abstract
             $where[] = $clause;
         }
 
-        $query = sprintf("select id from %s where %s;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        $query = sprintf("select id from %s where %s", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        if(!empty($orderClause)) {
+            $query .= ' order by ' . $orderClause;
+        }
+        $query .= ';';
+        
+        
         $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
         $resultSet = $this->getDbAdapter()->fetchAll($query);
         foreach ($resultSet as $row) {

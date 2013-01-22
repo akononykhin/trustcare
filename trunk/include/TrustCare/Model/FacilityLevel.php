@@ -78,6 +78,27 @@ class TrustCare_Model_FacilityLevel extends TrustCare_Model_Abstract
     }
 
     
+    /**
+     * Find an entry by name
+     *
+     * @param  string $value
+     * @param array|null $options
+     * @return TrustCare_Model_FacilityLevel
+     */
+    public static function findByName($value, array $options = null)
+    {
+        $newEntity = new TrustCare_Model_FacilityLevel($options);
+        $result = $newEntity->getMapper()->findByName($value, $newEntity);
+    
+        if(!$result) {
+            unset($newEntity);
+            $newEntity = null;
+        }
+    
+        return $newEntity;
+    }
+    
+    
     public function delete()
     {
         parent::delete();
