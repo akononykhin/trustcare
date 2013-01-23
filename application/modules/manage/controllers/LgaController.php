@@ -20,11 +20,33 @@ class LgaController extends ZendX_Controller_Action
     
     public function listAction()
     {
+        $countries = array();
+        $states = array();
+        $stateModel = new TrustCare_Model_State();
+        foreach ($stateModel->fetchAll(array(), "id_country,name") as $obj) {
+            $countryId = $obj->getIdCountry();
+            if(!array_key_exists($countryId, $countries)) {
+                $countryObj = TrustCare_Model_Country::find($countryId);
+                $countries[$countryId] = $countryObj->getName();
+            }
+            $countryName = array_key_exists($countryId, $countries) ? $countries[$countryId] : '';
+            $states[$obj->getId()] = sprintf("%s/%s", $countryName, $obj->getName());
+        }
+        asort($states);
+        
         $columnsInfo = array(
             'name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Name"),
                 'filter' => array(
                     'type' => 'text',
+                ),
+            ),
+            'state_name' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("State"),
+                'filter' => array(
+                    'type' => 'select',
+                    'values' => $states,
+                    'use_keys' => true,
                 ),
             ),
         );
@@ -36,10 +58,12 @@ class LgaController extends ZendX_Controller_Action
                     'text' => Zend_Registry::get("Zend_Translate")->_("Create"),
                     'url' => $this->view->url(array('action' => 'create'))
                 ),
+/*                    
                 array(
                     'text' => Zend_Registry::get("Zend_Translate")->_("Import"),
                     'url' => $this->view->url(array('action' => 'import'))
                 ),
+*/                
             ),
             'defSortColumn' => 1,
             'defSortDir' => 'asc',
@@ -66,9 +90,12 @@ class LgaController extends ZendX_Controller_Action
         
         
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_ASSOC);
-        $select = Zend_Registry::getInstance()->dbAdapter->select()->from("lga");
-
-        $this->processListLoadAjaxRequest($select);
+        $select = Zend_Registry::getInstance()->dbAdapter->select()
+                                                         ->from("lga",
+                                                                 array('lga.*'))
+                                                         ->joinLeft(array('state'), 'lga.id_state = state.id', array('state_name' => 'state.name'));
+        
+        $this->processListLoadAjaxRequest($select, array('state_name' => 'state.id'));
         
         $rows = Zend_Registry::getInstance()->dbAdapter->selectWithLimit($select->__toString(), $iFilteredTotal);
         
@@ -118,8 +145,15 @@ class LgaController extends ZendX_Controller_Action
                 try {
                     $name = $form->getValue('name');
                     
+                    $checkModel = TrustCare_Model_Lga::findByName($name);
+                    if(!is_null($checkModel)) {
+                        $errorMsg = sprintf(Zend_Registry::get("Zend_Translate")->_("LGA '%s' has already been used"), $name);
+                        throw new Exception("");
+                    }
+                    
                     $model = new TrustCare_Model_Lga();
                     $model->setName($name);
+                    $model->setIdState($form->getValue('id_state'));
                     $model->save();
 
                     $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
@@ -162,7 +196,17 @@ class LgaController extends ZendX_Controller_Action
                 try {
                     $name = $form->getValue('name');
                     
+                    
+                    if($name != $model->getName()) {
+                        $checkModel = TrustCare_Model_Lga::findByName($name);
+                        if(!is_null($checkModel)) {
+                            $errorMsg = sprintf(Zend_Registry::get("Zend_Translate")->_("LGA '%s' has already been used"), $name);
+                            throw new Exception("");
+                        }
+                    }
+                    
                     $model->setName($name);
+                    $model->setIdState($form->getValue('id_state'));
                     $model->save();
                     
                     $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
@@ -179,6 +223,7 @@ class LgaController extends ZendX_Controller_Action
         else {
             $form->getElement("id")->setValue($id);
             $form->getElement("name")->setValue($model->name);
+            $form->getElement("id_state")->setValue($model->id_state);
         }
         
         $this->view->form = $form;
@@ -311,6 +356,29 @@ class LgaController extends ZendX_Controller_Action
             'size'          => 40,
             'tabindex'      => $tabIndex++,
             'required'      => true
+        ));
+        
+        $countries = array();
+        $states = array();
+        $states[] = '';
+        $stateModel = new TrustCare_Model_State();
+        foreach ($stateModel->fetchAll(array(), "id_country,name") as $obj) {
+            $countryId = $obj->getIdCountry();
+            if(!array_key_exists($countryId, $countries)) {
+                $countryObj = TrustCare_Model_Country::find($countryId);
+                $countries[$countryId] = $countryObj->getName();
+            }
+            $countryName = array_key_exists($countryId, $countries) ? $countries[$countryId] : '';
+            $states[$obj->getId()] = sprintf("%s/%s", $countryName, $obj->getName());
+        }
+        asort($states);
+        
+        $form->addElement('select', 'id_state', array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("State"),
+                'required'      => true,
+                'multioptions'  => $states,
+                'tabindex'      => $tabIndex++,
+                'description'   => '',
         ));
         
         $form->addElement('submit', 'send', array(
