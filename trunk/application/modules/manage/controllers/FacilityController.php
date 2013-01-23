@@ -277,6 +277,13 @@ class FacilityController extends ZendX_Controller_Action
                     $form->addError(Zend_Registry::get("Zend_Translate")->_("Upload Error"));
                 }
                 else {
+                    $id_country = $form->getValue("id_country");
+                    $states = array();
+                    $lgas = array();
+                    $types = array();
+                    $levels = array();
+                    
+                    
                     $fileLocation = $form->import_file->getFileName();
                     $separator = $form->getValue("separator");
                     
@@ -297,20 +304,113 @@ class FacilityController extends ZendX_Controller_Action
                         while(($row = fgetcsv($fileHandle, 0, $separator))) {
 
                             try {
-                                if(1 > count($row)) {
+                                if(6 > count($row)) {
                                     throw new Exception(Zend_Registry::get("Zend_Translate")->_("Incorrect number of columns"));
                                 }
-                                $name = $row[0];
-                                if('#' == $tadig{0}) {
+                                
+                                if('#' == $row[0]{0}) {
                                     continue;
                                 }
                                 
-                                if(empty($name)) {
-                                    throw new Exception(sprintf("Empty name isn't allowed."));
+                                $sn = trim($row[0]);
+                                $stateName = trim($row[1]);
+                                $lgaName = trim($row[2]);
+                                $facilityName = trim($row[3]);
+                                $type = trim($row[4]);
+                                $level = trim($row[5]);
+
+                                /* check State */
+                                if(empty($stateName)) {
+                                    throw new Exception(sprintf("Empty state name isn't allowed."));
+                                }
+                                if(array_key_exists($stateName, $states)) {
+                                    $id_state = $states[$stateName];
+                                }
+                                else {
+                                    $stateObj = TrustCare_Model_State::findByName($stateName);
+                                    if(is_null($stateObj)) {
+                                        $stateObj = new TrustCare_Model_State(array(
+                                                'name' => $stateName,
+                                                'id_country' => $id_country,
+                                                'mapperOptions' => array('adapter' => $this->db),
+                                        ));
+                                        $stateObj->save();
+                                    }
+                                    $id_state = $stateObj->getId();
+                                    $states[$stateName] = $id_state;
+                                }
+
+                                /* check LGA */
+                                if(empty($lgaName)) {
+                                    throw new Exception(sprintf("Empty lga name isn't allowed."));
+                                }
+                                if(array_key_exists($lgaName, $lgas)) {
+                                    $id_lga = $lgas[$lgaName];
+                                }
+                                else {
+                                    $lgaObj = TrustCare_Model_Lga::findByName($lgaName);
+                                    if(is_null($lgaObj)) {
+                                        $lgaObj = new TrustCare_Model_Lga(array(
+                                                'name' => $lgaName,
+                                                'id_state' => $id_state,
+                                                'mapperOptions' => array('adapter' => $this->db),
+                                        ));
+                                        $lgaObj->save();
+                                    }
+                                    $id_lga = $lgaObj->getId();
+                                    $lgas[$lgaName] = $id_lga;
+                                }
+                                
+                                /* check Type */
+                                $id_facility_type = null;
+                                if(!empty($type)) {
+                                    if(array_key_exists($type, $types)) {
+                                        $id_facility_type = $types[$type];
+                                    }
+                                    else {
+                                        $typeObj = TrustCare_Model_FacilityType::findByName($type);
+                                        if(is_null($typeObj)) {
+                                            $typeObj = new TrustCare_Model_FacilityType(array(
+                                                    'name' => $type,
+                                                    'mapperOptions' => array('adapter' => $this->db),
+                                            ));
+                                            $typeObj->save();
+                                        }
+                                        $id_facility_type = $typeObj->getId();
+                                        $types[$type] = $id_facility_type;
+                                    }
+                                }
+                                
+                                /* check Level */
+                                $id_facility_level = null;
+                                if(!empty($level)) {
+                                    if(array_key_exists($level, $levels)) {
+                                        $id_facility_level = $levels[$level];
+                                    }
+                                    else {
+                                        $levelObj = TrustCare_Model_FacilityLevel::findByName($level);
+                                        if(is_null($levelObj)) {
+                                            $levelObj = new TrustCare_Model_FacilityLevel(array(
+                                                    'name' => $level,
+                                                    'mapperOptions' => array('adapter' => $this->db),
+                                            ));
+                                            $levelObj->save();
+                                        }
+                                        $id_facility_level = $levelObj->getId();
+                                        $levels[$level] = $id_facility_level;
+                                    }
+                                }
+                                
+                                if(empty($facilityName)) {
+                                    throw new Exception(sprintf("Empty facility name isn't allowed."));
                                 }
                                 
                                 $model = new TrustCare_Model_Facility(array(
-                                    'name' => $name,
+                                    'name' => $facilityName,
+                                    'sn' => $sn,
+                                    'id_lga' => $id_lga,
+                                    'id_facility_type' => $id_facility_type, 
+                                    'id_facility_level' => $id_facility_level, 
                                     'mapperOptions' => array('adapter' => $this->db),
                                 ));
                                 $model->save();
@@ -452,6 +552,22 @@ class FacilityController extends ZendX_Controller_Action
                     ->addValidator('Size', false, $maxFileSizeInMBytes * 1024 * 1024);
         $form->addElement($fileElement);
 
+        
+        $countryModel = new TrustCare_Model_Country();
+        $objs = $countryModel->fetchAll(array(), "name");
+        $countryList = array();
+        $countryList[''] = '';
+        foreach($objs as $obj) {
+            $countryList[$obj->getId()] = $obj->getName();
+        }
+        $form->addElement('select', 'id_country', array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Country"),
+                'description'   => Zend_Registry::get("Zend_Translate")->_("Loading facilities are placed in this country"),
+                'required'      => true,
+                'multioptions'  => $countryList,
+                'tabindex'      => $tabIndex++,
+        ));
+        
         $form->addElement('submit', 'send', array(
             'label'     => Zend_Registry::get("Zend_Translate")->_("Import"),
             'tabindex'  => $tabIndex++,
