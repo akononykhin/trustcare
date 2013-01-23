@@ -35,7 +35,6 @@ alter table state add UNIQUE KEY `cons_state_name` (`name`)
         if('42000' != $ex->getCode()) {
             return false;
         }
-        return false;
     }
 
     try {
