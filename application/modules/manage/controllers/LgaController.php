@@ -82,7 +82,7 @@ class LgaController extends ZendX_Controller_Action
                                                                  array('lga.*'))
                                                          ->joinLeft(array('state'), 'lga.id_state = state.id', array('state_name' => 'state.name'));
         
-        $this->processListLoadAjaxRequest($select, array('state_name' => 'state.id'));
+        $this->processListLoadAjaxRequest($select, array('state_name' => 'state.id', 'name' => 'lga.name'));
         
         $rows = Zend_Registry::getInstance()->dbAdapter->selectWithLimit($select->__toString(), $iFilteredTotal);
         
