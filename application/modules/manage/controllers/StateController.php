@@ -177,7 +177,7 @@ class StateController extends ZendX_Controller_Action
         $id = $this->_getParam('id');
         $model = TrustCare_Model_State::find($id);
         if(is_null($model)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown country with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown state with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown State")));
             return;
         }
@@ -235,7 +235,7 @@ class StateController extends ZendX_Controller_Action
         $id = $this->_getParam('id');
         $model = TrustCare_Model_State::find($id);
         if(is_null($model)) {
-            $this->getLogger()->error(sprintf("'%s' tries to delete unknown country with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->getLogger()->error(sprintf("'%s' tries to delete unknown state with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown State")));
             return;
         }

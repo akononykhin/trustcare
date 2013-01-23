@@ -457,6 +457,56 @@ class BootstrapApp extends BootstrapMain
                                         'resource'      => 'resource:admin.system_dict',
                                         'privilege'     => 'create'
                                     ),
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Types"),
+                                        'controller'    => 'facility_type',
+                                        'action'        => 'list',
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'view',
+                                        'pages'         => array(
+                                            array(
+                                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                                'controller'    => 'facility_type',
+                                                'action'        => 'create',
+                                                'visible'       => false,
+                                                'resource'      => 'resource:admin.system_dict',
+                                                'privilege'     => 'create'
+                                            ),
+                                            array(
+                                                    'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                                    'controller'    => 'facility_type',
+                                                    'action'        => 'edit',
+                                                    'visible'       => false,
+                                                    'resource'      => 'resource:admin.system_dict',
+                                                    'privilege'     => 'edit'
+                                            ),
+                                        ),
+                                    ),
+                                    array(
+                                        'label'         => Zend_Registry::get("Zend_Translate")->_("Levels"),
+                                        'controller'    => 'facility_level',
+                                        'action'        => 'list',
+                                        'resource'      => 'resource:admin.system_dict',
+                                        'privilege'     => 'view',
+                                        'pages'         => array(
+                                            array(
+                                                'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                                                'controller'    => 'facility_level',
+                                                'action'        => 'create',
+                                                'visible'       => false,
+                                                'resource'      => 'resource:admin.system_dict',
+                                                'privilege'     => 'create'
+                                            ),
+                                            array(
+                                                    'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                                    'controller'    => 'facility_level',
+                                                    'action'        => 'edit',
+                                                    'visible'       => false,
+                                                    'resource'      => 'resource:admin.system_dict',
+                                                    'privilege'     => 'edit'
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                         ),
