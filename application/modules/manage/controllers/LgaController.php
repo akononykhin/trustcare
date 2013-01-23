@@ -20,19 +20,6 @@ class LgaController extends ZendX_Controller_Action
     
     public function listAction()
     {
-        $countries = array();
-        $states = array();
-        $stateModel = new TrustCare_Model_State();
-        foreach ($stateModel->fetchAll(array(), "id_country,name") as $obj) {
-            $countryId = $obj->getIdCountry();
-            if(!array_key_exists($countryId, $countries)) {
-                $countryObj = TrustCare_Model_Country::find($countryId);
-                $countries[$countryId] = $countryObj->getName();
-            }
-            $countryName = array_key_exists($countryId, $countries) ? $countries[$countryId] : '';
-            $states[$obj->getId()] = sprintf("%s/%s", $countryName, $obj->getName());
-        }
-        asort($states);
         
         $columnsInfo = array(
             'name' => array(
@@ -45,7 +32,7 @@ class LgaController extends ZendX_Controller_Action
                 'title' => Zend_Registry::get("Zend_Translate")->_("State"),
                 'filter' => array(
                     'type' => 'select',
-                    'values' => $states,
+                    'values' => $this->getStateList(),
                     'use_keys' => true,
                 ),
             ),
@@ -358,25 +345,10 @@ class LgaController extends ZendX_Controller_Action
             'required'      => true
         ));
         
-        $countries = array();
-        $states = array();
-        $states[] = '';
-        $stateModel = new TrustCare_Model_State();
-        foreach ($stateModel->fetchAll(array(), "id_country,name") as $obj) {
-            $countryId = $obj->getIdCountry();
-            if(!array_key_exists($countryId, $countries)) {
-                $countryObj = TrustCare_Model_Country::find($countryId);
-                $countries[$countryId] = $countryObj->getName();
-            }
-            $countryName = array_key_exists($countryId, $countries) ? $countries[$countryId] : '';
-            $states[$obj->getId()] = sprintf("%s/%s", $countryName, $obj->getName());
-        }
-        asort($states);
-        
         $form->addElement('select', 'id_state', array(
                 'label'         => Zend_Registry::get("Zend_Translate")->_("State"),
                 'required'      => true,
-                'multioptions'  => $states,
+                'multioptions'  => array('' => '') + $this->getStateList(),
                 'tabindex'      => $tabIndex++,
                 'description'   => '',
         ));
@@ -426,6 +398,27 @@ class LgaController extends ZendX_Controller_Action
         ));
         
         return $form;
+    }
+    
+    private function getStateList()
+    {
+        $countries = array();
+        $states = array();
+        $stateModel = new TrustCare_Model_State();
+        foreach ($stateModel->fetchAll(array(), "id_country,name") as $obj) {
+            $countryId = $obj->getIdCountry();
+            if(!array_key_exists($countryId, $countries)) {
+                $countryObj = TrustCare_Model_Country::find($countryId);
+                if(!is_null($countryObj)) {
+                    $countries[$countryId] = $countryObj->getName();
+                }
+            }
+            $countryName = array_key_exists($countryId, $countries) ? $countries[$countryId] : '';
+            $states[$obj->getId()] = sprintf("%s/%s", $countryName, $obj->getName());
+        }
+        asort($states);
+        
+        return $states;
     }
 }
 

@@ -94,7 +94,7 @@ class TrustCare_Model_Mapper_FacilityType extends TrustCare_Model_Mapper_Abstrac
     /**
      * @return array
      */
-    public function fetchAll(array $clauses = array())
+    public function fetchAll(array $clauses = array(), $orderClause = '')
     {
         $entries   = array();
         
@@ -105,7 +105,12 @@ class TrustCare_Model_Mapper_FacilityType extends TrustCare_Model_Mapper_Abstrac
         }
         
         
-        $query = sprintf("select id from %s where %s;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        $query = sprintf("select id from %s where %s", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        if(!empty($orderClause)) {
+            $query .= ' order by ' . $orderClause;
+        }
+        $query .= ';';
+                
         $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
         $resultSet = $this->getDbAdapter()->fetchAll($query);
         foreach ($resultSet as $row) {
