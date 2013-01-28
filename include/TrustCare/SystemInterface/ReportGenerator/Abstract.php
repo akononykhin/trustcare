@@ -8,6 +8,9 @@ abstract class TrustCare_SystemInterface_ReportGenerator_Abstract
 {
     const CODE_CARE = 'care';
     const CODE_COMMUNITY = 'community';
+    const CODE_NAFDAC = 'nafdac';
+    
+    protected $_runTimePrefix = '';
     
     
     /**
@@ -63,7 +66,7 @@ abstract class TrustCare_SystemInterface_ReportGenerator_Abstract
         $fileReportDesign = sprintf("%s/%s", realpath(APPLICATION_PATH . '/../reports'), $designFile);
         
         set_time_limit(0);
-        $BIRT_RE_HOME = realpath (APPLICATION_PATH . "/../external/birt-runtime");
+        $BIRT_RE_HOME = realpath (APPLICATION_PATH . "/../external/birt-runtime" . $this->_runTimePrefix);
         $BIRTCLASSPATH = "";
         
         $libDir = $BIRT_RE_HOME . "/lib";
