@@ -111,6 +111,7 @@ class NafdacController extends ZendX_Controller_Action
                     
                     $nafdacModel->setFilename($filename);
                     $nafdacModel->save();
+                    $db->commit();
                     
                     $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
                     if(!file_exists($fileReportOutput)) {
@@ -121,7 +122,6 @@ class NafdacController extends ZendX_Controller_Action
                     $this->outputFileAsAttachment($fileReportOutput);
                     return;
                     
-                    $db->commit();
                 }
                 catch(Exception $ex) {
                     $db->rollback();
