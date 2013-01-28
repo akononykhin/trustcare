@@ -8,6 +8,14 @@
 
 class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
 {
+    const OUTCOME_REACTION_RECOVERED_FULLY = 1;
+    const OUTCOME_REACTION_CONGENITAL_ABNORMALITY = 2;
+    const OUTCOME_REACTION_DEATH = 3;
+    const OUTCOME_REACTION_RECOVERED_WITH_DISABILITY = 4;
+    const OUTCOME_REACTION_LIFE_THREATENING = 5;
+    const OUTCOME_REACTION_OTHER = 6;
+    
+    
     protected $_id;
     protected $_id_frm_care;
     protected $_generation_date;
@@ -15,6 +23,7 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     protected $_adr_description;
     protected $_was_admitted;
     protected $_was_hospitalization_prolonged;
+    protected $_duration_of_admission;
     protected $_treatment_of_reaction;
     protected $_outcome_of_reaction_type;
     protected $_outcome_of_reaction_desc;
@@ -168,6 +177,25 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     public function getWasHospitalizationProlonged()
     {
         return !empty($this->_was_hospitalization_prolonged) ? true : false;
+    }
+    
+    /**
+     * @param  value $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setDurationOfAdmission($value)
+    {
+        $this->_parameterChanged('duration_of_admission', $value);
+        $this->_duration_of_admission = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getDurationOfAdmission()
+    {
+        return $this->_duration_of_admission;
     }
     
     /**
@@ -566,5 +594,19 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     {
         parent::delete();
         $this->id = null;
+    }
+    
+    public static function getOutcomeReactionTypes()
+    {
+        $types = array();
+        
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_RECOVERED_FULLY] = Zend_Registry::get("Zend_Translate")->_("Recovered Fully");
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_CONGENITAL_ABNORMALITY] = Zend_Registry::get("Zend_Translate")->_("Congenital Abnormality");
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_DEATH] = Zend_Registry::get("Zend_Translate")->_("Death");
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_RECOVERED_WITH_DISABILITY] = Zend_Registry::get("Zend_Translate")->_("Recovered with Disability");
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_LIFE_THREATENING] = Zend_Registry::get("Zend_Translate")->_("Life Threatening");
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_OTHER] = Zend_Registry::get("Zend_Translate")->_("Other");
+        
+        return $types;
     }
 }

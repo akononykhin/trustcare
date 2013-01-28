@@ -34,6 +34,9 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('was_hospitalization_prolonged')) {
             $data['was_hospitalization_prolonged'] = $model->getWasHospitalizationProlonged() ? 1 : 0;
         }
+        if(!$model->isExists() || $model->isParameterChanged('duration_of_admission')) {
+            $data['duration_of_admission'] = $model->getDurationOfAdmission();
+        }
         if(!$model->isExists() || $model->isParameterChanged('treatment_of_reaction')) {
             $data['treatment_of_reaction'] = $model->getTreatmentOfReaction();
         }
@@ -135,6 +138,7 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
               ->setAdrDescription($row->adr_description)
               ->setWasAdmitted($row->was_admitted)
               ->setWasHospitalizationProlonged($row->was_hospitalization_prolonged)
+              ->setDurationOfAdmission($row->duration_of_admission)
               ->setTreatmentOfReaction($row->treatment_of_reaction)
               ->setOutcomeOfReactionType($row->outcome_of_reaction_type)
               ->setOutcomeOfReactionDesc($row->outcome_of_reaction_desc)

@@ -37,6 +37,7 @@ class TestOfNafdacMedicine extends UnitTestCase {
                 'id_nafdac' => 1,
                 'name' => '11',
                 'dosage' => '12',
+                'route'   => '100',
                 'started' => '13',
                 'stopped' => '14',
                 'reason' => '15',
@@ -85,6 +86,7 @@ class TestOfNafdacMedicine extends UnitTestCase {
             'id_nafdac' => 2,
             'name' => '11',
             'dosage' => '12',
+            'route'   => '100',
             'started' => '13',
             'stopped' => '14',
             'reason' => '15',
@@ -117,6 +119,7 @@ class TestOfNafdacMedicine extends UnitTestCase {
             'id_nafdac' => 1,
             'name' => '11',
             'dosage' => '12',
+            'route'   => '100',
             'started' => '13',
             'stopped' => '14',
             'reason' => '15',
@@ -145,6 +148,7 @@ class TestOfNafdacMedicine extends UnitTestCase {
             $params['id_nafdac'] = 1 == $model->id_nafdac ? 2 : 1;
             $params['name'] = $model->name . '_11';
             $params['dosage'] = $model->dosage . '_12';
+            $params['route'] = $model->route . '_100';
             $params['started'] = $model->started . '_13';
             $params['stopped'] = $model->stopped . '_14';
             $params['reason'] = $model->reason . '_15';
@@ -273,7 +277,8 @@ class TestOfNafdacMedicine extends UnitTestCase {
         $this->assertEqual($model->id_nafdac, $params['id_nafdac'], "Incorrect 'id_nafdac': %s");
         $this->assertEqual($model->name, $params['name'], "Incorrect 'name': %s");
         $this->assertEqual($model->dosage, $params['dosage'], "Incorrect 'dosage': %s");
-        $this->assertEqual($model->started, $params['started'], "Incorrect 'started': %s");
+        $this->assertEqual($model->route, $params['route'], "Incorrect 'route': %s");
+        $this->assertEqual($model->name, $params['name'], "Incorrect 'name': %s");
         $this->assertEqual($model->stopped, $params['stopped'], "Incorrect 'stopped': %s");
         $this->assertEqual($model->reason, $params['reason'], "Incorrect 'reason': %s");
     }

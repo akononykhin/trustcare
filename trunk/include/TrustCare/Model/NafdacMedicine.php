@@ -12,6 +12,7 @@ class TrustCare_Model_NafdacMedicine extends TrustCare_Model_Abstract
     protected $_id_nafdac;
     protected $_name;
     protected $_dosage;
+    protected $_route;
     protected $_started;
     protected $_stopped;
     protected $_reason;
@@ -90,6 +91,25 @@ class TrustCare_Model_NafdacMedicine extends TrustCare_Model_Abstract
     public function getDosage()
     {
         return $this->_dosage;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacMedicine
+     */
+    public function setRoute($value)
+    {
+        $this->_parameterChanged('route', $value);
+        $this->_route = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getRoute()
+    {
+        return $this->_route;
     }
     
     /**
