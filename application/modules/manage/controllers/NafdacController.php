@@ -102,7 +102,8 @@ class NafdacController extends ZendX_Controller_Action
                         $medModel->save();
                         
                     }
-
+                    $db->commit();
+                    
                     $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
                     
                     $fileName = $obj = $generator->generate(array(
@@ -111,7 +112,6 @@ class NafdacController extends ZendX_Controller_Action
                     
                     $nafdacModel->setFilename($filename);
                     $nafdacModel->save();
-                    $db->commit();
                     
                     $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
                     if(!file_exists($fileReportOutput)) {
