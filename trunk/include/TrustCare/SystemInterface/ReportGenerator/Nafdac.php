@@ -6,7 +6,7 @@
 
 class TrustCare_SystemInterface_ReportGenerator_Nafdac extends TrustCare_SystemInterface_ReportGenerator_Abstract
 {
-    protected $_runTimePrefix = '_3_7_2';
+    protected $_runTimePrefix = '';
     
     public function getCode()
     {
@@ -37,7 +37,7 @@ class TrustCare_SystemInterface_ReportGenerator_Nafdac extends TrustCare_SystemI
 
         $this->_generateReportFile($designFile, $fileReportOutput, $parameters, $format);
 
-        return $filename;
+        return $fileName;
     }
     
     public function getDefaultFormat()
