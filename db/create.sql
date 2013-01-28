@@ -577,6 +577,46 @@ CREATE TABLE report_community (
 
 
 
+CREATE TABLE nafdac (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `filename` varchar(255),
+  `adr_description` text,
+  `was_admitted` bool default false,
+  `was_hospitalization_prolonged` bool default false,
+  `treatment_of_reaction` varchar(255) default NULL,
+  `outcome_of_reaction_type` int,
+  `outcome_of_reaction_desc` varchar(255) default NULL,
+  `drug_brand_name` varchar(255) default NULL,
+  `drug_generic_name` varchar(255) default NULL,
+  `drug_batch_number` varchar(255) default NULL,
+  `drug_nafdac_number` varchar(255) default NULL,
+  `drug_expiry_name` varchar(255) default NULL,
+  `drug_manufactor` varchar(255) default NULL,
+  `drug_indication_for_use` varchar(255) default NULL,
+  `drug_dosage` varchar(255) default NULL,
+  `drug_route_of_administration` varchar(255) default NULL,
+  `drug_date_started` varchar(255) default NULL,
+  `drug_date_stopped` varchar(255) default NULL,
+  `reporter_name` varchar(255) default NULL,
+  `reporter_address` varchar(255) default NULL,
+  `reporter_profession` varchar(255) default NULL,
+  `reporter_contact` varchar(255) default NULL,
+  UNIQUE KEY `cons_nafdac_id_frm_care`  (`id_frm_care`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE nafdac_medicine (
+  `id` int NOT NULL,
+  `id_nafdac` int NOT NULL,
+  `name` varchar(255) default NULL,
+  `dosage` varchar(255) default NULL,
+  `started` varchar(255) default NULL,
+  `stopped` varchar(255) default NULL,
+  `reason` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 alter table state
     add constraint fk_state_id_country foreign key (id_country)
@@ -862,6 +902,14 @@ alter table report_community
     add constraint fk_report_community_id_user foreign key (id_user)
         references user(id) on delete set NULL;
 
+alter table nafdac
+    add constraint fk_nafdac_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table nafdac_medicine
+    add constraint fk_nafdac_medicine_id_nafdac foreign key (id_nafdac)
+        references nafdac(id) on delete cascade;
+
 
 
 insert into user(id, login, password, is_active,role) values (1, 'admin', MD5('admin'), 1, 'pharmacy_manager');
@@ -906,4 +954,7 @@ INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 
 
-insert into db_version values (1, 20130122, 1);
+INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
+
+insert into db_version values (1, 20130128, 2);
