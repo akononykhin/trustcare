@@ -29,6 +29,12 @@ class NafdacController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Necessary to choose Pharmaceutical Care form for generating NAFDAC.")));
             return;
         }
+        
+        $nafdacObj = TrustCare_Model_Nafdac::findByIdFrmCare($idFrmCare);
+        if(!is_null($nafdacObj)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("NAFDAC form has already been generated for this Pharmaceutical Care form.")));
+            return;
+        }
 
         $form = $this->_getParametersForm();
         $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
@@ -36,26 +42,71 @@ class NafdacController extends ZendX_Controller_Action
             if ($form->isValid($this->getRequest()->getPost())) {
     
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+                $db_options = Zend_Registry::get('dbOptions');
+                $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+                $db->beginTransaction();
                 try {
-/*                    
-                    $name = $form->getValue('name');
-                    $iso_3166 = $form->getValue('iso_3166');
-    
-                    $checkModel = TrustCare_Model_Country::findByIso($iso_3166);
-                    if(!is_null($checkModel)) {
-                        $errorMsg = sprintf(Zend_Registry::get("Zend_Translate")->_("ISO code %s has already been used"), $iso_3166);
-                        throw new Exception("");
+                    $nafdacModel = new TrustCare_Model_Nafdac(
+                            array(
+                                    'id_frm_care' => $idFrmCare,
+                                    'adr_description' => $form->getSubForm("adr")->getValue('adr_description'),
+                                    'was_admitted' => $form->getSubForm("adr")->getValue('was_admitted'),
+                                    'was_hospitalization_prolonged' => $form->getSubForm("adr")->getValue('was_hospitalization_prolonged'),
+                                    'duration_of_admission' => $form->getSubForm("adr")->getValue('duration_of_admission'),
+                                    'treatment_of_reaction' => $form->getSubForm("adr")->getValue('treatment_of_reaction'),
+                                    'outcome_of_reaction_type' => $form->getSubForm("adr")->getValue('outcome_of_reaction_type'),
+                                    'outcome_of_reaction_desc' => $form->getSubForm("adr")->getValue('outcome_of_reaction_desc'),
+                                    'drug_brand_name' => $form->getSubForm("drug")->getValue('drug_brand_name'),
+                                    'drug_generic_name' => $form->getSubForm("drug")->getValue('drug_generic_name'),
+                                    'drug_batch_number' => $form->getSubForm("drug")->getValue('drug_batch_number'),
+                                    'drug_nafdac_number' => $form->getSubForm("drug")->getValue('drug_nafdac_number'),
+                                    'drug_expiry_name' => $form->getSubForm("drug")->getValue('drug_expiry_name'),
+                                    'drug_manufactor' => $form->getSubForm("drug")->getValue('drug_manufactor'),
+                                    'drug_indication_for_use' => $form->getSubForm("drug")->getValue('drug_indication_for_use'),
+                                    'drug_dosage' => $form->getSubForm("drug")->getValue('drug_dosage'),
+                                    'drug_route_of_administration' => $form->getSubForm("drug")->getValue('drug_route_of_administration'),
+                                    'drug_date_started' => $form->getSubForm("drug")->getValue('drug_date_started'),
+                                    'drug_date_stopped' => $form->getSubForm("drug")->getValue('drug_date_stopped'),
+                                    'reporter_name' => $form->getSubForm("reporter")->getValue('reporter_name'),
+                                    'reporter_address' => $form->getSubForm("reporter")->getValue('reporter_address'),
+                                    'reporter_profession' => $form->getSubForm("reporter")->getValue('reporter_profession'),
+                                    'reporter_contact' => $form->getSubForm("reporter")->getValue('reporter_contact'),
+                                    'mapperOptions' => array('adapter' => $db)
+                            )
+                    );
+                    $nafdacModel->save();
+
+                    $medicineName = $_REQUEST['medicine_name'];
+                    $medicineDosage = $_REQUEST['medicine_dosage'];
+                    $medicineRoute = $_REQUEST['medicine_route'];
+                    $medicineStarted = $_REQUEST['medicine_started'];
+                    $medicineStopped = $_REQUEST['medicine_stopped'];
+                    $medicineReason = $_REQUEST['medicine_reason'];
+                    
+                    foreach($medicineName as $index=>$value) {
+                        if(empty($value)) {
+                            continue;
+                        }
+                        $medModel = new TrustCare_Model_NafdacMedicine(
+                                array(
+                                        'id_nafdac' => $nafdacModel->getId(),
+                                        'name' => $value,
+                                        'dosage' => $medicineDosage[$index],
+                                        'route'   => $medicineRoute[$index],
+                                        'started' => $medicineStarted[$index],
+                                        'stopped' => $medicineStopped[$index],
+                                        'reason' => $medicineReason[$index],
+                                        'mapperOptions' => array('adapter' => $db)
+                                )
+                        );
+                        $medModel->save();
+                        
                     }
-    
-                    $model = new TrustCare_Model_Country();
-                    $model->setName($name);
-                    $model->setIso3166($iso_3166);
-                    $model->save();
-    
-                    $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
-*/                    
+                    
+                    $db->commit();
                 }
                 catch(Exception $ex) {
+                    $db->rollback();
                     $message = $ex->getMessage();
                     if(!empty($message)) {
                         $this->getLogger()->error($message);
@@ -71,12 +122,25 @@ class NafdacController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
             return;
         }
+        $pharmObj = TrustCare_Model_Pharmacy::find($frmObj->getIdPharmacy());
+        if(is_null($pharmObj)) {
+            $this->getLogger()->error(sprintf("Failed to load pharmacy for frm_card.id=%s", $idFrmCare));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+        $facilityObj = TrustCare_Model_Facility::find($pharmObj->getIdFacility());
+        if(is_null($facilityObj)) {
+            $this->getLogger()->error(sprintf("Failed to load facility for pharmacy.id=%s(frm_card.id=%s)", $pharmObj->getId(), $idFrmCare));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
         
         $form->getSubForm("adr")->getElement('adr_start_date')->setValue($frmObj->getAdrStartDate());
         $form->getSubForm("adr")->getElement('adr_stop_date')->setValue($frmObj->getAdrStopDate());
         
         $this->view->id_frm_care = $idFrmCare;
         $this->view->patient = $patientObj;
+        $this->view->hospital_name = $facilityObj->getName();
         $this->view->form = $form;
         
         $this->render('create');
@@ -432,54 +496,6 @@ class NafdacController extends ZendX_Controller_Action
         return;
     }
     
-    public function deleteActionAccess()
-    {
-       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "delete");
-    }
-    
-    public function deleteAction()
-    {
-        $type = $this->_getParam('type');
-        if('care' == $type) {
-            return $this->_deleteCareForm(); 
-        }
-        else if('community' == $type) {
-            return $this->_deleteCommunityForm(); 
-        }
-        else {
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Incorrect type of counseling")));
-            return;
-        }
-    }
-    
-    private function _deleteCareForm()
-    {
-        $id = $this->_getParam('id');
-        $formModel = TrustCare_Model_FrmCare::find($id);
-        if(is_null($formModel)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
-            return;
-        }
-        
-        $formModel->delete();
-        $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
-    }
-    
-    private function _deleteCommunityForm()
-    {
-        $id = $this->_getParam('id');
-        $formModel = TrustCare_Model_FrmCommunity::find($id);
-        if(is_null($formModel)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_community.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
-            return;
-        }
-        
-        $formModel->delete();
-        $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
-    }
-    
     
     
     /**
@@ -617,15 +633,44 @@ class NafdacController extends ZendX_Controller_Action
                 'required'      => true
         ));
         
+        $reporterSubForm = new ZendX_Form_SubForm();
+        $reporterSubForm->setLegend(Zend_Registry::get("Zend_Translate")->_("Source of Report"));
+        $reporterSubForm->addElement('text', 'reporter_name', array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Name of Reporter"),
+                'size'          => 32,
+                'tabindex'      => $tabIndex++,
+                'required'      => true
+        ));
+        $reporterSubForm->addElement('text', 'reporter_address', array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Address"),
+                'size'          => 64,
+                'tabindex'      => $tabIndex++,
+                'required'      => true
+        ));
+        $reporterSubForm->addElement('text', 'reporter_profession', array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Profession"),
+                'size'          => 32,
+                'tabindex'      => $tabIndex++,
+                'required'      => true
+        ));
+        $reporterSubForm->addElement('text', 'reporter_contact', array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Tel No/Email"),
+                'size'          => 32,
+                'tabindex'      => $tabIndex++,
+                'required'      => true
+        ));
+        
         
         $form->addSubForms(array(
                 'adr'  => $adrSubForm,
                 'drug' => $drugSubForm,
+                'reporter' => $reporterSubForm,
         ));
         
         $form->addElement('submit', 'send', array(
                 'label'     => Zend_Registry::get("Zend_Translate")->_("Generate"),
         ));
+
         
         return $form;
     }

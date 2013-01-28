@@ -42,6 +42,18 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     protected $_reporter_address;
     protected $_reporter_profession;
     protected $_reporter_contact;
+
+    
+    public function __construct($options = array()) {
+        parent::__construct($options);
+        $this->_logObjectChanges = false;
+        
+        if(is_null($this->getId())) {
+            if(!is_array($options) || !array_key_exists('generation_date', $options)) {
+                $this->_generation_date = ZendX_Db_Table_Abstract::LABEL_NOW;
+            }
+        }
+    }
     
     /**
      * @param  int $value 
