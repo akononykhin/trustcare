@@ -1,0 +1,126 @@
+<?php
+if($this->form->isErrors()) {
+?>
+<div class="form_errors">
+<?php
+    foreach($this->form->getErrorMessages() as $errorMessage) {
+        echo $errorMessage."<br/>";
+    }
+?>
+</div>
+<p/>
+<?php
+}
+?>
+<form class="zend_form" method="post" action="<?php echo $this->url(array('action' => 'create', 'id_frm_care' => $this->id_frm_care));?>">
+<div class="tab_header"><?php echo $this->translate(_("Patient's Details"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Name"));?></div></td>
+   <td><?php echo sprintf("%s %s", $this->patient->getLastName(), $this->patient->getFirstName());?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Record No."));?></div></td>
+   <td><?php echo $this->patient->getIdentifier();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Date of Birth"));?></div></td>
+   <td><?php echo $this->patient->getBirthdate();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Sex"));?></div></td>
+   <td><?php echo $this->patient->getIsMale() ? 'M' : 'F';?></td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->form->getSubForm('adr')->getLegend(); ?></div>
+<div class="tab_content">
+ <?php  echo $this->form->getSubForm('adr');  ?>
+</div>
+
+<div class="tab_header"><?php echo $this->form->getSubForm('drug')->getLegend(); ?></div>
+<div class="tab_content">
+ <?php  echo $this->form->getSubForm('drug');  ?>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("Concomitant Medicines"));?></div>
+<div class="tab_content">
+ <table class="zend_form"  cellpadding="5" border="1">
+  <tr>
+   <th><?php echo $this->translate(_("Brand or Generic Name"));?></th>
+   <th><?php echo $this->translate(_("Dosage"));?></th>
+   <th><?php echo $this->translate(_("Route"));?></th>
+   <th><?php echo $this->translate(_("Date Started"));?></th>
+   <th><?php echo $this->translate(_("Date Stopped"));?></th>
+   <th><?php echo $this->translate(_("Reason for Use"));?></th>
+  </tr>
+  <tr>
+   <td>
+    <input type="text" name="medicine_name[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_dosage[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_route[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_started[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_stopped[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_reason[]" value="" size="16" />
+   </td>
+  </tr>
+  <tr>
+   <td>
+    <input type="text" name="medicine_name[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_dosage[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_route[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_started[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_stopped[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_reason[]" value="" size="16" />
+   </td>
+  </tr>
+  <tr>
+   <td>
+    <input type="text" name="medicine_name[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_dosage[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_route[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_started[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_stopped[]" value="" size="16" />
+   </td>
+   <td>
+    <input type="text" name="medicine_reason[]" value="" size="16" />
+   </td>
+  </tr>
+ </table>
+</div>
+
+<tr>
+ <td colspan="3"><?php echo $this->form->getElement("send");?></td>
+</tr>
+</table>
+</form>

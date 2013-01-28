@@ -40,6 +40,7 @@ class TestOfNafdac extends UnitTestCase {
                 'adr_description' => '222',
                 'was_admitted' => false,
                 'was_hospitalization_prolonged' => true,
+                'duration_of_admission' => '555',
                 'treatment_of_reaction' => '3',
                 'outcome_of_reaction_type' => 4,
                 'outcome_of_reaction_desc' => '555',
@@ -103,6 +104,7 @@ class TestOfNafdac extends UnitTestCase {
             'adr_description' => '222',
             'was_admitted' => true,
             'was_hospitalization_prolonged' => false,
+            'duration_of_admission' => '555',
             'treatment_of_reaction' => '3',
             'outcome_of_reaction_type' => 4,
             'outcome_of_reaction_desc' => '555',
@@ -165,6 +167,7 @@ class TestOfNafdac extends UnitTestCase {
             'adr_description' => '222',
             'was_admitted' => false,
             'was_hospitalization_prolonged' => true,
+            'duration_of_admission' => '555',
             'treatment_of_reaction' => '3',
             'outcome_of_reaction_type' => 4,
             'outcome_of_reaction_desc' => '555',
@@ -211,6 +214,7 @@ class TestOfNafdac extends UnitTestCase {
             $params['adr_description'] = $model->adr_description . '_2';
             $params['was_admitted'] = !$model->was_admitted;
             $params['was_hospitalization_prolonged'] = !$model->was_hospitalization_prolonged;
+            $params['duration_of_admission'] = $model->duration_of_admission . '123';
             $params['treatment_of_reaction'] = $model->treatment_of_reaction . '_3';
             $params['outcome_of_reaction_type'] = 4 == $model->outcome_of_reaction_type ? 40 : 4;
             $params['outcome_of_reaction_desc'] = $model->outcome_of_reaction_desc . '_5';
@@ -292,6 +296,7 @@ class TestOfNafdac extends UnitTestCase {
         $this->assertIdentical($model->was_admitted, $params['was_admitted'], "Incorrect 'was_admitted': %s");
         $this->assertIdentical($model->was_hospitalization_prolonged, $params['was_hospitalization_prolonged'], "Incorrect 'was_hospitalization_prolonged': %s");
         $this->assertEqual($model->treatment_of_reaction, $params['treatment_of_reaction'], "Incorrect 'treatment_of_reaction': %s");
+        $this->assertEqual($model->duration_of_admission, $params['duration_of_admission'], "Incorrect 'duration_of_admission': %s");
         $this->assertEqual($model->outcome_of_reaction_type, $params['outcome_of_reaction_type'], "Incorrect 'outcome_of_reaction_type': %s");
         $this->assertEqual($model->outcome_of_reaction_desc, $params['outcome_of_reaction_desc'], "Incorrect 'outcome_of_reaction_desc': %s");
         $this->assertEqual($model->drug_brand_name, $params['drug_brand_name'], "Incorrect 'drug_brand_name': %s");

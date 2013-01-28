@@ -25,6 +25,9 @@ class TrustCare_Model_Mapper_NafdacMedicine extends TrustCare_Model_Mapper_Abstr
         if(!$model->isExists() || $model->isParameterChanged('dosage')) {
             $data['dosage'] = $model->getDosage();
         }
+        if(!$model->isExists() || $model->isParameterChanged('route')) {
+            $data['route'] = $model->getRoute();
+        }
         if(!$model->isExists() || $model->isParameterChanged('started')) {
             $data['started'] = $model->getStarted();
         }
@@ -78,6 +81,7 @@ class TrustCare_Model_Mapper_NafdacMedicine extends TrustCare_Model_Mapper_Abstr
               ->setIdNafdac($row->id_nafdac)
               ->setName($row->name)
               ->setDosage($row->dosage)
+              ->setRoute($row->route)
               ->setStarted($row->started)
               ->setStopped($row->stopped)
               ->setReason($row->reason);

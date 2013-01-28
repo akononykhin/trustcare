@@ -585,6 +585,7 @@ CREATE TABLE nafdac (
   `adr_description` text,
   `was_admitted` bool default false,
   `was_hospitalization_prolonged` bool default false,
+  `duration_of_admission` varchar(8) default NULL,
   `treatment_of_reaction` varchar(255) default NULL,
   `outcome_of_reaction_type` int,
   `outcome_of_reaction_desc` varchar(255) default NULL,
@@ -612,6 +613,7 @@ CREATE TABLE nafdac_medicine (
   `id_nafdac` int NOT NULL,
   `name` varchar(255) default NULL,
   `dosage` varchar(255) default NULL,
+  `route` varchar(255) default NULL,
   `started` varchar(255) default NULL,
   `stopped` varchar(255) default NULL,
   `reason` varchar(255) default NULL,
@@ -958,4 +960,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130128, 3);
+insert into db_version values (1, 20130128, 5);

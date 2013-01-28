@@ -29,12 +29,8 @@ table.zend_form tr td {
     PADDING: 2px 10px;
 }
 
-table.zend_form td .normal {
-    font-weight: bold;
-}
 table.zend_form td .required {
     COLOR: #d13b3b;
-    font-weight: bold;
 }
 table.zend_form td .description {
     PADDING-LEFT: 3px; COLOR: #666666;
@@ -45,8 +41,8 @@ table.zend_form td .errors {
 
 
 .tab_header {
-	BACKGROUND: #e6e6e6;
-	FONT-SIZE: 14px; FONT-WEIGHT: bold;
-	MARGIN-TOP: 10px; MARGIN-BOTTOM: 5px;
-	PADDING-LEFT: 10px; PADDING-TOP: 2px; PADDING-BOTTOM: 2px;
+    BACKGROUND: #e6e6e6;
+    FONT-SIZE: 14px; FONT-WEIGHT: bold;
+    MARGIN-TOP: 10px; MARGIN-BOTTOM: 5px;
+    PADDING-LEFT: 10px; PADDING-TOP: 2px; PADDING-BOTTOM: 2px;
 }
