@@ -422,7 +422,12 @@ class FormController extends ZendX_Controller_Action
                 }
                 
                 $db->commit();
-                $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
+                if(!$isNafdacAdrFilled) {
+                    $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type' => $this->_getParam('type')));
+                }
+                else {
+                    $this->getRedirector()->gotoSimpleAndExit('create', 'nafdac', null, array('id_frm_care' => $frmModel->getId()));
+                }
             }
             catch(Exception $ex) {
                 $db->rollback();
