@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.22" id="1">
     <property name="createdBy">Eclipse BIRT Designer Version 3.7.2.v20120213 Build &lt;3.7.2.v20120214-1408></property>
     <list-property name="propertyBindings">
         <structure>
@@ -164,10 +164,10 @@
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select
-	concat_ws(' ', patient.last_name, patient.first_name) as patient_name,
-	date_format(patient.birthdate, '%Y-%m-%d') as patient_birthday,
-	patient.identifier as patient_no,
-	case WHEN patient.is_male=1 then 'M' else 'F' END as patient_sex
+    concat_ws(' ', patient.last_name, patient.first_name) as patient_name,
+    date_format(patient.birthdate, '%Y-%m-%d') as patient_birthday,
+    patient.identifier as patient_no,
+    case WHEN patient.is_male=1 then 'M' else 'F' END as patient_sex
 from frm_care left outer join patient on frm_care.id_patient=patient.id
 where frm_care.id=?]]></xml-property>
         </oda-data-set>
@@ -554,38 +554,38 @@ where frm_care.id=?]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select 
-	adr_description,
-	case when outcome_of_reaction_type=1 then 'X' else '' end as recovered_fully,
-	case when outcome_of_reaction_type=2 then 'X' else '' end as congenital_abnormality,
-	case when outcome_of_reaction_type=2 then outcome_of_reaction_desc else '' end as congenital_abnormality_desc,
-	case when outcome_of_reaction_type=3 then 'X' else '' end as death,
-	case when outcome_of_reaction_type=4 then 'X' else '' end as recovered_with_disability,
-	case when outcome_of_reaction_type=4 then outcome_of_reaction_desc else '' end as recovered_with_disability_desc,
-	case when outcome_of_reaction_type=5 then 'X' else '' end as life_threatening,
-	case when outcome_of_reaction_type=5 then outcome_of_reaction_desc else '' end as life_threatening_desc,
-	case when outcome_of_reaction_type=6 then 'X' else '' end as other,
-	case when outcome_of_reaction_type=6 then outcome_of_reaction_desc else '' end as other_desc,
-	case when was_admitted=1 then 'YES' else 'NO' end as was_admitted,
-	case when was_hospitalization_prolonged=1 then 'YES' else 'NO' end as was_hospitalization_prolonged,	
-	duration_of_admission,
-	treatment_of_reaction,
-	drug_brand_name,
-	drug_generic_name,
-	drug_batch_number,
-	drug_nafdac_number,
-	drug_expiry_name,
-	drug_manufactor,
-	drug_indication_for_use,
-	drug_dosage,
-	drug_route_of_administration,
-	drug_date_started,
-	drug_date_stopped,
-	reporter_name,
-	reporter_address,
-	reporter_profession,
-	reporter_contact
-	
-	
+    adr_description,
+    case when outcome_of_reaction_type=1 then 'X' else '' end as recovered_fully,
+    case when outcome_of_reaction_type=2 then 'X' else '' end as congenital_abnormality,
+    case when outcome_of_reaction_type=2 then outcome_of_reaction_desc else '' end as congenital_abnormality_desc,
+    case when outcome_of_reaction_type=3 then 'X' else '' end as death,
+    case when outcome_of_reaction_type=4 then 'X' else '' end as recovered_with_disability,
+    case when outcome_of_reaction_type=4 then outcome_of_reaction_desc else '' end as recovered_with_disability_desc,
+    case when outcome_of_reaction_type=5 then 'X' else '' end as life_threatening,
+    case when outcome_of_reaction_type=5 then outcome_of_reaction_desc else '' end as life_threatening_desc,
+    case when outcome_of_reaction_type=6 then 'X' else '' end as other,
+    case when outcome_of_reaction_type=6 then outcome_of_reaction_desc else '' end as other_desc,
+    case when was_admitted=1 then 'YES' else 'NO' end as was_admitted,
+    case when was_hospitalization_prolonged=1 then 'YES' else 'NO' end as was_hospitalization_prolonged,    
+    duration_of_admission,
+    treatment_of_reaction,
+    drug_brand_name,
+    drug_generic_name,
+    drug_batch_number,
+    drug_nafdac_number,
+    drug_expiry_name,
+    drug_manufactor,
+    drug_indication_for_use,
+    drug_dosage,
+    drug_route_of_administration,
+    drug_date_started,
+    drug_date_stopped,
+    reporter_name,
+    reporter_address,
+    reporter_profession,
+    reporter_contact
+    
+    
 from nafdac
 where id_frm_care=?]]></xml-property>
         </oda-data-set>
@@ -746,14 +746,14 @@ where id=?]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select 
-	name,
-	dosage,
-	route,
-	started,
-	stopped,
-	reason
+    name,
+    dosage,
+    route,
+    started,
+    stopped,
+    reason
 from 
-	nafdac_medicine
+    nafdac_medicine
 where id_nafdac in (select id from nafdac where id_frm_care=?)
 order by id]]></xml-property>
         </oda-data-set>
