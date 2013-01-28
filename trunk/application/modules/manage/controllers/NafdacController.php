@@ -102,6 +102,24 @@ class NafdacController extends ZendX_Controller_Action
                         $medModel->save();
                         
                     }
+
+                    $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+                    
+                    $fileName = $obj = $generator->generate(array(
+                                                    'id_frm_care' => $idFrmCare,
+                    ));
+                    
+                    $nafdacModel->setFilename($filename);
+                    $nafdacModel->save();
+                    
+                    $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
+                    if(!file_exists($fileReportOutput)) {
+                        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Report file not found");
+                        throw new Exception(sprintf("Report file '%s' not found", $fileReportOutput));
+                    }
+                    
+                    $this->outputFileAsAttachment($fileReportOutput);
+                    return;
                     
                     $db->commit();
                 }
