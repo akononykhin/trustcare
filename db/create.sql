@@ -580,6 +580,7 @@ CREATE TABLE report_community (
 CREATE TABLE nafdac (
   `id` int NOT NULL,
   `id_frm_care` int NOT NULL,
+  `generation_date` datetime NOT NULL,
   `filename` varchar(255),
   `adr_description` text,
   `was_admitted` bool default false,
@@ -957,4 +958,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130128, 2);
+insert into db_version values (1, 20130128, 3);

@@ -19,6 +19,9 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('id_frm_care')) {
             $data['id_frm_care'] = $model->getIdFrmCare();
         }
+        if(!$model->isExists() || $model->isParameterChanged('generation_date')) {
+            $data['generation_date'] = $model->getGenerationDate();
+        }
         if(!$model->isExists() || $model->isParameterChanged('filename')) {
             $data['filename'] = $model->getFilename();
         }
@@ -127,6 +130,7 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
               ->setIdFrmCare($row->id_frm_care)
+              ->setGenerationDate($row->generation_date)
               ->setFilename($row->filename)
               ->setAdrDescription($row->adr_description)
               ->setWasAdmitted($row->was_admitted)

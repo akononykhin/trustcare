@@ -7,7 +7,7 @@ insert into frm_care(id, id_patient, date_of_visit) values (1, 1, now());
 insert into frm_care(id, id_patient, date_of_visit) values (2, 2, now());
 insert into frm_care(id, id_patient, date_of_visit) values (3, 3, now());
 
-insert into nafdac(id, id_frm_care) values (1, 1);
-insert into nafdac(id, id_frm_care) values (2, 2);
-insert into nafdac(id, id_frm_care) values (3, 3);
+insert into nafdac(id, id_frm_care, generation_date) values (1, 1, now());
+insert into nafdac(id, id_frm_care, generation_date) values (2, 2, now());
+insert into nafdac(id, id_frm_care, generation_date) values (3, 3, now());
 

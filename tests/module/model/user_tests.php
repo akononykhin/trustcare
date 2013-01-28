@@ -75,7 +75,7 @@ class TestOfUser extends UnitTestCase {
         $query = sprintf("update db_sequence set value=10 where name='user_id_seq';");
         $this->db->query($query);
         
-        $query = sprintf("delete from country where id >= 500;");
+        $query = sprintf("delete from country where id >= 300;");
         $this->db->query($query);
         
         $query = sprintf("delete from state;");
