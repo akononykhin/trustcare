@@ -38,6 +38,13 @@ class TrustCare_Model_DbTable_Nafdac extends ZendX_Db_Table_Abstract
         $db = Zend_Registry::get("Storage")->getPersistantDb(); 
         $data['id'] = $db->nextSequenceId('nafdac_id_seq');
 
+        if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['generation_date']) {
+            $data['generation_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", gmdate("Y-m-d H:i:s")));
+        }
+        else {
+            $data['generation_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['generation_date']));
+        }
+
         return parent::insert($data);
     }
     

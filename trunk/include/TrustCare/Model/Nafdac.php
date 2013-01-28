@@ -10,6 +10,7 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
 {
     protected $_id;
     protected $_id_frm_care;
+    protected $_generation_date;
     protected $_filename;
     protected $_adr_description;
     protected $_was_admitted;
@@ -69,6 +70,25 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     public function getIdFrmCare()
     {
         return $this->_id_frm_care;
+    }
+    
+    /**
+     * @param  string $value 
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setGenerationDate($value)
+    {
+        $this->_parameterChanged('generation_date', $value);
+        $this->_generation_date = (string) $value;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getGenerationDate()
+    {
+        return $this->_generation_date;
     }
 
     

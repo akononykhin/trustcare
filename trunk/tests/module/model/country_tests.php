@@ -45,10 +45,10 @@ class TestOfCountry extends UnitTestCase {
 
 
     function tearDown() {
-        $query = sprintf("delete from country where id >= 500;");
+        $query = sprintf("delete from country where id >= 300;");
         $this->db->query($query);
         
-        $query = sprintf("update db_sequence set value=500 where name='country_id_seq';");
+        $query = sprintf("update db_sequence set value=300 where name='country_id_seq';");
         $this->db->query($query);
     }
     

@@ -35,6 +35,7 @@ class TestOfNafdac extends UnitTestCase {
             $params = array(
                 'id' => $this->db->nextSequenceId('nafdac_id_seq'),
                 'id_frm_care' => 3,
+                'generation_date' => '2012-10-01 11:23:45',
                 'filename' => '111',
                 'adr_description' => '222',
                 'was_admitted' => false,
@@ -97,6 +98,7 @@ class TestOfNafdac extends UnitTestCase {
         $params = array(
             'id' => '1',
             'id_frm_care' => 2,
+            'generation_date' => '2012-09-01 11:23:45',
             'filename' => '111',
             'adr_description' => '222',
             'was_admitted' => true,
@@ -158,6 +160,7 @@ class TestOfNafdac extends UnitTestCase {
     function testSaveNew() {
         $params = array(
             'id_frm_care' => 2,
+            'generation_date' => '2012-09-01 11:23:45',
             'filename' => '111',
             'adr_description' => '222',
             'was_admitted' => false,
@@ -203,6 +206,7 @@ class TestOfNafdac extends UnitTestCase {
         
         if(!is_null($model)) {
             $params['id_frm_care'] = 2 == $model->id_frm_care ? 3 : 2;
+            $params['generation_date'] = $model->generation_date == '2012-09-01 01:01:01' ? '2012-10-01 01:01:01' : '2012-09-01 01:01:01';
             $params['filename'] = $model->filename . '_1';
             $params['adr_description'] = $model->adr_description . '_2';
             $params['was_admitted'] = !$model->was_admitted;
@@ -280,6 +284,9 @@ class TestOfNafdac extends UnitTestCase {
         
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
         $this->assertEqual($model->id_frm_care, $params['id_frm_care'], "Incorrect 'id_frm_care': %s");
+        if($checkTime) {
+            $this->assertEqual($model->generation_date, $params['generation_date'], "Incorrect 'generation_date': %s");
+        }
         $this->assertEqual($model->filename, $params['filename'], "Incorrect 'filename': %s");
         $this->assertEqual($model->adr_description, $params['adr_description'], "Incorrect 'adr_description': %s");
         $this->assertIdentical($model->was_admitted, $params['was_admitted'], "Incorrect 'was_admitted': %s");
