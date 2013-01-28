@@ -12,7 +12,6 @@ class ModelGroupTest extends GroupTest {
     function ModelGroupTest() {
         $this->GroupTest('All Model tests');
 
-/*
         $this->addTestFile(dirname(__FILE__) . '/log_access_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/log_objects_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/country_tests.php');
@@ -50,7 +49,6 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_community_ovc_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/report_care_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/report_community_tests.php');
-*/
         $this->addTestFile(dirname(__FILE__) . '/nafdac_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/nafdac_medicine_tests.php');
         

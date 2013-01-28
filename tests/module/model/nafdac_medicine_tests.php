@@ -35,6 +35,11 @@ class TestOfNafdacMedicine extends UnitTestCase {
             $params = array(
                 'id' => $this->db->nextSequenceId('nafdac_medicine_id_seq'),
                 'id_nafdac' => 1,
+                'name' => '11',
+                'dosage' => '12',
+                'started' => '13',
+                'stopped' => '14',
+                'reason' => '15',
             );
 
             $columns = array();
@@ -78,6 +83,11 @@ class TestOfNafdacMedicine extends UnitTestCase {
         $params = array(
             'id' => '1',
             'id_nafdac' => 2,
+            'name' => '11',
+            'dosage' => '12',
+            'started' => '13',
+            'stopped' => '14',
+            'reason' => '15',
             'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -105,7 +115,12 @@ class TestOfNafdacMedicine extends UnitTestCase {
     function testSaveNew() {
         $params = array(
             'id_nafdac' => 1,
-            );
+            'name' => '11',
+            'dosage' => '12',
+            'started' => '13',
+            'stopped' => '14',
+            'reason' => '15',
+        );
         
         try {
             $model = new TrustCare_Model_NafdacMedicine(array('mapperOptions' => array('adapter' => $this->db)));
@@ -128,7 +143,12 @@ class TestOfNafdacMedicine extends UnitTestCase {
         
         if(!is_null($model)) {
             $params['id_nafdac'] = 1 == $model->id_nafdac ? 2 : 1;
-             
+            $params['name'] = $model->name . '_11';
+            $params['dosage'] = $model->dosage . '_12';
+            $params['started'] = $model->started . '_13';
+            $params['stopped'] = $model->stopped . '_14';
+            $params['reason'] = $model->reason . '_15';
+            
             try {
                 $model->setOptions($params);
                 $model->save();
@@ -251,6 +271,11 @@ class TestOfNafdacMedicine extends UnitTestCase {
         
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
         $this->assertEqual($model->id_nafdac, $params['id_nafdac'], "Incorrect 'id_nafdac': %s");
+        $this->assertEqual($model->name, $params['name'], "Incorrect 'name': %s");
+        $this->assertEqual($model->dosage, $params['dosage'], "Incorrect 'dosage': %s");
+        $this->assertEqual($model->started, $params['started'], "Incorrect 'started': %s");
+        $this->assertEqual($model->stopped, $params['stopped'], "Incorrect 'stopped': %s");
+        $this->assertEqual($model->reason, $params['reason'], "Incorrect 'reason': %s");
     }
 }
 

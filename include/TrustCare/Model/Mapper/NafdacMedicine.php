@@ -19,6 +19,25 @@ class TrustCare_Model_Mapper_NafdacMedicine extends TrustCare_Model_Mapper_Abstr
         if(!$model->isExists() || $model->isParameterChanged('id_nafdac')) {
             $data['id_nafdac'] = $model->getIdNafdac();
         }
+        if(!$model->isExists() || $model->isParameterChanged('name')) {
+            $data['name'] = $model->getName();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('dosage')) {
+            $data['dosage'] = $model->getDosage();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('started')) {
+            $data['started'] = $model->getStarted();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('stopped')) {
+            $data['stopped'] = $model->getStopped();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('reason')) {
+            $data['reason'] = $model->getReason();
+        }
+        
+        if(!count($data)) {
+            return;
+        }
 
         if (null === ($id = $model->getId())) {
             unset($data['id']);
@@ -56,7 +75,12 @@ class TrustCare_Model_Mapper_NafdacMedicine extends TrustCare_Model_Mapper_Abstr
     {
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
-              ->setIdNafdac($row->id_nafdac);
+              ->setIdNafdac($row->id_nafdac)
+              ->setName($row->name)
+              ->setDosage($row->dosage)
+              ->setStarted($row->started)
+              ->setStopped($row->stopped)
+              ->setReason($row->reason);
         $model->setSkipTrackChanges(false);
     }
     

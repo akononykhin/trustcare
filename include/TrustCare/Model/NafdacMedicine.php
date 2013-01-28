@@ -10,6 +10,11 @@ class TrustCare_Model_NafdacMedicine extends TrustCare_Model_Abstract
 {
     protected $_id;
     protected $_id_nafdac;
+    protected $_name;
+    protected $_dosage;
+    protected $_started;
+    protected $_stopped;
+    protected $_reason;
     
     /**
      * @param  int $value 
@@ -47,6 +52,101 @@ class TrustCare_Model_NafdacMedicine extends TrustCare_Model_Abstract
     public function getIdNafdac()
     {
         return $this->_id_nafdac;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacMedicine
+     */
+    public function setName($value)
+    {
+        $this->_parameterChanged('name', $value);
+        $this->_name = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getName()
+    {
+        return $this->_name;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacMedicine
+     */
+    public function setDosage($value)
+    {
+        $this->_parameterChanged('dosage', $value);
+        $this->_dosage = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getDosage()
+    {
+        return $this->_dosage;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacMedicine
+     */
+    public function setStarted($value)
+    {
+        $this->_parameterChanged('started', $value);
+        $this->_started = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getStarted()
+    {
+        return $this->_started;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacMedicine
+     */
+    public function setStopped($value)
+    {
+        $this->_parameterChanged('stopped', $value);
+        $this->_stopped = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getStopped()
+    {
+        return $this->_stopped;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacMedicine
+     */
+    public function setReason($value)
+    {
+        $this->_parameterChanged('reason', $value);
+        $this->_reason = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getReason()
+    {
+        return $this->_reason;
     }
     
 
