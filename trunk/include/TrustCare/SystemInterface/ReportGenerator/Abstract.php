@@ -66,7 +66,7 @@ abstract class TrustCare_SystemInterface_ReportGenerator_Abstract
         $fileReportDesign = sprintf("%s/%s", realpath(APPLICATION_PATH . '/../reports'), $designFile);
         
         set_time_limit(0);
-        $BIRT_RE_HOME = realpath (APPLICATION_PATH . "/../external/birt-runtime" . $this->_runTimePrefix);
+        $BIRT_RE_HOME = realpath (APPLICATION_PATH . "/../external/birt-runtime");
         $BIRTCLASSPATH = "";
         
         $libDir = $BIRT_RE_HOME . "/lib";
