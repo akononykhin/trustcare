@@ -495,6 +495,7 @@ class FormController extends ZendX_Controller_Action
             
         $this->view->type = 'care';
         $this->view->allow_create_patient = Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.patient", "create");
+        $this->view->allow_create_pharmacy = Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharmacy", "create");
         
         $this->view->idPharmacy = $idPharmacy;
         $this->view->pharmacies = $pharmaciesList;
