@@ -13,11 +13,47 @@ a {
 
 <script type="text/javascript" charset="utf-8">
 	var g_selectedPatient = '<?php echo $this->id_patient?>';
+	var g_selectedPharmacy = '<?php echo $this->idPharmacy?>';
 	var g_dictEntities = new Array();
 <?php foreach($this->dictEntities as $key=>$values) :?>
     g_dictEntities[<?php echo $key;?>] = [<?php if(is_array($values)) echo join(" , ", $values);?>];
 <?php endforeach; ?>
-	
+
+    function pharmacyReload(){
+        if($("#id_pharmacy option").length) {
+            g_selectedPharmacy = $("#id_pharmacy option:selected").val();
+        }
+        $.ajax({
+            url:'<?php echo $this->url(array('controller' => 'pharmacy', "action" => "load-array-of-active")); ?>'
+            ,type:'POST'
+            ,data:''
+            ,success: function(data){
+                if(!data || !data.success) {
+                    return;
+                }
+
+                var select = $('#id_pharmacy');
+                if(select.prop) {
+                    var options = select.prop('options');
+                }
+                else {
+                    var options = select.attr('options');
+                }
+                $('option', select).remove();
+                options[options.length] = new Option('', '');
+                for (var key in data.rows){
+	                var selectedFlag = false;
+    	            if(key == g_selectedPharmacy) {
+	 	               selectedFlag = true;
+	                } 
+                    options[options.length] = new Option(data.rows[key], key, selectedFlag);
+                }
+            }
+            ,complete: function(jqXHR, textStatus) {
+            }
+      });
+    }
+
 	function patientsReload(){
 		if($("#id_patient option").length) {
 			g_selectedPatient = $("#id_patient option:selected").val();
@@ -271,19 +307,31 @@ a {
 	    dictEntitiesReload('#suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
 	    dictEntitiesReload('#adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
 
-	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
+	    var newPharmacyDlg = $("<div id='dialog-add-pharmacy'></div>").dialog({
 			     dialogClass: 'dialog-content'
-				,title: '<?php echo $this->translate(_("Add Patient"));?>'
+				,title: '<?php echo $this->translate(_("Add Pharmacy"));?>'
 			    ,autoOpen: false
 		    	,height: 500
-			    ,width: 500
+			    ,width: 700
 			    ,modal: true
 			    ,close: function() {
-				    patientsReload();
+				    pharmacyReload();
 			    }
         });
 
-	    $("#dlg-add-dict-entity").dialog({
+	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
+		     dialogClass: 'dialog-content'
+			,title: '<?php echo $this->translate(_("Add Patient"));?>'
+		    ,autoOpen: false
+	    	,height: 500
+		    ,width: 500
+		    ,modal: true
+		    ,close: function() {
+			    patientsReload();
+		    }
+	    });
+
+        $("#dlg-add-dict-entity").dialog({
 	        dialogClass: 'dialog-content'
 	        ,autoOpen: false
 	        ,height: 200
@@ -341,6 +389,12 @@ a {
 	    $("#link-add-patient").click(function() {
 	    	newPatientDlg.load('<?php echo $this->url(array("controller" => "patient", "action" => "create", "for_dialog" => 1)); ?>', function(){
 		    	linkFormToDlg("#dialog-add-patient");
+		    }).dialog('open');
+	        return false;
+	    });
+	    $("#link-add-pharmacy").click(function() {
+	    	newPharmacyDlg.load('<?php echo $this->url(array("controller" => "pharmacy", "action" => "create", "for_dialog" => 1)); ?>', function(){
+		    	linkFormToDlg("#dialog-add-pharmacy");
 		    }).dialog('open');
 	        return false;
 	    });
@@ -501,8 +555,11 @@ a {
         printf("<option value='%s' %s>%s</option>", $key, $selectedStr, $value);
     }
 ?>     
-     </select>
-   </td>
+     </select>&nbsp;
+<?php if ($this->allow_create_pharmacy) : ?>
+     <a id="link-add-pharmacy" href="#"><?php echo $this->translate(_("Add Pharmacy"));?></a>
+<?php endif;?>     
+     </td>
   </tr>
   <tr>
    <td valign="top"><div class="required"><label for="patient"><?php echo $this->translate(_("Patient"));?></label></div></td>

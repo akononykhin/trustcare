@@ -157,6 +157,13 @@ class PharmacyController extends ZendX_Controller_Action
     {
         $form = $this->_getParametersForm(true);
         $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
+        
+        $forDialog = $this->_getParam('for_dialog');
+        if(!empty($forDialog)) {
+            $this->_helper->layout()->disableLayout();
+            $form->addElement('hidden', 'for_dialog', array('value' => 1));
+        }
+        
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 
@@ -172,7 +179,13 @@ class PharmacyController extends ZendX_Controller_Action
                     $model->setIdFacility($form->getValue("id_facility"));
                     $model->save();
 
-                    $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+                    if(empty($forDialog)) {
+                        $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+                    }
+                    else {
+                        $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Pharmacy Created"), 'for_dialog' => 1));
+                        return;
+                    }
                 }
                 catch(Exception $ex) {
                     $message = $ex->getMessage();
@@ -267,6 +280,38 @@ class PharmacyController extends ZendX_Controller_Action
         $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
     }
     
+    
+    public function loadArrayOfActiveActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharmacy", "view");
+    }
+    
+    public function loadArrayOfActiveAction()
+    {
+        $o = new stdClass();
+        $o->success = false;
+    
+        try {
+            Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_ASSOC);
+            $select = Zend_Registry::getInstance()->dbAdapter->select()->from("pharmacy", array('id', 'name'))
+                                                                       ->where("is_active!=0")
+                                                                       ->order("name");
+            $records = Zend_Registry::getInstance()->dbAdapter->fetchAll($select);
+    
+            $rows = array();
+            foreach ($records as $record) {
+                $rows[$record['id']] = $record['name'];
+            }
+            $o->rows = $rows;
+            $o->success = true;
+        }
+        catch(Exception $ex) {
+    
+        }
+    
+    
+        $this->_helper->json($o);
+    }
     
     /**
      * @return Zend_Form
