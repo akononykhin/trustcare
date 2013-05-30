@@ -114,25 +114,27 @@ CREATE TABLE pharmacy_dictionary_type (
 
 insert into pharmacy_dictionary_type(id,ordernum,name) values (1,  1,  'Types of Medication Error');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (2,  2,  'Types of Medication Adherence Related problems');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (3,  3,  'Types of Medication Error / Adherence intervention provided');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (4,  4,  'Type of Medication Error / Adherence intervention Outcome');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (5,  5,  'Types of ADR severity grade');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (6,  6,  'Types of ADR intervention');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (7,  7,  'GIT/Hepatic System Options');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (8,  8,  'Nervious System Options');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (9,  9,  'Cardiovascular System Options');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (10, 10, 'Skin and Appendages Options');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (11, 11, 'Metabolic/Endocrine System Options');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (12, 12, 'Musculoskeletal');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (13, 13, 'Systemic-General Options');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (14, 14, '\‘Referred in\’ List');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (15, 15, '\‘Referred out\’ List');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (16, 16, 'Type of HIV testing results');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (17, 17, 'Palliative Care Services');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (18, 18, 'Reproductive Health services');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (19, 19, 'STI Services');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (20, 20, 'Tuberculosis services');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (21, 21, 'OVC Care and Support services');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (3,  3,  'Types of Medication Error Intervention provided');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (22, 4, 'Types of Adherence Intervention provided');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (4,  5,  'Type of Medication Error Intervention Outcome');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (23, 6,  'Type of Adherence Intervention Outcome');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (5,  7,  'Types of ADR severity grade');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (6,  8,  'Types of ADR intervention');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (7,  9,  'GIT/Hepatic System Options');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (8,  10,  'Nervious System Options');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (9,  11,  'Cardiovascular System Options');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (10, 12, 'Skin and Appendages Options');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (11, 13, 'Metabolic/Endocrine System Options');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (12, 14, 'Musculoskeletal');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (13, 15, 'Systemic-General Options');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (14, 16, '\‘Referred in\’ List');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (15, 17, '\‘Referred out\’ List');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (16, 18, 'Type of HIV testing results');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (17, 19, 'Palliative Care Services');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (18, 20, 'Reproductive Health services');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (19, 21, 'STI Services');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (20, 22, 'Tuberculosis services');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (21, 23, 'OVC Care and Support services');
 
 CREATE TABLE pharmacy_dictionary (
   `id` int NOT NULL,
@@ -153,13 +155,14 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (8, 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (9,  2, 'Client’s Adherence Counseling not done or completed (new clients)');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (10, 2, 'Non-adherence to therapy identified (Refill Clients)');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (11, 3, 'Prescriber or other HCWs contacted to clarify error/provide drug information');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (12, 3, 'Drug therapy initiated/changed');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (13, 3, 'Did not dispense medication');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (14, 3, 'Patient Counseling and education provided');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (15, 4, 'Medication Error/Adherence issues addressed');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (16, 4, 'Medication Error/Adherence issues NOT addressed');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (11, 3, 'Prescriber or other health worker contacted to clarify error');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (12, 3, 'Refer patient to prescriber or other health worker to clarify error');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (13, 3, 'Drug therapy initiated/changed');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (14, 3, 'Did not dispense medication');
+
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (15, 4, 'Medication error(s) corrected or addressed');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (16, 4, 'Medication error(s) NOT corrected or addressed');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (17, 5, 'Mild');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (18, 5, 'Noderate');
@@ -259,6 +262,13 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (95,
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (96, 21, 'Health support');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (97, 21, 'Economic support (Skill acquisition)');
 
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (100, 22, 'Refer to adherence counselor for assessment and counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (101, 22, 'Patient counseling and education provided');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (102, 22, 'Did not dispense medication');
+
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (110, 23, 'Adherence issue(s) resolved');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (111, 23, 'Adherence issue(s) NOT resolved');
+
 
 /************* END Pharmacy Dictionaries **************************************************/
 
@@ -345,6 +355,7 @@ CREATE TABLE frm_care (
   `is_med_error_identified` int,
   `is_med_adh_problem_screened` int,
   `is_med_adh_problem_identified` int,
+  `is_med_error_intervention_provided` int,
   `is_adh_intervention_provided` int,
   `is_adr_screened` int,
   `is_adr_symptoms` int,
@@ -377,11 +388,28 @@ CREATE TABLE frm_care_med_adh_problem (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE frm_care_med_error_intervention (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_med_error_intervention_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 CREATE TABLE frm_care_adh_intervention (
   `id` int NOT NULL,
   `id_frm_care` int NOT NULL,
   `id_pharmacy_dictionary` int NOT NULL,
   UNIQUE KEY `cons_frm_care_adh_intervention_1` (`id_frm_care`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_care_med_error_intervention_outcome (
+  `id` int NOT NULL,
+  `id_frm_care` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_care_med_error_intervention_outcome_1` (`id_frm_care`, `id_pharmacy_dictionary`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -748,12 +776,28 @@ alter table frm_care_med_adh_problem
     add constraint fk_frm_care_med_adh_problem_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
         references pharmacy_dictionary(id);
 
+alter table frm_care_med_error_intervention
+    add constraint fk_frm_care_med_error_intervention_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_med_error_intervention
+    add constraint fk_frm_care_med_error_intervention_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
 alter table frm_care_adh_intervention
     add constraint fk_frm_care_adh_intervention_id_frm_care foreign key (id_frm_care)
         references frm_care(id) on delete cascade;
 
 alter table frm_care_adh_intervention
     add constraint fk_frm_care_adh_intervention_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+alter table frm_care_med_error_intervention_outcome
+    add constraint fk_frm_care_med_error_intervention_outcome_id_frm_care foreign key (id_frm_care)
+        references frm_care(id) on delete cascade;
+
+alter table frm_care_med_error_intervention_outcome
+    add constraint fk_frm_care_med_error_intervention_outcome_2 foreign key (id_pharmacy_dictionary)
         references pharmacy_dictionary(id);
 
 alter table frm_care_adh_intervention_outcome
@@ -934,7 +978,9 @@ INSERT INTO db_sequence(name,value) VALUES ('pharmacy_dictionary_id_seq', 1000);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_error_type_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_adh_problem_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_error_intervention_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_care_med_error_intervention_outcome_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_adh_intervention_outcome_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_hepatic_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_nervous_id_seq', 1);
@@ -960,4 +1006,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130128, 5);
+insert into db_version values (1, 20130530, 4);
