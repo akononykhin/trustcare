@@ -191,6 +191,7 @@ class FormController extends ZendX_Controller_Action
                 $isMedErrorIdentified = $this->_getParam('is_med_error_identified');
                 $isMedAdhProblemScreened = $this->_getParam('is_med_adh_problem_screened');
                 $isMedAdhProblemIdentified = $this->_getParam('is_med_adh_problem_identified');
+                $isMedErrorInterventionProvided = $this->_getParam('is_med_error_intervention_provided');
                 $isAdhInterventionProvided = $this->_getParam('is_adh_intervention_provided');
                 $isAdrScreened = $this->_getParam('is_adr_screened');
                 $isAdrSymptoms = $this->_getParam('is_adr_symptoms');
@@ -207,10 +208,15 @@ class FormController extends ZendX_Controller_Action
                 if(!$isMedAdhProblemIdentified) {
                     $medAdhProblems = array();
                 }
+                $medErrorInterventions = $this->_getParam('med_error_intervention');
+                if(!$isMedErrorInterventionProvided) {
+                    $medErrorInterventions = array();
+                }
                 $adhInterventions = $this->_getParam('adh_intervention');
                 if(!$isAdhInterventionProvided) {
                     $adhInterventions = array();
                 }
+                $medErrorInterventionOutcomes = $this->_getParam('med_error_intervention_outcome');
                 $adhInterventionOutcomes = $this->_getParam('adh_intervention_outcome');
                 $suspectedAdrHepatic = $this->_getParam('suspected_adr_hepatic');
                 $suspectedAdrNervous = $this->_getParam('suspected_adr_nervous');
@@ -280,7 +286,8 @@ class FormController extends ZendX_Controller_Action
                 		'is_med_error_identified' => $isMedErrorIdentified,
                 		'is_med_adh_problem_screened' => $isMedAdhProblemScreened,
                 		'is_med_adh_problem_identified' => $isMedAdhProblemIdentified,
-                		'is_adh_intervention_provided' => $isAdhInterventionProvided,
+                		'is_med_error_intervention_provided' => $isMedErrorInterventionProvided,
+                        'is_adh_intervention_provided' => $isAdhInterventionProvided,
                 		'is_adr_screened' => $isAdrScreened,
                 		'is_adr_symptoms' => $isAdrSymptoms,
                         'adr_start_date' => $adrStartDate,
@@ -317,6 +324,17 @@ class FormController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
+                foreach($medErrorInterventions  as $dictId) {
+                    $model = new TrustCare_Model_FrmCareMedErrorIntervention(
+                            array(
+                                    'id_frm_care' => $frmModel->getId(),
+                                    'id_pharmacy_dictionary' => $dictId,
+                                    'mapperOptions' => array('adapter' => $db)
+                            )
+                    );
+                    $model->save();
+                }
+                
                 foreach($adhInterventions  as $dictId) {
                     $model = new TrustCare_Model_FrmCareAdhIntervention(
                         array(
@@ -324,6 +342,17 @@ class FormController extends ZendX_Controller_Action
            					'id_pharmacy_dictionary' => $dictId,
                            	'mapperOptions' => array('adapter' => $db)
                         )
+                    );
+                    $model->save();
+                }
+
+                foreach($medErrorInterventionOutcomes  as $dictId) {
+                    $model = new TrustCare_Model_FrmCareMedErrorInterventionOutcome(
+                            array(
+                                    'id_frm_care' => $frmModel->getId(),
+                                    'id_pharmacy_dictionary' => $dictId,
+                                    'mapperOptions' => array('adapter' => $db)
+                            )
                     );
                     $model->save();
                 }
@@ -450,8 +479,11 @@ class FormController extends ZendX_Controller_Action
             $isMedAdhProblemScreened = true;
             $isMedAdhProblemIdentified = true;
             $medAdhProblems = array();
+            $isMedErrorInterventionProvided = false;
             $isAdhInterventionProvided = true;
+            $medErrorInterventions = array();
             $adhInterventions = array();
+            $medErrorInterventionOutcomes = array();
             $adhInterventionOutcomes = array();
             $isAdrScreened = true;
             $isAdrSymptoms = false;
@@ -473,7 +505,9 @@ class FormController extends ZendX_Controller_Action
         $dictEntities = array(
             TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE => $medErrorTypes,
             TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM => $medAdhProblems,
+            TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED => $medErrorInterventions,
             TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED => $adhInterventions,
+            TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME => $medErrorInterventionOutcomes,
             TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME => $adhInterventionOutcomes,
             TrustCare_Model_PharmacyDictionary::DTYPE_ADR_SEVERITY_GRADE => array($adrSeverityId),
             TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC => $suspectedAdrHepatic,
@@ -507,6 +541,7 @@ class FormController extends ZendX_Controller_Action
         $this->view->isMedErrorIdentified = $isMedErrorIdentified;
         $this->view->isMedAdhProblemScreened = $isMedAdhProblemScreened;
         $this->view->isMedAdhProblemIdentified = $isMedAdhProblemIdentified;
+        $this->view->isMedErrorInterventionProvided = $isMedErrorInterventionProvided;
         $this->view->isAdhInterventionProvided = $isAdhInterventionProvided;
         $this->view->isAdrScreened = $isAdrScreened;
         $this->view->isAdrSymptoms = $isAdrSymptoms;
@@ -876,7 +911,19 @@ class FormController extends ZendX_Controller_Action
                 $medAdhProblems[] = $dict->getName();
             }
         }
-
+        
+        $medErrorInterventions = array();
+        $model = new TrustCare_Model_FrmCareMedErrorIntervention();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $medErrorInterventions[] = $dict->getName();
+            }
+        }
+        
         $adhInterventions = array();
         $model = new TrustCare_Model_FrmCareAdhIntervention();
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
@@ -888,7 +935,19 @@ class FormController extends ZendX_Controller_Action
                 $adhInterventions[] = $dict->getName();
             }
         }
-
+        
+        $medErrorInterventionOutcomes = array();
+        $model = new TrustCare_Model_FrmCareMedErrorInterventionOutcome();
+        foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $medErrorInterventionOutcomes[] = $dict->getName();
+            }
+        }
+        
         $adhInterventionOutcomes = array();
         $model = new TrustCare_Model_FrmCareAdhInterventionOutcome();
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
@@ -1008,7 +1067,9 @@ class FormController extends ZendX_Controller_Action
         $this->view->pharmacyName = $pharmacyModel->getName();
         $this->view->medErrorTypes = $medErrorTypes;
         $this->view->medAdhProblems = $medAdhProblems;
+        $this->view->medErrorInterventions = $medErrorInterventions;
         $this->view->adhInterventions = $adhInterventions;
+        $this->view->medErrorInterventionOutcomes = $medErrorInterventionOutcomes;
         $this->view->adhInterventionOutcomes = $adhInterventionOutcomes;
         $this->view->severityName = $severityName;
         $this->view->suspectedAdrHepatic = $suspectedAdrHepatic;
