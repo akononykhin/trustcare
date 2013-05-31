@@ -43,6 +43,9 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('is_med_adh_problem_identified')) {
             $data['is_med_adh_problem_identified'] = $model->getIsMedAdhProblemIdentified() ? 1 : 0;
         }
+        if(!$model->isExists() || $model->isParameterChanged('is_med_error_intervention_provided')) {
+            $data['is_med_error_intervention_provided'] = $model->getIsMedErrorInterventionProvided() ? 1 : 0;
+        }
         if(!$model->isExists() || $model->isParameterChanged('is_adh_intervention_provided')) {
             $data['is_adh_intervention_provided'] = $model->getIsAdhInterventionProvided() ? 1 : 0;
         }
@@ -114,6 +117,7 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
             is_med_error_identified,
             is_med_adh_problem_screened,
             is_med_adh_problem_identified,
+            is_med_error_intervention_provided,
             is_adh_intervention_provided,
             is_adr_screened,
             is_adr_symptoms,
@@ -146,6 +150,7 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
               ->setIsMedErrorIdentified($row->is_med_error_identified)
               ->setIsMedAdhProblemScreened($row->is_med_adh_problem_screened)
               ->setIsMedAdhProblemIdentified($row->is_med_adh_problem_identified)
+              ->setIsMedErrorInterventionProvided($row->is_med_error_intervention_provided)
               ->setIsAdhInterventionProvided($row->is_adh_intervention_provided)
               ->setIsAdrScreened($row->is_adr_screened)
               ->setIsAdrSymptoms($row->is_adr_symptoms)

@@ -10,26 +10,28 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
 {
     const DTYPE_MEDICATION_ERROR_TYPE = 1;
     const DTYPE_MEDICATION_ADH_PROBLEM = 2;
-    const DTYPE_ADH_INTERVENTION_PROVIDED = 3;
-    const DTYPE_ADH_INTERVENTION_OUTCOME = 4;
-    const DTYPE_ADR_SEVERITY_GRADE = 5;
-    const DTYPE_ADR_INTERVENTION_TYPE = 6;
-    const DTYPE_HEPATIC = 7;
-    const DTYPE_NERVOUS = 8;
-    const DTYPE_CARDIOVASCULAR = 9;
-    const DTYPE_SKIN = 10;
-    const DTYPE_METABOLIC = 11;
-    const DTYPE_MUSCULOSKELETAL = 12;
-    const DTYPE_GENERAL = 13;
+    const DTYPE_MED_ERROR_INTERVENTION_PROVIDED = 3;
+    const DTYPE_ADH_INTERVENTION_PROVIDED = 4;
+    const DTYPE_MED_ERROR_INTERVENTION_OUTCOME = 5;
+    const DTYPE_ADH_INTERVENTION_OUTCOME = 6;
+    const DTYPE_ADR_SEVERITY_GRADE = 7;
+    const DTYPE_ADR_INTERVENTION_TYPE = 8;
+    const DTYPE_HEPATIC = 9;
+    const DTYPE_NERVOUS = 10;
+    const DTYPE_CARDIOVASCULAR = 11;
+    const DTYPE_SKIN = 12;
+    const DTYPE_METABOLIC = 13;
+    const DTYPE_MUSCULOSKELETAL = 14;
+    const DTYPE_GENERAL = 15;
     
-    const DTYPE_REFERRED_IN = 14;
-    const DTYPE_REFERRED_OUT = 15;
-    const DTYPE_HTC_RESULT = 16;
-    const DTYPE_PALLIATIVE_CARE_TYPE = 17;
-    const DTYPE_REPRODUCTIVE_HEALTH_TYPE = 18;
-    const DTYPE_STI_TYPE = 19;
-    const DTYPE_TUBERCULOSIS_TYPE = 20;
-    const DTYPE_OVC_TYPE = 21;
+    const DTYPE_REFERRED_IN = 16;
+    const DTYPE_REFERRED_OUT = 17;
+    const DTYPE_HTC_RESULT = 18;
+    const DTYPE_PALLIATIVE_CARE_TYPE = 19;
+    const DTYPE_REPRODUCTIVE_HEALTH_TYPE = 20;
+    const DTYPE_STI_TYPE = 21;
+    const DTYPE_TUBERCULOSIS_TYPE = 22;
+    const DTYPE_OVC_TYPE = 23;
     
     protected $_id;
     protected $_id_pharmacy_dictionary_type;

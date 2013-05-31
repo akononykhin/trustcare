@@ -29,7 +29,9 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_care_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_med_error_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_med_adh_problem_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/frm_care_med_error_intervention_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_adh_intervention_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/frm_care_med_error_intervention_outcome_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_adh_intervention_outcome_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_suspected_adr_hepatic_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_care_suspected_adr_nervous_tests.php');

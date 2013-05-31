@@ -44,9 +44,10 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_med_error_identified' => true,
                 'is_med_adh_problem_screened' => false,
                 'is_med_adh_problem_identified' => true,
-                'is_adh_intervention_provided' => false,
-                'is_adr_screened' => true,
-                'is_adr_symptoms' => false,
+                'is_med_error_intervention_provided' => false,
+                'is_adh_intervention_provided' => true,
+                'is_adr_screened' => false,
+                'is_adr_symptoms' => true,
                 'adr_severity_id' => 1,
                 'adr_start_date' => '2012-06-01',
                 'adr_stop_date' => '2012-06-08',
@@ -103,9 +104,10 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_med_error_identified' => true,
                 'is_med_adh_problem_screened' => false,
                 'is_med_adh_problem_identified' => true,
-                'is_adh_intervention_provided' => false,
-                'is_adr_screened' => true,
-                'is_adr_symptoms' => false,
+                'is_med_error_intervention_provided' => false,
+                'is_adh_intervention_provided' => true,
+                'is_adr_screened' => false,
+                'is_adr_symptoms' => true,
                 'adr_severity_id' => 2,
                 'adr_start_date' => '2012-06-01',
                 'adr_stop_date' => '2012-06-08',
@@ -149,9 +151,10 @@ class TestOfFrmCare extends UnitTestCase {
                 'is_med_error_identified' => true,
                 'is_med_adh_problem_screened' => false,
                 'is_med_adh_problem_identified' => true,
-                'is_adh_intervention_provided' => false,
-                'is_adr_screened' => true,
-                'is_adr_symptoms' => false,
+                'is_med_error_intervention_provided' => false,
+                'is_adh_intervention_provided' => true,
+                'is_adr_screened' => false,
+                'is_adr_symptoms' => true,
                 'adr_severity_id' => 3,
                 'adr_start_date' => '2012-06-01',
                 'adr_stop_date' => '2012-06-08',
@@ -192,6 +195,7 @@ class TestOfFrmCare extends UnitTestCase {
             $params['is_med_error_identified'] = !$model->is_med_error_identified;
             $params['is_med_adh_problem_screened'] = !$model->is_med_adh_problem_screened;
             $params['is_med_adh_problem_identified'] = !$model->is_med_adh_problem_identified;
+            $params['is_med_error_intervention_provided'] = !$model->is_med_error_intervention_provided;
             $params['is_adh_intervention_provided'] = !$model->is_adh_intervention_provided;
             $params['is_adr_screened'] = !$model->is_adr_screened;
             $params['is_adr_symptoms'] = !$model->is_adr_symptoms;
@@ -311,6 +315,7 @@ class TestOfFrmCare extends UnitTestCase {
         $this->assertIdentical($model->is_med_error_identified, !empty($params['is_med_error_identified']) ? true : false, "Incorrect 'is_med_error_identified': %s");
         $this->assertIdentical($model->is_med_adh_problem_screened, !empty($params['is_med_adh_problem_screened']) ? true : false, "Incorrect 'is_med_adh_problem_screened': %s");
         $this->assertIdentical($model->is_med_adh_problem_identified, !empty($params['is_med_adh_problem_identified']) ? true : false, "Incorrect 'is_med_adh_problem_identified': %s");
+        $this->assertIdentical($model->is_med_error_intervention_provided, !empty($params['is_med_error_intervention_provided']) ? true : false, "Incorrect 'is_med_error_intervention_provided': %s");
         $this->assertIdentical($model->is_adh_intervention_provided, !empty($params['is_adh_intervention_provided']) ? true : false, "Incorrect 'is_adh_intervention_provided': %s");
         $this->assertIdentical($model->is_adr_screened, !empty($params['is_adr_screened']) ? true : false, "Incorrect 'is_adr_screened': %s");
         $this->assertIdentical($model->is_adr_symptoms, !empty($params['is_adr_symptoms']) ? true : false, "Incorrect 'is_adr_symptoms': %s");

@@ -19,6 +19,7 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     protected $_is_med_error_identified;
     protected $_is_med_adh_problem_screened;
     protected $_is_med_adh_problem_identified;
+    protected $_is_med_error_intervention_provided;
     protected $_is_adh_intervention_provided;
     protected $_is_adr_screened;
     protected $_is_adr_symptoms;
@@ -241,6 +242,26 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     public function getIsMedAdhProblemIdentified()
     {
         return !empty($this->_is_med_adh_problem_identified) ? true : false;
+    }
+
+    
+    /**
+     * @param  bool $value
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setIsMedErrorInterventionProvided($value)
+    {
+        $this->_parameterChanged('is_med_error_intervention_provided', $value, true);
+        $this->_is_med_error_intervention_provided = !empty($value) ? true : false;
+        return $this;
+    }
+    
+    /**
+     * @return null|bool
+     */
+    public function getIsMedErrorInterventionProvided()
+    {
+        return !empty($this->_is_med_error_intervention_provided) ? true : false;
     }
     
     /**
