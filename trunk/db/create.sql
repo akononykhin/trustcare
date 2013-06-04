@@ -127,8 +127,8 @@ insert into pharmacy_dictionary_type(id,ordernum,name) values (12, 12, 'Skin and
 insert into pharmacy_dictionary_type(id,ordernum,name) values (13, 13, 'Metabolic/Endocrine System Options');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (14, 14, 'Musculoskeletal');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (15, 15, 'Systemic-General Options');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (16, 16, '\‘Referred in\’ List');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (17, 17, '\‘Referred out\’ List');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (16, 16, 'Referred in List');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (17, 17, 'Referred out List');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (18, 18, 'Type of HIV testing results');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (19, 19, 'Palliative Care Services');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (20, 20, 'Reproductive Health services');
@@ -152,7 +152,7 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (6, 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (7,  1, 'Possible Drug-Drug interaction or contraindication present');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (8,  1, 'Prescription order with incomplete prescriber/client details including date');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (20,  2, 'Client’s Adherence Counseling not done or completed (new clients)');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (20,  2, 'Client\'s Adherence Counseling not done or completed (new clients)');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (21, 2, 'Non-adherence to therapy identified (Refill Clients)');
 
 
@@ -1007,4 +1007,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130531, 1);
+insert into db_version values (1, 20130601, 1);

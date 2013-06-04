@@ -66,9 +66,16 @@ abstract class TrustCare_SystemInterface_ReportGenerator_Abstract
         $fileReportDesign = sprintf("%s/%s", realpath(APPLICATION_PATH . '/../reports'), $designFile);
         
         set_time_limit(0);
-        $BIRT_RE_HOME = realpath (APPLICATION_PATH . "/../external/birt-runtime");
+        $BIRT_RE_HOME = realpath (APPLICATION_PATH . "/../external/birt-runtime-3_7_2/ReportEngine");
         $BIRTCLASSPATH = "";
+        if(substr(PHP_OS, 0, 3) == "WIN") {
+            $commandBat = realpath($BIRT_RE_HOME . "/genReport.bat");
+        }
+        else {
+            $commandBat = realpath($BIRT_RE_HOME . "/genReport.sh");
+        }
         
+        /*
         $libDir = $BIRT_RE_HOME . "/lib";
         if ($handle = opendir($libDir)) {
             while (false !== ($file = readdir($handle))) {
@@ -82,13 +89,14 @@ abstract class TrustCare_SystemInterface_ReportGenerator_Abstract
             }
             closedir($handle);
         }
+        */
         
         
         $commandParams = array();
         $commandParams[] = sprintf("-Xmx1024m");
         //$commandParams[] = sprintf("-Xmx8192m");
-        $commandParams[] = sprintf("-cp \"$BIRTCLASSPATH\"");
-        $commandParams[] = sprintf("-DBIRT_HOME=\"%s\"", $BIRT_RE_HOME);
+        //$commandParams[] = sprintf("-cp \"$BIRTCLASSPATH\"");
+        //$commandParams[] = sprintf("-DBIRT_HOME=\"%s\"", $BIRT_RE_HOME);
         $commandParams[] = "org.eclipse.birt.report.engine.api.ReportRunner";
         $commandParams[] = "-m runrender";
         foreach($parameters as $parameter) {
@@ -98,7 +106,8 @@ abstract class TrustCare_SystemInterface_ReportGenerator_Abstract
         $commandParams[] = sprintf("-o %s", $fileReportOutput);
         $commandParams[] = $fileReportDesign;
         
-        $command = "java " . join(" ", $commandParams);
+        $command = $commandBat . " " . join(" ", $commandParams);
+        
         exec($command, $output, $ret);
         
         if(0 != $ret) {

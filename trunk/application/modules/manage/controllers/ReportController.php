@@ -207,6 +207,7 @@ class ReportController extends ZendX_Controller_Action
                                 'id_pharmacy' => $idPharmacy,
                                 'year' => $year,
                                 'month' => $month,
+                                'month_index' => sprintf("%04s%02s", $year, $month),
                                 'male_younger_15' => $male_younger_15,
                                 'female_younger_15' => $female_younger_15,
                                 'male_from_15' => $male_from_15,
