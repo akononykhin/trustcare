@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 
 BIRT_HOME=`dirname $0`
 
