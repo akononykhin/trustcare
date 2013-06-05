@@ -8,4 +8,4 @@ for i in `ls $BIRT_HOME/lib/*.jar`;do export BIRTCLASSPATH=$i:$BIRTCLASSPATH;don
 JAVACMD='java';
 $JAVACMD -cp "$BIRTCLASSPATH" -DBIRT_HOME="$BIRT_HOME" ${1+"$@"}
 
-
+exit $?
