@@ -613,7 +613,7 @@ a {
    </td>
   </tr>
   <tr>
-   <td valign="top"><div class="normal"><label for="is_receive_prescription"><?php echo $this->translate(_("Did client receive prescription in this visit?"));?></label></div></td>
+   <td valign="top"><div class="normal"><label for="is_receive_prescription"><?php echo $this->translate(_("Did client receive prescription at this visit?"));?></label></div></td>
    <td>
      <input type="radio" name="is_receive_prescription" id="is_receive_prescription_0" value="0" <?php if(!$this->isReceivePrescription) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
      <input type="radio" name="is_receive_prescription" id="is_receive_prescription_1" value="1" <?php if($this->isReceivePrescription) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
@@ -627,7 +627,7 @@ a {
 <div class="tab_content">
  <table class="zend_form">
   <tr>
-   <td valign="top"><div class="normal"><label for="is_med_error_screened"><?php echo $this->translate(_("Is patient screened for Medication Error in this visit?"));?></label></div></td>
+   <td valign="top"><div class="normal"><label for="is_med_error_screened"><?php echo $this->translate(_("Is patient screened for Medication Error at this visit?"));?></label></div></td>
    <td>
      <input type="radio" name="is_med_error_screened" id="is_med_error_screened_0" value="0" <?php if(!$this->isMedErrorScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
      <input type="radio" name="is_med_error_screened" id="is_med_error_screened_1" value="1" <?php if($this->isMedErrorScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
@@ -657,7 +657,7 @@ a {
 <div class="tab_content">
  <table class="zend_form">
   <tr>
-   <td valign="top"><div class="normal"><label for="is_med_adh_problem_screened"><?php echo $this->translate(_("Is patient screened for Medication Adherence Related problem(s) in this visit?"));?></label></div></td>
+   <td valign="top"><div class="normal"><label for="is_med_adh_problem_screened"><?php echo $this->translate(_("Is patient screened for Medication Adherence Related problem(s) at this visit?"));?></label></div></td>
    <td>
      <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_0" value="0" <?php if(!$this->isMedAdhProblemScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
      <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_1" value="1" <?php if($this->isMedAdhProblemScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
