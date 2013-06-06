@@ -16,6 +16,7 @@ class TrustCare_SystemInterface_ReportGenerator_Community extends TrustCare_Syst
         $id_user = array_key_exists('id_user', $params) ? $params['id_user'] : null;
         $year = array_key_exists('year', $params) ? $params['year'] : -1;
         $month = array_key_exists('month', $params) ? $params['month'] : -1;
+        $month_index = array_key_exists('month_index', $params) ? $params['month_index'] : -1;
         $id_pharmacy = array_key_exists('id_pharmacy', $params) ? $params['id_pharmacy'] : -1;
 
         if(empty($format)) {
@@ -34,6 +35,7 @@ class TrustCare_SystemInterface_ReportGenerator_Community extends TrustCare_Syst
         $parameters[] = sprintf('jdbc_driver_url=jdbc:mysql://%s/%s', $dbOptions['params']['host'], $dbOptions['params']['dbname']);
         $parameters[] = sprintf('jdbc_username=%s', $dbOptions['params']['username']);
         $parameters[] = sprintf('jdbc_password=%s', $dbOptions['params']['password']);
+        $parameters[] = sprintf("month_index=%s", $month_index);
         $parameters[] = sprintf("month=%s", $month);
         $parameters[] = sprintf("year=%s", $year);
         $parameters[] = sprintf("id_pharmacy=%s", $id_pharmacy);
