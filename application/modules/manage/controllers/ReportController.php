@@ -265,6 +265,7 @@ class ReportController extends ZendX_Controller_Action
                                 'id_pharmacy' => $idPharmacy,
                                 'year' => $year,
                                 'month' => $month,
+                                'month_index' => sprintf("%04s%02s", $year, $month),
                     ));
                     $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $obj->getFilename());
                     
