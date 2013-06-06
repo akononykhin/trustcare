@@ -199,6 +199,7 @@ class ReportController extends ZendX_Controller_Action
                     $male_from_15 = $form->getValue('male_from_15');
                     $female_from_15 = $form->getValue('female_from_15');
                     $drugs = $form->getValue('drugs');
+                    $format = $form->getValue('format');
                     
                     $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_CARE);
                     
@@ -213,7 +214,7 @@ class ReportController extends ZendX_Controller_Action
                                 'male_from_15' => $male_from_15,
                                 'female_from_15' => $female_from_15,
                                 'drugs' => $drugs
-                    ));
+                    ), $format);
                     $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $obj->getFilename());
                     
                     if(!file_exists($fileReportOutput)) {
@@ -252,6 +253,8 @@ class ReportController extends ZendX_Controller_Action
                 try {
                     $idPharmacy = $form->getValue('id_pharmacy');
                     $period = $form->getValue('period');
+                    $format = $form->getValue('format');
+                    
                     if(!preg_match("/^(\d{4})-(\d{2})$/", $period, $matches)) {
                         throw new Exception(sprintf("Incorrect period=%s for generating report.", $period));
                     }
@@ -266,7 +269,7 @@ class ReportController extends ZendX_Controller_Action
                                 'year' => $year,
                                 'month' => $month,
                                 'month_index' => sprintf("%04s%02s", $year, $month),
-                    ));
+                    ), $format);
                     $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $obj->getFilename());
                     
                     if(!file_exists($fileReportOutput)) {
@@ -518,6 +521,12 @@ class ReportController extends ZendX_Controller_Action
             $periodList[gmdate("Y-m", $time)] = gmdate("Y-m", $time);
         }
         
+        $formatList = array(
+            'PDF' => 'PDF',
+            'HTML' => 'HTML',
+            'XLS' => 'Excel',
+        );
+        
         $numberValidator = new Zend_Validate_Regex('/^\d+$/');
         $numberValidator->setMessage(Zend_Registry::get("Zend_Translate")->_("Necessary to enter positive value"));
         
@@ -581,6 +590,13 @@ class ReportController extends ZendX_Controller_Action
         	'required'      => true,
             'validators'    => array($numberValidator)
         ));
+        $form->addElement('select', 'format', array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Format"),
+                'tabindex'      => $tabIndex++,
+                'required'      => true,
+                'value'         => 'PDF',
+                'multioptions'  => $formatList,
+        ));
         
         
         $form->addElement('submit', 'send', array(
@@ -609,6 +625,12 @@ class ReportController extends ZendX_Controller_Action
             $periodList[gmdate("Y-m", $time)] = gmdate("Y-m", $time);
         }
         
+        $formatList = array(
+            'PDF' => 'PDF',
+            'HTML' => 'HTML',
+            'XLS' => 'Excel',
+        );
+        
         $form = new ZendX_Form();
         $form->setMethod('post');
 
@@ -627,6 +649,13 @@ class ReportController extends ZendX_Controller_Action
             'required'      => true,
             'value'         => gmdate("Y-m", gmmktime(0, 0, 0, gmdate("m"), gmdate("d"), gmdate("Y"))),
             'multioptions'  => $periodList,
+        ));
+        $form->addElement('select', 'format', array(
+            'label'         => Zend_Registry::get("Zend_Translate")->_("Format"),
+            'tabindex'      => $tabIndex++,
+            'required'      => true,
+            'value'         => 'PDF',
+            'multioptions'  => $formatList,
         ));
         
         
