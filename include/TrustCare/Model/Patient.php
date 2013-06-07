@@ -338,9 +338,19 @@ class TrustCare_Model_Patient extends TrustCare_Model_Abstract
         return $newEntity;
     }
     
+    public function fetchAllFilteredBy($filteredBy)
+    {
+        return $this->getMapper()->fetchAllFilteredBy($filteredBy);
+    }
+    
     public function delete()
     {
     	parent::delete();
     	$this->id = null;
+    }
+    
+    public function showNameAs()
+    {
+        return sprintf("%s %s", $this->getLastName(), $this->getFirstName());
     }
 }

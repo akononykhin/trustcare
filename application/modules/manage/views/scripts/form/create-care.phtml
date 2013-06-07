@@ -12,7 +12,6 @@ a {
 </style>
 
 <script type="text/javascript" charset="utf-8">
-	var g_selectedPatient = '<?php echo $this->id_patient?>';
 	var g_selectedPharmacy = '<?php echo $this->idPharmacy?>';
 	var g_dictEntities = new Array();
 <?php foreach($this->dictEntities as $key=>$values) :?>
@@ -54,41 +53,28 @@ a {
       });
     }
 
-	function patientsReload(){
-		if($("#id_patient option").length) {
-			g_selectedPatient = $("#id_patient option:selected").val();
-		}
-  	    $.ajax({
-	        url:'<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
-	        ,type:'POST'
-	        ,data:''
-	        ,success: function(data){
+    function checkOnChangePatient() {
+        $.ajax( {
+             type: "POST"
+            ,url: '<?php echo $this->url(array("controller" => "patient", "action" => "check-is-male")); ?>'
+	        ,data: {
+	 	        id: $("#id_patient").val()
+	 	    }
+            ,success: function(data) {
 	            if(!data || !data.success) {
 	                return;
 	            }
-
-	            var select = $('#id_patient');
-	            if(select.prop) {
-	                var options = select.prop('options');
+	            if(0 != data.is_male) {
+		            $('input[name = "is_pregnant"]').attr("disabled", 'disabled');
+		            $('#is_pregnant_0').attr('checked', 'checked');
 	            }
 	            else {
-	                var options = select.attr('options');
+		            $('input[name = "is_pregnant"]').removeAttr("disabled");
 	            }
-	            $('option', select).remove();
-                options[options.length] = new Option('', '');
-	            for (var key in data.rows){
-		            var selectedFlag = false;
-		            if(key == g_selectedPatient) {
-			            selectedFlag = true;
-		            }
-	                options[options.length] = new Option(data.rows[key], key, selectedFlag);
-	            }
-	        }
-	        ,complete: function(jqXHR, textStatus) {
-	        }
-	  });
-	}
-
+            }
+        }); 
+    }
+           
 	function dictEntitiesReload(ctrlId, dictTypeId){
 		if($(ctrlId + " option").length) {
 			g_dictEntities[dictTypeId] = new Array();
@@ -286,9 +272,14 @@ a {
             	$("#id_pharmacy").focus();
             	return false;
         	}
-        	if(!$("#id_patient option:selected").val()) {
+        	if(!$("#patient_name").val()) {
             	alert('<?php echo $this->translate(_("Necessary to choose patient"));?>');
-            	$("#id_patient").focus();
+            	$("#patient_name").focus();
+            	return false;
+        	}
+        	if($("#patient_name").val() && !$("#id_patient").val()) {
+            	alert('<?php echo $this->translate(_("Unknown patient"));?>');
+            	$("#patient_name").focus();
             	return false;
         	}
         	if(!$('#date_of_visit').val()) {
@@ -301,8 +292,23 @@ a {
         	}
         	return true;
 	    });
+
+        $("#patient_name").autocomplete({
+        	source:     '<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
+        	,delay:     300
+        	,focus: function(event, ui ) {
+        		$("#patient_name").val(ui.item.label);
+        		return false;
+            }
+        	,select: function( event, ui ) {
+        		$("#patient_name").val(ui.item.label);
+        		$("#id_patient").val(ui.item.value);
+        		checkOnChangePatient();
+        		return false;
+        	}
+        });
+	    
 		
-	    patientsReload();
 	    dictEntitiesReload('#med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
 	    dictEntitiesReload('#med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
 	    dictEntitiesReload('#med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
@@ -338,9 +344,6 @@ a {
 	    	,height: 500
 		    ,width: 500
 		    ,modal: true
-		    ,close: function() {
-			    patientsReload();
-		    }
 	    });
 
         $("#dlg-add-dict-entity").dialog({
@@ -496,28 +499,6 @@ a {
 	    });
 /***   END OnClick events ***/		
 
-        $('#id_patient').change(function() {
-	        $.ajax( {
-	             type: "POST"
-	            ,url: '<?php echo $this->url(array("controller" => "patient", "action" => "check-is-male")); ?>'
- 	            ,data: {
- 	 	            id: $("#id_patient option:selected").val()
- 	 	        }
-	            ,success: function(data) {
-		            if(!data || !data.success) {
-		                return;
-		            }
-		            if(0 != data.is_male) {
-			            $('input[name = "is_pregnant"]').attr("disabled", 'disabled');
-			            $('#is_pregnant_0').attr('checked', 'checked');
-		            }
-		            else {
-			            $('input[name = "is_pregnant"]').removeAttr("disabled");
-		            }
-	            }
-	        });			    	      
-        });        
-
 /*** START Bind of OnChange ***/        
         $('input[name = "is_med_error_screened"]').bind('change', function(){
             checkIsMedErrorScreened();
@@ -592,8 +573,8 @@ a {
   <tr>
    <td valign="top"><div class="required"><label for="patient"><?php echo $this->translate(_("Patient"));?></label></div></td>
    <td>
-     <select name="id_patient" id="id_patient">
-     </select>&nbsp;
+     <input type="hidden" name="id_patient" id="id_patient" value="<?php echo $this->id_patient?>" />
+     <input type="text" size="32" name="patient_name" id="patient_name" value="<?php echo $this->patientName;?>">&nbsp;     
 <?php if ($this->allow_create_patient) : ?>
      <a id="link-add-patient" href="#"><?php echo $this->translate(_("Add Patient"));?></a>
 <?php endif;?>     

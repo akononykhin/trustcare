@@ -343,27 +343,26 @@ class PatientController extends ZendX_Controller_Action
     
     public function loadArrayOfActiveAction()
     {
-        $o = new stdClass();
-        $o->success = false;
-        
+        $o = array();
+    
         try {
-            Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_ASSOC);
-            $select = Zend_Registry::getInstance()->dbAdapter->select()->from("patient", array('id', 'identifier', 'first_name', 'last_name'))
-                                                                       ->where("is_active!=0")
-                                                                       ->order("identifier");
-            $records = Zend_Registry::getInstance()->dbAdapter->fetchAll($select);
-
-            $rows = array();
-            foreach ($records as $record) {
-                $rows[$record['id']] = sprintf("%s (%s %s)", $record['identifier'], $record['last_name'], $record['first_name']);
+            $filteredBy = $this->_getParam('term');
+    
+            $model = new TrustCare_Model_Patient();
+            $objs = $model->fetchAllFilteredBy($filteredBy);
+            foreach($objs as $obj) {
+                $o[] = array(
+                    'label' => $obj->showNameAs(),
+                    'value' => $obj->getId(),
+                );
             }
-            $o->rows = $rows;
-            $o->success = true;
         }
         catch(Exception $ex) {
-            
+            $exMessage = $ex->getMessage();
+            if(!empty($exMessage)) {
+                $this->getLogger()->error($exMessage);
+            }
         }
-
                                               
         $this->_helper->json($o);
     }
