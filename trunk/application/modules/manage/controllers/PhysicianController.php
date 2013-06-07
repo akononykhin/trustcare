@@ -132,6 +132,13 @@ class PhysicianController extends ZendX_Controller_Action
     {
         $form = $this->_getParametersForm(true);
         $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
+        
+        $forDialog = $this->_getParam('for_dialog');
+        if(!empty($forDialog)) {
+            $this->_helper->layout()->disableLayout();
+            $form->addElement('hidden', 'for_dialog', array('value' => 1));
+        }
+        
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 
@@ -156,7 +163,13 @@ class PhysicianController extends ZendX_Controller_Action
                     $model->setIdFacility($form->getValue("id_facility"));
                     $model->save();
 
-                    $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+                    if(empty($forDialog)) {
+                        $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+                    }
+                    else {
+                        $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Physician Created"), 'for_dialog' => 1));
+                        return;
+                    }
                 }
                 catch(Exception $ex) {
                     $message = $ex->getMessage();
@@ -265,6 +278,38 @@ class PhysicianController extends ZendX_Controller_Action
     
     
     
+    public function getListAjaxActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.physician", "view");
+    }
+    
+    public function getListAjaxAction()
+    {
+        $o = array();
+    
+        try {
+            $filteredBy = $this->_getParam('term');
+    
+            $model = new TrustCare_Model_Physician();
+            $objs = $model->fetchAllFilteredBy($filteredBy);
+            foreach($objs as $obj) {
+                $o[] = array(
+                    'label' => $obj->showNameAs(),
+                    'value' => $obj->getId(),
+                );
+            }
+        }
+        catch(Exception $ex) {
+            $exMessage = $ex->getMessage();
+            if(!empty($exMessage)) {
+                $this->getLogger()->error($exMessage);
+            }
+        }
+    
+    
+        $this->_helper->json($o);
+    }
+    
     
     /**
      * @return Zend_Form
@@ -305,7 +350,7 @@ class PhysicianController extends ZendX_Controller_Action
 
         $form->addElement('hidden', 'id');
         
-        $tabIndex = 1;
+        $tabIndex = 3000;
         $form->addElement('text', 'identifier', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("Physycian ID"),
             'description'   => "",

@@ -289,9 +289,14 @@ class PatientController extends ZendX_Controller_Action
             $form->getElement("address")->setValue($model->address);
             $form->getElement("zip")->setValue($model->zip);
             $form->getElement("phone")->setValue($model->phone);
-            $form->getElement("id_physician")->setValue($model->id_physician);
             $form->getElement("birthdate")->setValue($model->birthdate);
             $form->getElement("is_male")->setValue($model->is_male);
+            
+            $physicianModel = TrustCare_Model_Physician::find($model->id_physician);
+            if(!is_null($physicianModel)) {
+                $form->getElement("id_physician")->setValue($model->id_physician);
+                $form->getElement("physician_name")->setValue($physicianModel->showNameAs());
+            }
         }
         
         $this->view->form = $form;
@@ -410,13 +415,6 @@ class PatientController extends ZendX_Controller_Action
         }
         
         
-        $physicianList = array();
-        $physicianList[''] = '';
-        $model = new TrustCare_Model_Physician();
-        foreach ($model->fetchAll() as $obj) {
-            $physicianList[$obj->getId()] = $obj->getIdentifier();
-        }
-        
         $dateValidator = new Zend_Validate_Date('yyyy-MM-dd');
         $dateValidator->setMessage(Zend_Registry::get("Zend_Translate")->_("Incorrect date"));
         
@@ -425,8 +423,9 @@ class PatientController extends ZendX_Controller_Action
         $form->setMethod('post');
 
         $form->addElement('hidden', 'id');
+        $form->addElement('hidden', 'id_physician', array('id' => 'id_physician'));
         
-        $tabIndex = 1;
+        $tabIndex = 2000;
         $form->addElement('text', 'identifier', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("Client ID"),
             'description'   => "",
@@ -458,11 +457,13 @@ class PatientController extends ZendX_Controller_Action
             'size'          => 32,
             'tabindex'      => $tabIndex++,
         ));
-        $form->addElement('select', 'id_physician', array(
+        $form->addElement('text', 'physician_name', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("Physician"),
+            'id'			=> 'physician_name',
+            'text_htmlsuf'  => sprintf("<a id='link-add-physician' href='#'>%s</a>", Zend_Registry::get("Zend_Translate")->_("Add")),
             'tabindex'      => $tabIndex++,
             'required'      => false,
-            'multioptions'  => $physicianList,
+            'size'          => 32,
             'description'   => '',
         ));
         $form->addElement('text', 'birthdate', array(
