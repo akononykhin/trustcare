@@ -352,7 +352,7 @@ class PharmacyController extends ZendX_Controller_Action
 
         $form->addElement('hidden', 'id');
         
-        $tabIndex = 1;
+        $tabIndex = 1000;
         $form->addElement('text', 'name', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("Name"),
             'description'   => "",

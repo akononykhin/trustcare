@@ -133,4 +133,34 @@ class TrustCare_Model_Mapper_Physician extends TrustCare_Model_Mapper_Abstract
         }
         return $entries;
     }
+    
+    /**
+     * @return array
+     */
+    public function fetchAllFilteredBy($filteredBy)
+    {
+        $entries   = array();
+        
+        $where = array();
+        $where[] = '1=1';
+        if(!empty($filteredBy)) {
+            $where[] = sprintf("(first_name like %s or last_name like %s or identifier like %s)",
+                $this->getDbAdapter()->quote('%'.$filteredBy.'%'),
+                $this->getDbAdapter()->quote('%'.$filteredBy.'%'),
+                $this->getDbAdapter()->quote('%'.$filteredBy.'%')
+            );
+        }
+        
+        
+        $query = sprintf("select id from %s where %s order by last_name;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
+        $resultSet = $this->getDbAdapter()->fetchAll($query);
+        foreach ($resultSet as $row) {
+            $entry = new TrustCare_Model_Physician(array('mapperOptions' => array('adapter' => $this->getDbAdapter())));
+            $this->find($row->id, $entry);
+            
+            $entries[] = $entry;
+        }
+        return $entries;
+    }
 }

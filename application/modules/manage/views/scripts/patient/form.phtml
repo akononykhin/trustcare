@@ -1,6 +1,63 @@
+<?php
+$this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
+$this->headLink()->appendStylesheet('/css/showLoading.css');
+?>
 <script>
+    function linkFormToDlg(dialogId) {
+	    var form = $(dialogId + '>form');
+	    if(form) {
+    	    form.submit(function(event) {
+	            event.preventDefault();
+    	        $(dialogId).showLoading();
+	            $.ajax( {
+	                 type: "POST"
+	                ,url: $(this).attr('action')
+  	                ,data: $(this).serialize()
+    	            ,success: function(response) {
+	            	    $(dialogId).html(response);
+	            	    linkFormToDlg(dialogId);
+	                }
+    	            ,complete: function(jqXHR, textStatus) {
+    	                $(dialogId).hideLoading();
+        	        }
+	            });			    	      
+	        });
+    	} 			    	  
+    }
+    
     $(function() {
-        $( "#id_birthdate" ).datepicker({dateFormat : 'yy-mm-dd'});
+        $("#id_birthdate").datepicker({dateFormat : 'yy-mm-dd'});
+        $("#physician_name").autocomplete({
+        	source:     '<?php echo $this->url(array('controller' => 'physician', "action" => "get-list-ajax")); ?>'
+        	,delay:     300
+        	,focus: function(event, ui ) {
+        		$("#physician_name").val(ui.item.label);
+        		return false;
+            }
+        	,select: function( event, ui ) {
+        		$("#physician_name").val(ui.item.label);
+        		$("#id_physician").val(ui.item.value);
+        		return false;
+        	}
+        });
+    });
+    
+	$(document).ready(function() {
+	    var newPhysicianDlg = $("<div id='dialog-add-physician'></div>").dialog({
+		     dialogClass: 'dialog-content'
+			,title: '<?php echo $this->translate(_("Add Physician"));?>'
+		    ,autoOpen: false
+	    	,height: 450
+		    ,width: 600
+		    ,modal: true
+	    });
+
+	    $("#link-add-physician").click(function() {
+	    	newPhysicianDlg.load('<?php echo $this->url(array("controller" => "physician", "action" => "create", "for_dialog" => 1)); ?>', function(){
+		    	linkFormToDlg("#dialog-add-physician");
+		    }).dialog('open');
+	        return false;
+	    });
     });
 </script>
 <?php echo $this->form; ?>
