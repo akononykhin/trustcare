@@ -22,7 +22,10 @@ class TrustCare_Model_Mapper_PharmacyDictionary extends TrustCare_Model_Mapper_A
         if(!$model->isExists() || $model->isParameterChanged('name')) {
             $data['name'] = $model->getName();
         }
-
+        if(!$model->isExists() || $model->isParameterChanged('is_active')) {
+            $data['is_active'] = $model->getIsActive() ? 1 : 0;
+        }
+        
         if (null === ($id = $model->getId())) {
             unset($data['id']);
             $primaryKey = $this->getDbTable()->insert($data);
@@ -58,7 +61,8 @@ class TrustCare_Model_Mapper_PharmacyDictionary extends TrustCare_Model_Mapper_A
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
               ->setIdPharmacyDictionaryType($row->id_pharmacy_dictionary_type)
-              ->setName($row->name);
+              ->setName($row->name)
+              ->setIsActive($row->is_active);
         $model->setSkipTrackChanges(false);
               
         return true;
