@@ -102,7 +102,11 @@ class PharmDictController extends ZendX_Controller_Action
         $model = TrustCare_Model_PharmacyDictionaryType::find($typeId);
         
         $columnsInfo = array(
-        	'name' => array(
+        	'is_active' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("Is Active"),
+                'width' => '5%',
+            ),
+            'name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Name"),
                 'filter' => array(
                     'type' => 'text',
@@ -121,7 +125,7 @@ class PharmDictController extends ZendX_Controller_Action
             'params' => array(
                 'type_id' => $typeId,
             ),
-        	'defSortColumn' => 1,
+        	'defSortColumn' => 2,
             'defSortDir' => 'asc',
             'columnsInfo' => $columnsInfo,
             'bActionsColumn' => true
@@ -168,6 +172,7 @@ class PharmDictController extends ZendX_Controller_Action
         );
         foreach ($rows as $row) {
             $row['DT_RowId'] = $row['id'];
+            $row['is_active'] = !empty($row['is_active']) ? Zend_Registry::get("Zend_Translate")->_("Yes") : Zend_Registry::get("Zend_Translate")->_("No");
             
             $row['_row_actions_'] = array(
                 array(
@@ -200,7 +205,7 @@ class PharmDictController extends ZendX_Controller_Action
         $typeId = $this->_getParam('type_id');
         $typeModel = TrustCare_Model_PharmacyDictionaryType::find($typeId);
         
-        $form = $this->_getParametersForm($typeId);
+        $form = $this->_getParametersForm($typeId, true);
         $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
@@ -212,6 +217,7 @@ class PharmDictController extends ZendX_Controller_Action
                     $model = new TrustCare_Model_PharmacyDictionary();
                     $model->setName($name);
                     $model->setIdPharmacyDictionaryType($typeId);
+                    $model->setIsActive(true);
                     $model->save();
 
                     $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type_id' => $typeId));
@@ -243,7 +249,7 @@ class PharmDictController extends ZendX_Controller_Action
         $typeId = $this->_getParam('type_id');
         $typeModel = TrustCare_Model_PharmacyDictionaryType::find($typeId);
         
-        $form = $this->_getParametersForm($typeId);
+        $form = $this->_getParametersForm($typeId, false);
         $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
         
         $id = $this->_getParam('id');
@@ -261,6 +267,7 @@ class PharmDictController extends ZendX_Controller_Action
                     $name = $form->getValue('name');
                     
                     $model->setName($name);
+                    $model->setIsActive($form->getValue(is_active));
                     $model->save();
                     
                     $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type_id' => $typeId));
@@ -277,6 +284,7 @@ class PharmDictController extends ZendX_Controller_Action
         else {
             $form->getElement("id")->setValue($id);
             $form->getElement("name")->setValue($model->name);
+            $form->getElement("is_active")->setValue($model->is_active);
         }
         
         $this->view->form = $form;
@@ -296,16 +304,35 @@ class PharmDictController extends ZendX_Controller_Action
     public function deleteAction()
     {
         $typeId = $this->_getParam('type_id');
-        
         $id = $this->_getParam('id');
-        $model = TrustCare_Model_PharmacyDictionary::find($id);
+        
+        $db_options = Zend_Registry::get('dbOptions');
+        $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+        
+        $model = TrustCare_Model_PharmacyDictionary::find($id, array('mapperOptions' => array('adapter' => $db)));
         if(is_null($model)) {
             $this->getLogger()->error(sprintf("'%s' tries to delete unknown pharmacy_dictionary with id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Pharmacy Dictionary row")));
             return;
         }
 
-        $model->delete();
+        try {
+            try {
+                $db->logSQLErrors(false);
+                $model->delete();
+            }
+            catch(Exception $ex1) {
+                $db->logSQLErrors(true);
+                $model->setIsActive(false);
+                $model->save();
+            }
+            $db->logSQLErrors(true);
+        }
+        catch(Exception $ex) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+
         
         $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName(), null, array('type_id' => $typeId));
     }
@@ -385,7 +412,7 @@ class PharmDictController extends ZendX_Controller_Action
     /**
      * @return Zend_Form
      */
-    private function _getParametersForm($typeId)
+    private function _getParametersForm($typeId, $isCreate = true)
     {
         $form = new ZendX_Form();
         $form->setMethod('post');
@@ -401,6 +428,13 @@ class PharmDictController extends ZendX_Controller_Action
             'tabindex'      => $tabIndex++,
             'required'      => true
         ));
+        if(!$isCreate) {
+            $form->addElement('checkbox', 'is_active', array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("Is Active"),
+                'tabindex'      => $tabIndex++,
+                'checked'      => true
+            ));
+        }
         
         $form->addElement('submit', 'send', array(
             'label'     => Zend_Registry::get("Zend_Translate")->_("Save"),
