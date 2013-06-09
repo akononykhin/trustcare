@@ -353,7 +353,7 @@ class PharmDictController extends ZendX_Controller_Action
         try {
             $rows = array();
             $model = new TrustCare_Model_PharmacyDictionary();
-            foreach($model->fetchAll(sprintf("id_pharmacy_dictionary_type=%d", $typeId)) as $obj) {
+            foreach($model->fetchAll(array(sprintf("id_pharmacy_dictionary_type=%d", $typeId), "is_active=1"), 'name') as $obj) {
                 $rows[$obj->getId()] = $obj->getName();
             }
              
