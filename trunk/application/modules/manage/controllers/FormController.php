@@ -247,7 +247,7 @@ class FormController extends ZendX_Controller_Action
                 if(is_null($pharmacyModel)) {
                     throw new Exception(sprintf("Trying to create form for unknown pharmacy.id=%s", $idPharmacy));
                 }
-                
+
                 $patientModel = TrustCare_Model_Patient::find($idPatient);
                 if(is_null($patientModel)) {
                     throw new Exception(sprintf("Trying to create form for unknown patient.id=%s", $idPatient));
