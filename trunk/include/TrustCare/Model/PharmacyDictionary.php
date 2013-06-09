@@ -36,6 +36,18 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
     protected $_id;
     protected $_id_pharmacy_dictionary_type;
     protected $_name;
+    protected $_is_active;
+    
+    public function __construct(array $options = null)
+    {
+        parent::__construct($options);
+        
+        if(!$this->isExists()) {
+            if(!is_array($options) || !array_key_exists('is_active', $options)) {
+                $this->_is_active = true;
+            }
+        }
+    }
     
     /**
      * @param  int $value 
@@ -92,6 +104,25 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
     public function getName()
     {
         return $this->_name;
+    }
+    
+    /**
+     * @param  bool $value
+     * @return TrustCare_Model_PharmacyDictionary
+     */
+    public function setIsActive($value)
+    {
+        $this->_parameterChanged('is_active', $value, true);
+        $this->_is_active = !empty($value) ? true : false;
+        return $this;
+    }
+    
+    /**
+     * @return null|bool
+     */
+    public function getIsActive()
+    {
+        return !empty($this->_is_active) ? true : false;
     }
     
     public function isExists()

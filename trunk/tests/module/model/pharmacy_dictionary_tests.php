@@ -35,6 +35,7 @@ class TestOfPharmacyDictionary extends UnitTestCase {
             $params = array(
                 'id' => $this->db->nextSequenceId('pharmacy_dictionary_id_seq'),
                 'name' => 'Test1',
+                'is_active' => false,
                 'id_pharmacy_dictionary_type' => 100
             );
 
@@ -74,6 +75,7 @@ class TestOfPharmacyDictionary extends UnitTestCase {
             'id' => '1',
             'id_pharmacy_dictionary_type' => '1000',
             'name' => 'Test2',
+            'is_active' => true,
             'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -83,6 +85,18 @@ class TestOfPharmacyDictionary extends UnitTestCase {
     }
     
     function testDefaultValues() {
+        $params = array(
+            'id_pharmacy_dictionary_type' => '1000',
+            'name' => 'Test2',
+            'mapperOptions' => array('adapter' => $this->db)
+        );
+        
+        $model = new TrustCare_Model_PharmacyDictionary($params);
+
+        $params['id'] = null;
+        $params['is_active'] = true;
+
+        $this->_compareObjectAndParams($model, $params);
     }
 
     function testLoadExistingById() {
@@ -103,7 +117,8 @@ class TestOfPharmacyDictionary extends UnitTestCase {
         $params = array(
             'id_pharmacy_dictionary_type' => 100,
             'name' => 'Test3',
-            );
+            'is_active' => false,
+        );
         
         try {
             $model = new TrustCare_Model_PharmacyDictionary(array('mapperOptions' => array('adapter' => $this->db)));
@@ -127,6 +142,7 @@ class TestOfPharmacyDictionary extends UnitTestCase {
         if(!is_null($model)) {
             $params['id_pharmacy_dictionary_type'] = 100 == $model->id_pharmacy_dictionary_type ? 101 : 100;
             $params['name'] = $model->name . '22';
+            $params['is_active'] = !$model->getIsActive();
              
             try {
                 $model->setOptions($params);
@@ -179,6 +195,7 @@ class TestOfPharmacyDictionary extends UnitTestCase {
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
         $this->assertEqual($model->id_pharmacy_dictionary_type, $params['id_pharmacy_dictionary_type'], "Incorrect 'id_pharmacy_dictionary_type': %s");
         $this->assertEqual($model->name, $params['name'], "Incorrect 'name': %s");
+        $this->assertIdentical($model->is_active, $params['is_active'], "Incorrect 'is_active': %s");
     }
 }
 

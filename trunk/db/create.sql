@@ -140,6 +140,7 @@ CREATE TABLE pharmacy_dictionary (
   `id` int NOT NULL,
   `id_pharmacy_dictionary_type` int NOT NULL,
   `name` varchar(255) NOT NULL,
+  `is_active` bool default 1,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1007,4 +1008,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130601, 1);
+insert into db_version values (1, 20130609, 1);
