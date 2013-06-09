@@ -1943,7 +1943,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=1
+  pharmacy_dictionary.id_pharmacy_dictionary_type=1 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
   ;
 
 ]]></xml-property>
@@ -2091,7 +2091,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=2
+  pharmacy_dictionary.id_pharmacy_dictionary_type=2 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
   ;
 
 ]]></xml-property>
@@ -2358,7 +2358,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=4
+  pharmacy_dictionary.id_pharmacy_dictionary_type=4 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
   ;
 
 ]]></xml-property>
@@ -2506,7 +2506,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=6
+  pharmacy_dictionary.id_pharmacy_dictionary_type=6 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
   ;
 
 ]]></xml-property>
@@ -2869,7 +2869,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=9
+  pharmacy_dictionary.id_pharmacy_dictionary_type=9 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
 
 union
 
@@ -2912,7 +2912,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=10
+  pharmacy_dictionary.id_pharmacy_dictionary_type=10 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
 
 union
 
@@ -2955,7 +2955,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=11
+  pharmacy_dictionary.id_pharmacy_dictionary_type=11 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
 
 union
 
@@ -2998,7 +2998,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=12
+  pharmacy_dictionary.id_pharmacy_dictionary_type=12 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
 
 union
 
@@ -3041,7 +3041,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=13
+  pharmacy_dictionary.id_pharmacy_dictionary_type=13 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
 
 union
 
@@ -3084,7 +3084,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=14
+  pharmacy_dictionary.id_pharmacy_dictionary_type=14 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
 
 union
 
@@ -3127,7 +3127,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=15
+  pharmacy_dictionary.id_pharmacy_dictionary_type=15 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
 
 ;
 
@@ -3396,7 +3396,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=8
+  pharmacy_dictionary.id_pharmacy_dictionary_type=8 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
   ;
 
 ]]></xml-property>
@@ -3663,7 +3663,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=3
+  pharmacy_dictionary.id_pharmacy_dictionary_type=3 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
   ;
 
 ]]></xml-property>
@@ -3811,7 +3811,7 @@ from
       t.id_pharmacy_dictionary
   ) as t2 on t2.id_pharmacy_dictionary=pharmacy_dictionary.id
 where
-  pharmacy_dictionary.id_pharmacy_dictionary_type=5
+  pharmacy_dictionary.id_pharmacy_dictionary_type=5 and (pharmacy_dictionary.is_active=1 or t2.id_pharmacy_dictionary is not null)
   ;
 
 ]]></xml-property>
