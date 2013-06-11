@@ -1,6 +1,10 @@
 <?php
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
+$this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.ui.position.js');
+$this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.contextMenu.js');
+
 $this->headLink()->appendStylesheet('/css/showLoading.css');
+$this->headLink()->appendStylesheet('/js/jquery/plugin/contextMenu/jquery.contextMenu.css');
 
 $textForEmptyAdrStopDate = $this->translate(_("Ongoing"));
 ?>
@@ -216,7 +220,94 @@ var g_dictEntities = new Array();
         $('#add-dict-entity-name').val("").removeClass("ui-state-error");
     }
 
-	$(document).ready(function() {
+
+    function processPharmDictContextMenuPressed(key, options, list_element_id, type_id)
+    {
+        var label = options.$trigger[0].label;
+        var value = options.$trigger[0].value;
+
+        if('edit' == key) {
+	    	$("#dlg-edit-dict-entity").attr('type_id', type_id);
+	    	$("#dlg-edit-dict-entity").attr('list_element_id', list_element_id);
+	    	$("#edit-dict-entity-name").val(label)
+	    	$("#edit-dict-entity-id").val(value)
+	    	$("#dlg-edit-dict-entity").dialog('open');
+        }
+        else if('delete' == key) {
+	    	$("#dlg-remove-dict-entity").attr('dict_id', value);
+	        $("#dlg-remove-dict-entity").attr('type_id', type_id);
+	    	$("#dlg-remove-dict-entity").attr('list_element_id', list_element_id);
+	        $('#remove-dict-entity-name').html(label);
+        	$("#dlg-remove-dict-entity").dialog({
+                modal: true
+               ,dialogClass: 'alert'
+               ,title: '<?php echo $this->translate(_("Warning"))?>'
+               ,width: 450
+               ,buttons: {
+                   "OK": function() {
+   	                    var type_id = $(this).attr('type_id');
+   	                    var list_element_id = $(this).attr('list_element_id');
+   	                    var dict_id = $(this).attr('dict_id');
+   	                    
+   	    	            $('#dlg-remove-dict-entity').showLoading();
+  	                    $.ajax({
+                            url: '<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "remove-ajax")); ?>'
+                            ,type:'POST'
+              	            ,data: {
+                                id : dict_id
+                            }
+	                        ,success: function(data) {
+	                            if (data && data.success){
+	                    	        $('#dlg-remove-dict-entity').dialog("close");
+    	            	            dictEntitiesReload('#'+list_element_id, type_id);
+            	                }
+                	            else {
+                    	            var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
+                      	            if(data) {
+                          	            errorMsg = data.error;
+                                    }
+                                    updateErrorInfo('#dlg-remove-dict-entity', errorMsg);
+                                }
+                            }
+	    	                ,complete: function(jqXHR, textStatus) {
+	    	        	        $('#dlg-remove-dict-entity').hideLoading();
+	    	                }
+                        });
+                   },
+                   Cancel: function() {
+                       $(this).dialog("close");
+                   }
+               }
+	           ,close: function() {
+	           }
+	           ,open: function() {
+	               cleanErrorInfo('#dlg-remove-dict-entity');
+	           }
+           });
+       }
+    }
+
+    function linkDynamicActionsToPharmDictCtrl(list_element_id, type_id)
+    {
+	    $("#link-add-"+list_element_id).click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', type_id);
+	    	$("#dlg-add-dict-entity").attr('list_element_id', list_element_id);
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+        $('#'+list_element_id).contextMenu({
+            selector: 'option', 
+            callback: function(key, options) {
+                processPharmDictContextMenuPressed(key, options, list_element_id, type_id);
+            },
+            items: {
+                "edit": {name: "Edit"},
+                "delete": {name: "Delete"},
+            }
+        });
+    }
+
+    $(document).ready(function() {
     	$('#main_form').submit(function() {
         	if(!$("#id_pharmacy option:selected").val()) {
             	alert('<?php echo $this->translate(_("Necessary to choose pharmacy"));?>');
@@ -288,11 +379,11 @@ var g_dictEntities = new Array();
 			    ,modal: true
         });
 
-	    $("#dlg-add-dict-entity").dialog({
+        $("#dlg-add-dict-entity").dialog({
 	        dialogClass: 'dialog-content'
 	        ,autoOpen: false
 	        ,height: 200
-	        ,width: 300
+	        ,width: 530
 	        ,modal: true
 	        ,buttons: {
 	            '<?php echo $this->translate(_("Add"));?>': function() {
@@ -340,9 +431,64 @@ var g_dictEntities = new Array();
 	        ,open: function() {
 	            cleanErrorInfo('#dlg-add-dict-entity');
 	        }
-	      });
-        
-/***   START OnClick events ***/		
+	    });
+
+        $("#dlg-edit-dict-entity").dialog({
+	        dialogClass: 'dialog-content'
+	        ,autoOpen: false
+	        ,height: 200
+	        ,width: 530
+	        ,modal: true
+	        ,buttons: {
+	            '<?php echo $this->translate(_("Save"));?>': function() {
+                    var name = $('#edit-dict-entity-name');
+	                if(!name.val()) {
+	                    name.addClass("ui-state-error");
+	                    updateErrorInfo('#dlg-edit-dict-entity', '<?php echo $this->translate(_("Necessary to enter value"));?>');
+	                    return false;
+	                }
+                    var id = $('#edit-dict-entity-id');
+	                var type_id = $(this).attr('type_id');
+	                var list_element_id = $(this).attr('list_element_id');
+	            
+	    	        $('#dlg-edit-dict-entity').showLoading();
+ 	                $.ajax({
+	                     url: '<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "change-ajax")); ?>'
+	                    ,type:'POST'
+	              	    ,data: {
+	                         name : name.val()
+	                        ,id: id.val()
+	                    }
+		                ,success: function(data) {
+		                    if (data && data.success){
+		                    	$('#dlg-edit-dict-entity').dialog("close");
+	    	            	    dictEntitiesReload('#'+list_element_id, type_id);
+	            	        }
+	                	    else{
+	                    	    var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
+	                      	    if(data) {
+	                          	    errorMsg = data.error;
+	                            }
+	                            updateErrorInfo('#dlg-edit-dict-entity', errorMsg);
+	                        }
+	                    }
+		    	        ,complete: function(jqXHR, textStatus) {
+		    	        	$('#dlg-edit-dict-entity').hideLoading();
+		    	        }
+	                });
+	          }
+	          ,'<?php echo $this->translate(_("Cancel"));?>': function() {
+	              $(this).dialog("close");
+	          }
+	        }
+	        ,close: function() {
+	        }
+	        ,open: function() {
+	            cleanErrorInfo('#dlg-edit-dict-entity');
+	        }
+	    });
+	    
+        /***   START OnClick events ***/		
 	    $("#link-add-patient").click(function() {
 	    	newPatientDlg.load('<?php echo $this->url(array("controller" => "patient", "action" => "create", "for_dialog" => 1)); ?>', function(){
 		    	linkFormToDlg("#dialog-add-patient");
@@ -355,50 +501,16 @@ var g_dictEntities = new Array();
 		    }).dialog('open');
 	        return false;
 	    });
-	    
-	    $("#link-add-referred_in").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'referred_in');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-referred_out").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'referred_out');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-palliative_care_type").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'palliative_care_type');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-sti_type").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'sti_type');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-reproductive_health_type").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'reproductive_health_type');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-tuberculosis_type").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'tuberculosis_type');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-ovc_type").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'ovc_type');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
 /***   END OnClick events ***/		
+	    
+	    linkDynamicActionsToPharmDictCtrl('referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
+	    linkDynamicActionsToPharmDictCtrl('referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
+	    linkDynamicActionsToPharmDictCtrl('palliative_care_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE;?>');
+	    linkDynamicActionsToPharmDictCtrl('sti_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
+	    linkDynamicActionsToPharmDictCtrl('reproductive_health_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE;?>');
+	    linkDynamicActionsToPharmDictCtrl('tuberculosis_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
+	    linkDynamicActionsToPharmDictCtrl('ovc_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
+	    
 
 /*** START Bind of OnChange ***/        
         $('input[name = "is_referred_in"]').bind('change', function(){
@@ -658,6 +770,21 @@ var g_dictEntities = new Array();
   <p class="errorInfo"></p>
   <form>
     <label for="name"><?php echo $this->translate(_("Name"));?></label>
-    <input type="text" name="name" id="add-dict-entity-name" class="text ui-widget-content ui-corner-all" />
+    <input type="text" name="name" id="add-dict-entity-name" class="text ui-widget-content ui-corner-all" size="56"/>
   </form>
+</div>
+
+<div id="dlg-edit-dict-entity" title="<?php echo $this->translate(_("Modify"));?>" type_id="" list_element_id="">
+  <p class="errorInfo"></p>
+  <form>
+    <label for="name"><?php echo $this->translate(_("Name"));?></label>
+    <input type="text" name="name" id="edit-dict-entity-name" class="text ui-widget-content ui-corner-all" size="56"/>
+    <input type="hidden" name="id" id="edit-dict-entity-id" />
+    </form>
+</div>
+
+<div id="dlg-remove-dict-entity"style="display: none;" title="<?php echo $this->translate(_("Warning"));?>" type_id="" list_element_id="" dict_id="">
+  <p class="errorInfo"></p>
+  <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+  <?php echo $this->translate(_("<div id='remove-dict-entity-name' style='font-weight: bold;'></div> will be removed. Are You sure?"));?>
 </div>
