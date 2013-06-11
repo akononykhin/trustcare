@@ -447,12 +447,14 @@ class PatientController extends ZendX_Controller_Action
         $form->addElement('text', 'first_name', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("First Name"),
             'description'   => "",
+            'required'      => true,
             'size'          => 32,
             'tabindex'      => $tabIndex++,
         ));
         $form->addElement('text', 'last_name', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("Last Name"),
             'description'   => "",
+            'required'      => true,
             'size'          => 32,
             'tabindex'      => $tabIndex++,
         ));
