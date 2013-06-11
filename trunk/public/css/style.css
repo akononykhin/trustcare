@@ -7,7 +7,7 @@ div.form_errors {
     color: #cc0000;
 }
 
-div.error {
+div.error, p.errorInfo {
     color: #cc0000;
 }
 
