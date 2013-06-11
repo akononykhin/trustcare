@@ -134,11 +134,27 @@ class TestOfFrmCare extends UnitTestCase {
 
     function testLoadUnexistingById() {
         $model = TrustCare_Model_FrmCare::find(-1 * $this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-        
-        
         $this->assertNull($model, "This entity must not be loaded");
     }
 
+    
+    function testLoadExistingByPatientIdAndDateOfVisit()
+    {
+        $model = TrustCare_Model_FrmCare::findByPatientIdAndDateOfVisit($this->paramsAtDb['id_patient'], $this->paramsAtDb['date_of_visit'], array('mapperOptions' => array('adapter' => $this->db)));
+    
+        $this->_compareObjectAndParams($model, $this->paramsAtDb);
+    }
+    
+    
+    function testLoadUnExistingByPatientIdAndDateOfVisit()
+    {
+        $model = TrustCare_Model_FrmCare::findByPatientIdAndDateOfVisit($this->paramsAtDb['id_patient'] * -1, $this->paramsAtDb['date_of_visit'], array('mapperOptions' => array('adapter' => $this->db)));
+        $this->assertNull($model, "This entity must not be loaded");
+
+        $model = TrustCare_Model_FrmCare::findByPatientIdAndDateOfVisit($this->paramsAtDb['id_patient'], '1970-01-01', array('mapperOptions' => array('adapter' => $this->db)));
+        $this->assertNull($model, "This entity must not be loaded");
+    }
+    
 
     function testSaveNew() {
         $params = array(

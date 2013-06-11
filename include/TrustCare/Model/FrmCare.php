@@ -483,6 +483,28 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
         return $newEntity;
     }
 
+    
+    /**
+     * Find an entry by unique pair: patient_id and date_of_visit
+     *
+     * @param int $patientId
+     * @param string $dateOfVisit Date of visit (YYYY-MM-DD)
+     * @param array|null $options
+     * @return TrustCare_Model_FrmCare
+     */
+    public static function findByPatientIdAndDateOfVisit($patientId, $dateOfVisit, array $options = null)
+    {
+        $newEntity = new TrustCare_Model_FrmCare($options);
+        $result = $newEntity->getMapper()->findByPatientIdAndDateOfVisit($patientId, $dateOfVisit, $newEntity);
+    
+        if(!$result) {
+            unset($newEntity);
+            $newEntity = null;
+        }
+    
+        return $newEntity;
+    }
+    
     /**
      * 
      * Get the number of forms generated for specified patient
