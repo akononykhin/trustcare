@@ -1,6 +1,10 @@
 <?php
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
+$this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.ui.position.js');
+$this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.contextMenu.js');
+
 $this->headLink()->appendStylesheet('/css/showLoading.css');
+$this->headLink()->appendStylesheet('/js/jquery/plugin/contextMenu/jquery.contextMenu.css');
 
 $textForEmptyAdrStopDate = $this->translate(_("Ongoing"));
 ?>
@@ -265,6 +269,92 @@ a {
         $('#add-dict-entity-name').val("").removeClass("ui-state-error");
     }
 
+    function processPharmDictContextMenuPressed(key, options, list_element_id, type_id)
+    {
+        var label = options.$trigger[0].label;
+        var value = options.$trigger[0].value;
+
+        if('edit' == key) {
+	    	$("#dlg-edit-dict-entity").attr('type_id', type_id);
+	    	$("#dlg-edit-dict-entity").attr('list_element_id', list_element_id);
+	    	$("#edit-dict-entity-name").val(label)
+	    	$("#edit-dict-entity-id").val(value)
+	    	$("#dlg-edit-dict-entity").dialog('open');
+        }
+        else if('delete' == key) {
+	    	$("#dlg-remove-dict-entity").attr('dict_id', value);
+	        $("#dlg-remove-dict-entity").attr('type_id', type_id);
+	    	$("#dlg-remove-dict-entity").attr('list_element_id', list_element_id);
+	        $('#remove-dict-entity-name').html(label);
+        	$("#dlg-remove-dict-entity").dialog({
+                modal: true
+               ,dialogClass: 'alert'
+               ,title: '<?php echo $this->translate(_("Warning"))?>'
+               ,width: 450
+               ,buttons: {
+                   "OK": function() {
+   	                    var type_id = $(this).attr('type_id');
+   	                    var list_element_id = $(this).attr('list_element_id');
+   	                    var dict_id = $(this).attr('dict_id');
+   	                    
+   	    	            $('#dlg-remove-dict-entity').showLoading();
+  	                    $.ajax({
+                            url: '<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "remove-ajax")); ?>'
+                            ,type:'POST'
+              	            ,data: {
+                                id : dict_id
+                            }
+	                        ,success: function(data) {
+	                            if (data && data.success){
+	                    	        $('#dlg-remove-dict-entity').dialog("close");
+    	            	            dictEntitiesReload('#'+list_element_id, type_id);
+            	                }
+                	            else {
+                    	            var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
+                      	            if(data) {
+                          	            errorMsg = data.error;
+                                    }
+                                    updateErrorInfo('#dlg-remove-dict-entity', errorMsg);
+                                }
+                            }
+	    	                ,complete: function(jqXHR, textStatus) {
+	    	        	        $('#dlg-remove-dict-entity').hideLoading();
+	    	                }
+                        });
+                   },
+                   Cancel: function() {
+                       $(this).dialog("close");
+                   }
+               }
+	           ,close: function() {
+	           }
+	           ,open: function() {
+	               cleanErrorInfo('#dlg-remove-dict-entity');
+	           }
+           });
+       }
+    }
+
+    function linkDynamicActionsToPharmDictCtrl(list_element_id, type_id)
+    {
+	    $("#link-add-"+list_element_id).click(function() {
+	    	$("#dlg-add-dict-entity").attr('type_id', type_id);
+	    	$("#dlg-add-dict-entity").attr('list_element_id', list_element_id);
+	    	$("#dlg-add-dict-entity").dialog('open');
+	        return false;
+	    });
+        $('#'+list_element_id).contextMenu({
+            selector: 'option', 
+            callback: function(key, options) {
+                processPharmDictContextMenuPressed(key, options, list_element_id, type_id);
+            },
+            items: {
+                "edit": {name: "Edit"},
+                "delete": {name: "Delete"},
+            }
+        });
+    }
+
 	$(document).ready(function() {
     	$('#main_form').submit(function() {
         	if(!$("#id_pharmacy option:selected").val()) {
@@ -350,7 +440,7 @@ a {
 	        dialogClass: 'dialog-content'
 	        ,autoOpen: false
 	        ,height: 200
-	        ,width: 300
+	        ,width: 530
 	        ,modal: true
 	        ,buttons: {
 	            '<?php echo $this->translate(_("Add"));?>': function() {
@@ -398,8 +488,63 @@ a {
 	        ,open: function() {
 	            cleanErrorInfo('#dlg-add-dict-entity');
 	        }
-	      });
-        
+	    });
+
+        $("#dlg-edit-dict-entity").dialog({
+	        dialogClass: 'dialog-content'
+	        ,autoOpen: false
+	        ,height: 200
+	        ,width: 530
+	        ,modal: true
+	        ,buttons: {
+	            '<?php echo $this->translate(_("Save"));?>': function() {
+                    var name = $('#edit-dict-entity-name');
+	                if(!name.val()) {
+	                    name.addClass("ui-state-error");
+	                    updateErrorInfo('#dlg-edit-dict-entity', '<?php echo $this->translate(_("Necessary to enter value"));?>');
+	                    return false;
+	                }
+                    var id = $('#edit-dict-entity-id');
+	                var type_id = $(this).attr('type_id');
+	                var list_element_id = $(this).attr('list_element_id');
+	            
+	    	        $('#dlg-edit-dict-entity').showLoading();
+ 	                $.ajax({
+	                     url: '<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "change-ajax")); ?>'
+	                    ,type:'POST'
+	              	    ,data: {
+	                         name : name.val()
+	                        ,id: id.val()
+	                    }
+		                ,success: function(data) {
+		                    if (data && data.success){
+		                    	$('#dlg-edit-dict-entity').dialog("close");
+	    	            	    dictEntitiesReload('#'+list_element_id, type_id);
+	            	        }
+	                	    else{
+	                    	    var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
+	                      	    if(data) {
+	                          	    errorMsg = data.error;
+	                            }
+	                            updateErrorInfo('#dlg-edit-dict-entity', errorMsg);
+	                        }
+	                    }
+		    	        ,complete: function(jqXHR, textStatus) {
+		    	        	$('#dlg-edit-dict-entity').hideLoading();
+		    	        }
+	                });
+	          }
+	          ,'<?php echo $this->translate(_("Cancel"));?>': function() {
+	              $(this).dialog("close");
+	          }
+	        }
+	        ,close: function() {
+	        }
+	        ,open: function() {
+	            cleanErrorInfo('#dlg-edit-dict-entity');
+	        }
+	    });
+	      
 /***   START OnClick events ***/		
 	    $("#link-add-patient").click(function() {
 	    	newPatientDlg.load('<?php echo $this->url(array("controller" => "patient", "action" => "create", "for_dialog" => 1)); ?>', function(){
@@ -413,91 +558,24 @@ a {
 		    }).dialog('open');
 	        return false;
 	    });
-	    $("#link-add-med_error_type").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'med_error_type');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-med_adh_problem").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'med_adh_problem');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-med_error_intervention").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'med_error_intervention');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-adh_intervention").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'adh_intervention');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-med_error_intervention_outcome").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'med_error_intervention_outcome');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-adh_intervention_outcome").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'adh_intervention_outcome');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-suspected_adr_hepatic").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_hepatic');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-suspected_adr_nervous").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_nervous');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-suspected_adr_cardiovascular").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_cardiovascular');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-suspected_adr_skin").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_skin');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-suspected_adr_metabolic").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_metabolic');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-suspected_adr_musculoskeletal").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_musculoskeletal');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-suspected_adr_general").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'suspected_adr_general');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-	    $("#link-add-adr_intervention").click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
-	    	$("#dlg-add-dict-entity").attr('list_element_id', 'adr_intervention');
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
 /***   END OnClick events ***/		
+	    
+	    linkDynamicActionsToPharmDictCtrl('med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
+	    linkDynamicActionsToPharmDictCtrl('med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
+	    linkDynamicActionsToPharmDictCtrl('med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
+	    linkDynamicActionsToPharmDictCtrl('adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
+	    linkDynamicActionsToPharmDictCtrl('med_error_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME;?>');
+	    linkDynamicActionsToPharmDictCtrl('adh_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
+	    linkDynamicActionsToPharmDictCtrl('suspected_adr_hepatic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
+	    linkDynamicActionsToPharmDictCtrl('suspected_adr_nervous', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
+	    linkDynamicActionsToPharmDictCtrl('suspected_adr_cardiovascular', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
+	    linkDynamicActionsToPharmDictCtrl('suspected_adr_skin', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
+	    linkDynamicActionsToPharmDictCtrl('suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
+	    linkDynamicActionsToPharmDictCtrl('suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
+	    linkDynamicActionsToPharmDictCtrl('suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
+        linkDynamicActionsToPharmDictCtrl('adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
+	    
+	    
 
 /*** START Bind of OnChange ***/        
         $('input[name = "is_med_error_screened"]').bind('change', function(){
@@ -543,7 +621,8 @@ a {
 	        checkAdrStopDate();
 	    });
         checkAdrStopDate();
-});
+
+    });
 </script>
 
 <?php if(!empty($this->error)) : ?>
@@ -624,7 +703,7 @@ a {
   <tr id="row_med_error_type">
    <td valign="top"><div class="normal"><label for="med_error_type"><?php echo $this->translate(_("Type of Medication Error"));?></label></div></td>
    <td>
-     <select name="med_error_type[]" id="med_error_type" multiple size="5">
+     <select name="med_error_type[]" id="med_error_type" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-med_error_type"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -654,7 +733,7 @@ a {
   <tr id="row_med_adh_problem">
    <td valign="top"><div class="normal"><label for="med_adh_problem"><?php echo $this->translate(_("Type of Medication Adherence Related problem(s)"));?></label></div></td>
    <td>
-     <select name="med_adh_problem[]" id="med_adh_problem" multiple size="3">
+     <select name="med_adh_problem[]" id="med_adh_problem" class="pharmdict_modify_menu" multiple size="3">
      </select>&nbsp;
      <a id="link-add-med_adh_problem"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -675,7 +754,7 @@ a {
   <tr id="row_med_error_intervention">
    <td valign="top"><div class="normal"><label for="med_error_intervention"><?php echo $this->translate(_("Type of Medication Error intervention provided"));?></label></div></td>
    <td>
-     <select name="med_error_intervention[]" id="med_error_intervention" multiple size="5">
+     <select name="med_error_intervention[]" id="med_error_intervention" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-med_error_intervention"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -696,7 +775,7 @@ a {
   <tr id="row_adh_intervention">
    <td valign="top"><div class="normal"><label for="adh_intervention"><?php echo $this->translate(_("Type of Adherence intervention provided"));?></label></div></td>
    <td>
-     <select name="adh_intervention[]" id="adh_intervention" multiple size="5">
+     <select name="adh_intervention[]" id="adh_intervention" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-adh_intervention"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -710,7 +789,7 @@ a {
   <tr id="row_med_error_intervention_outcome">
    <td valign="top"><div class="normal"><label for="med_error_intervention_outcome"><?php echo $this->translate(_("Type of Medication Error intervention Outcome"));?></label></div></td>
    <td>
-     <select name="med_error_intervention_outcome[]" id="med_error_intervention_outcome" multiple size="5">
+     <select name="med_error_intervention_outcome[]" id="med_error_intervention_outcome" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-med_error_intervention_outcome"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -724,7 +803,7 @@ a {
   <tr id="row_adh_intervention_outcome">
    <td valign="top"><div class="normal"><label for="adh_intervention_outcome"><?php echo $this->translate(_("Type of Adherence intervention Outcome"));?></label></div></td>
    <td>
-     <select name="adh_intervention_outcome[]" id="adh_intervention_outcome" multiple size="5">
+     <select name="adh_intervention_outcome[]" id="adh_intervention_outcome" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-adh_intervention_outcome"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -777,7 +856,7 @@ a {
   <tr id="row_suspected_adr_hepatic">
    <td valign="top"><div class="normal"><label for="suspected_adr_hepatic"><?php echo $this->translate(_("GIT/Hepatic System"));?></label></div></td>
    <td>
-     <select name="suspected_adr_hepatic[]" id="suspected_adr_hepatic" multiple size="5">
+     <select name="suspected_adr_hepatic[]" id="suspected_adr_hepatic" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_hepatic"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -785,7 +864,7 @@ a {
   <tr id="row_suspected_adr_nervous">
    <td valign="top"><div class="normal"><label for="suspected_adr_nervous"><?php echo $this->translate(_("Nervous System"));?></label></div></td>
    <td>
-     <select name="suspected_adr_nervous[]" id="suspected_adr_nervous" multiple size="5">
+     <select name="suspected_adr_nervous[]" id="suspected_adr_nervous" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_nervous"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -793,7 +872,7 @@ a {
   <tr id="row_suspected_adr_cardiovascular">
    <td valign="top"><div class="normal"><label for="suspected_adr_cardiovascular"><?php echo $this->translate(_("Cardiovascular System"));?></label></div></td>
    <td>
-     <select name="suspected_adr_cardiovascular[]" id="suspected_adr_cardiovascular" multiple size="5">
+     <select name="suspected_adr_cardiovascular[]" id="suspected_adr_cardiovascular" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_cardiovascular"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -801,7 +880,7 @@ a {
   <tr id="row_suspected_adr_skin">
    <td valign="top"><div class="normal"><label for="suspected_adr_skin"><?php echo $this->translate(_("Skin and Appendages"));?></label></div></td>
    <td>
-     <select name="suspected_adr_skin[]" id="suspected_adr_skin" multiple size="5">
+     <select name="suspected_adr_skin[]" id="suspected_adr_skin" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_skin"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -809,7 +888,7 @@ a {
   <tr id="row_suspected_adr_metabolic">
    <td valign="top"><div class="normal"><label for="suspected_adr_metabolic"><?php echo $this->translate(_("Metabolic/Endocrine System"));?></label></div></td>
    <td>
-     <select name="suspected_adr_metabolic[]" id="suspected_adr_metabolic" multiple size="5">
+     <select name="suspected_adr_metabolic[]" id="suspected_adr_metabolic" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_metabolic"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -817,7 +896,7 @@ a {
   <tr id="row_suspected_adr_musculoskeletal">
    <td valign="top"><div class="normal"><label for="suspected_adr_musculoskeletal"><?php echo $this->translate(_("Musculoskeletal"));?></label></div></td>
    <td>
-     <select name="suspected_adr_musculoskeletal[]" id="suspected_adr_musculoskeletal" multiple size="5">
+     <select name="suspected_adr_musculoskeletal[]" id="suspected_adr_musculoskeletal" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_musculoskeletal"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -825,7 +904,7 @@ a {
   <tr id="row_suspected_adr_general">
    <td valign="top"><div class="normal"><label for="suspected_adr_general"><?php echo $this->translate(_("Systematic-General"));?></label></div></td>
    <td>
-     <select name="suspected_adr_general[]" id="suspected_adr_general" multiple size="5">
+     <select name="suspected_adr_general[]" id="suspected_adr_general" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-suspected_adr_general"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -846,7 +925,7 @@ a {
   <tr id="row_adr_intervention">
    <td valign="top"><div class="normal"><label for="adr_intervention"><?php echo $this->translate(_("Types of ADR intervention"));?></label></div></td>
    <td>
-     <select name="adr_intervention[]" id="adr_intervention" multiple size="5">
+     <select name="adr_intervention[]" id="adr_intervention" class="pharmdict_modify_menu" multiple size="5">
      </select>&nbsp;
      <a id="link-add-adr_intervention"><?php echo $this->translate(_("Other"));?></a>
    </td>
@@ -869,6 +948,21 @@ a {
   <p class="errorInfo"></p>
   <form>
     <label for="name"><?php echo $this->translate(_("Name"));?></label>
-    <input type="text" name="name" id="add-dict-entity-name" class="text ui-widget-content ui-corner-all" />
+    <input type="text" name="name" id="add-dict-entity-name" class="text ui-widget-content ui-corner-all" size="56" />
   </form>
+</div>
+
+<div id="dlg-edit-dict-entity" title="<?php echo $this->translate(_("Modify"));?>" type_id="" list_element_id="">
+  <p class="errorInfo"></p>
+  <form>
+    <label for="name"><?php echo $this->translate(_("Name"));?></label>
+    <input type="text" name="name" id="edit-dict-entity-name" class="text ui-widget-content ui-corner-all" size="56"/>
+    <input type="hidden" name="id" id="edit-dict-entity-id" />
+    </form>
+</div>
+
+<div id="dlg-remove-dict-entity" title="<?php echo $this->translate(_("Warning"));?>" type_id="" list_element_id="" dict_id="">
+  <p class="errorInfo"></p>
+  <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+  <?php echo $this->translate(_("<div id='remove-dict-entity-name' style='font-weight: bold;'></div> will be removed. Are You sure?"));?>
 </div>

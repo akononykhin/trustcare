@@ -408,6 +408,93 @@ class PharmDictController extends ZendX_Controller_Action
                                               
         $this->_helper->json($o);
     }
+
+    
+    public function changeAjaxActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharm_dict", "edit");
+    }
+    
+    public function changeAjaxAction()
+    {
+        $o = new stdClass();
+        $o->success = false;
+        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+    
+        try {
+            $id = $this->_getParam('id');
+            $name = $this->_getParam('name');
+    
+            $model = TrustCare_Model_PharmacyDictionary::find($id);
+            if(is_null($model)) {
+                throw new Exception(sprintf("Failed to load pharmacy_dictionary.id=%s", $id));
+            }
+    
+            $model->setName($name);
+            $model->save();
+    
+            $o->success = true;
+        }
+        catch(Exception $ex) {
+            $o->error = $errorMsg;
+    
+            $exMessage = $ex->getMessage();
+            if(!empty($exMessage)) {
+                $this->getLogger()->error($exMessage);
+            }
+        }
+    
+    
+        $this->_helper->json($o);
+    }
+    
+    public function removeAjaxActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharm_dict", "delete");
+    }
+    
+    public function removeAjaxAction()
+    {
+        $o = new stdClass();
+        $o->success = false;
+        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+    
+        $db_options = Zend_Registry::get('dbOptions');
+        $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+        
+        try {
+            $id = $this->_getParam('id');
+    
+            $model = TrustCare_Model_PharmacyDictionary::find($id, array('mapperOptions' => array('adapter' => $db)));
+            if(is_null($model)) {
+                throw new Exception(sprintf("Failed to load pharmacy_dictionary.id=%s", $id));
+            }
+    
+            try {
+                $db->logSQLErrors(false);
+                $model->delete();
+            }
+            catch(Exception $ex1) {
+                $db->logSQLErrors(true);
+                $model->setIsActive(false);
+                $model->save();
+            }
+            $db->logSQLErrors(true);
+                
+            $o->success = true;
+        }
+        catch(Exception $ex) {
+            $o->error = $errorMsg;
+    
+            $exMessage = $ex->getMessage();
+            if(!empty($exMessage)) {
+                $this->getLogger()->error($exMessage);
+            }
+        }
+    
+    
+        $this->_helper->json($o);
+    }
     
     /**
      * @return Zend_Form
