@@ -97,6 +97,35 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
         }
     }
 
+    
+    private function _fillModelForFind(TrustCare_Model_FrmCare $model, $row)
+    {
+        $model->setSkipTrackChanges(true);
+        $model->setId($row->id)
+              ->setIdPharmacy($row->id_pharmacy)
+              ->setIdPatient($row->id_patient)
+              ->setDateOfVisit($row->date_of_visit)
+              ->setDateOfVisitMonthIndex($row->date_of_visit_month_index)
+              ->setIsPregnant($row->is_pregnant)
+              ->setIsReceivePrescription($row->is_receive_prescription)
+              ->setIsMedErrorScreened($row->is_med_error_screened)
+              ->setIsMedErrorIdentified($row->is_med_error_identified)
+              ->setIsMedAdhProblemScreened($row->is_med_adh_problem_screened)
+              ->setIsMedAdhProblemIdentified($row->is_med_adh_problem_identified)
+              ->setIsMedErrorInterventionProvided($row->is_med_error_intervention_provided)
+              ->setIsAdhInterventionProvided($row->is_adh_intervention_provided)
+              ->setIsAdrScreened($row->is_adr_screened)
+              ->setIsAdrSymptoms($row->is_adr_symptoms)
+              ->setAdrSeverityId($row->adr_severity_id)
+              ->setAdrStartDate($row->adr_start_date)
+              ->setAdrStopDate($row->adr_stop_date)
+              ->setIsAdrInterventionProvided($row->is_adr_intervention_provided)
+              ->setIsNafdacAdrFilled($row->is_nafdac_adr_filled)
+              ->setIsPatientYounger15($row->is_patient_younger_15)
+              ->setIsPatientMale($row->is_patient_male);
+        $model->setSkipTrackChanges(false);
+    }
+    
     /**
      * @param  int $id 
      * @param  TrustCare_Model_FrmCare $model 
@@ -137,32 +166,55 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
             return false;
         }
         $row = $result[0];
-
-        $model->setSkipTrackChanges(true);
-        $model->setId($row->id)
-              ->setIdPharmacy($row->id_pharmacy)
-              ->setIdPatient($row->id_patient)
-              ->setDateOfVisit($row->date_of_visit)
-              ->setDateOfVisitMonthIndex($row->date_of_visit_month_index)
-              ->setIsPregnant($row->is_pregnant)
-              ->setIsReceivePrescription($row->is_receive_prescription)
-              ->setIsMedErrorScreened($row->is_med_error_screened)
-              ->setIsMedErrorIdentified($row->is_med_error_identified)
-              ->setIsMedAdhProblemScreened($row->is_med_adh_problem_screened)
-              ->setIsMedAdhProblemIdentified($row->is_med_adh_problem_identified)
-              ->setIsMedErrorInterventionProvided($row->is_med_error_intervention_provided)
-              ->setIsAdhInterventionProvided($row->is_adh_intervention_provided)
-              ->setIsAdrScreened($row->is_adr_screened)
-              ->setIsAdrSymptoms($row->is_adr_symptoms)
-              ->setAdrSeverityId($row->adr_severity_id)
-              ->setAdrStartDate($row->adr_start_date)
-              ->setAdrStopDate($row->adr_stop_date)
-              ->setIsAdrInterventionProvided($row->is_adr_intervention_provided)
-              ->setIsNafdacAdrFilled($row->is_nafdac_adr_filled)
-              ->setIsPatientYounger15($row->is_patient_younger_15)
-              ->setIsPatientMale($row->is_patient_male);
-        $model->setSkipTrackChanges(false);
+        $this->_fillModelForFind($model, $row);
               
+        return true;
+    }
+
+    
+    /**
+     * @param  int $patientId
+     * @param string $dateOfVisit Date of visit (YYYY-MM-DD)
+     * @param  TrustCare_Model_FrmCare $model
+     * @return void
+     */
+    public function findByPatientIdAndDateOfVisit($patientId, $dateOfVisit, TrustCare_Model_FrmCare $model)
+    {
+        $query = sprintf("
+            select
+                id,
+                id_pharmacy,
+                id_patient,
+                date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit,
+                date_of_visit_month_index,
+                is_pregnant,
+                is_receive_prescription,
+                is_med_error_screened,
+                is_med_error_identified,
+                is_med_adh_problem_screened,
+                is_med_adh_problem_identified,
+                is_med_error_intervention_provided,
+                is_adh_intervention_provided,
+                is_adr_screened,
+                is_adr_symptoms,
+                adr_severity_id,
+                date_format(adr_start_date, '%%Y-%%m-%%d') as adr_start_date,
+                date_format(adr_stop_date, '%%Y-%%m-%%d') as adr_stop_date,
+                is_adr_intervention_provided,
+                is_nafdac_adr_filled,
+                is_patient_younger_15,
+                is_patient_male
+            from %s
+            where id_patient=%d and date_of_visit=str_to_date('%s', '%%Y-%%m-%%d');", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), $patientId, $dateOfVisit);
+    
+        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
+        $result = $this->getDbAdapter()->fetchAll($query);
+        if (0 == count($result)) {
+            return false;
+        }
+        $row = $result[0];
+        $this->_fillModelForFind($model, $row);
+    
         return true;
     }
     
