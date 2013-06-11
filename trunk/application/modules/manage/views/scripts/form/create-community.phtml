@@ -12,11 +12,47 @@ a {
 </style>
 
 <script type="text/javascript" charset="utf-8">
-	var g_dictEntities = new Array();
+var g_selectedPharmacy = '<?php echo $this->idPharmacy?>';
+var g_dictEntities = new Array();
 <?php foreach($this->dictEntities as $key=>$values) :?>
     g_dictEntities[<?php echo $key;?>] = [<?php if(is_array($values)) echo join(" , ", $values);?>];
 <?php endforeach; ?>
-	
+
+    function pharmacyReload(){
+        if($("#id_pharmacy option").length) {
+            g_selectedPharmacy = $("#id_pharmacy option:selected").val();
+        }
+        $.ajax({
+            url:'<?php echo $this->url(array('controller' => 'pharmacy', "action" => "load-array-of-active")); ?>'
+            ,type:'POST'
+            ,data:''
+            ,success: function(data){
+                if(!data || !data.success) {
+                    return;
+                    }
+
+                var select = $('#id_pharmacy');
+                if(select.prop) {
+                    var options = select.prop('options');
+                }
+                else {
+                    var options = select.attr('options');
+                }
+                $('option', select).remove();
+                options[options.length] = new Option('', '');
+                for (var key in data.rows){
+                    var selectedFlag = false;
+                    if(key == g_selectedPharmacy) {
+                        selectedFlag = true;
+                    } 
+                    options[options.length] = new Option(data.rows[key], key, selectedFlag);
+                }
+            }
+            ,complete: function(jqXHR, textStatus) {
+            }
+        });
+    }
+
 	function dictEntitiesReload(ctrlId, dictTypeId){
 		if($(ctrlId + " option").length) {
 			g_dictEntities[dictTypeId] = new Array();
@@ -231,6 +267,18 @@ a {
 	    dictEntitiesReload('#tuberculosis_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
 	    dictEntitiesReload('#ovc_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
 	    
+	    var newPharmacyDlg = $("<div id='dialog-add-pharmacy'></div>").dialog({
+		     dialogClass: 'dialog-content'
+			,title: '<?php echo $this->translate(_("Add Pharmacy"));?>'
+		    ,autoOpen: false
+	    	,height: 500
+		    ,width: 700
+		    ,modal: true
+		    ,close: function() {
+			    pharmacyReload();
+		    }
+	    });
+
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 			     dialogClass: 'dialog-content'
 				,title: '<?php echo $this->translate(_("Add Patient"));?>'
@@ -301,6 +349,13 @@ a {
 		    }).dialog('open');
 	        return false;
 	    });
+	    $("#link-add-pharmacy").click(function() {
+	    	newPharmacyDlg.load('<?php echo $this->url(array("controller" => "pharmacy", "action" => "create", "for_dialog" => 1)); ?>', function(){
+		    	linkFormToDlg("#dialog-add-pharmacy");
+		    }).dialog('open');
+	        return false;
+	    });
+	    
 	    $("#link-add-referred_in").click(function() {
 	    	$("#dlg-add-dict-entity").attr('type_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
 	    	$("#dlg-add-dict-entity").attr('list_element_id', 'referred_in');
@@ -404,7 +459,10 @@ a {
         printf("<option value='%s' %s>%s</option>", $key, $selectedStr, $value);
     }
 ?>     
-     </select>
+     </select>&nbsp;
+<?php if ($this->allow_create_pharmacy) : ?>
+     <a id="link-add-pharmacy" href="#"><?php echo $this->translate(_("Add Pharmacy"));?></a>
+<?php endif;?>     
    </td>
   </tr>
   <tr>
