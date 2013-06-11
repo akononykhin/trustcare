@@ -12,47 +12,11 @@ a {
 </style>
 
 <script type="text/javascript" charset="utf-8">
-	var g_selectedPatient = '<?php echo $this->id_patient?>';
 	var g_dictEntities = new Array();
 <?php foreach($this->dictEntities as $key=>$values) :?>
     g_dictEntities[<?php echo $key;?>] = [<?php if(is_array($values)) echo join(" , ", $values);?>];
 <?php endforeach; ?>
 	
-	function patientsReload(){
-		if($("#id_patient option").length) {
-			g_selectedPatient = $("#id_patient option:selected").val();
-		}
-  	    $.ajax({
-	        url:'<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
-	        ,type:'POST'
-	        ,data:''
-	        ,success: function(data){
-	            if(!data || !data.success) {
-	                return;
-	            }
-
-	            var select = $('#id_patient');
-	            if(select.prop) {
-	                var options = select.prop('options');
-	            }
-	            else {
-	                var options = select.attr('options');
-	            }
-	            $('option', select).remove();
-                options[options.length] = new Option('', '');
-	            for (var key in data.rows){
-		            var selectedFlag = false;
-		            if(key == g_selectedPatient) {
-			            selectedFlag = true;
-		            }
-	                options[options.length] = new Option(data.rows[key], key, selectedFlag);
-	            }
-	        }
-	        ,complete: function(jqXHR, textStatus) {
-	        }
-	  });
-	}
-
 	function dictEntitiesReload(ctrlId, dictTypeId){
 		if($(ctrlId + " option").length) {
 			g_dictEntities[dictTypeId] = new Array();
@@ -223,9 +187,14 @@ a {
             	$("#id_pharmacy").focus();
             	return false;
         	}
-        	if(!$("#id_patient option:selected").val()) {
+        	if(!$("#patient_name").val()) {
             	alert('<?php echo $this->translate(_("Necessary to choose patient"));?>');
-            	$("#id_patient").focus();
+            	$("#patient_name").focus();
+            	return false;
+        	}
+        	if($("#patient_name").val() && !$("#id_patient").val()) {
+            	alert('<?php echo $this->translate(_("Unknown patient"));?>');
+            	$("#patient_name").focus();
             	return false;
         	}
         	if(!$('#date_of_visit').val()) {
@@ -238,8 +207,21 @@ a {
         	}
         	return true;
 	    });
-		
-	    patientsReload();
+
+        $("#patient_name").autocomplete({
+        	source:     '<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
+        	,delay:     300
+        	,focus: function(event, ui ) {
+        		$("#patient_name").val(ui.item.label);
+        		return false;
+            }
+        	,select: function( event, ui ) {
+        		$("#patient_name").val(ui.item.label);
+        		$("#id_patient").val(ui.item.value);
+        		return false;
+        	}
+        });
+	    
 	    dictEntitiesReload('#referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
 	    dictEntitiesReload('#referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
 	    dictEntitiesReload('#htc_result_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT;?>');
@@ -256,9 +238,6 @@ a {
 		    	,height: 500
 			    ,width: 500
 			    ,modal: true
-			    ,close: function() {
-				    patientsReload();
-			    }
         });
 
 	    $("#dlg-add-dict-entity").dialog({
@@ -431,8 +410,8 @@ a {
   <tr>
    <td valign="top"><div class="required"><label for="id_patient"><?php echo $this->translate(_("Patient"));?></label></div></td>
    <td>
-     <select name="id_patient" id="id_patient">
-     </select>&nbsp;
+     <input type="hidden" name="id_patient" id="id_patient" value="<?php echo $this->id_patient?>" />
+     <input type="text" size="32" name="patient_name" id="patient_name" value="<?php echo $this->patientName;?>">&nbsp;     
 <?php if ($this->allow_create_patient) : ?>
      <a id="link-add-patient" href="#"><?php echo $this->translate(_("Add Patient"));?></a>
 <?php endif;?>     
