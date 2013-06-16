@@ -1,4 +1,4 @@
-var pharmacyListCtrl = {
+var pharmacyCtrl = {
 	 idDlgAddPharmacy: 'dialog-add-pharmacy'
 	,idList: undefined
 	,newDlg: undefined
@@ -14,7 +14,7 @@ var pharmacyListCtrl = {
            ,width: 700
            ,modal: true
            ,close: function() {
-               pharmacyListCtrl.pharmacyReload();
+               pharmacyCtrl.pharmacyReload();
            }
         });
         
@@ -23,16 +23,16 @@ var pharmacyListCtrl = {
 
     ,configureAddLink: function(idAddLink) {
         $("#" + idAddLink).click(function() {
-            pharmacyListCtrl.newDlg.load(internalAddress.pharmacyCreateDlg(), function(){
-                pageAsDlg.linkFormToDlg("#" + pharmacyListCtrl.idDlgAddPharmacy);
+            pharmacyCtrl.newDlg.load(internalAddress.pharmacyCreateDlg(), function(){
+                pageAsDlg.linkFormToDlg("#" + pharmacyCtrl.idDlgAddPharmacy);
             }).dialog('open');
             return false;
         });
     }
 
     ,pharmacyReload: function(){
-        if($(pharmacyListCtrl.idList + " option").length) {
-        	g_selectedPharmacy = $(pharmacyListCtrl.idList + " option:selected").val();
+        if($(pharmacyCtrl.idList + " option").length) {
+        	g_selectedPharmacy = $(pharmacyCtrl.idList + " option:selected").val();
         }
         $.ajax({
              url: internalAddress.pharmacyArray()
@@ -43,7 +43,7 @@ var pharmacyListCtrl = {
         	        return;
         	    }
 
-        	    var select = $(pharmacyListCtrl.idList);
+        	    var select = $(pharmacyCtrl.idList);
         	    if(select.prop) {
         	        var options = select.prop('options');
         	    }
