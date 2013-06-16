@@ -1,6 +1,7 @@
 <?php
 $this->headScript()->appendFile('/js/internalAddresses.js');
 $this->headScript()->appendFile('/js/pageAsDlg.js');
+$this->headScript()->appendFile('/js/pharmacyListCtrl.js');
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.ui.position.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.contextMenu.js');
@@ -23,41 +24,6 @@ a {
 <?php foreach($this->dictEntities as $key=>$values) :?>
     g_dictEntities[<?php echo $key;?>] = [<?php if(is_array($values)) echo join(" , ", $values);?>];
 <?php endforeach; ?>
-
-    function pharmacyReload(){
-        if($("#id_pharmacy option").length) {
-            g_selectedPharmacy = $("#id_pharmacy option:selected").val();
-        }
-        $.ajax({
-            url: internalAddress.pharmacyArray()
-            ,type:'POST'
-            ,data:''
-            ,success: function(data){
-                if(!data || !data.success) {
-                    return;
-                }
-
-                var select = $('#id_pharmacy');
-                if(select.prop) {
-                    var options = select.prop('options');
-                }
-                else {
-                    var options = select.attr('options');
-                }
-                $('option', select).remove();
-                options[options.length] = new Option('', '');
-                for (var key in data.rows){
-	                var selectedFlag = false;
-    	            if(key == g_selectedPharmacy) {
-	 	               selectedFlag = true;
-	                } 
-                    options[options.length] = new Option(data.rows[key], key, selectedFlag);
-                }
-            }
-            ,complete: function(jqXHR, textStatus) {
-            }
-      });
-    }
 
     function checkOnChangePatient() {
         $.ajax( {
@@ -337,6 +303,10 @@ a {
 
 	$(document).ready(function() {
 		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+		var newPharmacyDlg = pharmacyListCtrl.init('id_pharmacy', '<?php echo $this->translate(_("Add Pharmacy"));?>');
+<?php if ($this->allow_create_pharmacy) : ?>
+        pharmacyListCtrl.configureAddLink('link-add-pharmacy');
+<?php endif;?>     
 		
     	$('#main_form').submit(function() {
         	if(!$("#id_pharmacy option:selected").val()) {
@@ -396,18 +366,6 @@ a {
 	    dictEntitiesReload('#suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
 	    dictEntitiesReload('#suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
 	    dictEntitiesReload('#adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
-
-	    var newPharmacyDlg = $("<div id='dialog-add-pharmacy'></div>").dialog({
-			     dialogClass: 'dialog-content'
-				,title: '<?php echo $this->translate(_("Add Pharmacy"));?>'
-			    ,autoOpen: false
-		    	,height: 500
-			    ,width: 700
-			    ,modal: true
-			    ,close: function() {
-				    pharmacyReload();
-			    }
-        });
 
 	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
 		     dialogClass: 'dialog-content'
@@ -531,12 +489,6 @@ a {
 	    $("#link-add-patient").click(function() {
 	    	newPatientDlg.load(internalAddress.patientCreateDlg(), function(){
 	    		pageAsDlg.linkFormToDlg("#dialog-add-patient");
-		    }).dialog('open');
-	        return false;
-	    });
-	    $("#link-add-pharmacy").click(function() {
-	    	newPharmacyDlg.load(internalAddress.pharmacyCreateDlg(), function(){
-	    		pageAsDlg.linkFormToDlg("#dialog-add-pharmacy");
 		    }).dialog('open');
 	        return false;
 	    });
