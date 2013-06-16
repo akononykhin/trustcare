@@ -1,7 +1,8 @@
 <?php
 $this->headScript()->appendFile('/js/internalAddresses.js');
 $this->headScript()->appendFile('/js/pageAsDlg.js');
-$this->headScript()->appendFile('/js/pharmacyListCtrl.js');
+$this->headScript()->appendFile('/js/pharmacyCtrl.js');
+$this->headScript()->appendFile('/js/patientCtrl.js');
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.ui.position.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.contextMenu.js');
@@ -303,9 +304,9 @@ a {
 
 	$(document).ready(function() {
 		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
-		var newPharmacyDlg = pharmacyListCtrl.init('id_pharmacy', '<?php echo $this->translate(_("Add Pharmacy"));?>');
+		var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy', '<?php echo $this->translate(_("Add Pharmacy"));?>');
 <?php if ($this->allow_create_pharmacy) : ?>
-        pharmacyListCtrl.configureAddLink('link-add-pharmacy');
+        pharmacyCtrl.configureAddLink('link-add-pharmacy');
 <?php endif;?>     
 		
     	$('#main_form').submit(function() {
