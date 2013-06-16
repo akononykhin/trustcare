@@ -304,11 +304,18 @@ a {
 
 	$(document).ready(function() {
 		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+		
 		var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy', '<?php echo $this->translate(_("Add Pharmacy"));?>');
 <?php if ($this->allow_create_pharmacy) : ?>
         pharmacyCtrl.configureAddLink('link-add-pharmacy');
 <?php endif;?>     
-		
+
+        var newPatientDlg = patientCtrl.init('id_patient', 'patient_name', '<?php echo $this->translate(_("Add Patient"));?>');
+<?php if ($this->allow_create_patient) : ?>
+        patientCtrl.configureAddLink('link-add-patient');
+<?php endif;?>
+        patientCtrl.checkOnChangePatient = checkOnChangePatient;
+
     	$('#main_form').submit(function() {
         	if(!$("#id_pharmacy option:selected").val()) {
             	alert('<?php echo $this->translate(_("Necessary to choose pharmacy"));?>');
@@ -336,22 +343,6 @@ a {
         	return true;
 	    });
 
-        $("#patient_name").autocomplete({
-        	source:     internalAddress.patientArray()
-        	,delay:     300
-        	,focus: function(event, ui ) {
-        		$("#patient_name").val(ui.item.label);
-        		return false;
-            }
-        	,select: function( event, ui ) {
-        		$("#patient_name").val(ui.item.label);
-        		$("#id_patient").val(ui.item.value);
-        		checkOnChangePatient();
-        		return false;
-        	}
-        });
-	    
-		
 	    dictEntitiesReload('#med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
 	    dictEntitiesReload('#med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
 	    dictEntitiesReload('#med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
@@ -368,14 +359,6 @@ a {
 	    dictEntitiesReload('#suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
 	    dictEntitiesReload('#adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
 
-	    var newPatientDlg = $("<div id='dialog-add-patient'></div>").dialog({
-		     dialogClass: 'dialog-content'
-			,title: '<?php echo $this->translate(_("Add Patient"));?>'
-		    ,autoOpen: false
-	    	,height: 500
-		    ,width: 500
-		    ,modal: true
-	    });
 
         $("#dlg-add-dict-entity").dialog({
 	        dialogClass: 'dialog-content'
@@ -486,15 +469,6 @@ a {
 	        }
 	    });
 	      
-/***   START OnClick events ***/		
-	    $("#link-add-patient").click(function() {
-	    	newPatientDlg.load(internalAddress.patientCreateDlg(), function(){
-	    		pageAsDlg.linkFormToDlg("#dialog-add-patient");
-		    }).dialog('open');
-	        return false;
-	    });
-/***   END OnClick events ***/		
-	    
 	    linkDynamicActionsToPharmDictCtrl('med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
 	    linkDynamicActionsToPharmDictCtrl('med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
 	    linkDynamicActionsToPharmDictCtrl('med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
