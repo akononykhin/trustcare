@@ -120,28 +120,6 @@ a {
 	  });
 	}
 	
-	function linkFormToDlg(dialogId) {
-    	var form = $(dialogId + '>form');
-    	if(form) {
-	    	form.submit(function(event) {
-    	        event.preventDefault();
-    	        $(dialogId).showLoading();
-    	        $.ajax( {
-    	             type: "POST"
-    	            ,url: $(this).attr('action')
-      	            ,data: $(this).serialize()
-    	            ,success: function(response) {
-    	        	    $(dialogId).html(response);
-    	        	    linkFormToDlg(dialogId);
-    	            }
-	    	        ,complete: function(jqXHR, textStatus) {
-	    	            $(dialogId).hideLoading();
-	    	        }
-    	        });			    	      
-    	    });
-    	} 			    	  
-	}
-
 	function checkIsMedErrorScreened()
 	{
 		if(0 == $('input:radio[name=is_med_error_screened]:checked').val()) {
@@ -552,13 +530,13 @@ a {
 /***   START OnClick events ***/		
 	    $("#link-add-patient").click(function() {
 	    	newPatientDlg.load(internalAddress.patientCreateDlg(), function(){
-		    	linkFormToDlg("#dialog-add-patient");
+	    		pageAsDlg.linkFormToDlg("#dialog-add-patient");
 		    }).dialog('open');
 	        return false;
 	    });
 	    $("#link-add-pharmacy").click(function() {
 	    	newPharmacyDlg.load(internalAddress.pharmacyCreateDlg(), function(){
-		    	linkFormToDlg("#dialog-add-pharmacy");
+	    		pageAsDlg.linkFormToDlg("#dialog-add-pharmacy");
 		    }).dialog('open');
 	        return false;
 	    });
