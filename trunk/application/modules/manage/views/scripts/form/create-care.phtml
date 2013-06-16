@@ -3,6 +3,7 @@ $this->headScript()->appendFile('/js/internalAddress.js');
 $this->headScript()->appendFile('/js/pageAsDlg.js');
 $this->headScript()->appendFile('/js/pharmacyCtrl.js');
 $this->headScript()->appendFile('/js/patientCtrl.js');
+$this->headScript()->appendFile('/js/dictEntitiesCtrl.js');
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.ui.position.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.contextMenu.js');
@@ -21,9 +22,8 @@ a {
 
 <script type="text/javascript" charset="utf-8">
 	var g_selectedPharmacy = '<?php echo $this->idPharmacy?>';
-	var g_dictEntities = new Array();
 <?php foreach($this->dictEntities as $key=>$values) :?>
-    g_dictEntities[<?php echo $key;?>] = [<?php if(is_array($values)) echo join(" , ", $values);?>];
+    dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) echo join(" , ", $values);?>]);
 <?php endforeach; ?>
 
     function checkOnChangePatient() {
@@ -48,45 +48,6 @@ a {
         }); 
     }
            
-	function dictEntitiesReload(ctrlId, dictTypeId){
-		if($(ctrlId + " option").length) {
-			g_dictEntities[dictTypeId] = new Array();
-			$(ctrlId + " option:selected").each( function() {
-                g_dictEntities[dictTypeId][g_dictEntities[dictTypeId].length] = parseInt($(this).val(), 10);
-            });
-		}
-  	    $.ajax({
-	        url: internalAddress.pharmDictArray()
-	        ,type:'POST'
-	        ,data: {
-		        type_id: dictTypeId
-		    }
-	        ,success: function(data){
-	            if(!data || !data.success) {
-	                return;
-	            }
-
-	            var select = $(ctrlId);
-	            if(select.prop) {
-	                var options = select.prop('options');
-	            }
-	            else {
-	                var options = select.attr('options');
-	            }
-	            $('option', select).remove();
-	            for (var key in data.rows){
-		            var selectedFlag = false;
-		            if(-1 != jQuery.inArray(parseInt(key, 10), g_dictEntities[dictTypeId])) { /* to check int with int */
-			            selectedFlag = true;
-		            }
-	                options[options.length] = new Option(data.rows[key], key, selectedFlag);
-	            }
-	        }
-	        ,complete: function(jqXHR, textStatus) {
-	        }
-	  });
-	}
-	
 	function checkIsMedErrorScreened()
 	{
 		if(0 == $('input:radio[name=is_med_error_screened]:checked').val()) {
@@ -254,7 +215,7 @@ a {
 	                        ,success: function(data) {
 	                            if (data && data.success){
 	                    	        $('#dlg-remove-dict-entity').dialog("close");
-    	            	            dictEntitiesReload('#'+list_element_id, type_id);
+    	            	            dictEntitiesCtrl.reload('#'+list_element_id, type_id);
             	                }
                 	            else {
                     	            var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
@@ -343,21 +304,21 @@ a {
         	return true;
 	    });
 
-	    dictEntitiesReload('#med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
-	    dictEntitiesReload('#med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
-	    dictEntitiesReload('#med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
-	    dictEntitiesReload('#adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
-	    dictEntitiesReload('#med_error_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME;?>');
-	    dictEntitiesReload('#adh_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
-	    dictEntitiesReload('#adr_severity_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_SEVERITY_GRADE;?>');
-	    dictEntitiesReload('#suspected_adr_hepatic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
-	    dictEntitiesReload('#suspected_adr_nervous', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
-	    dictEntitiesReload('#suspected_adr_cardiovascular', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
-	    dictEntitiesReload('#suspected_adr_skin', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
-	    dictEntitiesReload('#suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
-	    dictEntitiesReload('#suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
-	    dictEntitiesReload('#suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
-	    dictEntitiesReload('#adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
+	    dictEntitiesCtrl.reload('#med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
+	    dictEntitiesCtrl.reload('#med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
+	    dictEntitiesCtrl.reload('#med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
+	    dictEntitiesCtrl.reload('#adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
+	    dictEntitiesCtrl.reload('#med_error_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME;?>');
+	    dictEntitiesCtrl.reload('#adh_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
+	    dictEntitiesCtrl.reload('#adr_severity_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_SEVERITY_GRADE;?>');
+	    dictEntitiesCtrl.reload('#suspected_adr_hepatic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
+	    dictEntitiesCtrl.reload('#suspected_adr_nervous', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
+	    dictEntitiesCtrl.reload('#suspected_adr_cardiovascular', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
+	    dictEntitiesCtrl.reload('#suspected_adr_skin', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
+	    dictEntitiesCtrl.reload('#suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
+	    dictEntitiesCtrl.reload('#suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
+	    dictEntitiesCtrl.reload('#suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
+	    dictEntitiesCtrl.reload('#adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
 
 
         $("#dlg-add-dict-entity").dialog({
@@ -388,7 +349,7 @@ a {
 		                ,success: function(data) {
 		                    if (data && data.success){
 		                    	$('#dlg-add-dict-entity').dialog("close");
-	    	            	    dictEntitiesReload('#'+list_element_id, type_id);
+	    	            	    dictEntitiesCtrl.reload('#'+list_element_id, type_id);
 	            	        }
 	                	    else{
 	                    	    var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
@@ -443,7 +404,7 @@ a {
 		                ,success: function(data) {
 		                    if (data && data.success){
 		                    	$('#dlg-edit-dict-entity').dialog("close");
-	    	            	    dictEntitiesReload('#'+list_element_id, type_id);
+	    	            	    dictEntitiesCtrl.reload('#'+list_element_id, type_id);
 	            	        }
 	                	    else{
 	                    	    var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
