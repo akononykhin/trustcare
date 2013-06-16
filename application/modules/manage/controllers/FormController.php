@@ -30,29 +30,33 @@ class FormController extends ZendX_Controller_Action
         $columnsInfo = array(
             'id' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("ID"),
-                'width' => '5%',
+                'width' => '3%',
             ),
             'date_of_visit' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Date of Visit"),
-                'width' => '15%',
+                'width' => '8%',
             ),
             'pharmacy_name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Pharmacy"),
                 'filter' => array(
                     'type' => 'text',
                 ),
+                'width' => '20%',
             ),
             'patient_identifier' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Patient ID"),
                 'filter' => array(
                     'type' => 'text',
                 ),
+                'width' => '20%',
             ),
             'patient_last_name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Last Name"),
+                'width' => '20%',
             ),
             'patient_first_name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("First Name"),
+                'width' => '20%',
             ),
         );
 
@@ -137,6 +141,11 @@ class FormController extends ZendX_Controller_Action
                     'title' => Zend_Registry::get("Zend_Translate")->_("View"),
                     'url' => $this->view->url(array('action' => 'view', 'id' => $row['id'], 'type' => $type)),
                     'type' => 'view'
+                ),
+                array(
+                    'title' => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                    'url' => $this->view->url(array('action' => 'edit', 'id' => $row['id'], 'type' => $type)),
+                    'type' => 'edit'
                 ),
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("Delete"),
