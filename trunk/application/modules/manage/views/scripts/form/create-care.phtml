@@ -1,4 +1,6 @@
 <?php
+$this->headScript()->appendFile('/js/internalAddresses.js');
+$this->headScript()->appendFile('/js/pageAsDlg.js');
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.ui.position.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.contextMenu.js');
@@ -27,7 +29,7 @@ a {
             g_selectedPharmacy = $("#id_pharmacy option:selected").val();
         }
         $.ajax({
-            url:'<?php echo $this->url(array('controller' => 'pharmacy', "action" => "load-array-of-active")); ?>'
+            url: internalAddress.pharmacyArray()
             ,type:'POST'
             ,data:''
             ,success: function(data){
@@ -60,7 +62,7 @@ a {
     function checkOnChangePatient() {
         $.ajax( {
              type: "POST"
-            ,url: '<?php echo $this->url(array("controller" => "patient", "action" => "check-is-male")); ?>'
+            ,url: internalAddress.patientCheckIsMale()
 	        ,data: {
 	 	        id: $("#id_patient").val()
 	 	    }
@@ -87,7 +89,7 @@ a {
             });
 		}
   	    $.ajax({
-	        url:'<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "load-array-for-type")); ?>'
+	        url: internalAddress.pharmDictArray()
 	        ,type:'POST'
 	        ,data: {
 		        type_id: dictTypeId
@@ -299,7 +301,7 @@ a {
    	                    
    	    	            $('#dlg-remove-dict-entity').showLoading();
   	                    $.ajax({
-                            url: '<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "remove-ajax")); ?>'
+                            url: internalAddress.pharmDictRemove()
                             ,type:'POST'
               	            ,data: {
                                 id : dict_id
@@ -356,6 +358,8 @@ a {
     }
 
 	$(document).ready(function() {
+		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+		
     	$('#main_form').submit(function() {
         	if(!$("#id_pharmacy option:selected").val()) {
             	alert('<?php echo $this->translate(_("Necessary to choose pharmacy"));?>');
@@ -384,7 +388,7 @@ a {
 	    });
 
         $("#patient_name").autocomplete({
-        	source:     '<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
+        	source:     internalAddress.patientArray()
         	,delay:     300
         	,focus: function(event, ui ) {
         		$("#patient_name").val(ui.item.label);
@@ -455,7 +459,7 @@ a {
 	            
 	    	        $('#dlg-add-dict-entity').showLoading();
  	                $.ajax({
-	                     url: '<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "create-ajax")); ?>'
+	                     url: internalAddress.pharmDictCreate()
 	                    ,type:'POST'
 	              	    ,data: {
 	                         name : name.val()
@@ -510,7 +514,7 @@ a {
 	            
 	    	        $('#dlg-edit-dict-entity').showLoading();
  	                $.ajax({
-	                     url: '<?php echo $this->url(array('controller' => 'pharm-dict', "action" => "change-ajax")); ?>'
+	                     url: internalAddress.pharmDictChange()
 	                    ,type:'POST'
 	              	    ,data: {
 	                         name : name.val()
@@ -547,13 +551,13 @@ a {
 	      
 /***   START OnClick events ***/		
 	    $("#link-add-patient").click(function() {
-	    	newPatientDlg.load('<?php echo $this->url(array("controller" => "patient", "action" => "create", "for_dialog" => 1)); ?>', function(){
+	    	newPatientDlg.load(internalAddress.patientCreateDlg(), function(){
 		    	linkFormToDlg("#dialog-add-patient");
 		    }).dialog('open');
 	        return false;
 	    });
 	    $("#link-add-pharmacy").click(function() {
-	    	newPharmacyDlg.load('<?php echo $this->url(array("controller" => "pharmacy", "action" => "create", "for_dialog" => 1)); ?>', function(){
+	    	newPharmacyDlg.load(internalAddress.pharmacyCreateDlg(), function(){
 		    	linkFormToDlg("#dialog-add-pharmacy");
 		    }).dialog('open');
 	        return false;
