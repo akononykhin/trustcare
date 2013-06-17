@@ -28,7 +28,7 @@ var patientCtrl = {
     	
         this.newDlg = $("<div id='" + this.idDlgAddPatient + "'></div>").dialog({
             dialogClass: 'dialog-content'
-           ,title: newDlgTitle
+           ,title: i18n.translate("Add Patient")
            ,autoOpen: false
            ,height: 500
            ,width: 500
