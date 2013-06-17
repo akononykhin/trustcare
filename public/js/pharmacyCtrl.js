@@ -8,7 +8,7 @@ var pharmacyCtrl = {
     	
         this.newDlg = $("<div id='" + this.idDlgAddPharmacy + "'></div>").dialog({
             dialogClass: 'dialog-content'
-           ,title: newDlgTitle
+           ,title: i18n.translate("Add Pharmacy")
            ,autoOpen: false
            ,height: 500
            ,width: 700

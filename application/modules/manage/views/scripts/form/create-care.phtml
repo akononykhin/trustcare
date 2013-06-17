@@ -7,6 +7,7 @@ $this->headScript()->appendFile('/js/dictEntitiesCtrl.js');
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.ui.position.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.contextMenu.js');
+$this->headScript()->appendFile('/js/i18next-1.6.3.min.js');
 
 $this->headLink()->appendStylesheet('/css/showLoading.css');
 $this->headLink()->appendStylesheet('/js/jquery/plugin/contextMenu/jquery.contextMenu.css');
@@ -265,6 +266,15 @@ a {
 
 	$(document).ready(function() {
 		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+
+		i18n.init({
+		    resGetPath: internalAddress.loadI18nDict()
+		    ,dynamicLoad: true 
+		    ,getAsync: false
+		    ,lng: '<?php echo Zend_Registry::get('Zend_Locale');?>'
+		    ,ns: 'js_resources'
+		    ,fallbackLng: false
+		});
 		
 		var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy', '<?php echo $this->translate(_("Add Pharmacy"));?>');
 <?php if ($this->allow_create_pharmacy) : ?>

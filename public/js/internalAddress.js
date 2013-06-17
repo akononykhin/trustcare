@@ -7,6 +7,9 @@ var internalAddress = {
         url = url.replace(/__controller__/g, controller).replace(/__action__/g, action);
         return url;
     }
+    ,loadI18nDict: function() {
+        return internalAddress.replacePatterns('language', 'load-dict-for-js') + '/language/__lng__/namespace/__ns__';
+    }
     ,pharmacyArray: function() {
         return internalAddress.replacePatterns('pharmacy', 'load-array-of-active');
     }
