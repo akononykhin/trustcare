@@ -3,7 +3,7 @@ var pharmacyCtrl = {
 	,idList: undefined
 	,newDlg: undefined
 	
-    ,init: function(idList, newDlgTitle) {
+    ,init: function(idList) {
     	this.idList = '#' + idList;
     	
         this.newDlg = $("<div id='" + this.idDlgAddPharmacy + "'></div>").dialog({

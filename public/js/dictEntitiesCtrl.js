@@ -1,5 +1,217 @@
 var dictEntitiesCtrl = {
-    selectedList: Array()
+     idDlgAdd: 'dlg-add-dict-entity'
+    ,idCtrlNameInDlgAdd: 'add-dict-entity-name'
+    ,idDlgEdit: 'dlg-edit-dict-entity'
+    ,idCtrlNameInDlgEdit: 'edit-dict-entity-name'
+    ,idCtrlIdInDlgEdit: 'edit-dict-entity-id'
+    ,idDlgRemove: 'dlg-remove-dict-entity'
+    ,idDivNameInDlgRemove: 'remove-dict-entity-name'
+        
+    ,selectedList: Array()
+    
+    ,init: function() {
+        dictEntitiesCtrl.initDlgAdd();
+        dictEntitiesCtrl.initDlgEdit();
+        dictEntitiesCtrl.initDlgRemove();
+    }
+    
+    ,initDlgAdd: function() {
+        var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgAdd + "' title='" + i18n.translate("Add") + "' type_id='' list_element_id=''>" +
+                      " <p class='errorInfo'></p>" +
+                      " <form>" +
+                      "  <label for='name'>" + i18n.translate("Name") + "</label>" +
+                      "  <input type='text' name='name' id='" + dictEntitiesCtrl.idCtrlNameInDlgAdd + "' class='text ui-widget-content ui-corner-all' size='56' />" +
+                      " </form>" +
+                      "</div>";
+        
+        $(dlgHtml).dialog({
+            dialogClass: 'dialog-content'
+            ,autoOpen: false
+            ,height: 200
+            ,width: 530
+            ,modal: true
+            ,buttons: [{
+                text: i18n.translate("Add")
+                ,click: function() {
+                    var name = $('#' + dictEntitiesCtrl.idCtrlNameInDlgAdd);
+                    if(!name.val()) {
+                        name.addClass("ui-state-error");
+                        updateErrorInfo('#'+dictEntitiesCtrl.idDlgAdd, i18n.translate("Necessary to enter value"));
+                        return false;
+                    }
+                    var type_id = $('#'+dictEntitiesCtrl.idDlgAdd).attr('type_id');
+                    var list_element_id = $('#'+dictEntitiesCtrl.idDlgAdd).attr('list_element_id');
+
+                    $('#'+dictEntitiesCtrl.idDlgAdd).showLoading();
+                    $.ajax({
+                        url: internalAddress.pharmDictCreate()
+                        ,type:'POST'
+                        ,data: {
+                            name : name.val()
+                            ,type_id: type_id
+                        }
+                        ,success: function(data) {
+                            if (data && data.success){
+                                $('#'+dictEntitiesCtrl.idDlgAdd).dialog("close");
+                                dictEntitiesCtrl.reload('#'+list_element_id, type_id);
+                            }
+                            else{
+                                var errorMsg = i18n.translate("Internal Error");
+                                if(data) {
+                                    errorMsg = data.error;
+                                }
+                                updateErrorInfo('#'+dictEntitiesCtrl.idDlgAdd, errorMsg);
+                            }
+                        }
+                        ,complete: function(jqXHR, textStatus) {
+                            $('#'+dictEntitiesCtrl.idDlgAdd).hideLoading();
+                        }
+                    });
+                } 
+            }
+            ,{
+                 text: i18n.translate("Cancel")
+                ,click: function() {
+                    $('#'+dictEntitiesCtrl.idDlgAdd).dialog("close");
+                } 
+            }]
+            ,close: function() {
+            }
+            ,open: function() {
+                cleanErrorInfo('#'+dictEntitiesCtrl.idDlgAdd);
+            }
+        });
+    }
+    
+    ,initDlgEdit: function() {
+        var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgEdit + "' title='" + i18n.translate("Edit") + "' type_id='' list_element_id=''>" +
+                      " <p class='errorInfo'></p>" +
+                      " <form>" +
+                      "  <label for='name'>" + i18n.translate("Name") + "</label>" +
+                      "  <input type='text' name='name' id='" + dictEntitiesCtrl.idCtrlNameInDlgEdit + "' class='text ui-widget-content ui-corner-all' size='56' />" +
+                      "  <input type='hidden' name='id' id='" + dictEntitiesCtrl.idCtrlIdInDlgEdit + "' />" +
+                      " </form>" +
+                      "</div>";
+        
+        $(dlgHtml).dialog({
+            dialogClass: 'dialog-content'
+            ,autoOpen: false
+            ,height: 200
+            ,width: 530
+            ,modal: true
+            ,buttons: [{
+                text: i18n.translate("Save")
+                ,click: function() {
+                    var name = $('#' + dictEntitiesCtrl.idCtrlNameInDlgEdit);
+                    if(!name.val()) {
+                        name.addClass("ui-state-error");
+                        updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, i18n.translate("Necessary to enter value"));
+                        return false;
+                    }
+                    var id = $('#' + dictEntitiesCtrl.idCtrlIdInDlgEdit);
+                    var type_id = $('#'+dictEntitiesCtrl.idDlgEdit).attr('type_id');
+                    var list_element_id = $('#'+dictEntitiesCtrl.idDlgEdit).attr('list_element_id');
+
+                    $('#'+dictEntitiesCtrl.idDlgEdit).showLoading();
+                    $.ajax({
+                        url: internalAddress.pharmDictChange()
+                        ,type:'POST'
+                        ,data: {
+                             name : name.val()
+                            ,id: id.val()
+                        }
+                        ,success: function(data) {
+                            if (data && data.success){
+                                $('#'+dictEntitiesCtrl.idDlgEdit).dialog("close");
+                                dictEntitiesCtrl.reload('#'+list_element_id, type_id);
+                            }
+                            else{
+                                var errorMsg = i18n.translate("Internal Error");
+                                if(data) {
+                                    errorMsg = data.error;
+                                }
+                                updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, errorMsg);
+                            }
+                        }
+                        ,complete: function(jqXHR, textStatus) {
+                            $('#'+dictEntitiesCtrl.idDlgEdit).hideLoading();
+                        }
+                    });
+                } 
+            }
+            ,{
+                 text: i18n.translate("Cancel")
+                ,click: function() {
+                    $('#'+dictEntitiesCtrl.idDlgEdit).dialog("close");
+                } 
+            }]
+            ,close: function() {
+            }
+            ,open: function() {
+                cleanErrorInfo('#'+dictEntitiesCtrl.idDlgEdit);
+            }
+        });
+    }
+ 
+    ,initDlgRemove: function() {
+        var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgRemove + "' title='" + i18n.translate("Warning") + "' type_id='' list_element_id='' dict_id=''>" +
+        " <p class='errorInfo'></p>" +
+        " <span class='ui-icon ui-icon-alert' style='float: left; margin: 0 7px 20px 0;'></span>" +
+        i18n.translate("__NameDiv__ will be removed. Are You sure?", {NameDiv: "<div id='" + dictEntitiesCtrl.idDivNameInDlgRemove + "' style='font-weight: bold;'></div>"}) +
+        "</div>";
+        
+        
+        $(dlgHtml).dialog({
+             modal: true
+            ,dialogClass: 'alert'
+            ,autoOpen: false
+            ,width: 450
+            ,buttons: [{
+                text: 'OK'
+                ,click: function() {
+                    var type_id = $('#'+dictEntitiesCtrl.idDlgRemove).attr('type_id');
+                    var list_element_id = $('#'+dictEntitiesCtrl.idDlgRemove).attr('list_element_id');
+                    var dict_id = $('#'+dictEntitiesCtrl.idDlgRemove).attr('dict_id');
+                    
+                    $('#'+dictEntitiesCtrl.idDlgRemove).showLoading();
+                    $.ajax({
+                        url: internalAddress.pharmDictRemove()
+                        ,type:'POST'
+                        ,data: {
+                            id : dict_id
+                        }
+                        ,success: function(data) {
+                            if (data && data.success){
+                                $('#'+dictEntitiesCtrl.idDlgRemove).dialog("close");
+                                dictEntitiesCtrl.reload('#'+list_element_id, type_id);
+                            }
+                            else{
+                                var errorMsg = i18n.translate("Internal Error");
+                                if(data) {
+                                    errorMsg = data.error;
+                                }
+                                updateErrorInfo('#'+dictEntitiesCtrl.idDlgRemove, errorMsg);
+                            }
+                        }
+                        ,complete: function(jqXHR, textStatus) {
+                            $('#'+dictEntitiesCtrl.idDlgRemove).hideLoading();
+                        }
+                    });
+                } 
+            }
+            ,{
+                 text: i18n.translate("Cancel")
+                ,click: function() {
+                    $('#'+dictEntitiesCtrl.idDlgRemove).dialog("close");
+                } 
+            }]
+            ,close: function() {
+            }
+            ,open: function() {
+                cleanErrorInfo('#'+dictEntitiesCtrl.idDlgRemove);
+            }
+        });
+    }
     
     ,addSelected: function(type, values) {
         dictEntitiesCtrl.selectedList[type] = [values];

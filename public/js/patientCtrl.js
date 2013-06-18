@@ -4,7 +4,7 @@ var patientCtrl = {
 	,idText: undefined
 	,newDlg: undefined
 	
-    ,init: function(idHidden, idText, newDlgTitle) {
+    ,init: function(idHidden, idText) {
     	this.idHidden = '#' + idHidden;
         this.idText = '#' + idText;
     	
