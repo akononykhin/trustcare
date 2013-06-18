@@ -195,52 +195,7 @@ a {
 	        $("#dlg-remove-dict-entity").attr('type_id', type_id);
 	    	$("#dlg-remove-dict-entity").attr('list_element_id', list_element_id);
 	        $('#remove-dict-entity-name').html(label);
-        	$("#dlg-remove-dict-entity").dialog({
-                modal: true
-               ,dialogClass: 'alert'
-               ,title: '<?php echo $this->translate(_("Warning"))?>'
-               ,width: 450
-               ,buttons: {
-                   "OK": function() {
-   	                    var type_id = $(this).attr('type_id');
-   	                    var list_element_id = $(this).attr('list_element_id');
-   	                    var dict_id = $(this).attr('dict_id');
-   	                    
-   	    	            $('#dlg-remove-dict-entity').showLoading();
-  	                    $.ajax({
-                            url: internalAddress.pharmDictRemove()
-                            ,type:'POST'
-              	            ,data: {
-                                id : dict_id
-                            }
-	                        ,success: function(data) {
-	                            if (data && data.success){
-	                    	        $('#dlg-remove-dict-entity').dialog("close");
-    	            	            dictEntitiesCtrl.reload('#'+list_element_id, type_id);
-            	                }
-                	            else {
-                    	            var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
-                      	            if(data) {
-                          	            errorMsg = data.error;
-                                    }
-                                    updateErrorInfo('#dlg-remove-dict-entity', errorMsg);
-                                }
-                            }
-	    	                ,complete: function(jqXHR, textStatus) {
-	    	        	        $('#dlg-remove-dict-entity').hideLoading();
-	    	                }
-                        });
-                   },
-                   Cancel: function() {
-                       $(this).dialog("close");
-                   }
-               }
-	           ,close: function() {
-	           }
-	           ,open: function() {
-	               cleanErrorInfo('#dlg-remove-dict-entity');
-	           }
-           });
+	    	$("#dlg-remove-dict-entity").dialog('open');
        }
     }
 
@@ -276,16 +231,18 @@ a {
 		    ,fallbackLng: false
 		});
 		
-		var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy', '<?php echo $this->translate(_("Add Pharmacy"));?>');
+		var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy');
 <?php if ($this->allow_create_pharmacy) : ?>
         pharmacyCtrl.configureAddLink('link-add-pharmacy');
 <?php endif;?>     
 
-        var newPatientDlg = patientCtrl.init('id_patient', 'patient_name', '<?php echo $this->translate(_("Add Patient"));?>');
+        var newPatientDlg = patientCtrl.init('id_patient', 'patient_name');
 <?php if ($this->allow_create_patient) : ?>
         patientCtrl.configureAddLink('link-add-patient');
 <?php endif;?>
         patientCtrl.checkOnChangePatient = checkOnChangePatient;
+
+        dictEntitiesCtrl.init();
 
     	$('#main_form').submit(function() {
         	if(!$("#id_pharmacy option:selected").val()) {
@@ -331,115 +288,6 @@ a {
 	    dictEntitiesCtrl.reload('#adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
 
 
-        $("#dlg-add-dict-entity").dialog({
-	        dialogClass: 'dialog-content'
-	        ,autoOpen: false
-	        ,height: 200
-	        ,width: 530
-	        ,modal: true
-	        ,buttons: {
-	            '<?php echo $this->translate(_("Add"));?>': function() {
-                    var name = $('#add-dict-entity-name');
-	                if(!name.val()) {
-	                  name.addClass("ui-state-error");
-	                  updateErrorInfo('#dlg-add-dict-entity', '<?php echo $this->translate(_("Necessary to enter value"));?>');
-	                  return false;
-	                }
-	                var type_id = $(this).attr('type_id');
-	                var list_element_id = $(this).attr('list_element_id');
-	            
-	    	        $('#dlg-add-dict-entity').showLoading();
- 	                $.ajax({
-	                     url: internalAddress.pharmDictCreate()
-	                    ,type:'POST'
-	              	    ,data: {
-	                         name : name.val()
-	                        ,type_id: type_id
-	                    }
-		                ,success: function(data) {
-		                    if (data && data.success){
-		                    	$('#dlg-add-dict-entity').dialog("close");
-	    	            	    dictEntitiesCtrl.reload('#'+list_element_id, type_id);
-	            	        }
-	                	    else{
-	                    	    var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
-	                      	    if(data) {
-	                          	    errorMsg = data.error;
-	                            }
-	                            updateErrorInfo('#dlg-add-dict-entity', errorMsg);
-	                        }
-	                    }
-		    	        ,complete: function(jqXHR, textStatus) {
-		    	        	$('#dlg-add-dict-entity').hideLoading();
-		    	        }
-	                });
-	          }
-	          ,'<?php echo $this->translate(_("Cancel"));?>': function() {
-	              $(this).dialog("close");
-	          }
-	        }
-	        ,close: function() {
-	        }
-	        ,open: function() {
-	            cleanErrorInfo('#dlg-add-dict-entity');
-	        }
-	    });
-
-        $("#dlg-edit-dict-entity").dialog({
-	        dialogClass: 'dialog-content'
-	        ,autoOpen: false
-	        ,height: 200
-	        ,width: 530
-	        ,modal: true
-	        ,buttons: {
-	            '<?php echo $this->translate(_("Save"));?>': function() {
-                    var name = $('#edit-dict-entity-name');
-	                if(!name.val()) {
-	                    name.addClass("ui-state-error");
-	                    updateErrorInfo('#dlg-edit-dict-entity', '<?php echo $this->translate(_("Necessary to enter value"));?>');
-	                    return false;
-	                }
-                    var id = $('#edit-dict-entity-id');
-	                var type_id = $(this).attr('type_id');
-	                var list_element_id = $(this).attr('list_element_id');
-	            
-	    	        $('#dlg-edit-dict-entity').showLoading();
- 	                $.ajax({
-	                     url: internalAddress.pharmDictChange()
-	                    ,type:'POST'
-	              	    ,data: {
-	                         name : name.val()
-	                        ,id: id.val()
-	                    }
-		                ,success: function(data) {
-		                    if (data && data.success){
-		                    	$('#dlg-edit-dict-entity').dialog("close");
-	    	            	    dictEntitiesCtrl.reload('#'+list_element_id, type_id);
-	            	        }
-	                	    else{
-	                    	    var errorMsg = '<?php echo $this->translate(_("Internal Error"));?>';
-	                      	    if(data) {
-	                          	    errorMsg = data.error;
-	                            }
-	                            updateErrorInfo('#dlg-edit-dict-entity', errorMsg);
-	                        }
-	                    }
-		    	        ,complete: function(jqXHR, textStatus) {
-		    	        	$('#dlg-edit-dict-entity').hideLoading();
-		    	        }
-	                });
-	          }
-	          ,'<?php echo $this->translate(_("Cancel"));?>': function() {
-	              $(this).dialog("close");
-	          }
-	        }
-	        ,close: function() {
-	        }
-	        ,open: function() {
-	            cleanErrorInfo('#dlg-edit-dict-entity');
-	        }
-	    });
-	      
 	    linkDynamicActionsToPharmDictCtrl('med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
 	    linkDynamicActionsToPharmDictCtrl('med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
 	    linkDynamicActionsToPharmDictCtrl('med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
@@ -823,26 +671,3 @@ a {
 <input type="submit" name="save" value="<?php echo $this->translate(_("Save"));?>"/>     
 </form>
 
-
-<div id="dlg-add-dict-entity" title="<?php echo $this->translate(_("Add"));?>" type_id="" list_element_id="">
-  <p class="errorInfo"></p>
-  <form>
-    <label for="name"><?php echo $this->translate(_("Name"));?></label>
-    <input type="text" name="name" id="add-dict-entity-name" class="text ui-widget-content ui-corner-all" size="56" />
-  </form>
-</div>
-
-<div id="dlg-edit-dict-entity" title="<?php echo $this->translate(_("Modify"));?>" type_id="" list_element_id="">
-  <p class="errorInfo"></p>
-  <form>
-    <label for="name"><?php echo $this->translate(_("Name"));?></label>
-    <input type="text" name="name" id="edit-dict-entity-name" class="text ui-widget-content ui-corner-all" size="56"/>
-    <input type="hidden" name="id" id="edit-dict-entity-id" />
-    </form>
-</div>
-
-<div id="dlg-remove-dict-entity" style="display: none;" title="<?php echo $this->translate(_("Warning"));?>" type_id="" list_element_id="" dict_id="">
-  <p class="errorInfo"></p>
-  <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-  <?php echo $this->translate(_("<div id='remove-dict-entity-name' style='font-weight: bold;'></div> will be removed. Are You sure?"));?>
-</div>

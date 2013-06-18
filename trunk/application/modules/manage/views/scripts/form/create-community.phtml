@@ -265,12 +265,12 @@ var g_dictEntities = new Array();
 		    ,fallbackLng: false
 		});
 		
-		var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy', '<?php echo $this->translate(_("Add Pharmacy"));?>');
+		var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy');
 <?php if ($this->allow_create_pharmacy) : ?>
         pharmacyCtrl.configureAddLink('link-add-pharmacy');
 <?php endif;?>     
 
-        var newPatientDlg = patientCtrl.init('id_patient', 'patient_name', '<?php echo $this->translate(_("Add Patient"));?>');
+        var newPatientDlg = patientCtrl.init('id_patient', 'patient_name');
 <?php if ($this->allow_create_patient) : ?>
         patientCtrl.configureAddLink('link-add-patient');
 <?php endif;?>
