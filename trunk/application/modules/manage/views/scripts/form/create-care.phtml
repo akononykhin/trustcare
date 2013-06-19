@@ -158,26 +158,6 @@ a {
 		}
 	}
 	
-    function updateErrorInfo(dlgId, message) {
-	    var infoEl = $(dlgId + " .errorInfo");
-	    if('' != message) {
-	        infoEl.text(message).addClass("ui-state-highlight");
-	    }
-	    else {
-	        infoEl.text('').removeClass("ui-state-highlight");
-	    }
-	      
-	    setTimeout(function() {
-	        infoEl.removeClass("ui-state-highlight", 1500);
-	    }, 500 );
-	}
-
-    
-    function cleanErrorInfo(dlgId) {
-        updateErrorInfo(dlgId, '');
-        $('#add-dict-entity-name').val("").removeClass("ui-state-error");
-    }
-
 	$(document).ready(function() {
 		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
 
