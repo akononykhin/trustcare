@@ -1,10 +1,13 @@
 var dictEntitiesCtrl = {
      idDlgAdd: 'dlg-add-dict-entity'
+    ,idBtnAddInDlgAdd: 'dlg-add-btn-add'
     ,idCtrlNameInDlgAdd: 'add-dict-entity-name'
     ,idDlgEdit: 'dlg-edit-dict-entity'
+    ,idBtnSaveInDlgEdit: 'dlg-edit-btn-save'
     ,idCtrlNameInDlgEdit: 'edit-dict-entity-name'
     ,idCtrlIdInDlgEdit: 'edit-dict-entity-id'
     ,idDlgRemove: 'dlg-remove-dict-entity'
+    ,idBtnOkInDlgRemove: 'dlg-remove-btn-ok'
     ,idDivNameInDlgRemove: 'remove-dict-entity-name'
         
     ,selectedList: Array()
@@ -43,6 +46,7 @@ var dictEntitiesCtrl = {
             ,modal: true
             ,buttons: [{
                 text: i18n.translate("Add")
+                ,id: dictEntitiesCtrl.idBtnAddInDlgAdd
                 ,click: function() {
                     var name = $('#' + dictEntitiesCtrl.idCtrlNameInDlgAdd);
                     if(!name.val()) {
@@ -87,8 +91,15 @@ var dictEntitiesCtrl = {
                 } 
             }]
             ,close: function() {
+                $(this).unbind('keypress');
             }
             ,open: function() {
+                $(this).bind('keypress', function(e) {
+                    if (e.keyCode == $.ui.keyCode.ENTER) {
+                      $('#'+dictEntitiesCtrl.idBtnAddInDlgAdd).click();
+                      return false;
+                    }
+                });
                 dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgAdd, '');
                 $('#'+dictEntitiesCtrl.idCtrlNameInDlgAdd).val("").removeClass("ui-state-error");
             }
@@ -113,6 +124,7 @@ var dictEntitiesCtrl = {
             ,modal: true
             ,buttons: [{
                 text: i18n.translate("Save")
+                ,id: dictEntitiesCtrl.idBtnSaveInDlgEdit
                 ,click: function() {
                     var name = $('#' + dictEntitiesCtrl.idCtrlNameInDlgEdit);
                     if(!name.val()) {
@@ -157,8 +169,15 @@ var dictEntitiesCtrl = {
                 } 
             }]
             ,close: function() {
+                $(this).unbind('keypress');
             }
             ,open: function() {
+                $(this).bind('keypress', function(e) {
+                    if (e.keyCode == $.ui.keyCode.ENTER) {
+                      $('#'+dictEntitiesCtrl.idBtnSaveInDlgEdit).click();
+                      return false;
+                    }
+                });
                 dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, '');
                 $('#'+dictEntitiesCtrl.idCtrlNameInDlgEdit).removeClass("ui-state-error");
             }
@@ -180,6 +199,7 @@ var dictEntitiesCtrl = {
             ,width: 450
             ,buttons: [{
                 text: 'OK'
+                ,id: dictEntitiesCtrl.idBtnOkInDlgRemov
                 ,click: function() {
                     var list_element_id = $('#'+dictEntitiesCtrl.idDlgRemove).attr('list_element_id');
                     var dict_id = $('#'+dictEntitiesCtrl.idDlgRemove).attr('dict_id');
@@ -217,8 +237,15 @@ var dictEntitiesCtrl = {
                 } 
             }]
             ,close: function() {
+                $(this).unbind('keypress');
             }
             ,open: function() {
+                $(this).bind('keypress', function(e) {
+                    if (e.keyCode == $.ui.keyCode.ENTER) {
+                      $('#'+dictEntitiesCtrl.idBtnOkInDlgRemove).click();
+                      return false;
+                    }
+                });
                 dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, '');
             }
         });
