@@ -47,7 +47,7 @@ var dictEntitiesCtrl = {
                     var name = $('#' + dictEntitiesCtrl.idCtrlNameInDlgAdd);
                     if(!name.val()) {
                         name.addClass("ui-state-error");
-                        updateErrorInfo('#'+dictEntitiesCtrl.idDlgAdd, i18n.translate("Necessary to enter value"));
+                        dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgAdd, i18n.translate("Necessary to enter value"));
                         return false;
                     }
                     var list_element_id = $('#'+dictEntitiesCtrl.idDlgAdd).attr('list_element_id');
@@ -71,7 +71,7 @@ var dictEntitiesCtrl = {
                                 if(data) {
                                     errorMsg = data.error;
                                 }
-                                updateErrorInfo('#'+dictEntitiesCtrl.idDlgAdd, errorMsg);
+                                dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgAdd, errorMsg);
                             }
                         }
                         ,complete: function(jqXHR, textStatus) {
@@ -89,7 +89,8 @@ var dictEntitiesCtrl = {
             ,close: function() {
             }
             ,open: function() {
-                cleanErrorInfo('#'+dictEntitiesCtrl.idDlgAdd);
+                dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgAdd, '');
+                $('#'+dictEntitiesCtrl.idCtrlNameInDlgAdd).val("").removeClass("ui-state-error");
             }
         });
     }
@@ -116,7 +117,7 @@ var dictEntitiesCtrl = {
                     var name = $('#' + dictEntitiesCtrl.idCtrlNameInDlgEdit);
                     if(!name.val()) {
                         name.addClass("ui-state-error");
-                        updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, i18n.translate("Necessary to enter value"));
+                        dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, i18n.translate("Necessary to enter value"));
                         return false;
                     }
                     var id = $('#' + dictEntitiesCtrl.idCtrlIdInDlgEdit);
@@ -140,7 +141,7 @@ var dictEntitiesCtrl = {
                                 if(data) {
                                     errorMsg = data.error;
                                 }
-                                updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, errorMsg);
+                                dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, errorMsg);
                             }
                         }
                         ,complete: function(jqXHR, textStatus) {
@@ -158,7 +159,8 @@ var dictEntitiesCtrl = {
             ,close: function() {
             }
             ,open: function() {
-                cleanErrorInfo('#'+dictEntitiesCtrl.idDlgEdit);
+                dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, '');
+                $('#'+dictEntitiesCtrl.idCtrlNameInDlgEdit).removeClass("ui-state-error");
             }
         });
     }
@@ -199,7 +201,7 @@ var dictEntitiesCtrl = {
                                 if(data) {
                                     errorMsg = data.error;
                                 }
-                                updateErrorInfo('#'+dictEntitiesCtrl.idDlgRemove, errorMsg);
+                                dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgRemove, errorMsg);
                             }
                         }
                         ,complete: function(jqXHR, textStatus) {
@@ -217,7 +219,7 @@ var dictEntitiesCtrl = {
             ,close: function() {
             }
             ,open: function() {
-                cleanErrorInfo('#'+dictEntitiesCtrl.idDlgRemove);
+                dictEntitiesCtrl.updateErrorInfo('#'+dictEntitiesCtrl.idDlgEdit, '');
             }
         });
     }
@@ -305,4 +307,19 @@ var dictEntitiesCtrl = {
        }
     }
 
+    ,updateErrorInfo: function(dlgId, message) {
+        var infoEl = $(dlgId + " .errorInfo");
+        if('' != message) {
+            infoEl.text(message).addClass("ui-state-highlight");
+        }
+        else {
+            infoEl.text('').removeClass("ui-state-highlight");
+        }
+          
+        setTimeout(function() {
+            infoEl.removeClass("ui-state-highlight", 1500);
+        }, 500 );
+    }
+
+    
 }
