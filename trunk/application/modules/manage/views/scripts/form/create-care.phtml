@@ -178,47 +178,6 @@ a {
         $('#add-dict-entity-name').val("").removeClass("ui-state-error");
     }
 
-    function processPharmDictContextMenuPressed(key, options, list_element_id, type_id)
-    {
-        var label = options.$trigger[0].label;
-        var value = options.$trigger[0].value;
-
-        if('edit' == key) {
-	    	$("#dlg-edit-dict-entity").attr('type_id', type_id);
-	    	$("#dlg-edit-dict-entity").attr('list_element_id', list_element_id);
-	    	$("#edit-dict-entity-name").val(label)
-	    	$("#edit-dict-entity-id").val(value)
-	    	$("#dlg-edit-dict-entity").dialog('open');
-        }
-        else if('delete' == key) {
-	    	$("#dlg-remove-dict-entity").attr('dict_id', value);
-	        $("#dlg-remove-dict-entity").attr('type_id', type_id);
-	    	$("#dlg-remove-dict-entity").attr('list_element_id', list_element_id);
-	        $('#remove-dict-entity-name').html(label);
-	    	$("#dlg-remove-dict-entity").dialog('open');
-       }
-    }
-
-    function linkDynamicActionsToPharmDictCtrl(list_element_id, type_id)
-    {
-	    $("#link-add-"+list_element_id).click(function() {
-	    	$("#dlg-add-dict-entity").attr('type_id', type_id);
-	    	$("#dlg-add-dict-entity").attr('list_element_id', list_element_id);
-	    	$("#dlg-add-dict-entity").dialog('open');
-	        return false;
-	    });
-        $('#'+list_element_id).contextMenu({
-            selector: 'option', 
-            callback: function(key, options) {
-                processPharmDictContextMenuPressed(key, options, list_element_id, type_id);
-            },
-            items: {
-                "edit": {name: "Edit"},
-                "delete": {name: "Delete"},
-            }
-        });
-    }
-
 	$(document).ready(function() {
 		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
 
@@ -288,20 +247,20 @@ a {
 	    dictEntitiesCtrl.reload('#adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
 
 
-	    linkDynamicActionsToPharmDictCtrl('med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
-	    linkDynamicActionsToPharmDictCtrl('med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
-	    linkDynamicActionsToPharmDictCtrl('med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
-	    linkDynamicActionsToPharmDictCtrl('adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
-	    linkDynamicActionsToPharmDictCtrl('med_error_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME;?>');
-	    linkDynamicActionsToPharmDictCtrl('adh_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
-	    linkDynamicActionsToPharmDictCtrl('suspected_adr_hepatic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
-	    linkDynamicActionsToPharmDictCtrl('suspected_adr_nervous', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
-	    linkDynamicActionsToPharmDictCtrl('suspected_adr_cardiovascular', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
-	    linkDynamicActionsToPharmDictCtrl('suspected_adr_skin', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
-	    linkDynamicActionsToPharmDictCtrl('suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
-	    linkDynamicActionsToPharmDictCtrl('suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
-	    linkDynamicActionsToPharmDictCtrl('suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
-        linkDynamicActionsToPharmDictCtrl('adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('med_error_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('adh_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('suspected_adr_hepatic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('suspected_adr_nervous', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('suspected_adr_cardiovascular', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('suspected_adr_skin', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
+	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
+        dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
 	    
 	    
 

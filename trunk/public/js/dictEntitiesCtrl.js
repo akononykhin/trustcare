@@ -255,4 +255,47 @@ var dictEntitiesCtrl = {
             }
         });
     }
+    
+    ,linkDynamicActionsToPharmDictCtrl: function(list_element_id, type_id)
+    {
+        $("#link-add-"+list_element_id).click(function() {
+            $("#" + dictEntitiesCtrl.idDlgAdd).attr('type_id', type_id);
+            $("#" + dictEntitiesCtrl.idDlgAdd).attr('list_element_id', list_element_id);
+            $("#" + dictEntitiesCtrl.idDlgAdd).dialog('open');
+            return false;
+        });
+        $('#'+list_element_id).contextMenu({
+            selector: 'option', 
+            callback: function(key, options) {
+                dictEntitiesCtrl.processPharmDictContextMenuPressed(key, options, list_element_id, type_id);
+            },
+            items: {
+                "edit": {name: "Edit"},
+                "delete": {name: "Delete"},
+            }
+        });
+    }
+
+    ,processPharmDictContextMenuPressed: function(key, options, list_element_id, type_id)
+    {
+        var label = options.$trigger[0].label;
+        var value = options.$trigger[0].value;
+
+        if('edit' == key) {
+            $("#" + dictEntitiesCtrl.idDlgEdit).attr('type_id', type_id);
+            $("#" + dictEntitiesCtrl.idDlgEdit).attr('list_element_id', list_element_id);
+            $("#" + dictEntitiesCtrl.idCtrlNameInDlgEdit).val(label)
+            $("#" + dictEntitiesCtrl.idCtrlIdInDlgEdit).val(value)
+            $("#" + dictEntitiesCtrl.idDlgEdit).dialog('open');
+        }
+        else if('delete' == key) {
+            $("#" + dictEntitiesCtrl.idDlgRemove).attr('dict_id', value);
+            $("#" + dictEntitiesCtrl.idDlgRemove).attr('type_id', type_id);
+            $("#" + dictEntitiesCtrl.idDlgRemove).attr('list_element_id', list_element_id);
+            $("#" + dictEntitiesCtrl.idDivNameInDlgRemove).html(label);
+            $("#" + dictEntitiesCtrl.idDlgRemove).dialog('open');
+       }
+    }
+
+    
 }
