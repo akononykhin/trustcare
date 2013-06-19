@@ -8,7 +8,7 @@ var dictEntitiesCtrl = {
     ,idDivNameInDlgRemove: 'remove-dict-entity-name'
         
     ,selectedList: Array()
-    
+    ,ctrlsList: {}
     
     ,init: function() {
         dictEntitiesCtrl.initDlgAdd();
@@ -19,13 +19,15 @@ var dictEntitiesCtrl = {
 
     ,addCtrl: function(ctrlId, typeId)
     {
-        dictEntitiesCtrl.reload(ctrlId, typeId);
-        dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl(ctrlId, typeId);
+        dictEntitiesCtrl.ctrlsList[ctrlId] = typeId;
+        
+        dictEntitiesCtrl.reload(ctrlId);
+        dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl(ctrlId);
 
     }
 
     ,initDlgAdd: function() {
-        var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgAdd + "' title='" + i18n.translate("Add") + "' type_id='' list_element_id=''>" +
+        var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgAdd + "' title='" + i18n.translate("Add") + "' list_element_id=''>" +
                       " <p class='errorInfo'></p>" +
                       " <form>" +
                       "  <label for='name'>" + i18n.translate("Name") + "</label>" +
@@ -48,8 +50,8 @@ var dictEntitiesCtrl = {
                         updateErrorInfo('#'+dictEntitiesCtrl.idDlgAdd, i18n.translate("Necessary to enter value"));
                         return false;
                     }
-                    var type_id = $('#'+dictEntitiesCtrl.idDlgAdd).attr('type_id');
                     var list_element_id = $('#'+dictEntitiesCtrl.idDlgAdd).attr('list_element_id');
+                    var type_id = dictEntitiesCtrl.ctrlsList[list_element_id];
 
                     $('#'+dictEntitiesCtrl.idDlgAdd).showLoading();
                     $.ajax({
@@ -62,7 +64,7 @@ var dictEntitiesCtrl = {
                         ,success: function(data) {
                             if (data && data.success){
                                 $('#'+dictEntitiesCtrl.idDlgAdd).dialog("close");
-                                dictEntitiesCtrl.reload(list_element_id, type_id);
+                                dictEntitiesCtrl.reload(list_element_id);
                             }
                             else{
                                 var errorMsg = i18n.translate("Internal Error");
@@ -93,7 +95,7 @@ var dictEntitiesCtrl = {
     }
     
     ,initDlgEdit: function() {
-        var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgEdit + "' title='" + i18n.translate("Edit") + "' type_id='' list_element_id=''>" +
+        var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgEdit + "' title='" + i18n.translate("Edit") + "' list_element_id=''>" +
                       " <p class='errorInfo'></p>" +
                       " <form>" +
                       "  <label for='name'>" + i18n.translate("Name") + "</label>" +
@@ -118,7 +120,6 @@ var dictEntitiesCtrl = {
                         return false;
                     }
                     var id = $('#' + dictEntitiesCtrl.idCtrlIdInDlgEdit);
-                    var type_id = $('#'+dictEntitiesCtrl.idDlgEdit).attr('type_id');
                     var list_element_id = $('#'+dictEntitiesCtrl.idDlgEdit).attr('list_element_id');
 
                     $('#'+dictEntitiesCtrl.idDlgEdit).showLoading();
@@ -132,7 +133,7 @@ var dictEntitiesCtrl = {
                         ,success: function(data) {
                             if (data && data.success){
                                 $('#'+dictEntitiesCtrl.idDlgEdit).dialog("close");
-                                dictEntitiesCtrl.reload(list_element_id, type_id);
+                                dictEntitiesCtrl.reload(list_element_id);
                             }
                             else{
                                 var errorMsg = i18n.translate("Internal Error");
@@ -163,7 +164,7 @@ var dictEntitiesCtrl = {
     }
  
     ,initDlgRemove: function() {
-        var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgRemove + "' title='" + i18n.translate("Warning") + "' type_id='' list_element_id='' dict_id=''>" +
+        var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgRemove + "' title='" + i18n.translate("Warning") + "' list_element_id='' dict_id=''>" +
         " <p class='errorInfo'></p>" +
         " <span class='ui-icon ui-icon-alert' style='float: left; margin: 0 7px 20px 0;'></span>" +
         i18n.translate("__NameDiv__ will be removed. Are You sure?", {NameDiv: "<div id='" + dictEntitiesCtrl.idDivNameInDlgRemove + "' style='font-weight: bold;'></div>"}) +
@@ -178,7 +179,6 @@ var dictEntitiesCtrl = {
             ,buttons: [{
                 text: 'OK'
                 ,click: function() {
-                    var type_id = $('#'+dictEntitiesCtrl.idDlgRemove).attr('type_id');
                     var list_element_id = $('#'+dictEntitiesCtrl.idDlgRemove).attr('list_element_id');
                     var dict_id = $('#'+dictEntitiesCtrl.idDlgRemove).attr('dict_id');
                     
@@ -192,7 +192,7 @@ var dictEntitiesCtrl = {
                         ,success: function(data) {
                             if (data && data.success){
                                 $('#'+dictEntitiesCtrl.idDlgRemove).dialog("close");
-                                dictEntitiesCtrl.reload(list_element_id, type_id);
+                                dictEntitiesCtrl.reload(list_element_id);
                             }
                             else{
                                 var errorMsg = i18n.translate("Internal Error");
@@ -226,7 +226,9 @@ var dictEntitiesCtrl = {
         dictEntitiesCtrl.selectedList[type] = [values];
     }
     
-    ,reload: function(ctrlId, dictTypeId){
+    ,reload: function(ctrlId){
+        dictTypeId = dictEntitiesCtrl.ctrlsList[ctrlId];
+        
         if($("#"+ctrlId + " option").length) {
             dictEntitiesCtrl.selectedList[dictTypeId] = new Array();
             $("#"+ctrlId + " option:selected").each( function() {
@@ -265,10 +267,9 @@ var dictEntitiesCtrl = {
         });
     }
     
-    ,linkDynamicActionsToPharmDictCtrl: function(list_element_id, type_id)
+    ,linkDynamicActionsToPharmDictCtrl: function(list_element_id)
     {
         $("#link-add-"+list_element_id).click(function() {
-            $("#" + dictEntitiesCtrl.idDlgAdd).attr('type_id', type_id);
             $("#" + dictEntitiesCtrl.idDlgAdd).attr('list_element_id', list_element_id);
             $("#" + dictEntitiesCtrl.idDlgAdd).dialog('open');
             return false;
@@ -276,7 +277,7 @@ var dictEntitiesCtrl = {
         $('#'+list_element_id).contextMenu({
             selector: 'option', 
             callback: function(key, options) {
-                dictEntitiesCtrl.processPharmDictContextMenuPressed(key, options, list_element_id, type_id);
+                dictEntitiesCtrl.processPharmDictContextMenuPressed(key, options, list_element_id);
             },
             items: {
                 "edit": {name: "Edit"},
@@ -285,13 +286,12 @@ var dictEntitiesCtrl = {
         });
     }
 
-    ,processPharmDictContextMenuPressed: function(key, options, list_element_id, type_id)
+    ,processPharmDictContextMenuPressed: function(key, options, list_element_id)
     {
         var label = options.$trigger[0].label;
         var value = options.$trigger[0].value;
 
         if('edit' == key) {
-            $("#" + dictEntitiesCtrl.idDlgEdit).attr('type_id', type_id);
             $("#" + dictEntitiesCtrl.idDlgEdit).attr('list_element_id', list_element_id);
             $("#" + dictEntitiesCtrl.idCtrlNameInDlgEdit).val(label)
             $("#" + dictEntitiesCtrl.idCtrlIdInDlgEdit).val(value)
@@ -299,7 +299,6 @@ var dictEntitiesCtrl = {
         }
         else if('delete' == key) {
             $("#" + dictEntitiesCtrl.idDlgRemove).attr('dict_id', value);
-            $("#" + dictEntitiesCtrl.idDlgRemove).attr('type_id', type_id);
             $("#" + dictEntitiesCtrl.idDlgRemove).attr('list_element_id', list_element_id);
             $("#" + dictEntitiesCtrl.idDivNameInDlgRemove).html(label);
             $("#" + dictEntitiesCtrl.idDlgRemove).dialog('open');
