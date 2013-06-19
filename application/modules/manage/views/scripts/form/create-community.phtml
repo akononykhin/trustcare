@@ -150,6 +150,16 @@ var g_dictEntities = new Array();
         patientCtrl.configureAddLink('link-add-patient');
 <?php endif;?>
 
+        dictEntitiesCtrl.init();
+        dictEntitiesCtrl.addCtrl('referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
+        dictEntitiesCtrl.addCtrl('referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
+        dictEntitiesCtrl.addCtrl('htc_result_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT;?>');
+        dictEntitiesCtrl.addCtrl('palliative_care_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE;?>');
+        dictEntitiesCtrl.addCtrl('sti_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
+        dictEntitiesCtrl.addCtrl('reproductive_health_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE;?>');
+        dictEntitiesCtrl.addCtrl('tuberculosis_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
+        dictEntitiesCtrl.addCtrl('ovc_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
+
     	$('#main_form').submit(function() {
         	if(!$("#id_pharmacy option:selected").val()) {
             	alert('<?php echo $this->translate(_("Necessary to choose pharmacy"));?>');
@@ -177,22 +187,6 @@ var g_dictEntities = new Array();
         	return true;
 	    });
 
-	    dictEntitiesCtrl.reload('#referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
-	    dictEntitiesCtrl.reload('#referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
-	    dictEntitiesCtrl.reload('#htc_result_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT;?>');
-	    dictEntitiesCtrl.reload('#palliative_care_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE;?>');
-	    dictEntitiesCtrl.reload('#sti_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
-	    dictEntitiesCtrl.reload('#reproductive_health_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE;?>');
-	    dictEntitiesCtrl.reload('#tuberculosis_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
-	    dictEntitiesCtrl.reload('#ovc_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
-	    
-	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
-	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
-	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('palliative_care_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE;?>');
-	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('sti_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
-	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('reproductive_health_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE;?>');
-	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('tuberculosis_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
-	    dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl('ovc_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
 	    
 
 /*** START Bind of OnChange ***/        

@@ -9,12 +9,21 @@ var dictEntitiesCtrl = {
         
     ,selectedList: Array()
     
+    
     ,init: function() {
         dictEntitiesCtrl.initDlgAdd();
         dictEntitiesCtrl.initDlgEdit();
         dictEntitiesCtrl.initDlgRemove();
     }
-    
+
+
+    ,addCtrl: function(ctrlId, typeId)
+    {
+        dictEntitiesCtrl.reload(ctrlId, typeId);
+        dictEntitiesCtrl.linkDynamicActionsToPharmDictCtrl(ctrlId, typeId);
+
+    }
+
     ,initDlgAdd: function() {
         var dlgHtml = "<div id='" + dictEntitiesCtrl.idDlgAdd + "' title='" + i18n.translate("Add") + "' type_id='' list_element_id=''>" +
                       " <p class='errorInfo'></p>" +
@@ -53,7 +62,7 @@ var dictEntitiesCtrl = {
                         ,success: function(data) {
                             if (data && data.success){
                                 $('#'+dictEntitiesCtrl.idDlgAdd).dialog("close");
-                                dictEntitiesCtrl.reload('#'+list_element_id, type_id);
+                                dictEntitiesCtrl.reload(list_element_id, type_id);
                             }
                             else{
                                 var errorMsg = i18n.translate("Internal Error");
@@ -123,7 +132,7 @@ var dictEntitiesCtrl = {
                         ,success: function(data) {
                             if (data && data.success){
                                 $('#'+dictEntitiesCtrl.idDlgEdit).dialog("close");
-                                dictEntitiesCtrl.reload('#'+list_element_id, type_id);
+                                dictEntitiesCtrl.reload(list_element_id, type_id);
                             }
                             else{
                                 var errorMsg = i18n.translate("Internal Error");
@@ -183,7 +192,7 @@ var dictEntitiesCtrl = {
                         ,success: function(data) {
                             if (data && data.success){
                                 $('#'+dictEntitiesCtrl.idDlgRemove).dialog("close");
-                                dictEntitiesCtrl.reload('#'+list_element_id, type_id);
+                                dictEntitiesCtrl.reload(list_element_id, type_id);
                             }
                             else{
                                 var errorMsg = i18n.translate("Internal Error");
@@ -218,9 +227,9 @@ var dictEntitiesCtrl = {
     }
     
     ,reload: function(ctrlId, dictTypeId){
-        if($(ctrlId + " option").length) {
+        if($("#"+ctrlId + " option").length) {
             dictEntitiesCtrl.selectedList[dictTypeId] = new Array();
-            $(ctrlId + " option:selected").each( function() {
+            $("#"+ctrlId + " option:selected").each( function() {
                 dictEntitiesCtrl.selectedList[dictTypeId][dictEntitiesCtrl.selectedList[dictTypeId].length] = parseInt($(this).val(), 10);
             });
         }
@@ -235,7 +244,7 @@ var dictEntitiesCtrl = {
                     return;
                 }
 
-                var select = $(ctrlId);
+                var select = $("#"+ctrlId);
                 if(select.prop) {
                     var options = select.prop('options');
                 }
@@ -297,5 +306,4 @@ var dictEntitiesCtrl = {
        }
     }
 
-    
 }
