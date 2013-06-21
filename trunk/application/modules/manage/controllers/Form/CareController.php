@@ -56,9 +56,6 @@ class Form_CareController extends ZendX_Controller_Action
 
         $this->view->DataTable = array(
             'serverUrl' => $this->view->url(array('action' => 'list-load')),
-            'params' => array(
-                'type' => $type,
-            ),
             'toolbar' => array(
                 array(
                     'text' => Zend_Registry::get("Zend_Translate")->_("Create"),

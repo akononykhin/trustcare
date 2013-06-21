@@ -213,7 +213,7 @@ var g_dictEntities = new Array();
 <?php if(!empty($this->error)) : ?>
 <div class="form_errors"><?php echo $this->error;?></div>
 <?php endif;?>
-<form id="main_form" class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'create', 'type' => $this->type));?>">
+<form id="main_form" class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'create'));?>">
 <div class="tab_header"><?php echo $this->translate(_("General Tab"));?></div>
 <div class="tab_content">
  <table class="zend_form">
