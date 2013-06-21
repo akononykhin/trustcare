@@ -149,27 +149,32 @@ class BootstrapApp extends BootstrapMain
             	'pages'         => array(
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmaceutical Care"),
-                        'controller'    => 'form',
+                        'controller'    => 'form_care',
                         'action'        => 'list',
-                        'params'        => array('type' => 'care'),
                     	'resource'      => 'resource:form',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'form',
+                                'controller'    => 'form_care',
                                 'action'        => 'create',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'care'),
                     			'resource'      => 'resource:form',
                                 'privilege'     => 'create'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                                'controller'    => 'form',
+                                'controller'    => 'form_care',
                                 'action'        => 'view',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'care'),
+                    			'resource'      => 'resource:form',
+                                'privilege'     => 'view'
+                            ),
+                            array(
+                                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+                                'controller'    => 'form_care',
+                                'action'        => 'edit',
+                                'visible'       => false,
                     			'resource'      => 'resource:form',
                                 'privilege'     => 'view'
                             ),
@@ -177,36 +182,32 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Community Pharmacy"),
-                        'controller'    => 'form',
+                        'controller'    => 'form_community',
                         'action'        => 'list',
-                        'params'        => array('type' => 'community'),
                     	'resource'      => 'resource:form',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'form',
+                                'controller'    => 'form_community',
                                 'action'        => 'create',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:form',
                                 'privilege'     => 'create'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                                'controller'    => 'form',
+                                'controller'    => 'form_community',
                                 'action'        => 'view',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:form',
                                 'privilege'     => 'view'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'form',
+                                'controller'    => 'form_community',
                                 'action'        => 'edit',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:form',
                                 'privilege'     => 'edit'
                             ),
