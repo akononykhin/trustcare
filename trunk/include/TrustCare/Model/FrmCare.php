@@ -485,17 +485,17 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
 
     
     /**
-     * Find an entry by unique pair: patient_id and date_of_visit
+     * Find an entry by unique combination: pharmacy_id - patient_id - date_of_visit
      *
      * @param int $patientId
      * @param string $dateOfVisit Date of visit (YYYY-MM-DD)
      * @param array|null $options
      * @return TrustCare_Model_FrmCare
      */
-    public static function findByPatientIdAndDateOfVisit($patientId, $dateOfVisit, array $options = null)
+    public static function findByPharmacyIdPatientIdAndDateOfVisit($pharmacyId, $patientId, $dateOfVisit, array $options = null)
     {
         $newEntity = new TrustCare_Model_FrmCare($options);
-        $result = $newEntity->getMapper()->findByPatientIdAndDateOfVisit($patientId, $dateOfVisit, $newEntity);
+        $result = $newEntity->getMapper()->findByPharmacyIdPatientIdAndDateOfVisit($pharmacyId, $patientId, $dateOfVisit, $newEntity);
     
         if(!$result) {
             unset($newEntity);

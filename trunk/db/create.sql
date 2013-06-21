@@ -368,7 +368,7 @@ CREATE TABLE frm_care (
   `is_nafdac_adr_filled` int,
   `is_patient_younger_15` int default NULL,
   `is_patient_male` int default NULL,
-  UNIQUE KEY `cons_frm_care_1` (`id_patient`, `date_of_visit`),
+  UNIQUE KEY `cons_frm_care_1` (`id_pharmacy`, `id_patient`, `date_of_visit`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1009,4 +1009,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130611, 1);
+insert into db_version values (1, 20130621, 1);

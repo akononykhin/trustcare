@@ -178,7 +178,7 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
      * @param  TrustCare_Model_FrmCare $model
      * @return void
      */
-    public function findByPatientIdAndDateOfVisit($patientId, $dateOfVisit, TrustCare_Model_FrmCare $model)
+    public function findByPharmacyIdPatientIdAndDateOfVisit($pharmacyId, $patientId, $dateOfVisit, TrustCare_Model_FrmCare $model)
     {
         $query = sprintf("
             select
@@ -205,7 +205,7 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
                 is_patient_younger_15,
                 is_patient_male
             from %s
-            where id_patient=%d and date_of_visit=str_to_date('%s', '%%Y-%%m-%%d');", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), $patientId, $dateOfVisit);
+            where id_pharmacy=%d and id_patient=%d and date_of_visit=str_to_date('%s', '%%Y-%%m-%%d');", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), $pharmacyId, $patientId, $dateOfVisit);
     
         $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
         $result = $this->getDbAdapter()->fetchAll($query);
