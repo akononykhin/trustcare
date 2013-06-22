@@ -78,7 +78,7 @@ class TrustCare_Model_FrmCareMedErrorType extends TrustCare_Model_Abstract
     /**
      * Find an entry by id
      *
-     * @param  string $id 
+     * @param  string $id
      * @param array|null $options
      * @return TrustCare_Model_FrmCareMedErrorType
      */
@@ -86,15 +86,15 @@ class TrustCare_Model_FrmCareMedErrorType extends TrustCare_Model_Abstract
     {
         $newEntity = new TrustCare_Model_FrmCareMedErrorType($options);
         $result = $newEntity->getMapper()->find($id, $newEntity);
-        
+    
         if(!$result) {
             unset($newEntity);
             $newEntity = null;
         }
-        
+    
         return $newEntity;
     }
-
+    
     
     /**
      * Fetch all for specified $id_frm_care
@@ -112,4 +112,37 @@ class TrustCare_Model_FrmCareMedErrorType extends TrustCare_Model_Abstract
         parent::delete();
         $this->id = null;
     }
+    
+    /**
+     * Replace current set of pharmacy_dictionary ids to new one
+     * 
+     * @param int $id_frm_care
+     * @param array $dictIds
+     * @param array|null $options
+     */
+    public static function replaceForFrmCare($id_frm_care, array $dictIds, array $options = null)
+    {
+        $existingIds = array();
+        
+        $model = new TrustCare_Model_FrmCareMedErrorType($options);
+        $objs = $model->fetchAllForFrmCare($id_frm_care);
+        foreach($objs as $obj) {
+            if(in_array($obj->getIdPharmacyDictionary(), $dictIds)) {
+                $existingIds[] = $obj->getIdPharmacyDictionary();
+            }
+            else {
+                $obj->delete();
+            }
+        }        
+        
+        $newIds = array_diff($dictIds, $existingIds);
+        foreach($newIds as $dictId) {
+            $model = new TrustCare_Model_FrmCareMedErrorType($options);
+            $model->setIdFrmCare($id_frm_care);
+            $model->setIdPharmacyDictionary($dictId);
+            $model->save();
+            
+        }
+    }
+
 }

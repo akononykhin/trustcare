@@ -233,6 +233,49 @@ class TestOfFrmCareSuspectedAdrHepatic extends UnitTestCase {
         }
     }
     
+    function testReplaceForFrmCare() {
+        /* clean rows */
+        $model = TrustCare_Model_FrmCareSuspectedAdrHepatic::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+        $model->delete();
+    
+        $frmCareId = 2;
+        $currentDictIds = array(1,2,4,7);
+        $newDictIds = array(2,3,4,8);
+        
+        $samples = array();
+        try {
+            foreach($currentDictIds as $dictId) {
+                $params = array(
+                    'id_frm_care' => $frmCareId,
+                    'id_pharmacy_dictionary' => $dictId,
+                );
+                $model = new TrustCare_Model_FrmCareSuspectedAdrHepatic(array('mapperOptions' => array('adapter' => $this->db)));
+                $model->setOptions($params);
+                $model->save();
+            }
+    
+    
+            TrustCare_Model_FrmCareSuspectedAdrHepatic::replaceForFrmCare($frmCareId, $newDictIds, array('mapperOptions' => array('adapter' => $this->db)));
+    
+            $model = new TrustCare_Model_FrmCareSuspectedAdrHepatic(array('mapperOptions' => array('adapter' => $this->db)));
+            $objs = $model->fetchAllForFrmCare($frmCareId);
+            $this->assertEqual(count($objs), count($newDictIds), "Incorrect number of objects loaded: %s");
+    
+            $checkDictIds = array();
+            foreach($objs as $obj) {
+                $checkDictIds[] = $obj->getIdPharmacyDictionary();
+            }
+            if(count($checkDictIds) == count($newDictIds)) {
+                foreach($newDictIds as $dictId) {
+                    $this->assertTrue(in_array($dictId, $checkDictIds), sprintf("Object with id_pharmacy_dictionary=%s not loaded", $dictId));
+                }
+            }
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+        }
+    }
+    
     /**
      * 
      * @param TrustCare_Model_FrmCareSuspectedAdrHepatic $model

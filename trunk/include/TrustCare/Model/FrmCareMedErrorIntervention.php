@@ -112,4 +112,36 @@ class TrustCare_Model_FrmCareMedErrorIntervention extends TrustCare_Model_Abstra
         parent::delete();
         $this->id = null;
     }
+    
+    /**
+     * Replace current set of pharmacy_dictionary ids to new one
+     * 
+     * @param int $id_frm_care
+     * @param array $dictIds
+     * @param array|null $options
+     */
+    public static function replaceForFrmCare($id_frm_care, array $dictIds, array $options = null)
+    {
+        $existingIds = array();
+        
+        $model = new TrustCare_Model_FrmCareMedErrorIntervention($options);
+        $objs = $model->fetchAllForFrmCare($id_frm_care);
+        foreach($objs as $obj) {
+            if(in_array($obj->getIdPharmacyDictionary(), $dictIds)) {
+                $existingIds[] = $obj->getIdPharmacyDictionary();
+            }
+            else {
+                $obj->delete();
+            }
+        }        
+        
+        $newIds = array_diff($dictIds, $existingIds);
+        foreach($newIds as $dictId) {
+            $model = new TrustCare_Model_FrmCareMedErrorIntervention($options);
+            $model->setIdFrmCare($id_frm_care);
+            $model->setIdPharmacyDictionary($dictId);
+            $model->save();
+            
+        }
+    }
 }
