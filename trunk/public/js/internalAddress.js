@@ -37,4 +37,10 @@ var internalAddress = {
     ,pharmDictRemove: function() {
         return internalAddress.replacePatterns('pharm-dict', 'remove-ajax');
     }
+    ,formCareIsAlreadyFilled: function() {
+        return internalAddress.replacePatterns('form_care', 'check-if-filled');
+    }
+    ,formCareEdit: function(id) {
+        return internalAddress.replacePatterns('form_care', 'edit') + '/id/' + id;
+    }
 }
