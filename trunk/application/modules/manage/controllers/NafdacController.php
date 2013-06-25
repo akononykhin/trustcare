@@ -136,19 +136,19 @@ class NafdacController extends ZendX_Controller_Action
         
         $patientObj = TrustCare_Model_Patient::find($frmObj->getIdPatient());
         if(is_null($patientObj)) {
-            $this->getLogger()->error(sprintf("Failed to load patient for frm_card.id=%s", $idFrmCare));
+            $this->getLogger()->error(sprintf("Failed to load patient for frm_care.id=%s", $idFrmCare));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
             return;
         }
         $pharmObj = TrustCare_Model_Pharmacy::find($frmObj->getIdPharmacy());
         if(is_null($pharmObj)) {
-            $this->getLogger()->error(sprintf("Failed to load pharmacy for frm_card.id=%s", $idFrmCare));
+            $this->getLogger()->error(sprintf("Failed to load pharmacy for frm_care.id=%s", $idFrmCare));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
             return;
         }
         $facilityObj = TrustCare_Model_Facility::find($pharmObj->getIdFacility());
         if(is_null($facilityObj)) {
-            $this->getLogger()->error(sprintf("Failed to load facility for pharmacy.id=%s(frm_card.id=%s)", $pharmObj->getId(), $idFrmCare));
+            $this->getLogger()->error(sprintf("Failed to load facility for pharmacy.id=%s(frm_care.id=%s)", $pharmObj->getId(), $idFrmCare));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
             return;
         }
