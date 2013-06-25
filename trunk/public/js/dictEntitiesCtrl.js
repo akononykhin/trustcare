@@ -252,7 +252,7 @@ var dictEntitiesCtrl = {
     }
     
     ,addSelected: function(type, values) {
-        dictEntitiesCtrl.selectedList[type] = [values];
+        dictEntitiesCtrl.selectedList[type] = values;
     }
     
     ,reload: function(ctrlId){
@@ -275,6 +275,7 @@ var dictEntitiesCtrl = {
                     return;
                 }
 
+                var dictTypeId = dictEntitiesCtrl.ctrlsList[ctrlId];
                 var select = $("#"+ctrlId);
                 if(select.prop) {
                     var options = select.prop('options');

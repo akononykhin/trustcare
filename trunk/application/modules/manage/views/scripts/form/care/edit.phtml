@@ -1,0 +1,513 @@
+<?php
+$this->headScript()->appendFile('/js/internalAddress.js');
+$this->headScript()->appendFile('/js/pageAsDlg.js');
+$this->headScript()->appendFile('/js/dictEntitiesCtrl.js');
+$this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
+$this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.ui.position.js');
+$this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.contextMenu.js');
+$this->headScript()->appendFile('/js/i18next-1.6.3.min.js');
+
+$this->headLink()->appendStylesheet('/css/showLoading.css');
+$this->headLink()->appendStylesheet('/js/jquery/plugin/contextMenu/jquery.contextMenu.css');
+
+$textForEmptyAdrStopDate = $this->translate(_("Ongoing"));
+?>
+<style type="text/css" title="currentStyle">
+a {
+    cursor: pointer;
+    text-decoration: underline;
+}
+</style>
+
+<script type="text/javascript" charset="utf-8">
+<?php foreach($this->dictEntities as $key=>$values) :?>
+    dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) echo join(" , ", $values);?>]);
+<?php endforeach; ?>
+
+	function checkIsMedErrorScreened()
+	{
+		if(0 == $('input:radio[name=is_med_error_screened]:checked').val()) {
+            $('input[name = "is_med_error_identified"]').attr("disabled", 'disabled');
+            $('#is_med_error_identified_0').attr('checked', 'checked');
+		}
+		else {
+            $('input[name = "is_med_error_identified"]').removeAttr("disabled");
+		}
+		checkIsMedErrorIdentified();
+	}
+
+	function checkIsMedErrorIdentified()
+	{
+		if(0 == $('input:radio[name=is_med_error_identified]:checked').val()) {
+			$('#row_med_error_type').hide();
+		}
+		else {
+			$('#row_med_error_type').show();
+		}
+	}
+
+	function checkIsMedAdhProblemScreened()
+	{
+		if(0 == $('input:radio[name=is_med_adh_problem_screened]:checked').val()) {
+            $('input[name = "is_med_adh_problem_identified"]').attr("disabled", 'disabled');
+            $('#is_med_adh_problem_identified_0').attr('checked', 'checked');
+		}
+		else {
+            $('input[name = "is_med_adh_problem_identified"]').removeAttr("disabled");
+		}
+		checkIsMedAdhProblemIdentified();
+	}
+
+	function checkIsMedAdhProblemIdentified()
+	{
+		if(0 == $('input:radio[name=is_med_adh_problem_identified]:checked').val()) {
+			$('#row_med_adh_problem').hide();
+		}
+		else {
+			$('#row_med_adh_problem').show();
+		}
+	}
+
+	function checkIsMedErrorInterventionProvided()
+	{
+		if(0 == $('input:radio[name=is_med_error_intervention_provided]:checked').val()) {
+			$('#row_med_error_intervention').hide();
+		}
+		else {
+			$('#row_med_error_intervention').show();
+		}
+	}
+	
+	function checkIsAdhInterventionProvided()
+	{
+		if(0 == $('input:radio[name=is_adh_intervention_provided]:checked').val()) {
+			$('#row_adh_intervention').hide();
+		}
+		else {
+			$('#row_adh_intervention').show();
+		}
+	}
+	
+	function checkIsAdrScreened()
+	{
+		if(0 == $('input:radio[name=is_adr_screened]:checked').val()) {
+            $('input[name = "is_adr_symptoms"]').attr("disabled", 'disabled');
+            $('#is_adr_symptoms_0').attr('checked', 'checked');
+		}
+		else {
+            $('input[name = "is_adr_symptoms"]').removeAttr("disabled");
+		}
+		checkIsAdrSymptoms();
+	}
+
+	function checkIsAdrSymptoms()
+	{
+		if(0 == $('input:radio[name=is_adr_symptoms]:checked').val()) {
+			$('#row_adr_severity_id').hide();
+		}
+		else {
+			$('#row_adr_severity_id').show();
+		}
+	}
+
+	function checkIsAdrInterventionProvided()
+	{
+		if(0 == $('input:radio[name=is_adr_intervention_provided]:checked').val()) {
+			$('#row_adr_intervention').hide();
+		}
+		else {
+			$('#row_adr_intervention').show();
+		}
+	}
+	
+
+	function checkAdrStopDate()
+	{
+		var val = $('#adr_stop_date').val();
+		if('' == val || '<?php echo $textForEmptyAdrStopDate;?>' == val) {
+			$('#adr_stop_date').val('<?php echo $textForEmptyAdrStopDate;?>');
+			$('#adr_stop_date').css('color', '#e6e6e6');
+		}
+		else {
+			$('#adr_stop_date').css('color', '#000000');
+		}
+	}
+	
+	$(document).ready(function() {
+		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+
+		i18n.init({
+		    resGetPath: internalAddress.loadI18nDict()
+		    ,dynamicLoad: true 
+		    ,getAsync: false
+		    ,lng: '<?php echo Zend_Registry::get('Zend_Locale');?>'
+		    ,ns: 'js_resources'
+		    ,fallbackLng: false
+		});
+		
+
+        dictEntitiesCtrl.init();
+	    dictEntitiesCtrl.addCtrl('med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
+	    dictEntitiesCtrl.addCtrl('med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
+	    dictEntitiesCtrl.addCtrl('med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
+	    dictEntitiesCtrl.addCtrl('adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
+	    dictEntitiesCtrl.addCtrl('med_error_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME;?>');
+	    dictEntitiesCtrl.addCtrl('adh_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
+	    dictEntitiesCtrl.addCtrl('adr_severity_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_SEVERITY_GRADE;?>');
+	    dictEntitiesCtrl.addCtrl('suspected_adr_hepatic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
+	    dictEntitiesCtrl.addCtrl('suspected_adr_nervous', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
+	    dictEntitiesCtrl.addCtrl('suspected_adr_cardiovascular', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
+	    dictEntitiesCtrl.addCtrl('suspected_adr_skin', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
+	    dictEntitiesCtrl.addCtrl('suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
+	    dictEntitiesCtrl.addCtrl('suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
+	    dictEntitiesCtrl.addCtrl('suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
+	    dictEntitiesCtrl.addCtrl('adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
+        
+    	$('#main_form').submit(function() {
+        	if('<?php echo $textForEmptyAdrStopDate?>' == $('#adr_stop_date').val()) {
+        		$('#adr_stop_date').val('');
+        	}
+        	return true;
+	    });
+	    
+	    
+
+/*** START Bind of OnChange ***/        
+        $('input[name = "is_med_error_screened"]').bind('change', function(){
+            checkIsMedErrorScreened();
+        });
+        $('input[name = "is_med_error_identified"]').bind('change', function(){
+            checkIsMedErrorIdentified();
+        });
+        $('input[name = "is_med_adh_problem_screened"]').bind('change', function(){
+            checkIsMedAdhProblemScreened();
+        });
+        $('input[name = "is_med_adh_problem_identified"]').bind('change', function(){
+            checkIsMedAdhProblemIdentified();
+        });
+        $('input[name = "is_med_error_intervention_provided"]').bind('change', function(){
+        	checkIsMedErrorInterventionProvided();
+        });
+        $('input[name = "is_adh_intervention_provided"]').bind('change', function(){
+        	checkIsAdhInterventionProvided();
+        });
+        $('input[name = "is_adr_screened"]').bind('change', function(){
+            checkIsAdrScreened();
+        });
+        $('input[name = "is_adr_symptoms"]').bind('change', function(){
+            checkIsAdrSymptoms();
+        });
+        $('input[name = "is_adr_intervention_provided"]').bind('change', function(){
+        	checkIsAdrInterventionProvided();
+        });
+/*** END Bind of OnChange ***/        
+        
+        checkIsMedErrorScreened();
+        checkIsMedAdhProblemScreened();
+        checkIsMedErrorInterventionProvided();
+        checkIsAdhInterventionProvided();
+        checkIsAdrScreened();
+        checkIsAdrInterventionProvided();
+        
+        $("#adr_start_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+        $("#adr_stop_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+	    $("#adr_stop_date").bind('change', function(){
+	        checkAdrStopDate();
+	    });
+        checkAdrStopDate();
+
+    });
+</script>
+
+<?php if(!empty($this->error)) : ?>
+<div class="form_errors"><?php echo $this->error;?></div>
+<?php endif;?>
+<form id="main_form" class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'edit'));?>">
+<div class="tab_header"><?php echo $this->translate(_("General Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="required"><label for="id_pharmacy"><?php echo $this->translate(_("Pharmacy"));?></label></div></td>
+   <td><?php echo $this->pharmacyName;?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="required"><label for="patient"><?php echo $this->translate(_("Patient"));?></label></div></td>
+   <td><?php echo $this->patientModel->showNameAs();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="required"><label for="date_of_visit"><?php echo $this->translate(_("Date of Visit"));?></label></div></td>
+   <td><?php echo $this->formModel->getDateOfVisit();?></td>
+  </tr>
+<?php if(!$this->patientModel->getIsMale()) : ?>  
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_pregnant"><?php echo $this->translate(_("Is pregnant"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_pregnant" id="is_pregnant_0" value="0" <?php if(!$this->isPregnant) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_pregnant" id="is_pregnant_1" value="1" <?php if($this->isPregnant) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+<?php endif; ?>  
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_receive_prescription"><?php echo $this->translate(_("Did client receive prescription at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_receive_prescription" id="is_receive_prescription_0" value="0" <?php if(!$this->isReceivePrescription) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_receive_prescription" id="is_receive_prescription_1" value="1" <?php if($this->isReceivePrescription) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+ </table>
+</div>
+
+
+<div class="tab_header"><?php echo $this->translate(_("Medication Error Screening Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_med_error_screened"><?php echo $this->translate(_("Is patient screened for Medication Error at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_med_error_screened" id="is_med_error_screened_0" value="0" <?php if(!$this->isMedErrorScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_error_screened" id="is_med_error_screened_1" value="1" <?php if($this->isMedErrorScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_med_error_identified"><?php echo $this->translate(_("Is there Medication Error identified at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_med_error_identified" id="is_med_error_identified_0" value="0" <?php if(!$this->isMedErrorIdentified) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_error_identified" id="is_med_error_identified_1" value="1" <?php if($this->isMedErrorIdentified) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_med_error_type">
+   <td valign="top"><div class="normal"><label for="med_error_type"><?php echo $this->translate(_("Type of Medication Error"));?></label></div></td>
+   <td>
+     <select name="med_error_type[]" id="med_error_type" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-med_error_type"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
+
+
+<div class="tab_header"><?php echo $this->translate(_("Adherence Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_med_adh_problem_screened"><?php echo $this->translate(_("Is patient screened for Medication Adherence Related problem(s) at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_0" value="0" <?php if(!$this->isMedAdhProblemScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_adh_problem_screened" id="is_med_adh_problem_screened_1" value="1" <?php if($this->isMedAdhProblemScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_med_adh_problem_identified"><?php echo $this->translate(_("Is there Medication Adherence Related problem(s) identified at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_med_adh_problem_identified" id="is_med_adh_problem_identified_0" value="0" <?php if(!$this->isMedAdhProblemIdentified) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_adh_problem_identified" id="is_med_adh_problem_identified_1" value="1" <?php if($this->isMedAdhProblemIdentified) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_med_adh_problem">
+   <td valign="top"><div class="normal"><label for="med_adh_problem"><?php echo $this->translate(_("Type of Medication Adherence Related problem(s)"));?></label></div></td>
+   <td>
+     <select name="med_adh_problem[]" id="med_adh_problem" class="pharmdict_modify_menu" multiple size="3">
+     </select>&nbsp;
+     <a id="link-add-med_adh_problem"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("Medication Error Intervention Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_med_error_intervention_provided"><?php echo $this->translate(_("Medication Error intervention provided at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_med_error_intervention_provided" id="is_med_error_intervention_provided_0" value="0" <?php if(!$this->isMedErrorInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_med_error_intervention_provided" id="is_med_error_intervention_provided_1" value="1" <?php if($this->isMedErrorInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_med_error_intervention">
+   <td valign="top"><div class="normal"><label for="med_error_intervention"><?php echo $this->translate(_("Type of Medication Error intervention provided"));?></label></div></td>
+   <td>
+     <select name="med_error_intervention[]" id="med_error_intervention" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-med_error_intervention"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("Adherence Intervention Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adh_intervention_provided"><?php echo $this->translate(_("Adherence intervention provided at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adh_intervention_provided" id="is_adh_intervention_provided_0" value="0" <?php if(!$this->isAdhInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adh_intervention_provided" id="is_adh_intervention_provided_1" value="1" <?php if($this->isAdhInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_adh_intervention">
+   <td valign="top"><div class="normal"><label for="adh_intervention"><?php echo $this->translate(_("Type of Adherence intervention provided"));?></label></div></td>
+   <td>
+     <select name="adh_intervention[]" id="adh_intervention" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-adh_intervention"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("Medication Error Intervention Outcome Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr id="row_med_error_intervention_outcome">
+   <td valign="top"><div class="normal"><label for="med_error_intervention_outcome"><?php echo $this->translate(_("Type of Medication Error intervention Outcome"));?></label></div></td>
+   <td>
+     <select name="med_error_intervention_outcome[]" id="med_error_intervention_outcome" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-med_error_intervention_outcome"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("Adherence Intervention Outcome Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr id="row_adh_intervention_outcome">
+   <td valign="top"><div class="normal"><label for="adh_intervention_outcome"><?php echo $this->translate(_("Type of Adherence intervention Outcome"));?></label></div></td>
+   <td>
+     <select name="adh_intervention_outcome[]" id="adh_intervention_outcome" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-adh_intervention_outcome"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+ 
+<div class="tab_header"><?php echo $this->translate(_("Suspected Adverse Drug Reactions (ADRs) Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adr_screened"><?php echo $this->translate(_("Is patient screened for ADR symptoms at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adr_screened" id="is_adr_screened_0" value="0" <?php if(!$this->isAdrScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_screened" id="is_adr_screened_1" value="1" <?php if($this->isAdrScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adr_symptoms"><?php echo $this->translate(_("Any signs/symptoms indicating NEW adverse drug reactions (ADRs) at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_0" value="0" <?php if(!$this->isAdrSymptoms) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_1" value="1" <?php if($this->isAdrSymptoms) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_adr_severity_id">
+   <td valign="top"><div class="normal"><label for="adr_severity_id"><?php echo $this->translate(_("Types of ADRs severity grade"));?></label></div></td>
+   <td>
+     <select name="adr_severity_id" id="adr_severity_id">
+     </select>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="adr_start_date"><?php echo $this->translate(_("ADR Start Date"));?></label></div></td>
+   <td>
+     <input type="text" name="adr_start_date" id="adr_start_date" value="<?php echo $this->adrStartDate;?>">     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="adr_stop_date"><?php echo $this->translate(_("ADR Stop Date"));?></label></div></td>
+   <td>
+     <input type="text" name="adr_stop_date" id="adr_stop_date" value="<?php echo $this->adrStopDate;?>">     
+   </td>
+  </tr>
+ </table>
+</div>
+ 
+<div class="tab_header"><?php echo $this->translate(_("Suspected ADR in system-organ classification"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr id="row_suspected_adr_hepatic">
+   <td valign="top"><div class="normal"><label for="suspected_adr_hepatic"><?php echo $this->translate(_("GIT/Hepatic System"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_hepatic[]" id="suspected_adr_hepatic" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_hepatic"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_nervous">
+   <td valign="top"><div class="normal"><label for="suspected_adr_nervous"><?php echo $this->translate(_("Nervous System"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_nervous[]" id="suspected_adr_nervous" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_nervous"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_cardiovascular">
+   <td valign="top"><div class="normal"><label for="suspected_adr_cardiovascular"><?php echo $this->translate(_("Cardiovascular System"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_cardiovascular[]" id="suspected_adr_cardiovascular" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_cardiovascular"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_skin">
+   <td valign="top"><div class="normal"><label for="suspected_adr_skin"><?php echo $this->translate(_("Skin and Appendages"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_skin[]" id="suspected_adr_skin" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_skin"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_metabolic">
+   <td valign="top"><div class="normal"><label for="suspected_adr_metabolic"><?php echo $this->translate(_("Metabolic/Endocrine System"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_metabolic[]" id="suspected_adr_metabolic" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_metabolic"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_musculoskeletal">
+   <td valign="top"><div class="normal"><label for="suspected_adr_musculoskeletal"><?php echo $this->translate(_("Musculoskeletal"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_musculoskeletal[]" id="suspected_adr_musculoskeletal" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_musculoskeletal"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr id="row_suspected_adr_general">
+   <td valign="top"><div class="normal"><label for="suspected_adr_general"><?php echo $this->translate(_("Systematic-General"));?></label></div></td>
+   <td>
+     <select name="suspected_adr_general[]" id="suspected_adr_general" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-suspected_adr_general"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("ADR Intervention Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adr_intervention_provided"><?php echo $this->translate(_("Adverse Drug Reaction intervention provided"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adr_intervention_provided" id="is_adr_intervention_provided_0" value="0" <?php if(!$this->isAdrInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_intervention_provided" id="is_adr_intervention_provided_1" value="1" <?php if($this->isAdrInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_adr_intervention">
+   <td valign="top"><div class="normal"><label for="adr_intervention"><?php echo $this->translate(_("Types of ADR intervention"));?></label></div></td>
+   <td>
+     <select name="adr_intervention[]" id="adr_intervention" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-adr_intervention"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
+
+<input type="submit" name="save" value="<?php echo $this->translate(_("Save"));?>"/>     
+</form>
+

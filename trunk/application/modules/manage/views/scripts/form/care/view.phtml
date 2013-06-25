@@ -83,15 +83,36 @@
  </table>
 </div>
 
-<div class="tab_header"><?php echo $this->translate(_("Medication Error / Adherence Intervention Tab"));?></div>
+<div class="tab_header"><?php echo $this->translate(_("Medication Error Intervention Tab"));?></div>
 <div class="tab_content">
  <table class="zend_form">
   <tr>
-   <td valign="top"><div class="normal"><?php echo $this->translate(_("Medication Error / Adherence intervention provided at this visit?"));?></div></td>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Medication Error intervention provided at this visit?"));?></div></td>
+   <td><?php echo $this->formModel->getIsMedErrorInterventionProvided() ? $this->translate(_("Yes")) : $this->translate(_("No"));?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Type of Medication Error intervention provided"));?></div></td>
+   <td>
+<?php
+    foreach($this->medErrorInterventions as $name) {
+        echo $name.'<br/>';
+    }
+?>
+   </td>
+  </tr>
+ </table>
+</div>
+
+
+<div class="tab_header"><?php echo $this->translate(_("Adherence Intervention Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Adherence intervention provided at this visit?"));?></div></td>
    <td><?php echo $this->formModel->getIsAdhInterventionProvided() ? $this->translate(_("Yes")) : $this->translate(_("No"));?></td>
   </tr>
   <tr>
-   <td valign="top"><div class="normal"><?php echo $this->translate(_("Type of Medication Error / Adherence intervention provided"));?></div></td>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Type of Adherence intervention provided"));?></div></td>
    <td>
 <?php
     foreach($this->adhInterventions as $name) {
@@ -103,11 +124,28 @@
  </table>
 </div>
 
-<div class="tab_header"><?php echo $this->translate(_("Medication Error / Adherence Intervention Outcome Tab"));?></div>
+<div class="tab_header"><?php echo $this->translate(_("Medication Error Intervention Outcome Tab"));?></div>
 <div class="tab_content">
  <table class="zend_form">
   <tr>
-   <td valign="top"><div class="normal"><?php echo $this->translate(_("Type of Medication Error / Adherence intervention Outcome"));?></div></td>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Type of Medication Error intervention Outcome"));?></div></td>
+   <td>
+<?php
+    foreach($this->medErrorInterventionOutcomes as $name) {
+        echo $name.'<br/>';
+    }
+?>
+   </td>
+  </tr>
+ </table>
+</div>
+ 
+
+<div class="tab_header"><?php echo $this->translate(_("Adherence Intervention Outcome Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Type of Adherence intervention Outcome"));?></div></td>
    <td>
 <?php
     foreach($this->adhInterventionOutcomes as $name) {
