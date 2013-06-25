@@ -27,7 +27,52 @@ a {
     dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) echo join(" , ", $values);?>]);
 <?php endforeach; ?>
 
-    function checkOnChangePatient() {
+
+    function checkIsAlreadyFilled() {
+        $.ajax( {
+             type: "POST"
+            ,url: internalAddress.formCareIsAlreadyFilled()
+            ,data: {
+                 patient_id: $("#id_patient").val()
+                ,pharmacy_id: $("#id_pharmacy option:selected").val()
+                ,date_of_visit:  $('#date_of_visit').val()
+            }
+            ,success: function(data) {
+                if(!data || !data.success) {
+                    return;
+                }
+                if(data.form_already_filled) {
+                    var formId = data.form_id;
+                    
+                    var dlgHtml = "<div><span class='ui-icon ui-icon-alert' style='float: left; margin: 0 7px 20px 0;'></span>" +
+                    i18n.translate("Such form has already been filled.") + '<br/>' +
+                    i18n.translate("If You want to modify existing form press Yes. If You want to fill new form and replace old one please press No.") +
+                    "</div>";
+                
+                    $(dlgHtml).dialog({
+                        modal: true
+                       ,dialogClass: 'alert'
+                       ,title: i18n.translate("Warning")
+                       ,width: 550
+                       ,buttons: [{
+                           text: i18n.translate("Yes")
+                           ,click: function() {
+                               $(location).attr('href', internalAddress.formCareEdit(formId));
+                           }
+                       }
+                       ,{ 
+                           text: i18n.translate("No")
+                           ,click: function() {
+                               $(this).dialog( "close" );
+                           }
+                       }]
+                   });
+                }
+            }
+        }); 
+    }
+
+    function checkIsMale() {
         $.ajax( {
              type: "POST"
             ,url: internalAddress.patientCheckIsMale()
@@ -48,7 +93,12 @@ a {
             }
         }); 
     }
-           
+
+    function checkOnChangePatient() {
+        checkIsMale();
+        checkIsAlreadyFilled();
+    }
+    
 	function checkIsMedErrorScreened()
 	{
 		if(0 == $('input:radio[name=is_med_error_screened]:checked').val()) {
@@ -255,7 +305,14 @@ a {
         $('input[name = "is_adr_intervention_provided"]').bind('change', function(){
         	checkIsAdrInterventionProvided();
         });
-/*** END Bind of OnChange ***/        
+        
+        $('#id_pharmacy').bind('change', function(){
+            checkIsAlreadyFilled();
+        });
+        $('#date_of_visit').bind('change', function(){
+            checkIsAlreadyFilled();
+        });
+        /*** END Bind of OnChange ***/        
         
         checkIsMedErrorScreened();
         checkIsMedAdhProblemScreened();
