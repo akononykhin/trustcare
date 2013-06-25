@@ -541,7 +541,7 @@ class Form_CareController extends ZendX_Controller_Action
         $id = $this->_getParam('id');
         $formModel = TrustCare_Model_FrmCare::find($id);
         if(is_null($formModel)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->getLogger()->error(sprintf("'%s' tries to view unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
             return;
         }
@@ -608,6 +608,7 @@ class Form_CareController extends ZendX_Controller_Action
                 $adhInterventions[] = $dict->getName();
             }
         }
+
         
         $medErrorInterventionOutcomes = array();
         $model = new TrustCare_Model_FrmCareMedErrorInterventionOutcome();
@@ -739,7 +740,7 @@ class Form_CareController extends ZendX_Controller_Action
         $this->view->patientModel = $patientModel;
         $this->view->pharmacyName = $pharmacyModel->getName();
         $this->view->medErrorTypes = $medErrorTypes;
-        $this->view->medAdhProblems = $medAdhProblems;
+        $this->view->medErrorInterventions = $medErrorInterventions;
         $this->view->medErrorInterventions = $medErrorInterventions;
         $this->view->adhInterventions = $adhInterventions;
         $this->view->medErrorInterventionOutcomes = $medErrorInterventionOutcomes;
@@ -755,6 +756,368 @@ class Form_CareController extends ZendX_Controller_Action
         $this->view->adrInterventions = $adrInterventions;
         
         $this->render('view');
+        return;
+    }
+
+    
+    public function editActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "edit");
+    }
+    
+    public function editAction()
+    {
+        $id = $this->_getParam('id');
+        
+        $db_options = Zend_Registry::get('dbOptions');
+        $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+        
+        $frmModel = TrustCare_Model_FrmCare::find($id, array('mapperOptions' => array('adapter' => $db)));
+        if(is_null($frmModel)) {
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+            return;
+        }
+    
+        $patientModel = TrustCare_Model_Patient::find($frmModel->getIdPatient(), array('mapperOptions' => array('adapter' => $db)));
+        if(is_null($patientModel)) {
+            $this->getLogger()->error(sprintf("Failed to load patient.id=%s specified for frm_care.id=%s", $frmModel->getIdPatient(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+    
+    
+        $pharmacyModel = TrustCare_Model_Pharmacy::find($frmModel->getIdPharmacy(), array('mapperOptions' => array('adapter' => $db)));
+        if(is_null($pharmacyModel)) {
+            $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for frm_care.id=%s", $frmModel->getIdPharmacy(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+        
+        
+        if($this->getRequest()->isPost()) {
+            $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+        
+            $db->beginTransaction();
+            try {
+                $isPregnant = $this->_getParam('is_pregnant');
+                $isReceivePrescription = $this->_getParam('is_receive_prescription');
+                $isMedErrorScreened = $this->_getParam('is_med_error_screened');
+                $isMedErrorIdentified = $this->_getParam('is_med_error_identified');
+                $isMedAdhProblemScreened = $this->_getParam('is_med_adh_problem_screened');
+                $isMedAdhProblemIdentified = $this->_getParam('is_med_adh_problem_identified');
+                $isMedErrorInterventionProvided = $this->_getParam('is_med_error_intervention_provided');
+                $isAdhInterventionProvided = $this->_getParam('is_adh_intervention_provided');
+                $isAdrScreened = $this->_getParam('is_adr_screened');
+                $isAdrSymptoms = $this->_getParam('is_adr_symptoms');
+                $adrSeverityId = $this->_getParam('adr_severity_id');
+                $adrStartDate = $this->_getParam('adr_start_date');
+                $adrStopDate = $this->_getParam('adr_stop_date');
+                $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
+                $isNafdacAdrFilled = $this->_getParam('is_nafdac_adr_filled');
+                $medErrorTypes = $this->_getParam('med_error_type');
+                if(!$isMedErrorIdentified) {
+                    $medErrorTypes = array();
+                }
+                $medAdhProblems = $this->_getParam('med_adh_problem');
+                if(!$isMedAdhProblemIdentified) {
+                    $medAdhProblems = array();
+                }
+                $medErrorInterventions = $this->_getParam('med_error_intervention');
+                if(!$isMedErrorInterventionProvided) {
+                    $medErrorInterventions = array();
+                }
+                $adhInterventions = $this->_getParam('adh_intervention');
+                if(!$isAdhInterventionProvided) {
+                    $adhInterventions = array();
+                }
+                $medErrorInterventionOutcomes = $this->_getParam('med_error_intervention_outcome');
+                $adhInterventionOutcomes = $this->_getParam('adh_intervention_outcome');
+                $suspectedAdrHepatic = $this->_getParam('suspected_adr_hepatic');
+                $suspectedAdrNervous = $this->_getParam('suspected_adr_nervous');
+                $suspectedAdrCardiovascular = $this->_getParam('suspected_adr_cardiovascular');
+                $suspectedAdrSkin = $this->_getParam('suspected_adr_skin');
+                $suspectedAdrMetabolic = $this->_getParam('suspected_adr_metabolic');
+                $suspectedAdrMusculoskeletal = $this->_getParam('suspected_adr_musculoskeletal');
+                $suspectedAdrGeneral = $this->_getParam('suspected_adr_general');
+                $adrInterventions = $this->_getParam('adr_intervention');
+                if(!$isAdrInterventionProvided) {
+                    $adrInterventions = array();
+                }
+
+                if($patientModel->getIsMale()) {
+                    $isPregnant = false;
+                }
+                
+                $frmModel->setIsPregnant($isPregnant);
+                $frmModel->setIsReceivePrescription($isReceivePrescription);
+                $frmModel->setIsMedErrorScreened($isMedErrorScreened);
+                $frmModel->setIsMedErrorIdentified($isMedErrorIdentified);
+                $frmModel->setIsMedAdhProblemScreened($isMedAdhProblemScreened);
+                $frmModel->setIsMedAdhProblemIdentified($isMedAdhProblemIdentified);
+                $frmModel->setIsMedErrorInterventionProvided($isMedErrorInterventionProvided);
+                $frmModel->setIsAdhInterventionProvided($isAdhInterventionProvided);
+                $frmModel->setIsAdrScreened($isAdrScreened);
+                $frmModel->setIsAdrSymptoms($isAdrSymptoms);
+                $frmModel->setAdrStartDate($adrStartDate);
+                $frmModel->setAdrStopDate($adrStopDate);
+                $frmModel->setAdrSeverityId($adrSeverityId);
+                $frmModel->setIsAdrInterventionProvided($isAdrInterventionProvided);
+                $frmModel->setIsNafdacAdrFilled($isNafdacAdrFilled);
+                $frmModel->save();
+        
+                TrustCare_Model_FrmCareMedErrorType::replaceForFrmCare($frmModel->getId(), $medErrorTypes, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareMedAdhProblem::replaceForFrmCare($frmModel->getId(), $medAdhProblems, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareMedErrorIntervention::replaceForFrmCare($frmModel->getId(), $medErrorInterventions, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareAdhIntervention::replaceForFrmCare($frmModel->getId(), $adhInterventions, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareMedErrorInterventionOutcome::replaceForFrmCare($frmModel->getId(), $medErrorInterventionOutcomes, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareAdhInterventionOutcome::replaceForFrmCare($frmModel->getId(), $adhInterventionOutcomes, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareSuspectedAdrHepatic::replaceForFrmCare($frmModel->getId(), $suspectedAdrHepatic, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareSuspectedAdrNervous::replaceForFrmCare($frmModel->getId(), $suspectedAdrNervous, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareSuspectedAdrCardiovascular::replaceForFrmCare($frmModel->getId(), $suspectedAdrCardiovascular, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareSuspectedAdrSkin::replaceForFrmCare($frmModel->getId(), $suspectedAdrSkin, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareSuspectedAdrMetabolic::replaceForFrmCare($frmModel->getId(), $suspectedAdrMetabolic, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareSuspectedAdrMusculoskeletal::replaceForFrmCare($frmModel->getId(), $suspectedAdrMusculoskeletal, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareSuspectedAdrGeneral::replaceForFrmCare($frmModel->getId(), $suspectedAdrGeneral, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCareAdrIntervention::replaceForFrmCare($frmModel->getId(), $adrInterventions, array('mapperOptions' => array('adapter' => $db)));
+        
+                $db->commit();
+                $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+            }
+            catch(Exception $ex) {
+                $db->rollback();
+                $message = $ex->getMessage();
+                if(!empty($message)) {
+                    $this->getLogger()->error($message);
+                }
+            }
+            $this->view->error = $errorMsg;
+        }
+        else {
+            $isPregnant = $frmModel->getIsPregnant();
+            $isReceivePrescription = $frmModel->getIsReceivePrescription();
+            $isMedErrorScreened = $frmModel->getIsMedErrorScreened();
+            $isMedErrorIdentified = $frmModel->getIsMedErrorIdentified();
+            $isMedAdhProblemScreened = $frmModel->getIsMedAdhProblemScreened();
+            $isMedAdhProblemIdentified = $frmModel->getIsMedAdhProblemIdentified();
+            $isMedErrorInterventionProvided = $frmModel->getIsMedErrorInterventionProvided();
+            $isAdhInterventionProvided = $frmModel->getIsAdhInterventionProvided();
+            $isAdrScreened = $frmModel->getIsAdrScreened();
+            $isAdrSymptoms = $frmModel->getIsAdrSymptoms();
+            $adrSeverityId = $frmModel->getAdrSeverityId();
+            $adrStartDate = $frmModel->getAdrStartDate();
+            $adrStopDate = $frmModel->getAdrStopDate();
+            $isAdrInterventionProvided = $frmModel->getIsAdrInterventionProvided();
+            $isNafdacAdrFilled = $frmModel->getIsNafdacAdrFilled();
+            
+            $medErrorTypes = array();
+            $model = new TrustCare_Model_FrmCareMedErrorType(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $medErrorTypes[] = $dict->getId();
+                }
+            }
+
+            $medAdhProblems = array();
+            $model = new TrustCare_Model_FrmCareMedAdhProblem(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $medAdhProblems[] = $dict->getId();
+                }
+            }
+
+            $medErrorInterventions = array();
+            $model = new TrustCare_Model_FrmCareMedErrorIntervention(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $medErrorInterventions[] = $dict->getId();
+                }
+            }
+
+            $adhInterventions = array();
+            $model = new TrustCare_Model_FrmCareAdhIntervention(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $adhInterventions[] = $dict->getId();
+                }
+            }
+
+            $medErrorInterventionOutcomes = array();
+            $model = new TrustCare_Model_FrmCareMedErrorInterventionOutcome(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $medErrorInterventionOutcomes[] = $dict->getId();
+                }
+            }
+
+            $adhInterventionOutcomes = array();
+            $model = new TrustCare_Model_FrmCareAdhInterventionOutcome(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $adhInterventionOutcomes[] = $dict->getId();
+                }
+            }
+
+            $suspectedAdrHepatic = array();
+            $model = new TrustCare_Model_FrmCareSuspectedAdrHepatic(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $suspectedAdrHepatic[] = $dict->getId();
+                }
+            }
+
+            $suspectedAdrNervous = array();
+            $model = new TrustCare_Model_FrmCareSuspectedAdrNervous(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $suspectedAdrNervous[] = $dict->getId();
+                }
+            }
+
+            $suspectedAdrCardiovascular = array();
+            $model = new TrustCare_Model_FrmCareSuspectedAdrCardiovascular(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $suspectedAdrCardiovascular[] = $dict->getId();
+                }
+            }
+
+            $suspectedAdrSkin = array();
+            $model = new TrustCare_Model_FrmCareSuspectedAdrSkin(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $suspectedAdrSkin[] = $dict->getId();
+                }
+            }
+
+            $suspectedAdrMetabolic = array();
+            $model = new TrustCare_Model_FrmCareSuspectedAdrMetabolic(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $suspectedAdrMetabolic[] = $dict->getId();
+                }
+            }
+
+            $suspectedAdrMusculoskeletal = array();
+            $model = new TrustCare_Model_FrmCareSuspectedAdrMusculoskeletal(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $suspectedAdrMusculoskeletal[] = $dict->getId();
+                }
+            }
+
+            $suspectedAdrGeneral = array();
+            $model = new TrustCare_Model_FrmCareSuspectedAdrGeneral(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $suspectedAdrGeneral[] = $dict->getId();
+                }
+            }
+
+            $adrInterventions = array();
+            $model = new TrustCare_Model_FrmCareAdrIntervention(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $adrInterventions[] = $dict->getId();
+                }
+            }
+
+        }
+        
+        $dictEntities = array(
+            TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE => $medErrorTypes,
+            TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM => $medAdhProblems,
+            TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED => $medErrorInterventions,
+            TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED => $adhInterventions,
+            TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME => $medErrorInterventionOutcomes,
+            TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME => $adhInterventionOutcomes,
+            TrustCare_Model_PharmacyDictionary::DTYPE_ADR_SEVERITY_GRADE => array($adrSeverityId),
+            TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC => $suspectedAdrHepatic,
+            TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS => $suspectedAdrNervous,
+            TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR => $suspectedAdrCardiovascular,
+            TrustCare_Model_PharmacyDictionary::DTYPE_SKIN => $suspectedAdrSkin,
+            TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC => $suspectedAdrMetabolic,
+            TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL => $suspectedAdrMusculoskeletal,
+            TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL => $suspectedAdrGeneral,
+            TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE => $adrInterventions,
+        );
+        
+        $this->view->formModel = $frmModel;
+        $this->view->patientModel = $patientModel;
+        $this->view->pharmacyName = $pharmacyModel->getName();
+        $this->view->isPregnant = $isPregnant;
+        $this->view->isReceivePrescription = $isReceivePrescription;
+        $this->view->isMedErrorScreened = $isMedErrorScreened;
+        $this->view->isMedErrorIdentified = $isMedErrorIdentified;
+        $this->view->isMedAdhProblemScreened = $isMedAdhProblemScreened;
+        $this->view->isMedAdhProblemIdentified = $isMedAdhProblemIdentified;
+        $this->view->isMedErrorInterventionProvided = $isMedErrorInterventionProvided;
+        $this->view->isAdhInterventionProvided = $isAdhInterventionProvided;
+        $this->view->isAdrScreened = $isAdrScreened;
+        $this->view->isAdrSymptoms = $isAdrSymptoms;
+        $this->view->adrStartDate = $adrStartDate;
+        $this->view->adrStopDate = $adrStopDate;
+        $this->view->isAdrInterventionProvided = $isAdrInterventionProvided;
+        $this->view->isNafdacAdrFilled = $isNafdacAdrFilled;
+        $this->view->dictEntities = $dictEntities;
+        
+        $this->render('edit');
         return;
     }
     
