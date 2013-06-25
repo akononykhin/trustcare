@@ -396,7 +396,7 @@ class PharmacyController extends ZendX_Controller_Action
         $form->addElement('select', 'id_facility', array(
             'label'         => Zend_Registry::get("Zend_Translate")->_("Facility"),
             'tabindex'      => $tabIndex++,
-            'required'      => false,
+            'required'      => true,
             'multioptions'  => $facilityList,
             'description'   => '',
         ));
