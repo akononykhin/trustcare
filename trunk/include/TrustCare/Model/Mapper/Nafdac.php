@@ -25,6 +25,9 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('id_pharmacy')) {
             $data['id_pharmacy'] = $model->getIdPharmacy();
         }
+        if(!$model->isExists() || $model->isParameterChanged('date_of_visit')) {
+            $data['date_of_visit'] = $model->getDateOfVisit();
+        }
         if(!$model->isExists() || $model->isParameterChanged('generation_date')) {
             $data['generation_date'] = $model->getGenerationDate();
         }
@@ -142,6 +145,7 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
     {
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
+              ->setDateOfVisit($row->date_of_visit_formatted)
               ->setGenerationDate($row->generation_date_formatted)
               ->setIdUser($row->id_user)
               ->setIdPatient($row->id_patient)
@@ -184,6 +188,7 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
         $query = sprintf("
         select
             *,
+            date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit_formatted,
             date_format(generation_date, '%%Y-%%m-%%d %%H:%%i:%%s') as generation_date_formatted,
             date_format(adr_start_date, '%%Y-%%m-%%d') as adr_start_date_formatted,
             date_format(adr_stop_date, '%%Y-%%m-%%d') as adr_stop_date_formatted
@@ -219,6 +224,7 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
         $query = sprintf("
             select
                 *,
+                date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit_formatted,
                 date_format(generation_date, '%%Y-%%m-%%d %%H:%%i:%%s') as generation_date_formatted,
                 date_format(adr_start_date, '%%Y-%%m-%%d') as adr_start_date_formatted,
                 date_format(adr_stop_date, '%%Y-%%m-%%d') as adr_stop_date_formatted

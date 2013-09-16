@@ -611,6 +611,7 @@ CREATE TABLE report_community (
 CREATE TABLE nafdac (
   `id` int NOT NULL,
   `generation_date` datetime NOT NULL,
+  `date_of_visit` datetime NOT NULL,
   `id_user` int NOT NULL,
   `id_patient` int NOT NULL,
   `id_pharmacy` int NOT NULL,
@@ -1020,4 +1021,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130916, 2);
+insert into db_version values (1, 20130916, 3);
