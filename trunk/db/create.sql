@@ -610,7 +610,6 @@ CREATE TABLE report_community (
 
 CREATE TABLE nafdac (
   `id` int NOT NULL,
-  `id_frm_care` int NOT NULL,
   `generation_date` datetime NOT NULL,
   `id_user` int NOT NULL,
   `id_patient` int NOT NULL,
@@ -640,7 +639,6 @@ CREATE TABLE nafdac (
   `reporter_address` varchar(255) default NULL,
   `reporter_profession` varchar(255) default NULL,
   `reporter_contact` varchar(255) default NULL,
-  UNIQUE KEY `cons_nafdac_id_frm_care`  (`id_frm_care`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -962,11 +960,6 @@ alter table nafdac
         references user(id);
 
 alter table nafdac
-    add constraint fk_nafdac_id_frm_care foreign key (id_frm_care)
-        references frm_care(id) on delete cascade;
-
-
-alter table nafdac
     add constraint fk_nafdac_id_patient foreign key (id_patient)
         references patient(id);
 
@@ -1027,4 +1020,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130916, 1);
+insert into db_version values (1, 20130916, 2);

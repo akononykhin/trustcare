@@ -16,14 +16,26 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
     public function save(TrustCare_Model_Nafdac &$model)
     {
         $data = array();
-        if(!$model->isExists() || $model->isParameterChanged('id_frm_care')) {
-            $data['id_frm_care'] = $model->getIdFrmCare();
+        if(!$model->isExists() || $model->isParameterChanged('id_user')) {
+            $data['id_user'] = $model->getIdUser();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_patient')) {
+            $data['id_patient'] = $model->getIdPatient();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_pharmacy')) {
+            $data['id_pharmacy'] = $model->getIdPharmacy();
         }
         if(!$model->isExists() || $model->isParameterChanged('generation_date')) {
             $data['generation_date'] = $model->getGenerationDate();
         }
         if(!$model->isExists() || $model->isParameterChanged('filename')) {
             $data['filename'] = $model->getFilename();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('adr_start_date')) {
+            $data['adr_start_date'] = $model->getAdrStartDate();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('adr_stop_date')) {
+            $data['adr_stop_date'] = $model->getAdrStopDate();
         }
         if(!$model->isExists() || $model->isParameterChanged('adr_description')) {
             $data['adr_description'] = $model->getAdrDescription();
@@ -108,7 +120,6 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
         $model->setObjectKeyInfo(
             array(
                 'id' => $model->getId(),
-                'id_frm_care' => $model->getIdFrmCare()
             )
         );
     }
@@ -118,7 +129,6 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
         $model->setObjectKeyInfo(
             array(
                 'id' => $model->getId(),
-                'id_frm_care' => $model->getIdFrmCare()
             )
         );
         if(!is_null($model->getId())) {
@@ -132,9 +142,13 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
     {
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
-              ->setIdFrmCare($row->id_frm_care)
-              ->setGenerationDate($row->generation_date)
+              ->setGenerationDate($row->generation_date_formatted)
+              ->setIdUser($row->id_user)
+              ->setIdPatient($row->id_patient)
+              ->setIdPharmacy($row->id_pharmacy)
               ->setFilename($row->filename)
+              ->setAdrStartDate($row->adr_start_date_formatted)
+              ->setAdrStopDate($row->adr_stop_date_formatted)
               ->setAdrDescription($row->adr_description)
               ->setWasAdmitted($row->was_admitted)
               ->setWasHospitalizationProlonged($row->was_hospitalization_prolonged)
@@ -167,37 +181,26 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
      */
     public function find($id, TrustCare_Model_Nafdac $model)
     {
-        $result = $this->getDbTable()->find($id);
+        $query = sprintf("
+        select
+            *,
+            date_format(generation_date, '%%Y-%%m-%%d %%H:%%i:%%s') as generation_date_formatted,
+            date_format(adr_start_date, '%%Y-%%m-%%d') as adr_start_date_formatted,
+            date_format(adr_stop_date, '%%Y-%%m-%%d') as adr_stop_date_formatted
+        from %s
+        where id=?;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME));
+        
+        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
+        $result = $this->getDbAdapter()->fetchAll($query, $id);
         if (0 == count($result)) {
             return false;
         }
-        $row = $result->current();
+        $row = $result[0];
         $this->_fillModelForFind($model, $row);
-                      
+              
         return true;
     }
 
-    
-    /**
-     * @param  int $balue
-     * @param  TrustCare_Model_Nafdac $model
-     * @return void
-     */
-    public function findByIdFrmCare($value, TrustCare_Model_Nafdac $model)
-    {
-        $select = $this->getDbTable()->select();
-        $select->from($this->getDbTable(), array('*'))
-               ->where("id_frm_care=?", $value);
-        $result = $this->getDbTable()->fetchAll($select);
-        if (0 == count($result)) {
-            return false;
-        }
-        $row = $result->current();
-                
-        $this->_fillModelForFind($model, $row);
-    
-        return true;
-    }
     
     
     /**
@@ -213,7 +216,19 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
             $where[] = $clause;
         }
         
-        $query = sprintf("select * from %s where %s order by id desc;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        $query = sprintf("
+            select
+                *,
+                date_format(generation_date, '%%Y-%%m-%%d %%H:%%i:%%s') as generation_date_formatted,
+                date_format(adr_start_date, '%%Y-%%m-%%d') as adr_start_date_formatted,
+                date_format(adr_stop_date, '%%Y-%%m-%%d') as adr_stop_date_formatted
+            from
+                %s
+            where
+                %s
+            order by id desc;
+            ", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), join(' and ', $where));
+        
         $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
         $resultSet = $this->getDbAdapter()->fetchAll($query);
         foreach ($resultSet as $row) {

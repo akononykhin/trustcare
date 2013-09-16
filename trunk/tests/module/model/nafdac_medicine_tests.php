@@ -72,10 +72,13 @@ class TestOfNafdacMedicine extends UnitTestCase {
         $query = sprintf("delete from nafdac;");
         $this->db->query($query);
         
-        $query = sprintf("delete from frm_care;");
+        $query = sprintf("delete from patient;");
         $this->db->query($query);
         
-        $query = sprintf("delete from patient;");
+        $query = sprintf("delete from pharmacy;");
+        $this->db->query($query);
+        
+        $query = sprintf("delete from user;");
         $this->db->query($query);
     }
     
