@@ -21,6 +21,7 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     protected $_id_patien;
     protected $_id_pharmacy;
     protected $_generation_date;
+    protected $_date_of_visit;
     protected $_filename;
     protected $_adr_start_date;
     protected $_adr_stop_date;
@@ -97,6 +98,25 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         return $this->_generation_date;
     }
 
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setDateOfVisit($value)
+    {
+        $this->_parameterChanged('date_of_visit', $value);
+        $this->_date_of_visit = (string) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getDateOfVisit()
+    {
+        return $this->_date_of_visit;
+    }
     
     /**
      * @param  int $value

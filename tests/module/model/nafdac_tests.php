@@ -35,6 +35,7 @@ class TestOfNafdac extends UnitTestCase {
             $params = array(
                 'id' => $this->db->nextSequenceId('nafdac_id_seq'),
                 'generation_date' => '2012-10-01 11:23:45',
+                'date_of_visit' => '2012-05-01',
                 'id_user' => 21,
                 'id_patient' => 1,
                 'id_pharmacy' => 31,
@@ -106,6 +107,7 @@ class TestOfNafdac extends UnitTestCase {
         $params = array(
             'id' => '1',
             'generation_date' => '2012-09-01 11:23:45',
+            'date_of_visit' => '2012-05-01',
             'id_user' => 22,
             'id_patient' => 2,
             'id_pharmacy' => 32,
@@ -161,6 +163,7 @@ class TestOfNafdac extends UnitTestCase {
     function testSaveNew() {
         $params = array(
             'generation_date' => '2012-09-01 11:23:45',
+            'date_of_visit' => '2012-07-02',
             'id_user' => 21,
             'id_patient' => 1,
             'id_pharmacy' => 31,
@@ -264,6 +267,7 @@ class TestOfNafdac extends UnitTestCase {
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
         if($checkTime) {
             $this->assertEqual($model->generation_date, $params['generation_date'], "Incorrect 'generation_date': %s");
+            $this->assertEqual($model->date_of_visit, $params['date_of_visit'], "Incorrect 'date_of_visit': %s");
             $this->assertEqual($model->adr_start_date, $params['adr_start_date'], "Incorrect 'adr_start_date': %s");
             $this->assertEqual($model->adr_stop_date, $params['adr_stop_date'], "Incorrect 'adr_stop_date': %s");
         }
