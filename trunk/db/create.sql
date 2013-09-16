@@ -612,7 +612,12 @@ CREATE TABLE nafdac (
   `id` int NOT NULL,
   `id_frm_care` int NOT NULL,
   `generation_date` datetime NOT NULL,
+  `id_user` int NOT NULL,
+  `id_patient` int NOT NULL,
+  `id_pharmacy` int NOT NULL,
   `filename` varchar(255),
+  `adr_start_date` datetime default NULL,
+  `adr_stop_date` datetime default NULL,
   `adr_description` text,
   `was_admitted` bool default false,
   `was_hospitalization_prolonged` bool default false,
@@ -953,8 +958,21 @@ alter table report_community
         references user(id) on delete set NULL;
 
 alter table nafdac
+    add constraint fk_nafdac_id_user foreign key (id_user)
+        references user(id);
+
+alter table nafdac
     add constraint fk_nafdac_id_frm_care foreign key (id_frm_care)
         references frm_care(id) on delete cascade;
+
+
+alter table nafdac
+    add constraint fk_nafdac_id_patient foreign key (id_patient)
+        references patient(id);
+
+alter table nafdac
+    add constraint fk_nafdac_id_pharmacy foreign key (id_pharmacy)
+        references pharmacy(id);
 
 alter table nafdac_medicine
     add constraint fk_nafdac_medicine_id_nafdac foreign key (id_nafdac)
@@ -1009,4 +1027,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130621, 1);
+insert into db_version values (1, 20130916, 1);
