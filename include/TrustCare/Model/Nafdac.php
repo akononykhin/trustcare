@@ -17,9 +17,13 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     
     
     protected $_id;
-    protected $_id_frm_care;
+    protected $_id_user;
+    protected $_id_patien;
+    protected $_id_pharmacy;
     protected $_generation_date;
     protected $_filename;
+    protected $_adr_start_date;
+    protected $_adr_stop_date;
     protected $_adr_description;
     protected $_was_admitted;
     protected $_was_hospitalization_prolonged;
@@ -75,25 +79,6 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     }
     
     /**
-     * @param  int $value 
-     * @return TrustCare_Model_Nafdac
-     */
-    public function setIdFrmCare($value)
-    {
-        $this->_parameterChanged('id_frm_care', $value);
-        $this->_id_frm_care = (int) $value;
-        return $this;
-    }
-
-    /**
-     * @return null|int
-     */
-    public function getIdFrmCare()
-    {
-        return $this->_id_frm_care;
-    }
-    
-    /**
      * @param  string $value 
      * @return TrustCare_Model_Nafdac
      */
@@ -114,6 +99,65 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
 
     
     /**
+     * @param  int $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setIdUser($value)
+    {
+        $this->_parameterChanged('id_user', $value);
+        $this->_id_user = (int) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getIdUser()
+    {
+        return $this->_id_user;
+    }
+    
+    
+    /**
+     * @param  int $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setIdPatient($value)
+    {
+        $this->_parameterChanged('id_patient', $value);
+        $this->_id_patient = (int) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getIdPatient()
+    {
+        return $this->_id_patient;
+    }
+    
+    
+    /**
+     * @param  int $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setIdPharmacy($value)
+    {
+        $this->_parameterChanged('id_pharmacy', $value);
+        $this->_id_pharmacy = (int) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getIdPharmacy()
+    {
+        return $this->_id_pharmacy;
+    }
+    
+    /**
      * @param  value $value
      * @return TrustCare_Model_Nafdac
      */
@@ -130,6 +174,46 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     public function getFilename()
     {
         return $this->_filename;
+    }
+    
+    
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setAdrStartDate($value)
+    {
+        $this->_parameterChanged('adr_start_date', $value);
+        $this->_adr_start_date = (string) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getAdrStartDate()
+    {
+        return $this->_adr_start_date;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setAdrStopDate($value)
+    {
+        $this->_parameterChanged('adr_stop_date', $value);
+        $this->_adr_stop_date = (string) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getAdrStopDate()
+    {
+        return $this->_adr_stop_date;
     }
     
     
@@ -582,25 +666,15 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     }
 
     
-    /**
-     * Find an entry by id_frm_care
-     *
-     * @param  string $value
-     * @param array|null $options
-     * @return TrustCare_Model_Nafdac
-     */
-    public static function findByIdFrmCare($value, array $options = null)
+    public function save()
     {
-        $newEntity = new TrustCare_Model_Nafdac($options);
-        $result = $newEntity->getMapper()->findByIdFrmCare($value, $newEntity);
-    
-        if(!$result) {
-            unset($newEntity);
-            $newEntity = null;
+        if($this->isExists()) {
+            throw new Exception(sprintf("Failed to modify NAFDAC"));
         }
     
-        return $newEntity;
+        parent::save();
     }
+    
     
     public function delete()
     {

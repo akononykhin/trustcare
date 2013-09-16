@@ -34,9 +34,13 @@ class TestOfNafdac extends UnitTestCase {
             
             $params = array(
                 'id' => $this->db->nextSequenceId('nafdac_id_seq'),
-                'id_frm_care' => 3,
                 'generation_date' => '2012-10-01 11:23:45',
+                'id_user' => 21,
+                'id_patient' => 1,
+                'id_pharmacy' => 31,
                 'filename' => '111',
+                'adr_start_date' => '2012-06-01',
+                'adr_stop_date' => '2012-06-08',
                 'adr_description' => '222',
                 'was_admitted' => false,
                 'was_hospitalization_prolonged' => true,
@@ -87,10 +91,13 @@ class TestOfNafdac extends UnitTestCase {
         $query = sprintf("update db_sequence set value=1 where name='nafdac_id_seq';");
         $this->db->query($query);
         
-        $query = sprintf("delete from frm_care;");
+        $query = sprintf("delete from patient;");
         $this->db->query($query);
         
-        $query = sprintf("delete from patient;");
+        $query = sprintf("delete from pharmacy;");
+        $this->db->query($query);
+        
+        $query = sprintf("delete from user;");
         $this->db->query($query);
     }
     
@@ -98,9 +105,13 @@ class TestOfNafdac extends UnitTestCase {
     function testInitializing() {
         $params = array(
             'id' => '1',
-            'id_frm_care' => 2,
             'generation_date' => '2012-09-01 11:23:45',
+            'id_user' => 22,
+            'id_patient' => 2,
+            'id_pharmacy' => 32,
             'filename' => '111',
+            'adr_start_date' => '2012-06-02',
+            'adr_stop_date' => '2012-06-09',
             'adr_description' => '222',
             'was_admitted' => true,
             'was_hospitalization_prolonged' => false,
@@ -147,23 +158,15 @@ class TestOfNafdac extends UnitTestCase {
     }
 
     
-    function testLoadExistingByIdFrmCare() {
-        $model = TrustCare_Model_Nafdac::findByIdFrmCare($this->paramsAtDb['id_frm_care'], array('mapperOptions' => array('adapter' => $this->db)));
-    
-        $this->_compareObjectAndParams($model, $this->paramsAtDb);
-    }
-    
-    function testLoadUnexistingByIdFrmCare() {
-        $model = TrustCare_Model_Nafdac::findByIdFrmCare(-1 * $this->paramsAtDb['id_frm_care'], array('mapperOptions' => array('adapter' => $this->db)));
-    
-        $this->assertNull($model, "This entity must not be loaded");
-    }
-    
     function testSaveNew() {
         $params = array(
-            'id_frm_care' => 2,
             'generation_date' => '2012-09-01 11:23:45',
+            'id_user' => 21,
+            'id_patient' => 1,
+            'id_pharmacy' => 31,
             'filename' => '111',
+            'adr_start_date' => '2012-06-03',
+            'adr_stop_date' => '2012-06-10',
             'adr_description' => '222',
             'was_admitted' => false,
             'was_hospitalization_prolonged' => true,
@@ -208,43 +211,15 @@ class TestOfNafdac extends UnitTestCase {
         $model = TrustCare_Model_Nafdac::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
-            $params['id_frm_care'] = 2 == $model->id_frm_care ? 3 : 2;
-            $params['generation_date'] = $model->generation_date == '2012-09-01 01:01:01' ? '2012-10-01 01:01:01' : '2012-09-01 01:01:01';
             $params['filename'] = $model->filename . '_1';
-            $params['adr_description'] = $model->adr_description . '_2';
-            $params['was_admitted'] = !$model->was_admitted;
-            $params['was_hospitalization_prolonged'] = !$model->was_hospitalization_prolonged;
-            $params['duration_of_admission'] = $model->duration_of_admission . '123';
-            $params['treatment_of_reaction'] = $model->treatment_of_reaction . '_3';
-            $params['outcome_of_reaction_type'] = 4 == $model->outcome_of_reaction_type ? 40 : 4;
-            $params['outcome_of_reaction_desc'] = $model->outcome_of_reaction_desc . '_5';
-            $params['drug_brand_name'] = $model->drug_brand_name . '_6';
-            $params['drug_generic_name'] = $model->drug_generic_name . '_7';
-            $params['drug_batch_number'] = $model->drug_batch_number . '_8';
-            $params['drug_nafdac_number'] = $model->drug_nafdac_number . '_9';
-            $params['drug_expiry_name'] = $model->drug_expiry_name . '_10';
-            $params['drug_manufactor'] = $model->drug_manufactor . '_11';
-            $params['drug_indication_for_use'] = $model->drug_indication_for_use . '_12';
-            $params['drug_dosage'] = $model->drug_dosage . '_13';
-            $params['drug_route_of_administration'] = $model->drug_route_of_administration . '_14';
-            $params['drug_date_started'] = $model->drug_date_started . '_15';
-            $params['drug_date_stopped'] = $model->drug_date_stopped . '_16';
-            $params['reporter_name'] = $model->reporter_name . '_17';
-            $params['reporter_address'] = $model->reporter_address . '_18';
-            $params['reporter_profession'] = $model->reporter_profession . '_19';
-            $params['reporter_contact'] = $model->reporter_profession . '_20';
             
             try {
                 $model->setOptions($params);
                 $model->save();
-                
-                $params['id'] = $model->id;
-                
-                $model1 = TrustCare_Model_Nafdac::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-                $this->_compareObjectAndParams($model1, $params);
+
+                $this->assertTrue(false, sprintf("Trying to modify NAFDAC parameters must throw an exception"));
             }
             catch(Exception $ex) {
-                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
             }
         }
         else {
@@ -287,10 +262,14 @@ class TestOfNafdac extends UnitTestCase {
         }
         
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
-        $this->assertEqual($model->id_frm_care, $params['id_frm_care'], "Incorrect 'id_frm_care': %s");
         if($checkTime) {
             $this->assertEqual($model->generation_date, $params['generation_date'], "Incorrect 'generation_date': %s");
+            $this->assertEqual($model->adr_start_date, $params['adr_start_date'], "Incorrect 'adr_start_date': %s");
+            $this->assertEqual($model->adr_stop_date, $params['adr_stop_date'], "Incorrect 'adr_stop_date': %s");
         }
+        $this->assertEqual($model->id_user, $params['id_user'], "Incorrect 'id_user': %s");
+        $this->assertEqual($model->id_patient, $params['id_patient'], "Incorrect 'id_patient': %s");
+        $this->assertEqual($model->id_pharmacy, $params['id_pharmacy'], "Incorrect 'id_pharmacy': %s");
         $this->assertEqual($model->filename, $params['filename'], "Incorrect 'filename': %s");
         $this->assertEqual($model->adr_description, $params['adr_description'], "Incorrect 'adr_description': %s");
         $this->assertIdentical($model->was_admitted, $params['was_admitted'], "Incorrect 'was_admitted': %s");

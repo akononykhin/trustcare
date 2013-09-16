@@ -2,12 +2,12 @@ insert into patient(id, identifier) values (1, 'name1');
 insert into patient(id, identifier) values (2, 'name2');
 insert into patient(id, identifier) values (3, 'name3');
 
+insert into user(id, login) values (21, 'name1');
 
-insert into frm_care(id, id_patient, date_of_visit) values (1, 1, now());
-insert into frm_care(id, id_patient, date_of_visit) values (2, 2, now());
-insert into frm_care(id, id_patient, date_of_visit) values (3, 3, now());
+insert into pharmacy(id, name) values (31, 'Pharmacy1');
 
-insert into nafdac(id, id_frm_care, generation_date) values (1, 1, now());
-insert into nafdac(id, id_frm_care, generation_date) values (2, 2, now());
-insert into nafdac(id, id_frm_care, generation_date) values (3, 3, now());
+
+insert into nafdac(id, generation_date, id_user, id_patient, id_pharmacy) values (1, now(), 21, 1, 31);
+insert into nafdac(id, generation_date, id_user, id_patient, id_pharmacy) values (2, now(), 21, 2, 31);
+insert into nafdac(id, generation_date, id_user, id_patient, id_pharmacy) values (3, now(), 21, 3, 31);
 
