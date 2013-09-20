@@ -18,7 +18,7 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     
     protected $_id;
     protected $_id_user;
-    protected $_id_patien;
+    protected $_id_patient;
     protected $_id_pharmacy;
     protected $_generation_date;
     protected $_date_of_visit;
@@ -685,16 +685,6 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         return $newEntity;
     }
 
-    
-    public function save()
-    {
-        if($this->isExists()) {
-            throw new Exception(sprintf("Failed to modify NAFDAC"));
-        }
-    
-        parent::save();
-    }
-    
     
     public function delete()
     {

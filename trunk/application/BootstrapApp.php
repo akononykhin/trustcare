@@ -216,6 +216,31 @@ class BootstrapApp extends BootstrapMain
                     
                 ),
             ),
+            array(
+                'label'         => Zend_Registry::get("Zend_Translate")->_("NAFDAC"),
+                'controller'    => 'nafdac',
+                'action'        => 'list',
+                'resource'      => 'resource:form',
+                'privilege'     => 'view',
+                'pages'         => array(
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
+                        'controller'    => 'nafdac',
+                        'action'        => 'create',
+                        'visible'       => false,
+                        'resource'      => 'resource:form',
+                        'privilege'     => 'create'
+                    ),
+                    array(
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
+                        'controller'    => 'nafdac',
+                        'action'        => 'view',
+                        'visible'       => false,
+                        'resource'      => 'resource:form',
+                        'privilege'     => 'view'
+                    ),
+                ),
+            ),
             
             array(
                 'label'         => Zend_Registry::get("Zend_Translate")->_("Reports"),

@@ -1,4 +1,79 @@
 <?php
+$this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
+$this->headLink()->appendStylesheet('/css/showLoading.css');
+
+$textForEmptyAdrStopDate = $this->translate(_("Ongoing"));
+?>
+<script>
+function checkAdrStopDate()
+{
+	var val = $('#adr_stop_date').val();
+	if('' == val || '<?php echo $textForEmptyAdrStopDate;?>' == val) {
+		$('#adr_stop_date').val('<?php echo $textForEmptyAdrStopDate;?>');
+		$('#adr_stop_date').css('color', '#e6e6e6');
+	}
+	else {
+		$('#adr_stop_date').css('color', '#000000');
+	}
+}
+
+var addMedicine = function( event ) {
+    var currentRow = $(event.target).closest('tr');
+    var newRow = currentRow.clone();
+    newRow.find("input").val('');
+    newRow.find("input.medicines_row_add").val(' + ');
+    newRow.find("input.medicines_row_add").on( "click", addMedicine);
+    newRow.find("input.medicines_row_sub").val(' - ');
+    newRow.find("input.medicines_row_sub").on( "click", subMedicine);
+    
+    newRow.insertAfter(currentRow);
+}
+var subMedicine = function( event ) {
+    if(2 >= $(event.target).closest('table').find('tr').length) { /* header row + one row*/
+        return;
+    }
+    $(event.target).closest('tr').remove();
+}
+
+$(document).ready(function() {
+    $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd'});
+    $("#adr_start_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+    $("#adr_stop_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+    $("#adr_stop_date").bind('change', function(){
+	    checkAdrStopDate();
+	});
+    checkAdrStopDate();
+        
+    $("#patient_name").autocomplete({
+        source:     '<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
+        ,minLength: 2
+        ,delay:     300
+        ,focus: function(event, ui ) {
+            $("#patient_name").val(ui.item.label);
+            return false;
+        }
+        ,select: function( event, ui ) {
+            $("#patient_name").val(ui.item.label);
+            $("#id_patient").val(ui.item.value);
+            return false;
+        }
+    });
+
+    $('input.medicines_row_add').on( "click", addMedicine);
+    $('input.medicines_row_sub').on( "click", subMedicine);
+    
+	$('#main_form').submit(function() {
+    	if('<?php echo $textForEmptyAdrStopDate?>' == $('#adr_stop_date').val()) {
+    		$('#adr_stop_date').val('');
+    	}
+    	return true;
+    });
+    
+});
+</script>
+
+
+<?php
 if($this->form->isErrors()) {
 ?>
 <div class="form_errors">
@@ -6,37 +81,30 @@ if($this->form->isErrors()) {
     foreach($this->form->getErrorMessages() as $errorMessage) {
         echo $errorMessage."<br/>";
     }
+    foreach($this->form->getSubForms() as $subForm) {
+        foreach($subForm->getErrorMessages() as $errorMessage) {
+            echo $errorMessage."<br/>";
+        }
+        foreach($subForm->getElements() as $element) {
+            foreach($element->getMessages() as $message) {
+                echo $element->getLabel() . ' : ' . $message.'<br/>';
+            }
+        }
+    }
 ?>
 </div>
 <p/>
 <?php
 }
 ?>
-<form class="zend_form" method="post" action="<?php echo $this->url(array('action' => 'create', 'id_frm_care' => $this->id_frm_care));?>">
-<div class="tab_header"><?php echo $this->translate(_("Patient's Details"));?></div>
+<form id="main_form" class="zend_form" method="post" action="<?php echo $this->form->getAction();?>">
+<input type="hidden" name="id_patient" id="id_patient" value="<?php echo $this->id_patient;?>"/>
+<input type="hidden" name="id_frm_care" value="<?php echo $this->id_frm_care;?>"/>
+<input type="hidden" name="id_frm_community" value="<?php echo $this->id_frm_community;?>"/>
+
+<div class="tab_header"><?php echo $this->form->getSubForm('patient')->getLegend(); ?></div>
 <div class="tab_content">
- <table class="zend_form">
-  <tr>
-   <td valign="top"><div class="normal"><?php echo $this->translate(_("Name"));?></div></td>
-   <td><?php echo sprintf("%s %s", $this->patient->getLastName(), $this->patient->getFirstName());?></td>
-  </tr>
-  <tr>
-   <td valign="top"><div class="normal"><?php echo $this->translate(_("Record No."));?></div></td>
-   <td><?php echo $this->patient->getIdentifier();?></td>
-  </tr>
-  <tr>
-   <td valign="top"><div class="normal"><?php echo $this->translate(_("Date of Birth"));?></div></td>
-   <td><?php echo $this->patient->getBirthdate();?></td>
-  </tr>
-  <tr>
-   <td valign="top"><div class="normal"><?php echo $this->translate(_("Sex"));?></div></td>
-   <td><?php echo $this->patient->getIsMale() ? 'M' : 'F';?></td>
-  </tr>
-  <tr>
-   <td valign="top"><div class="normal"><?php echo $this->translate(_("Hospital/Treatment Centre"));?></div></td>
-   <td><?php echo $this->hospital_name;?></td>
-  </tr>
- </table>
+ <?php  echo $this->form->getSubForm('patient');  ?>
 </div>
 
 <div class="tab_header"><?php echo $this->form->getSubForm('adr')->getLegend(); ?></div>
@@ -51,7 +119,7 @@ if($this->form->isErrors()) {
 
 <div class="tab_header"><?php echo $this->translate(_("Concomitant Medicines"));?></div>
 <div class="tab_content">
- <table class="zend_form"  cellpadding="5" border="1">
+ <table id="medicines_content" class="info_table" cellspacing="2" border=0>
   <tr>
    <th><?php echo $this->translate(_("Brand or Generic Name"));?></th>
    <th><?php echo $this->translate(_("Dosage"));?></th>
@@ -59,67 +127,33 @@ if($this->form->isErrors()) {
    <th><?php echo $this->translate(_("Date Started"));?></th>
    <th><?php echo $this->translate(_("Date Stopped"));?></th>
    <th><?php echo $this->translate(_("Reason for Use"));?></th>
+   <th width="10%"></th>
   </tr>
+<?php
+  $medicineCount = array_key_exists("medicine_name", $_REQUEST) && is_array($_REQUEST['medicine_name']) ? count($_REQUEST['medicine_name']) : 3;
+  for($i = 0; $i < $medicineCount; $i++) {
+      $medicineName = $_REQUEST['medicine_name'][$i];
+      $medicineDosage = $_REQUEST['medicine_dosage'][$i];
+      $medicineRoute = $_REQUEST['medicine_route'][$i];
+      $medicineStarted = $_REQUEST['medicine_started'][$i];
+      $medicineStopped = $_REQUEST['medicine_stopped'][$i];
+      $medicineReason = $_REQUEST['medicine_reason'][$i];
+?>
   <tr>
+   <td><input type="text" name="medicine_name[]" value="<?php echo $medicineName;?>" size="16" /></td>
+   <td><input type="text" name="medicine_dosage[]" value="<?php echo $medicineDosage;?>" size="16" /></td>
+   <td><input type="text" name="medicine_route[]" value="<?php echo $medicineRoute;?>" size="16" /></td>
+   <td><input type="text" name="medicine_started[]" value="<?php echo $medicineStarted?>" size="16" /></td>
+   <td><input type="text" name="medicine_stopped[]" value="<?php echo $medicineStopped?>" size="16" /></td>
+   <td><input type="text" name="medicine_reason[]" value="<?php echo $medicineReason?>" size="16" /></td>
    <td>
-    <input type="text" name="medicine_name[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_dosage[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_route[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_started[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_stopped[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_reason[]" value="" size="16" />
-   </td>
+    <input type=button class="medicines_row_add" value=" + "/>
+    <input type=button class="medicines_row_sub" value=" - "/>
+    </td>
   </tr>
-  <tr>
-   <td>
-    <input type="text" name="medicine_name[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_dosage[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_route[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_started[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_stopped[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_reason[]" value="" size="16" />
-   </td>
-  </tr>
-  <tr>
-   <td>
-    <input type="text" name="medicine_name[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_dosage[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_route[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_started[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_stopped[]" value="" size="16" />
-   </td>
-   <td>
-    <input type="text" name="medicine_reason[]" value="" size="16" />
-   </td>
-  </tr>
+<?php      
+  } 
+?>  
  </table>
 </div>
 
@@ -128,8 +162,5 @@ if($this->form->isErrors()) {
  <?php  echo $this->form->getSubForm('reporter');  ?>
 </div>
 
-<tr>
- <td colspan="3"><?php echo $this->form->getElement("send");?></td>
-</tr>
-</table>
+<div><?php echo $this->form->getElement("send");?></div>
 </form>

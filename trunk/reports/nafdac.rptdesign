@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.22" id="1">
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
     <property name="createdBy">Eclipse BIRT Designer Version 3.7.2.v20120213 Build &lt;3.7.2.v20120214-1408></property>
     <list-property name="propertyBindings">
         <structure>
@@ -61,9 +61,9 @@
                 <property name="category">Unformatted</property>
             </structure>
         </scalar-parameter>
-        <scalar-parameter name="id_frm_care" id="947">
+        <scalar-parameter name="id" id="947">
             <property name="valueType">static</property>
-            <property name="dataType">string</property>
+            <property name="dataType">integer</property>
             <property name="distinct">true</property>
             <simple-property-list name="defaultValue">
                 <value type="constant">1</value>
@@ -104,8 +104,8 @@
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="patient" id="2130">
             <list-property name="parameters">
                 <structure>
-                    <property name="name">id_frm_care</property>
-                    <property name="paramName">id_frm_care</property>
+                    <property name="name">id</property>
+                    <property name="paramName">id</property>
                     <property name="dataType">integer</property>
                     <property name="position">1</property>
                     <property name="isInput">true</property>
@@ -168,14 +168,15 @@
     date_format(patient.birthdate, '%Y-%m-%d') as patient_birthday,
     patient.identifier as patient_no,
     case WHEN patient.is_male=1 then 'M' else 'F' END as patient_sex
-from frm_care left outer join patient on frm_care.id_patient=patient.id
-where frm_care.id=?]]></xml-property>
+from nafdac left outer join patient on nafdac.id_patient=patient.id
+where nafdac.id=?]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="facility" id="2137">
+            <property name="nullsOrdering">nulls lowest</property>
             <list-property name="parameters">
                 <structure>
-                    <property name="name">id_frm_care</property>
-                    <property name="paramName">id_frm_care</property>
+                    <property name="name">id</property>
+                    <property name="paramName">id</property>
                     <property name="dataType">integer</property>
                     <property name="position">1</property>
                     <property name="isInput">true</property>
@@ -201,15 +202,15 @@ where frm_care.id=?]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select facility.name as facility_name
-from frm_care left outer join pharmacy on frm_care.id_pharmacy=pharmacy.id
+from nafdac left outer join pharmacy on nafdac.id_pharmacy=pharmacy.id
               left outer join facility on pharmacy.id_facility=facility.id
-where frm_care.id=?]]></xml-property>
+where nafdac.id=?]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="nafdac" id="2195">
             <list-property name="parameters">
                 <structure>
-                    <property name="name">id_frm_care</property>
-                    <property name="paramName">id_frm_care</property>
+                    <property name="name">id</property>
+                    <property name="paramName">id</property>
                     <property name="dataType">integer</property>
                     <property name="position">1</property>
                     <property name="isInput">true</property>
@@ -220,151 +221,161 @@ where frm_care.id=?]]></xml-property>
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
-                        <property name="name">adr_description</property>
+                        <property name="name">adr_start_date</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
-                        <property name="name">recovered_fully</property>
+                        <property name="name">adr_stop_date</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
-                        <property name="name">congenital_abnormality</property>
+                        <property name="name">adr_description</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
-                        <property name="name">congenital_abnormality_desc</property>
+                        <property name="name">recovered_fully</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
-                        <property name="name">death</property>
+                        <property name="name">congenital_abnormality</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
-                        <property name="name">recovered_with_disability</property>
+                        <property name="name">congenital_abnormality_desc</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
-                        <property name="name">recovered_with_disability_desc</property>
+                        <property name="name">death</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">8</property>
-                        <property name="name">life_threatening</property>
+                        <property name="name">recovered_with_disability</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">9</property>
-                        <property name="name">life_threatening_desc</property>
+                        <property name="name">recovered_with_disability_desc</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">10</property>
-                        <property name="name">other</property>
+                        <property name="name">life_threatening</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">11</property>
-                        <property name="name">other_desc</property>
+                        <property name="name">life_threatening_desc</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">12</property>
-                        <property name="name">was_admitted</property>
+                        <property name="name">other</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">13</property>
-                        <property name="name">was_hospitalization_prolonged</property>
+                        <property name="name">other_desc</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">14</property>
-                        <property name="name">duration_of_admission</property>
+                        <property name="name">was_admitted</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">15</property>
-                        <property name="name">treatment_of_reaction</property>
+                        <property name="name">was_hospitalization_prolonged</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">16</property>
-                        <property name="name">drug_brand_name</property>
+                        <property name="name">duration_of_admission</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">17</property>
-                        <property name="name">drug_generic_name</property>
+                        <property name="name">treatment_of_reaction</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">18</property>
-                        <property name="name">drug_batch_number</property>
+                        <property name="name">drug_brand_name</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">19</property>
-                        <property name="name">drug_nafdac_number</property>
+                        <property name="name">drug_generic_name</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">20</property>
-                        <property name="name">drug_expiry_name</property>
+                        <property name="name">drug_batch_number</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">21</property>
-                        <property name="name">drug_manufactor</property>
+                        <property name="name">drug_nafdac_number</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">22</property>
-                        <property name="name">drug_indication_for_use</property>
+                        <property name="name">drug_expiry_name</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">23</property>
-                        <property name="name">drug_dosage</property>
+                        <property name="name">drug_manufactor</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">24</property>
-                        <property name="name">drug_route_of_administration</property>
+                        <property name="name">drug_indication_for_use</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">25</property>
-                        <property name="name">drug_date_started</property>
+                        <property name="name">drug_dosage</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">26</property>
-                        <property name="name">drug_date_stopped</property>
+                        <property name="name">drug_route_of_administration</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">27</property>
-                        <property name="name">reporter_name</property>
+                        <property name="name">drug_date_started</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">28</property>
-                        <property name="name">reporter_address</property>
+                        <property name="name">drug_date_stopped</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">29</property>
-                        <property name="name">reporter_profession</property>
+                        <property name="name">reporter_name</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">30</property>
+                        <property name="name">reporter_address</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">31</property>
+                        <property name="name">reporter_profession</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">32</property>
                         <property name="name">reporter_contact</property>
                         <property name="dataType">string</property>
                     </structure>
@@ -374,186 +385,200 @@ where frm_care.id=?]]></xml-property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
+                    <property name="name">adr_start_date</property>
+                    <property name="nativeName">adr_start_date</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">adr_stop_date</property>
+                    <property name="nativeName">adr_stop_date</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
                     <property name="name">adr_description</property>
                     <property name="nativeName">adr_description</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">2</property>
+                    <property name="position">4</property>
                     <property name="name">recovered_fully</property>
                     <property name="nativeName">recovered_fully</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">3</property>
+                    <property name="position">5</property>
                     <property name="name">congenital_abnormality</property>
                     <property name="nativeName">congenital_abnormality</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">4</property>
+                    <property name="position">6</property>
                     <property name="name">congenital_abnormality_desc</property>
                     <property name="nativeName">congenital_abnormality_desc</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">5</property>
+                    <property name="position">7</property>
                     <property name="name">death</property>
                     <property name="nativeName">death</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">6</property>
+                    <property name="position">8</property>
                     <property name="name">recovered_with_disability</property>
                     <property name="nativeName">recovered_with_disability</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">7</property>
+                    <property name="position">9</property>
                     <property name="name">recovered_with_disability_desc</property>
                     <property name="nativeName">recovered_with_disability_desc</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">8</property>
+                    <property name="position">10</property>
                     <property name="name">life_threatening</property>
                     <property name="nativeName">life_threatening</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">9</property>
+                    <property name="position">11</property>
                     <property name="name">life_threatening_desc</property>
                     <property name="nativeName">life_threatening_desc</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">10</property>
+                    <property name="position">12</property>
                     <property name="name">other</property>
                     <property name="nativeName">other</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">11</property>
+                    <property name="position">13</property>
                     <property name="name">other_desc</property>
                     <property name="nativeName">other_desc</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">12</property>
+                    <property name="position">14</property>
                     <property name="name">was_admitted</property>
                     <property name="nativeName">was_admitted</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">13</property>
+                    <property name="position">15</property>
                     <property name="name">was_hospitalization_prolonged</property>
                     <property name="nativeName">was_hospitalization_prolonged</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">14</property>
+                    <property name="position">16</property>
                     <property name="name">duration_of_admission</property>
                     <property name="nativeName">duration_of_admission</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">15</property>
+                    <property name="position">17</property>
                     <property name="name">treatment_of_reaction</property>
                     <property name="nativeName">treatment_of_reaction</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">16</property>
+                    <property name="position">18</property>
                     <property name="name">drug_brand_name</property>
                     <property name="nativeName">drug_brand_name</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">17</property>
+                    <property name="position">19</property>
                     <property name="name">drug_generic_name</property>
                     <property name="nativeName">drug_generic_name</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">18</property>
+                    <property name="position">20</property>
                     <property name="name">drug_batch_number</property>
                     <property name="nativeName">drug_batch_number</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">19</property>
+                    <property name="position">21</property>
                     <property name="name">drug_nafdac_number</property>
                     <property name="nativeName">drug_nafdac_number</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">20</property>
+                    <property name="position">22</property>
                     <property name="name">drug_expiry_name</property>
                     <property name="nativeName">drug_expiry_name</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">21</property>
+                    <property name="position">23</property>
                     <property name="name">drug_manufactor</property>
                     <property name="nativeName">drug_manufactor</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">22</property>
+                    <property name="position">24</property>
                     <property name="name">drug_indication_for_use</property>
                     <property name="nativeName">drug_indication_for_use</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">23</property>
+                    <property name="position">25</property>
                     <property name="name">drug_dosage</property>
                     <property name="nativeName">drug_dosage</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">24</property>
+                    <property name="position">26</property>
                     <property name="name">drug_route_of_administration</property>
                     <property name="nativeName">drug_route_of_administration</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">25</property>
+                    <property name="position">27</property>
                     <property name="name">drug_date_started</property>
                     <property name="nativeName">drug_date_started</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">26</property>
+                    <property name="position">28</property>
                     <property name="name">drug_date_stopped</property>
                     <property name="nativeName">drug_date_stopped</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">27</property>
+                    <property name="position">29</property>
                     <property name="name">reporter_name</property>
                     <property name="nativeName">reporter_name</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">28</property>
+                    <property name="position">30</property>
                     <property name="name">reporter_address</property>
                     <property name="nativeName">reporter_address</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">29</property>
+                    <property name="position">31</property>
                     <property name="name">reporter_profession</property>
                     <property name="nativeName">reporter_profession</property>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="position">30</property>
+                    <property name="position">32</property>
                     <property name="name">reporter_contact</property>
                     <property name="nativeName">reporter_contact</property>
                     <property name="dataType">string</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select 
+            <xml-property name="queryText"><![CDATA[select
+    date_format(adr_start_date, '%Y-%m-%d') as adr_start_date,
+    date_format(adr_stop_date, '%Y-%m-%d') as adr_stop_date,
     adr_description,
     case when outcome_of_reaction_type=1 then 'X' else '' end as recovered_fully,
     case when outcome_of_reaction_type=2 then 'X' else '' end as congenital_abnormality,
@@ -587,85 +612,13 @@ where frm_care.id=?]]></xml-property>
     
     
 from nafdac
-where id_frm_care=?]]></xml-property>
-        </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="frmCare" id="2196">
-            <list-property name="parameters">
-                <structure>
-                    <property name="name">id_frm_care</property>
-                    <property name="paramName">id_frm_care</property>
-                    <property name="dataType">integer</property>
-                    <property name="position">1</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-            </list-property>
-            <structure name="cachedMetaData">
-                <list-property name="resultSet">
-                    <structure>
-                        <property name="position">1</property>
-                        <property name="name">adr_start_date</property>
-                        <property name="dataType">string</property>
-                    </structure>
-                    <structure>
-                        <property name="position">2</property>
-                        <property name="name">adr_stop_date</property>
-                        <property name="dataType">string</property>
-                    </structure>
-                </list-property>
-            </structure>
-            <property name="dataSource">DataSource</property>
-            <list-property name="resultSet">
-                <structure>
-                    <property name="position">1</property>
-                    <property name="name">adr_start_date</property>
-                    <property name="nativeName">adr_start_date</property>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="position">2</property>
-                    <property name="name">adr_stop_date</property>
-                    <property name="nativeName">adr_stop_date</property>
-                    <property name="dataType">string</property>
-                </structure>
-            </list-property>
-            <xml-property name="queryText"><![CDATA[select 
-date_format(adr_start_date, '%Y-%m-%d') as adr_start_date,
-date_format(adr_stop_date, '%Y-%m-%d') as adr_stop_date
-from frm_care
 where id=?]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="medicines" id="2390">
-            <list-property name="columnHints">
-                <structure>
-                    <property name="columnName">name</property>
-                    <text-property name="displayName">Brand or Generic Name</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">dosage</property>
-                    <text-property name="displayName">Dosage</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">route</property>
-                    <text-property name="displayName">Route</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">started</property>
-                    <text-property name="displayName">Date Started</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">stopped</property>
-                    <text-property name="displayName">Date Stopped</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">reason</property>
-                    <text-property name="displayName">Reason</text-property>
-                </structure>
-            </list-property>
             <list-property name="parameters">
                 <structure>
-                    <property name="name">id_frm_care</property>
-                    <property name="paramName">id_frm_care</property>
+                    <property name="name">id</property>
+                    <property name="paramName">id</property>
                     <property name="dataType">integer</property>
                     <property name="position">1</property>
                     <property name="isInput">true</property>
@@ -754,7 +707,7 @@ where id=?]]></xml-property>
     reason
 from 
     nafdac_medicine
-where id_nafdac in (select id from nafdac where id_frm_care=?)
+where id_nafdac=?
 order by id]]></xml-property>
         </oda-data-set>
     </data-sets>
@@ -1181,7 +1134,7 @@ REACTIONS]]></text-property>
                                             <property name="borderRightColor">#000000</property>
                                             <property name="borderRightStyle">solid</property>
                                             <data id="2197">
-                                                <property name="dataSet">frmCare</property>
+                                                <property name="dataSet">nafdac</property>
                                                 <list-property name="boundDataColumns">
                                                     <structure>
                                                         <property name="name">adr_start_date</property>
@@ -1195,7 +1148,7 @@ REACTIONS]]></text-property>
                                         </cell>
                                         <cell id="2191">
                                             <data id="2198">
-                                                <property name="dataSet">frmCare</property>
+                                                <property name="dataSet">nafdac</property>
                                                 <list-property name="boundDataColumns">
                                                     <structure>
                                                         <property name="name">adr_stop_date</property>

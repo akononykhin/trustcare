@@ -210,6 +210,9 @@ class TestOfPharmacy extends UnitTestCase {
         $model = TrustCare_Model_Pharmacy::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         try {
+            if(is_null($model)) {
+                throw new Exception('Entity not initialized');
+            }
             $model->delete();
             
             $model1 = TrustCare_Model_Pharmacy::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));

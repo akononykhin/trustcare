@@ -220,9 +220,11 @@ class TestOfNafdac extends UnitTestCase {
                 $model->setOptions($params);
                 $model->save();
 
-                $this->assertTrue(false, sprintf("Trying to modify NAFDAC parameters must throw an exception"));
+                $model1 = TrustCare_Model_Nafdac::find($model->getId(), array('mapperOptions' => array('adapter' => $this->db)));
+                $this->assertEqual($model1->filename, $params['filename'], "Incorrect 'filename': %s");
             }
             catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
             }
         }
         else {
