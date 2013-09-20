@@ -226,7 +226,7 @@ class NafdacController extends ZendX_Controller_Action
                     
                     $fileName = $obj = $generator->generate(array('id' => $nafdacModel->getId()));
                     
-                    $nafdacModel->setFilename($filename);
+                    $nafdacModel->setFilename($fileName);
                     $nafdacModel->save();
                     
                     $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
