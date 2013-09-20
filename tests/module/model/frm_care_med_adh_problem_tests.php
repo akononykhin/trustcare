@@ -152,7 +152,9 @@ class TestOfFrmCareMedAdhProblem extends UnitTestCase {
     
     function testLoadAllForFrmCare() {
         $model = TrustCare_Model_FrmCareMedAdhProblem::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-        $model->delete();
+        if(!is_null($model)) {
+            $model->delete();
+        }
 
         $id_frm_care = 2;
         $samples = array();
@@ -222,6 +224,9 @@ class TestOfFrmCareMedAdhProblem extends UnitTestCase {
         $model = TrustCare_Model_FrmCareMedAdhProblem::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         try {
+            if(is_null($model)) {
+                throw new Exception('Entity not initialized');
+            }
             $model->delete();
             
             $model1 = TrustCare_Model_FrmCareMedAdhProblem::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
@@ -235,7 +240,9 @@ class TestOfFrmCareMedAdhProblem extends UnitTestCase {
     function testReplaceForFrmCare() {
         /* clean rows */
         $model = TrustCare_Model_FrmCareMedAdhProblem::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-        $model->delete();
+        if(!is_null($model)) {
+            $model->delete();
+        }
     
         $frmCareId = 2;
         $currentDictIds = array(1,2,4,7);

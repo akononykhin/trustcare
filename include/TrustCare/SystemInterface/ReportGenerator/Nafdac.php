@@ -15,7 +15,7 @@ class TrustCare_SystemInterface_ReportGenerator_Nafdac extends TrustCare_SystemI
     
     public function generate($params, $format = '')
     {
-        $id_frm_care = array_key_exists('id_frm_care', $params) ? $params['id_frm_care'] : -1;
+        $id = array_key_exists('id', $params) ? $params['id'] : -1;
 
         if(empty($format)) {
             $format = $this->getDefaultFormat();
@@ -25,7 +25,7 @@ class TrustCare_SystemInterface_ReportGenerator_Nafdac extends TrustCare_SystemI
         $dbOptions = Zend_Registry::get('dbOptions');
         $db = Zend_Db::factory($dbOptions['adapter'], $dbOptions['params']);
         
-        $fileName = sprintf("%s_%s_%s.%s", $this->getCode(), $id_frm_care, rand(0, 1000), strtolower($format));
+        $fileName = sprintf("%s_%s_%s.%s", $this->getCode(), $id, rand(0, 1000), strtolower($format));
         $fileReportOutput = sprintf("%s/%s", $this->reportsDirectory(), $fileName);
         
         $designFile= "nafdac.rptdesign";
@@ -33,7 +33,7 @@ class TrustCare_SystemInterface_ReportGenerator_Nafdac extends TrustCare_SystemI
         $parameters[] = sprintf('jdbc_driver_url=jdbc:mysql://%s/%s', $dbOptions['params']['host'], $dbOptions['params']['dbname']);
         $parameters[] = sprintf('jdbc_username=%s', $dbOptions['params']['username']);
         $parameters[] = sprintf('jdbc_password=%s', $dbOptions['params']['password']);
-        $parameters[] = sprintf("id_frm_care=%s", $id_frm_care);
+        $parameters[] = sprintf("id=%s", $id);
 
         $this->_generateReportFile($designFile, $fileReportOutput, $parameters, $format);
 

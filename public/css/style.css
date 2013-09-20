@@ -46,3 +46,12 @@ table.zend_form td .errors {
     MARGIN-TOP: 10px; MARGIN-BOTTOM: 5px;
     PADDING-LEFT: 10px; PADDING-TOP: 2px; PADDING-BOTTOM: 2px;
 }
+
+
+.info_table tr th {
+    background: #e6e6e6;
+}
+
+.ui-autocomplete-loading {
+    background: white url('../img/ui-anim_basic_16x16.gif') right center no-repeat;
+}
