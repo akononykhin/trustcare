@@ -118,6 +118,11 @@ class NafdacController extends ZendX_Controller_Action
                     'type' => 'view'
                 ),
                 array(
+                    'title' => Zend_Registry::get("Zend_Translate")->_("Download"),
+                    'url' => $this->view->url(array('action' => 'download', 'id' => $row['id'])),
+                    'type' => 'download'
+                ),
+                array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("Delete"),
                     'url' => $this->view->url(array('action' => 'delete', 'id' => $row['id'])),
                     'type' => 'delete',
@@ -284,6 +289,37 @@ class NafdacController extends ZendX_Controller_Action
         
         $this->render('create');
         return;
+    }
+    
+
+    
+    public function downloadActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "view");
+    }
+
+    
+    public function downloadAction()
+    {
+        $id = $this->_getParam('id');
+    
+        $model = TrustCare_Model_Nafdac::find($id);
+        if(is_null($model)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown NAFDAC")));
+            return;
+        }
+
+        $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+        $fileName = $model->getFilename();
+        
+        $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
+        if(!file_exists($fileReportOutput) || !is_file($fileReportOutput)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Report file not found")));
+            return;
+        }
+        
+        $this->outputFileAsAttachment($fileReportOutput);
+        die;
     }
     
     
