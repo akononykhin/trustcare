@@ -229,7 +229,7 @@ class NafdacController extends ZendX_Controller_Action
                     
                     $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
                     
-                    $fileName = $obj = $generator->generate(array('id' => $nafdacModel->getId()));
+                    $fileName = $generator->generate(array('id' => $nafdacModel->getId()));
                     
                     $nafdacModel->setFilename($fileName);
                     $nafdacModel->save();
@@ -323,6 +323,54 @@ class NafdacController extends ZendX_Controller_Action
     }
 
     
+    public function viewActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "view");
+    }
+    
+    
+    public function viewAction()
+    {
+        $id = $this->_getParam('id');
+    
+        $model = TrustCare_Model_Nafdac::find($id);
+        if(is_null($model)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown NAFDAC")));
+            return;
+        }
+        
+        $patientModel = TrustCare_Model_Patient::find($model->getIdPatient());
+        if(is_null($patientModel)) {
+            $this->getLogger()->error(sprintf("Failed to load patient.id=%s specified for nafdac.id=%s", $model->getIdPatient(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+        
+        
+        $pharmacyModel = TrustCare_Model_Pharmacy::find($model->getIdPharmacy());
+        if(is_null($pharmacyModel)) {
+            $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for nafdac.id=%s", $model->getIdPharmacy(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+        
+        
+        $medicines = array();
+        $model1 = new TrustCare_Model_NafdacMedicine();
+        foreach($model1->fetchAllByIdNafdac($model->getId()) as $obj) {
+            $medicines[] = $obj;
+        }
+        
+        $this->view->model = $model;
+        $this->view->patientModel = $patientModel;
+        $this->view->pharmacyName = $pharmacyModel->getName();
+        $this->view->medicines = $medicines;
+        
+        $this->render('view');
+        return;
+    }
+    
+    
     public function deleteActionAccess()
     {
         return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "delete");
@@ -349,6 +397,47 @@ class NafdacController extends ZendX_Controller_Action
         $model->delete();
     
         $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+    }
+
+    
+    
+    public function regenerateActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "edit");
+    }
+    
+    
+    public function regenerateAction()
+    {
+        $id = $this->_getParam('id');
+    
+        $model = TrustCare_Model_Nafdac::find($id);
+        if(is_null($model)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown NAFDAC")));
+            return;
+        }
+    
+        $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+        $fileName = $model->getFilename();
+    
+        $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
+        if(file_exists($fileReportOutput) && is_file($fileReportOutput)) {
+            unlink($fileReportOutput);
+        }
+
+        $fileName = $generator->generate(array('id' => $model->getId()));
+        
+        $model->setFilename($fileName);
+        $model->save();
+        
+        $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
+        if(!file_exists($fileReportOutput)) {
+            $errorMsg = Zend_Registry::get("Zend_Translate")->_("Report file not found");
+            throw new Exception(sprintf("Report file '%s' not found", $fileReportOutput));
+        }
+        
+        $this->outputFileAsAttachment($fileReportOutput);
+        return;
     }
     
     

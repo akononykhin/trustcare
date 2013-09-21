@@ -1,0 +1,180 @@
+<script>
+$(document).ready(function() {
+	$('#btn_download').click(function() {
+        $(location).attr('href', '<?php  echo $this->url(array('controller' => 'nafdac', 'action' => 'download', 'id' => $this->model->getId()), null, true)?>');
+    	return true;
+    });
+    
+    $('#btn_regenerate').click(function() {
+        $(location).attr('href', '<?php  echo $this->url(array('controller' => 'nafdac', 'action' => 'regenerate', 'id' => $this->model->getId()), null, true);?>');
+	    return true;
+    });
+
+});
+</script>
+
+<div class="tab_header"><?php echo $this->translate(_("Patient's Details"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Patient"));?></div></td>
+   <td><?php echo $this->patientModel->showNameAs();?></td>
+  </tr>
+ <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Pharmacy"));?></div></td>
+   <td><?php echo $this->pharmacyName;?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Date of Visit"));?></div></td>
+   <td><?php echo $this->model->getDateOfVisit();?></td>
+  </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("Adverse Drug Reaction (ADR)"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Description"));?></div></td>
+   <td><?php echo $this->model->getAdrDescription();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("DATE Reaction Started"));?></div></td>
+   <td><?php echo $this->model->getAdrStartDate();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("DATE Reaction Stopped"));?></div></td>
+   <td><?php echo $this->model->getAdrStopDate();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Outcome of Reaction"));?></div></td>
+   <td>
+     <?php echo $this->model->getOutcomeOfReactionType();?><br/>
+     <?php echo $this->model->getOutcomeOfReactionDesc();?>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Was Patient Admited Due to ADR?"));?></div></td>
+   <td><?php echo $this->model->getWasAdmitted() ? $this->translate(_("Yes")) : $this->translate(_("No"));?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("If Already Hospitalized, Was it Prolonged Due to ADR?"));?></div></td>
+   <td><?php echo $this->model->getWasHospitalizationProlonged() ? $this->translate(_("Yes")) : $this->translate(_("No"));?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Duration of Admission (days)"));?></div></td>
+   <td><?php echo $this->model->getDurationOfAdmission();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Treatment of Reaction"));?></div></td>
+   <td><?php echo $this->model->getTreatmentOfReaction();?></td>
+  </tr>
+  </table>
+</div>
+
+
+<div class="tab_header"><?php echo $this->translate(_("Suspected Drug"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Brand Name"));?></div></td>
+   <td><?php echo $this->model->getDrugBrandName();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Generic Name"));?></div></td>
+   <td><?php echo $this->model->getDrugGenericName();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Batch No."));?></div></td>
+   <td><?php echo $this->model->getDrugBatchNumber();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("NAFDAC No."));?></div></td>
+   <td><?php echo $this->model->getDrugNafdacNumber();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Expiry Date"));?></div></td>
+   <td><?php echo $this->model->getDrugExpiryName();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Name & Address of Manufacturer"));?></div></td>
+   <td><?php echo $this->model->getDrugManufactor();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Indication for Use"));?></div></td>
+   <td><?php echo $this->model->getDrugIndicationForUse();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Dosage"));?></div></td>
+   <td><?php echo $this->model->getDrugDosage();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Route of Administration"));?></div></td>
+   <td><?php echo $this->model->getDrugRouteOfAdministration();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Date Started"));?></div></td>
+   <td><?php echo $this->model->getDrugDateStarted();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Date Stopped"));?></div></td>
+   <td><?php echo $this->model->getDrugDateStopped();?></td>
+  </tr>
+ </table>
+</div>
+
+
+<div class="tab_header"><?php echo $this->translate(_("Concomitant Medicines"));?></div>
+<div class="tab_content">
+ <table id="medicines_content" class="info_table" cellspacing="2" border=0>
+  <tr>
+   <th><?php echo $this->translate(_("Brand or Generic Name"));?></th>
+   <th><?php echo $this->translate(_("Dosage"));?></th>
+   <th><?php echo $this->translate(_("Route"));?></th>
+   <th><?php echo $this->translate(_("Date Started"));?></th>
+   <th><?php echo $this->translate(_("Date Stopped"));?></th>
+   <th><?php echo $this->translate(_("Reason for Use"));?></th>
+  </tr>
+<?php
+foreach($this->medicines as $obj) {
+?>
+  <tr>
+   <td><?php echo $obj->getName();?></td>
+   <td><?php echo $obj->getDosage();?></td>
+   <td><?php echo $obj->getRoute();?></td>
+   <td><?php echo $obj->getStarted();?></td>
+   <td><?php echo $obj->getStopped();?></td>
+   <td><?php echo $obj->getReason();?></td>
+  </tr>
+<?php      
+  } 
+?>  
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("Source of Report"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Name of Reporter"));?></div></td>
+   <td><?php echo $this->model->getReporterName();?></td>
+  </tr>
+ <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Address"));?></div></td>
+   <td><?php echo $this->model->getReporterAddress();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Profession"));?></div></td>
+   <td><?php echo $this->model->getReporterProfession();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Tel No/Email"));?></div></td>
+   <td><?php echo $this->model->getReporterContact();?></td>
+  </tr>
+ </table>
+</div>
+
+<div>
+ <input type="button" name="download" id="btn_download" value="<?php echo $this->translate(_("Download"));?>"/>     
+ <input type="button" name="regenerate" id="btn_regenerate"  value="<?php echo $this->translate(_("Regenerate"));?>"/>     
+</div>
