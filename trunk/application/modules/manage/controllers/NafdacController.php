@@ -361,10 +361,14 @@ class NafdacController extends ZendX_Controller_Action
             $medicines[] = $obj;
         }
         
+        $reactionOutcomes = TrustCare_Model_Nafdac::getOutcomeReactionTypes();
+        $outcomeOfReaction = array_key_exists($model->getOutcomeOfReactionType(), $reactionOutcomes) ? $reactionOutcomes[$model->getOutcomeOfReactionType()] : '';
+        
         $this->view->model = $model;
         $this->view->patientModel = $patientModel;
         $this->view->pharmacyName = $pharmacyModel->getName();
         $this->view->medicines = $medicines;
+        $this->view->outcomeOfReaction = $outcomeOfReaction;
         
         $this->render('view');
         return;
