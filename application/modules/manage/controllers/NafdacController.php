@@ -126,7 +126,7 @@ class NafdacController extends ZendX_Controller_Action
                     'title' => Zend_Registry::get("Zend_Translate")->_("Delete"),
                     'url' => $this->view->url(array('action' => 'delete', 'id' => $row['id'])),
                     'type' => 'delete',
-                    'askConfirm' => sprintf(Zend_Registry::get("Zend_Translate")->_("Are you sure you want to delete form %s generated %s?"), $row['id'], $row['date_of_visit']),
+                    'askConfirm' => sprintf(Zend_Registry::get("Zend_Translate")->_("Are you sure you want to delete report %s generated %s?"), $row['id'], $row['date_of_visit']),
                 ),
             );
             $output['aaData'][] = $row;
@@ -320,6 +320,35 @@ class NafdacController extends ZendX_Controller_Action
         
         $this->outputFileAsAttachment($fileReportOutput);
         die;
+    }
+
+    
+    public function deleteActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "delete");
+    }
+    
+    
+    public function deleteAction()
+    {
+        $id = $this->_getParam('id');
+    
+        $model = TrustCare_Model_Nafdac::find($id);
+        if(is_null($model)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown NAFDAC")));
+            return;
+        }
+    
+        $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+        $fileName = $model->getFilename();
+    
+        $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
+        if(file_exists($fileReportOutput) && is_file($fileReportOutput)) {
+            unlink($fileReportOutput);
+        }
+        $model->delete();
+    
+        $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
     }
     
     
