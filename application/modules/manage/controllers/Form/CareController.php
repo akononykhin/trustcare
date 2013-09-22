@@ -26,6 +26,10 @@ class Form_CareController extends ZendX_Controller_Action
                 'title' => Zend_Registry::get("Zend_Translate")->_("ID"),
                 'width' => '3%',
             ),
+            'generation_date' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("Generation Date"),
+                'width' => '10%',
+            ),
             'date_of_visit' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Date of Visit"),
                 'width' => '8%',
@@ -46,11 +50,11 @@ class Form_CareController extends ZendX_Controller_Action
             ),
             'patient_last_name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Last Name"),
-                'width' => '20%',
+                'width' => '15%',
             ),
             'patient_first_name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("First Name"),
-                'width' => '20%',
+                'width' => '15%',
             ),
         );
 
@@ -93,6 +97,8 @@ class Form_CareController extends ZendX_Controller_Action
                                                              array(
                                                                  'frm_care.id',
                                                                  'date_of_visit' => new Zend_Db_Expr("date_format(date_of_visit, '%Y-%m-%d')"),
+                                                                 'generation_date' => new Zend_Db_Expr("date_format(frm_care.generation_date, '%Y-%m-%d %H:%i:%s')"),
+                                                                 'frm_care.is_commited'
                                                              ))
                                                          ->joinLeft(array('patient'), 'frm_care.id_patient = patient.id', array('patient_identifier' => 'patient.identifier',
                                                                                                                                 'patient_first_name' => 'patient.first_name',
@@ -115,7 +121,8 @@ class Form_CareController extends ZendX_Controller_Action
         );
         foreach ($rows as $row) {
             $row['DT_RowId'] = $row['id'];
-            //$row['date_of_visit'] = $this->convertDateToUserTimezone($row['date_of_visit']); /* We don't convert date before saving so it's not necessary to convert it back */
+            $row['generation_date'] = $this->convertDateToUserTimezone($row['generation_date']);
+            $row['date_of_visit'] = $this->showDateAtSpecifiedFormat($row['date_of_visit']);
             
             $row['_row_actions_'] = array(
                 array(
@@ -126,7 +133,8 @@ class Form_CareController extends ZendX_Controller_Action
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("Edit"),
                     'url' => $this->view->url(array('action' => 'edit', 'id' => $row['id'])),
-                    'type' => 'edit'
+                    'type' => 'edit',
+                    'conditions' => 'full.is_commited != 1'
                 ),
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("Delete"),
@@ -157,6 +165,7 @@ class Form_CareController extends ZendX_Controller_Action
             $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
             $db->beginTransaction();
             try {
+                $isCommited = $this->_getParam('is_commited');
                 $idPharmacy = $this->_getParam('id_pharmacy');
                 $idPatient = $this->_getParam('id_patient');
                 $dateOfVisit = $this->_getParam('date_of_visit');
@@ -174,7 +183,6 @@ class Form_CareController extends ZendX_Controller_Action
                 $adrStartDate = $this->_getParam('adr_start_date');
                 $adrStopDate = $this->_getParam('adr_stop_date');
                 $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
-                $isNafdacAdrFilled = $this->_getParam('is_nafdac_adr_filled');
                 $medErrorTypes = $this->_getParam('med_error_type');
                 if(!$isMedErrorIdentified) {
                     $medErrorTypes = array();
@@ -251,6 +259,7 @@ class Form_CareController extends ZendX_Controller_Action
                 
                 $frmModel = new TrustCare_Model_FrmCare(
                     array(
+                        'is_commited' => $isCommited,
                         'id_pharmacy' => $idPharmacy,
                     	'id_patient' => $idPatient,
                 		'date_of_visit' => $dateOfVisit,
@@ -268,7 +277,6 @@ class Form_CareController extends ZendX_Controller_Action
                         'adr_stop_date' => $adrStopDate,
                     	'adr_severity_id' => $adrSeverityId,
                 		'is_adr_intervention_provided' => $isAdrInterventionProvided,
-                		'is_nafdac_adr_filled' => $isNafdacAdrFilled,
                 		'is_patient_younger_15' => $isPatientYounger15,
                 		'is_patient_male' => $patientModel->getIsMale(),
                     	'mapperOptions' => array('adapter' => $db)
@@ -425,7 +433,11 @@ class Form_CareController extends ZendX_Controller_Action
                 }
                 
                 $db->commit();
-                if(!$isNafdacAdrFilled) {
+                
+                $generateNafdacForm = $this->_getParam('generate_nafdac_form');
+                $isGenerateNafdacForm = $isCommited ? !empty($generateNafdacForm) : false;
+                
+                if(!$isGenerateNafdacForm) {
                     $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
                 }
                 else {
@@ -777,6 +789,10 @@ class Form_CareController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
             return;
         }
+        
+        if($frmModel->getIsCommited()) {
+            $this->getRedirector()->gotoSimpleAndExit("view", $this->getRequest()->getControllerName(), null, array('id' => $id));
+        }
     
         $patientModel = TrustCare_Model_Patient::find($frmModel->getIdPatient(), array('mapperOptions' => array('adapter' => $db)));
         if(is_null($patientModel)) {
@@ -799,6 +815,7 @@ class Form_CareController extends ZendX_Controller_Action
         
             $db->beginTransaction();
             try {
+                $isCommited = $this->_getParam('is_commited');
                 $isPregnant = $this->_getParam('is_pregnant');
                 $isReceivePrescription = $this->_getParam('is_receive_prescription');
                 $isMedErrorScreened = $this->_getParam('is_med_error_screened');
@@ -813,7 +830,6 @@ class Form_CareController extends ZendX_Controller_Action
                 $adrStartDate = $this->_getParam('adr_start_date');
                 $adrStopDate = $this->_getParam('adr_stop_date');
                 $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
-                $isNafdacAdrFilled = $this->_getParam('is_nafdac_adr_filled');
                 $medErrorTypes = $this->_getParam('med_error_type');
                 if(!$isMedErrorIdentified) {
                     $medErrorTypes = array();
@@ -847,7 +863,8 @@ class Form_CareController extends ZendX_Controller_Action
                 if($patientModel->getIsMale()) {
                     $isPregnant = false;
                 }
-                
+
+                $frmModel->setIsCommited($isCommited);
                 $frmModel->setIsPregnant($isPregnant);
                 $frmModel->setIsReceivePrescription($isReceivePrescription);
                 $frmModel->setIsMedErrorScreened($isMedErrorScreened);
@@ -862,7 +879,6 @@ class Form_CareController extends ZendX_Controller_Action
                 $frmModel->setAdrStopDate($adrStopDate);
                 $frmModel->setAdrSeverityId($adrSeverityId);
                 $frmModel->setIsAdrInterventionProvided($isAdrInterventionProvided);
-                $frmModel->setIsNafdacAdrFilled($isNafdacAdrFilled);
                 $frmModel->save();
         
                 TrustCare_Model_FrmCareMedErrorType::replaceForFrmCare($frmModel->getId(), $medErrorTypes, array('mapperOptions' => array('adapter' => $db)));
@@ -881,7 +897,17 @@ class Form_CareController extends ZendX_Controller_Action
                 TrustCare_Model_FrmCareAdrIntervention::replaceForFrmCare($frmModel->getId(), $adrInterventions, array('mapperOptions' => array('adapter' => $db)));
         
                 $db->commit();
-                $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+                
+                $generateNafdacForm = $this->_getParam('generate_nafdac_form');
+                $isGenerateNafdacForm = $isCommited ? !empty($generateNafdacForm) : false;
+                
+                if(!$isGenerateNafdacForm) {
+                    $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+                }
+                else {
+                    $this->getRedirector()->gotoSimpleAndExit('create', 'nafdac', null, array('id_frm_care' => $frmModel->getId()));
+                }
+                
             }
             catch(Exception $ex) {
                 $db->rollback();
@@ -907,7 +933,6 @@ class Form_CareController extends ZendX_Controller_Action
             $adrStartDate = $frmModel->getAdrStartDate();
             $adrStopDate = $frmModel->getAdrStopDate();
             $isAdrInterventionProvided = $frmModel->getIsAdrInterventionProvided();
-            $isNafdacAdrFilled = $frmModel->getIsNafdacAdrFilled();
             
             $medErrorTypes = array();
             $model = new TrustCare_Model_FrmCareMedErrorType(array('mapperOptions' => array('adapter' => $db)));
@@ -1113,7 +1138,6 @@ class Form_CareController extends ZendX_Controller_Action
         $this->view->adrStartDate = $adrStartDate;
         $this->view->adrStopDate = $adrStopDate;
         $this->view->isAdrInterventionProvided = $isAdrInterventionProvided;
-        $this->view->isNafdacAdrFilled = $isNafdacAdrFilled;
         $this->view->dictEntities = $dictEntities;
         
         $this->render('edit');

@@ -343,10 +343,13 @@ class ZendX_Controller_Action extends Zend_Controller_Action
      */
     protected function convertTimeToUserTimezone($time)
     {
-            $zendDate  = new Zend_Date($time.'Z', "yyyy-MM-dd HH:mm:ssZ");
-            $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
-            $zendDate->setTimezone($clientTZ);
-            return $zendDate->toString(Zend_Registry::getInstance()->dateTimeFormat);
+        if(empty($time)) {
+            return '';
+        }
+        $zendDate  = new Zend_Date($time.'Z', "yyyy-MM-dd HH:mm:ssZ");
+        $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
+        $zendDate->setTimezone($clientTZ);
+        return $zendDate->toString(Zend_Registry::getInstance()->dateTimeFormat);
     }
 
     /**
@@ -355,12 +358,31 @@ class ZendX_Controller_Action extends Zend_Controller_Action
      */
     protected function convertDateToUserTimezone($date, $format = '')
     {
+        if(empty($date)) {
+            return '';
+        }
         if(empty($format)) {
             $format = Zend_Registry::getInstance()->dateFormat;
         }
         $zendDate  = new Zend_Date($date.'Z', "yyyy-MM-ddZ");
         $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
         $zendDate->setTimezone($clientTZ);
+        return $zendDate->toString($format);
+    }
+
+    /**
+     * 
+     * @param string $date at YYYY-MM-DD format
+     */
+    protected function showDateAtSpecifiedFormat($date, $format = '')
+    {
+        if(empty($date)) {
+            return '';
+        }
+        if(empty($format)) {
+            $format = Zend_Registry::getInstance()->dateFormat;
+        }
+        $zendDate  = new Zend_Date($date.'Z', "yyyy-MM-ddZ");
         return $zendDate->toString($format);
     }
 }

@@ -56,13 +56,22 @@ $(document).ready( function () {
                var content = '';
                jQuery.each(full._row_actions_, function() {
                    var idPrefix = 'action_' + this.type + '_' + full.DT_RowId;
-                   content += '<a class="row_action" id="' + idPrefix + '">';
-                   content += '<img src="/img/actions/'+this.type+'.gif" title="'+this.title+'">';
-                   content += '<div class="ui-helper-hidden" id="'+idPrefix+'_url">'+this.url+'</div>'
-                   if(this.askConfirm) {
-                       content += '<div class="ui-helper-hidden" id="'+idPrefix+'_message">'+this.askConfirm+'</div>'
+                   var showAction = true;
+                   if(this.conditions) {
+                       eval("showAction = ("+this.conditions+") ? true : false;");
                    }
-                   content += '</a>';
+                   if(showAction) {
+                       content += '<a class="row_action" id="' + idPrefix + '">';
+                       content += '<img src="/img/actions/'+this.type+'.gif" title="'+this.title+'">';
+                       content += '<div class="ui-helper-hidden" id="'+idPrefix+'_url">'+this.url+'</div>'
+                       if(this.askConfirm) {
+                           content += '<div class="ui-helper-hidden" id="'+idPrefix+'_message">'+this.askConfirm+'</div>'
+                       }
+                       content += '</a>';
+                   }
+                   else {
+                       content += '<img src="/img/actions/transparent_1x1.png" width="16" height="16"/>';
+                   }
                });
                                
                return content;
