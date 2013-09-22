@@ -347,7 +347,7 @@ CREATE TABLE patient (
 /****************** START FRM_CARE tables ************************************************/
 CREATE TABLE frm_care (
   `id` int NOT NULL,
-  `generation_date` datetime NOT NULL
+  `generation_date` datetime default NULL
   `date_of_visit` datetime NOT NULL,
   `date_of_visit_month_index` int default NULL,
   `is_commited` bool default false,
@@ -612,7 +612,7 @@ CREATE TABLE report_community (
 
 CREATE TABLE nafdac (
   `id` int NOT NULL,
-  `generation_date` datetime NOT NULL,
+  `generation_date` datetime default NULL,
   `date_of_visit` datetime NOT NULL,
   `id_user` int NOT NULL,
   `id_patient` int NOT NULL,
@@ -1028,4 +1028,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130922, 3);
+insert into db_version values (1, 20130922, 4);

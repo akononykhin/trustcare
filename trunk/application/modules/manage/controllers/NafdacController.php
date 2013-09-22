@@ -110,7 +110,8 @@ class NafdacController extends ZendX_Controller_Action
         foreach ($rows as $row) {
             $row['DT_RowId'] = $row['id'];
             $row['generation_date'] = $this->convertDateToUserTimezone($row['generation_date']);
-    
+            $row['date_of_visit'] = $this->showDateAtSpecifiedFormat($row['date_of_visit']);
+            
             $row['_row_actions_'] = array(
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("View"),
@@ -148,8 +149,6 @@ class NafdacController extends ZendX_Controller_Action
         $idFrmCare = $this->_getParam('id_frm_care');
         $idFrmCommunity = $this->_getParam('id_frm_community');
         $patientId = $this->_getParam('id_patient');
-        
-        $frmObj = TrustCare_Model_FrmCare::find($idFrmCare);
         
         $form = $this->_getParametersForm();
         $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
@@ -224,7 +223,19 @@ class NafdacController extends ZendX_Controller_Action
                         $medModel->save();
                         
                     }
+                    
+                    $frmCare = TrustCare_Model_FrmCare::find($idFrmCare, array('mapperOptions' => array('adapter' => $db)));
+                    $frmCommunity = TrustCare_Model_FrmCommunity::find($idFrmCare, array('mapperOptions' => array('adapter' => $db)));
+                    if(!is_null($frmCare)) {
+                        $frmCare->setIdNafdac($nafdacModel->getId());
+                        $frmCare->save();
+                    }
+                    else if(!is_null($frmCommunity)) {
+                        
+                    }
+                    
                     $db->commit();
+                    
                     $transactionStarted = false;
                     
                     $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
@@ -257,21 +268,21 @@ class NafdacController extends ZendX_Controller_Action
             }
         }
         else {
-            $frmObj = TrustCare_Model_FrmCare::find($idFrmCare);
-            if(!is_null($frmObj)) {
-                $patientObj = TrustCare_Model_Patient::find($frmObj->getIdPatient());
+            $frmCare = TrustCare_Model_FrmCare::find($idFrmCare);
+            if(!is_null($frmCare)) {
+                $patientObj = TrustCare_Model_Patient::find($frmCare->getIdPatient());
                 if(!is_null($patientObj)) {
                     $patientName = $patientObj->showNameAs();
                     $patientId = $patientObj->getId();
                 }
-                $pharmObj = TrustCare_Model_Pharmacy::find($frmObj->getIdPharmacy());
+                $pharmObj = TrustCare_Model_Pharmacy::find($frmCare->getIdPharmacy());
                 if(!is_null($pharmObj)) {
                     $pharmacyId = $pharmObj->getId();
                 }
-                $dateOfVisit = $frmObj->getDateOfVisit();
+                $dateOfVisit = $frmCare->getDateOfVisit();
                 
-                $adrStartDate = $frmObj->getAdrStartDate();
-                $adrStopDate = $frmObj->getAdrStopDate();
+                $adrStartDate = $frmCare->getAdrStartDate();
+                $adrStopDate = $frmCare->getAdrStopDate();
             }
             $form->getSubForm("patient")->getElement('patient_name')->setValue($patientName);
             $form->getSubForm("patient")->getElement('id_pharmacy')->setValue($pharmacyId);
