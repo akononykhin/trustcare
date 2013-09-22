@@ -228,11 +228,6 @@ class Form_CareController extends ZendX_Controller_Action
                     throw new Exception(sprintf("Trying to create form for unknown patient.id=%s", $idPatient));
                 }
                 
-                $existingForm = TrustCare_Model_FrmCare::findByPharmacyIdPatientIdAndDateOfVisit($idPharmacy, $idPatient, $dateOfVisit, array('mapperOptions' => array('adapter' => $db)));
-                if(!is_null($existingForm)) {
-                    $existingForm->delete();
-                }
-                
                 if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $patientModel->getBirthdate(), $matches)) {
                     throw new Exception(sprintf("Failed to parse birthdate='%s' of patient.id=%s", $patientModel->getBirthdate(), $patientModel->getId()));
                 }
@@ -1144,37 +1139,6 @@ class Form_CareController extends ZendX_Controller_Action
         $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
     }
     
-    
-    public function checkIfFilledAccess()
-    {
-       return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "view");
-    }
-    
-    public function checkIfFilledAction()
-    {
-        $patientId = $this->_getParam('patient_id');
-        $pharmacyId = $this->_getParam('pharmacy_id');
-        $dateOfVisit = $this->_getParam('date_of_visit');
-        
-        $o = new stdClass();
-        $o->success = false;
-        $o->form_already_filled = false;
-    
-        try {
-            $obj = TrustCare_Model_FrmCare::findByPharmacyIdPatientIdAndDateOfVisit($pharmacyId, $patientId, $dateOfVisit);
-            if(!is_null($obj)) {
-                $o->form_already_filled = true;
-                $o->form_id = $obj->getId();
-            }
-            $o->success = true;
-        }
-        catch(Exception $ex) {
-    
-        }
-    
-    
-        $this->_helper->json($o);
-    }
     
 }
 
