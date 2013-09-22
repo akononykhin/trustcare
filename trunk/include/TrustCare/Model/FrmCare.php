@@ -9,6 +9,8 @@
 class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
 {
     protected $_id;
+    protected $_generation_date;
+    protected $_is_commited;
     protected $_id_pharmacy;
     protected $_id_patient;
     protected $_date_of_visit;
@@ -30,6 +32,19 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     protected $_is_nafdac_adr_filled;
     protected $_is_patient_younger_15;
     protected $_is_patient_male;
+    protected $_id_nafdac;
+    
+    public function __construct($options = array()) {
+        parent::__construct($options);
+        $this->_logObjectChanges = false;
+    
+        if(is_null($this->getId())) {
+            if(!is_array($options) || !array_key_exists('generation_date', $options)) {
+                $this->_generation_date = ZendX_Db_Table_Abstract::LABEL_NOW;
+            }
+        }
+    }
+    
     
     /**
      * @param  int $value 
@@ -50,6 +65,45 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
         return $this->_id;
     }
 
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setGenerationDate($value)
+    {
+        $this->_parameterChanged('generation_date', $value);
+        $this->_generation_date = (string) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getGenerationDate()
+    {
+        return $this->_generation_date;
+    }
+    
+    
+    /**
+     * @param  bool $value
+     * @return TrustCare_Model_FrmCare
+     */
+    public function setIsCommited($value)
+    {
+        $this->_parameterChanged('is_commited', $value, true);
+        $this->_is_commited = !empty($value) ? true : false;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getIsCommited()
+    {
+        return !empty($this->_is_commited) ? true : false;
+    }
     
     /**
      * @param  int $value 
@@ -457,6 +511,27 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     {
         return !empty($this->_is_patient_male) ? true : false;
     }
+    
+    
+    /**
+     * @param  int $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setIdNafdac($value)
+    {
+        $this->_parameterChanged('id_nafdac', $value);
+        $this->_id_nafdac = (int) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getIdNafdac()
+    {
+        return $this->_id_nafdac;
+    }
+    
     
     public function isExists()
     {

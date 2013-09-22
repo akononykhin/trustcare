@@ -347,10 +347,12 @@ CREATE TABLE patient (
 /****************** START FRM_CARE tables ************************************************/
 CREATE TABLE frm_care (
   `id` int NOT NULL,
-  `id_pharmacy` int default NULL,
-  `id_patient` int NOT NULL,
+  `generation_date` datetime NOT NULL
   `date_of_visit` datetime NOT NULL,
   `date_of_visit_month_index` int default NULL,
+  `is_commited` bool default false,
+  `id_pharmacy` int default NULL,
+  `id_patient` int NOT NULL,
   `is_pregnant` int default 0,
   `is_receive_prescription` int,
   `is_med_error_screened` int,
@@ -368,7 +370,7 @@ CREATE TABLE frm_care (
   `is_nafdac_adr_filled` int,
   `is_patient_younger_15` int default NULL,
   `is_patient_male` int default NULL,
-  UNIQUE KEY `cons_frm_care_1` (`id_pharmacy`, `id_patient`, `date_of_visit`),
+  `id_nafdac` int default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -751,6 +753,11 @@ alter table frm_care
     add constraint fk_frm_care_adr_severity_id foreign key (adr_severity_id)
         references pharmacy_dictionary(id) on delete set NULL;
 
+alter table frm_care
+    add constraint fk_frm_care_id_nafdac foreign key (id_nafdac)
+        references nafdac(id) on delete set NULL;
+
+
 
 
 alter table frm_community
@@ -1021,4 +1028,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130916, 3);
+insert into db_version values (1, 20130922, 3);
