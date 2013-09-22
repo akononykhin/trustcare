@@ -150,28 +150,6 @@ class TestOfFrmCare extends UnitTestCase {
         $this->assertNull($model, "This entity must not be loaded");
     }
 
-    
-    function testLoadExistingByPharmacyIdPatientIdAndDateOfVisit()
-    {
-        $model = TrustCare_Model_FrmCare::findByPharmacyIdPatientIdAndDateOfVisit($this->paramsAtDb['id_pharmacy'], $this->paramsAtDb['id_patient'], $this->paramsAtDb['date_of_visit'], array('mapperOptions' => array('adapter' => $this->db)));
-    
-        $this->_compareObjectAndParams($model, $this->paramsAtDb);
-    }
-    
-    
-    function testLoadUnExistingByPharmacyIdPatientIdAndDateOfVisit()
-    {
-        $model = TrustCare_Model_FrmCare::findByPharmacyIdPatientIdAndDateOfVisit($this->paramsAtDb['id_pharmacy'] * -1, $this->paramsAtDb['id_patient'], $this->paramsAtDb['date_of_visit'], array('mapperOptions' => array('adapter' => $this->db)));
-        $this->assertNull($model, "This entity must not be loaded");
-
-        $model = TrustCare_Model_FrmCare::findByPharmacyIdPatientIdAndDateOfVisit($this->paramsAtDb['id_pharmacy'], $this->paramsAtDb['id_patient'] * -1, $this->paramsAtDb['date_of_visit'], array('mapperOptions' => array('adapter' => $this->db)));
-        $this->assertNull($model, "This entity must not be loaded");
-
-        $model = TrustCare_Model_FrmCare::findByPharmacyIdPatientIdAndDateOfVisit($this->paramsAtDb['id_pharmacy'], $this->paramsAtDb['id_patient'], '1970-01-01', array('mapperOptions' => array('adapter' => $this->db)));
-        $this->assertNull($model, "This entity must not be loaded");
-    }
-    
-
     function testSaveNew() {
         $params = array(
                 'generation_date' => '2012-09-01 11:23:45',

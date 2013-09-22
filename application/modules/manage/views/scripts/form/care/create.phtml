@@ -22,205 +22,160 @@ a {
 </style>
 
 <script type="text/javascript" charset="utf-8">
-	var g_selectedPharmacy = '<?php echo $this->idPharmacy?>';
+    var g_selectedPharmacy = '<?php echo $this->idPharmacy?>';
 <?php foreach($this->dictEntities as $key=>$values) :?>
     dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) echo join(" , ", $values);?>]);
 <?php endforeach; ?>
 
 
-    function checkIsAlreadyFilled() {
+    function checkIsMale() {
         $.ajax( {
              type: "POST"
-            ,url: internalAddress.formCareIsAlreadyFilled()
+            ,url: internalAddress.patientCheckIsMale()
             ,data: {
-                 patient_id: $("#id_patient").val()
-                ,pharmacy_id: $("#id_pharmacy option:selected").val()
-                ,date_of_visit:  $('#date_of_visit').val()
+                id: $("#id_patient").val()
             }
             ,success: function(data) {
                 if(!data || !data.success) {
                     return;
                 }
-                if(data.form_already_filled) {
-                    var formId = data.form_id;
-                    
-                    var dlgHtml = "<div><span class='ui-icon ui-icon-alert' style='float: left; margin: 0 7px 20px 0;'></span>" +
-                    i18n.translate("Such form has already been filled.") + '<br/>' +
-                    i18n.translate("If You want to modify existing form press Yes. If You want to fill new form and replace old one please press No.") +
-                    "</div>";
-                
-                    $(dlgHtml).dialog({
-                        modal: true
-                       ,dialogClass: 'alert'
-                       ,title: i18n.translate("Warning")
-                       ,width: 550
-                       ,buttons: [{
-                           text: i18n.translate("Yes")
-                           ,click: function() {
-                               $(location).attr('href', internalAddress.formCareEdit(formId));
-                           }
-                       }
-                       ,{ 
-                           text: i18n.translate("No")
-                           ,click: function() {
-                               $(this).dialog( "close" );
-                           }
-                       }]
-                   });
+                if(0 != data.is_male) {
+                    $('input[name = "is_pregnant"]').attr("disabled", 'disabled');
+                    $('#is_pregnant_0').attr('checked', 'checked');
                 }
-            }
-        }); 
-    }
-
-    function checkIsMale() {
-        $.ajax( {
-             type: "POST"
-            ,url: internalAddress.patientCheckIsMale()
-	        ,data: {
-	 	        id: $("#id_patient").val()
-	 	    }
-            ,success: function(data) {
-	            if(!data || !data.success) {
-	                return;
-	            }
-	            if(0 != data.is_male) {
-		            $('input[name = "is_pregnant"]').attr("disabled", 'disabled');
-		            $('#is_pregnant_0').attr('checked', 'checked');
-	            }
-	            else {
-		            $('input[name = "is_pregnant"]').removeAttr("disabled");
-	            }
+                else {
+                    $('input[name = "is_pregnant"]').removeAttr("disabled");
+                }
             }
         }); 
     }
 
     function checkOnChangePatient() {
         checkIsMale();
-        checkIsAlreadyFilled();
     }
     
-	function checkIsMedErrorScreened()
-	{
-		if(0 == $('input:radio[name=is_med_error_screened]:checked').val()) {
+    function checkIsMedErrorScreened()
+    {
+        if(0 == $('input:radio[name=is_med_error_screened]:checked').val()) {
             $('input[name = "is_med_error_identified"]').attr("disabled", 'disabled');
             $('#is_med_error_identified_0').attr('checked', 'checked');
-		}
-		else {
+        }
+        else {
             $('input[name = "is_med_error_identified"]').removeAttr("disabled");
-		}
-		checkIsMedErrorIdentified();
-	}
+        }
+        checkIsMedErrorIdentified();
+    }
 
-	function checkIsMedErrorIdentified()
-	{
-		if(0 == $('input:radio[name=is_med_error_identified]:checked').val()) {
-			$('#row_med_error_type').hide();
-		}
-		else {
-			$('#row_med_error_type').show();
-		}
-	}
+    function checkIsMedErrorIdentified()
+    {
+        if(0 == $('input:radio[name=is_med_error_identified]:checked').val()) {
+            $('#row_med_error_type').hide();
+        }
+        else {
+            $('#row_med_error_type').show();
+        }
+    }
 
-	function checkIsMedAdhProblemScreened()
-	{
-		if(0 == $('input:radio[name=is_med_adh_problem_screened]:checked').val()) {
+    function checkIsMedAdhProblemScreened()
+    {
+        if(0 == $('input:radio[name=is_med_adh_problem_screened]:checked').val()) {
             $('input[name = "is_med_adh_problem_identified"]').attr("disabled", 'disabled');
             $('#is_med_adh_problem_identified_0').attr('checked', 'checked');
-		}
-		else {
+        }
+        else {
             $('input[name = "is_med_adh_problem_identified"]').removeAttr("disabled");
-		}
-		checkIsMedAdhProblemIdentified();
-	}
+        }
+        checkIsMedAdhProblemIdentified();
+    }
 
-	function checkIsMedAdhProblemIdentified()
-	{
-		if(0 == $('input:radio[name=is_med_adh_problem_identified]:checked').val()) {
-			$('#row_med_adh_problem').hide();
-		}
-		else {
-			$('#row_med_adh_problem').show();
-		}
-	}
+    function checkIsMedAdhProblemIdentified()
+    {
+        if(0 == $('input:radio[name=is_med_adh_problem_identified]:checked').val()) {
+            $('#row_med_adh_problem').hide();
+        }
+        else {
+            $('#row_med_adh_problem').show();
+        }
+    }
 
-	function checkIsMedErrorInterventionProvided()
-	{
-		if(0 == $('input:radio[name=is_med_error_intervention_provided]:checked').val()) {
-			$('#row_med_error_intervention').hide();
-		}
-		else {
-			$('#row_med_error_intervention').show();
-		}
-	}
-	
-	function checkIsAdhInterventionProvided()
-	{
-		if(0 == $('input:radio[name=is_adh_intervention_provided]:checked').val()) {
-			$('#row_adh_intervention').hide();
-		}
-		else {
-			$('#row_adh_intervention').show();
-		}
-	}
-	
-	function checkIsAdrScreened()
-	{
-		if(0 == $('input:radio[name=is_adr_screened]:checked').val()) {
+    function checkIsMedErrorInterventionProvided()
+    {
+        if(0 == $('input:radio[name=is_med_error_intervention_provided]:checked').val()) {
+            $('#row_med_error_intervention').hide();
+        }
+        else {
+            $('#row_med_error_intervention').show();
+        }
+    }
+    
+    function checkIsAdhInterventionProvided()
+    {
+        if(0 == $('input:radio[name=is_adh_intervention_provided]:checked').val()) {
+            $('#row_adh_intervention').hide();
+        }
+        else {
+            $('#row_adh_intervention').show();
+        }
+    }
+    
+    function checkIsAdrScreened()
+    {
+        if(0 == $('input:radio[name=is_adr_screened]:checked').val()) {
             $('input[name = "is_adr_symptoms"]').attr("disabled", 'disabled');
             $('#is_adr_symptoms_0').attr('checked', 'checked');
-		}
-		else {
+        }
+        else {
             $('input[name = "is_adr_symptoms"]').removeAttr("disabled");
-		}
-		checkIsAdrSymptoms();
-	}
+        }
+        checkIsAdrSymptoms();
+    }
 
-	function checkIsAdrSymptoms()
-	{
-		if(0 == $('input:radio[name=is_adr_symptoms]:checked').val()) {
-			$('#row_adr_severity_id').hide();
-		}
-		else {
-			$('#row_adr_severity_id').show();
-		}
-	}
+    function checkIsAdrSymptoms()
+    {
+        if(0 == $('input:radio[name=is_adr_symptoms]:checked').val()) {
+            $('#row_adr_severity_id').hide();
+        }
+        else {
+            $('#row_adr_severity_id').show();
+        }
+    }
 
-	function checkIsAdrInterventionProvided()
-	{
-		if(0 == $('input:radio[name=is_adr_intervention_provided]:checked').val()) {
-			$('#row_adr_intervention').hide();
-		}
-		else {
-			$('#row_adr_intervention').show();
-		}
-	}
-	
+    function checkIsAdrInterventionProvided()
+    {
+        if(0 == $('input:radio[name=is_adr_intervention_provided]:checked').val()) {
+            $('#row_adr_intervention').hide();
+        }
+        else {
+            $('#row_adr_intervention').show();
+        }
+    }
+    
 
-	function checkAdrStopDate()
-	{
-		var val = $('#adr_stop_date').val();
-		if('' == val || '<?php echo $textForEmptyAdrStopDate;?>' == val) {
-			$('#adr_stop_date').val('<?php echo $textForEmptyAdrStopDate;?>');
-			$('#adr_stop_date').css('color', '#e6e6e6');
-		}
-		else {
-			$('#adr_stop_date').css('color', '#000000');
-		}
-	}
-	
-	$(document).ready(function() {
-		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+    function checkAdrStopDate()
+    {
+        var val = $('#adr_stop_date').val();
+        if('' == val || '<?php echo $textForEmptyAdrStopDate;?>' == val) {
+            $('#adr_stop_date').val('<?php echo $textForEmptyAdrStopDate;?>');
+            $('#adr_stop_date').css('color', '#e6e6e6');
+        }
+        else {
+            $('#adr_stop_date').css('color', '#000000');
+        }
+    }
+    
+    $(document).ready(function() {
+        internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
 
-		i18n.init({
-		    resGetPath: internalAddress.loadI18nDict()
-		    ,dynamicLoad: true 
-		    ,getAsync: false
-		    ,lng: '<?php echo Zend_Registry::get('Zend_Locale');?>'
-		    ,ns: 'js_resources'
-		    ,fallbackLng: false
-		});
-		
-		var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy');
+        i18n.init({
+            resGetPath: internalAddress.loadI18nDict()
+            ,dynamicLoad: true 
+            ,getAsync: false
+            ,lng: '<?php echo Zend_Registry::get('Zend_Locale');?>'
+            ,ns: 'js_resources'
+            ,fallbackLng: false
+        });
+        
+        var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy');
 <?php if ($this->allow_create_pharmacy) : ?>
         pharmacyCtrl.configureAddLink('link-add-pharmacy');
 <?php endif;?>     
@@ -232,50 +187,50 @@ a {
         patientCtrl.checkOnChangePatient = checkOnChangePatient;
 
         dictEntitiesCtrl.init();
-	    dictEntitiesCtrl.addCtrl('med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
-	    dictEntitiesCtrl.addCtrl('med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
-	    dictEntitiesCtrl.addCtrl('med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
-	    dictEntitiesCtrl.addCtrl('adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
-	    dictEntitiesCtrl.addCtrl('med_error_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME;?>');
-	    dictEntitiesCtrl.addCtrl('adh_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
-	    dictEntitiesCtrl.addCtrl('adr_severity_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_SEVERITY_GRADE;?>');
-	    dictEntitiesCtrl.addCtrl('suspected_adr_hepatic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
-	    dictEntitiesCtrl.addCtrl('suspected_adr_nervous', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
-	    dictEntitiesCtrl.addCtrl('suspected_adr_cardiovascular', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
-	    dictEntitiesCtrl.addCtrl('suspected_adr_skin', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
-	    dictEntitiesCtrl.addCtrl('suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
-	    dictEntitiesCtrl.addCtrl('suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
-	    dictEntitiesCtrl.addCtrl('suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
-	    dictEntitiesCtrl.addCtrl('adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
+        dictEntitiesCtrl.addCtrl('med_error_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ERROR_TYPE;?>');
+        dictEntitiesCtrl.addCtrl('med_adh_problem', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MEDICATION_ADH_PROBLEM;?>');
+        dictEntitiesCtrl.addCtrl('med_error_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_PROVIDED;?>');
+        dictEntitiesCtrl.addCtrl('adh_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_PROVIDED;?>');
+        dictEntitiesCtrl.addCtrl('med_error_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MED_ERROR_INTERVENTION_OUTCOME;?>');
+        dictEntitiesCtrl.addCtrl('adh_intervention_outcome', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADH_INTERVENTION_OUTCOME;?>');
+        dictEntitiesCtrl.addCtrl('adr_severity_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_SEVERITY_GRADE;?>');
+        dictEntitiesCtrl.addCtrl('suspected_adr_hepatic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HEPATIC;?>');
+        dictEntitiesCtrl.addCtrl('suspected_adr_nervous', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_NERVOUS;?>');
+        dictEntitiesCtrl.addCtrl('suspected_adr_cardiovascular', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_CARDIOVASCULAR;?>');
+        dictEntitiesCtrl.addCtrl('suspected_adr_skin', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_SKIN;?>');
+        dictEntitiesCtrl.addCtrl('suspected_adr_metabolic', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_METABOLIC;?>');
+        dictEntitiesCtrl.addCtrl('suspected_adr_musculoskeletal', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL;?>');
+        dictEntitiesCtrl.addCtrl('suspected_adr_general', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL;?>');
+        dictEntitiesCtrl.addCtrl('adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE;?>');
         
-    	$('#main_form').submit(function() {
-        	if(!$("#id_pharmacy option:selected").val()) {
-            	alert('<?php echo $this->translate(_("Necessary to choose pharmacy"));?>');
-            	$("#id_pharmacy").focus();
-            	return false;
-        	}
-        	if(!$("#patient_name").val()) {
-            	alert('<?php echo $this->translate(_("Necessary to choose patient"));?>');
-            	$("#patient_name").focus();
-            	return false;
-        	}
-        	if($("#patient_name").val() && !$("#id_patient").val()) {
-            	alert('<?php echo $this->translate(_("Unknown patient"));?>');
-            	$("#patient_name").focus();
-            	return false;
-        	}
-        	if(!$('#date_of_visit').val()) {
-            	alert('<?php echo $this->translate(_("Necessary to enter date of visit"));?>');
-            	$("#date_of_visit").focus();
-            	return false;
-        	}
-        	if('<?php echo $textForEmptyAdrStopDate?>' == $('#adr_stop_date').val()) {
-        		$('#adr_stop_date').val('');
-        	}
-        	return true;
-	    });
-	    
-	    
+        $('#main_form').submit(function() {
+            if(!$("#id_pharmacy option:selected").val()) {
+                alert('<?php echo $this->translate(_("Necessary to choose pharmacy"));?>');
+                $("#id_pharmacy").focus();
+                return false;
+            }
+            if(!$("#patient_name").val()) {
+                alert('<?php echo $this->translate(_("Necessary to choose patient"));?>');
+                $("#patient_name").focus();
+                return false;
+            }
+            if($("#patient_name").val() && !$("#id_patient").val()) {
+                alert('<?php echo $this->translate(_("Unknown patient"));?>');
+                $("#patient_name").focus();
+                return false;
+            }
+            if(!$('#date_of_visit').val()) {
+                alert('<?php echo $this->translate(_("Necessary to enter date of visit"));?>');
+                $("#date_of_visit").focus();
+                return false;
+            }
+            if('<?php echo $textForEmptyAdrStopDate?>' == $('#adr_stop_date').val()) {
+                $('#adr_stop_date').val('');
+            }
+            return true;
+        });
+        
+        
 
 /*** START Bind of OnChange ***/        
         $('input[name = "is_med_error_screened"]').bind('change', function(){
@@ -291,10 +246,10 @@ a {
             checkIsMedAdhProblemIdentified();
         });
         $('input[name = "is_med_error_intervention_provided"]').bind('change', function(){
-        	checkIsMedErrorInterventionProvided();
+            checkIsMedErrorInterventionProvided();
         });
         $('input[name = "is_adh_intervention_provided"]').bind('change', function(){
-        	checkIsAdhInterventionProvided();
+            checkIsAdhInterventionProvided();
         });
         $('input[name = "is_adr_screened"]').bind('change', function(){
             checkIsAdrScreened();
@@ -303,15 +258,9 @@ a {
             checkIsAdrSymptoms();
         });
         $('input[name = "is_adr_intervention_provided"]').bind('change', function(){
-        	checkIsAdrInterventionProvided();
+            checkIsAdrInterventionProvided();
         });
         
-        $('#id_pharmacy').bind('change', function(){
-            checkIsAlreadyFilled();
-        });
-        $('#date_of_visit').bind('change', function(){
-            checkIsAlreadyFilled();
-        });
         /*** END Bind of OnChange ***/        
         
         checkIsMedErrorScreened();
@@ -324,9 +273,9 @@ a {
         $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
         $("#adr_start_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
         $("#adr_stop_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
-	    $("#adr_stop_date").bind('change', function(){
-	        checkAdrStopDate();
-	    });
+        $("#adr_stop_date").bind('change', function(){
+            checkAdrStopDate();
+        });
         checkAdrStopDate();
 
     });

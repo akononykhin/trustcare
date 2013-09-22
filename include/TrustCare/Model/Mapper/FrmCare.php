@@ -168,35 +168,6 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
 
     
     /**
-     * @param  int $patientId
-     * @param string $dateOfVisit Date of visit (YYYY-MM-DD)
-     * @param  TrustCare_Model_FrmCare $model
-     * @return void
-     */
-    public function findByPharmacyIdPatientIdAndDateOfVisit($pharmacyId, $patientId, $dateOfVisit, TrustCare_Model_FrmCare $model)
-    {
-        $query = sprintf("
-            select
-                *,
-                date_format(generation_date, '%%Y-%%m-%%d %%H:%%i:%%s') as generation_date_formatted,
-                date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit_formatted,
-                date_format(adr_start_date, '%%Y-%%m-%%d') as adr_start_date_formatted,
-                date_format(adr_stop_date, '%%Y-%%m-%%d') as adr_stop_date_formatted
-            from %s
-            where id_pharmacy=%d and id_patient=%d and date_of_visit=str_to_date('%s', '%%Y-%%m-%%d');", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), $pharmacyId, $patientId, $dateOfVisit);
-    
-        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
-        $result = $this->getDbAdapter()->fetchAll($query);
-        if (0 == count($result)) {
-            return false;
-        }
-        $row = $result[0];
-        $this->_fillModelForFind($model, $row);
-    
-        return true;
-    }
-    
-    /**
      * 
      * Get the number of forms generated for specified patient
      * @param int $patientId
