@@ -1,18 +1,18 @@
 var patientCtrl = {
-	 idDlgAddPatient: 'dialog-add-patient'
-	,idHidden: undefined
-	,idText: undefined
-	,newDlg: undefined
-	
+     idDlgAddPatient: 'dialog-add-patient'
+    ,idHidden: undefined
+    ,idText: undefined
+    ,newDlg: undefined
+    
     ,init: function(idHidden, idText) {
-    	this.idHidden = '#' + idHidden;
+        this.idHidden = '#' + idHidden;
         this.idText = '#' + idText;
-    	
+        
         $(this.idText).autocomplete({
             source:     internalAddress.patientArray()
             ,delay:     300
             ,focus: function(event, ui ) {
-                $(patientCtrl.idText).val(ui.item.label);
+                $(patientCtrl.idText).val('');
                 return false;
             }
             ,select: function( event, ui ) {
@@ -24,8 +24,8 @@ var patientCtrl = {
                 return false;
             }
         });
-    	
-    	
+        
+        
         this.newDlg = $("<div id='" + this.idDlgAddPatient + "'></div>").dialog({
             dialogClass: 'dialog-content'
            ,title: i18n.translate("Add Patient")
