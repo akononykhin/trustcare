@@ -34,6 +34,9 @@ class TestOfFrmCommunity extends UnitTestCase {
             
             $params = array(
                 'id' => $this->db->nextSequenceId('frm_community_id_seq'),
+                'generation_date' => '2012-10-01 11:23:45',
+                'id_user' => 1,
+                'is_commited' => true,
                 'id_pharmacy' => 2,
                 'id_patient' => 1,
                 'date_of_visit' => '2012-05-01',
@@ -54,6 +57,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_ovc_services' => true,
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
+                'id_nafdac' => 1,
             );
 
             $columns = array();
@@ -82,10 +86,17 @@ class TestOfFrmCommunity extends UnitTestCase {
         $query = sprintf("update db_sequence set value=1 where name='frm_community_id_seq';");
         $this->db->query($query);
         
-        $query = sprintf("delete from patient;");
+        $query = sprintf("delete from nafdac;");
         $this->db->query($query);
         
         $query = sprintf("delete from pharmacy;");
+        $this->db->query($query);
+        
+        $query = sprintf("delete from patient;");
+        $this->db->query($query);
+        
+        
+        $query = sprintf("delete from user;");
         $this->db->query($query);
     }
     
@@ -93,6 +104,9 @@ class TestOfFrmCommunity extends UnitTestCase {
     function testInitializing() {
         $params = array(
                 'id' => '1',
+                'generation_date' => '2012-09-01 11:23:45',
+                'id_user' => 2,
+                'is_commited' => false,
                 'id_pharmacy' => 2,
                 'id_patient' => 1,
                 'date_of_visit' => '2012-05-01',
@@ -113,6 +127,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_ovc_services' => false,
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
+                'id_nafdac' => 2,
                 'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -140,6 +155,9 @@ class TestOfFrmCommunity extends UnitTestCase {
 
     function testSaveNew() {
         $params = array(
+                'generation_date' => '2012-09-01 11:23:45',
+                'id_user' => 1,
+                'is_commited' => true,
                 'id_pharmacy' => 1,
         		'id_patient' => 2,
                 'date_of_visit' => '2012-07-02',
@@ -159,6 +177,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_ovc_services' => true,
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
+                'id_nafdac' => 1,
         );
         
         try {
@@ -178,11 +197,74 @@ class TestOfFrmCommunity extends UnitTestCase {
         }
     }
     
-    function testChangeParameters() {
+    
+    function testSaveWithEmptyValues()
+    {
+        /* with empty */
+        try {
+            $params = array(
+                'id_pharmacy' => 1,
+                'id_patient' => 2,
+                'date_of_visit' => '2012-07-02',
+                'id_nafdac' => ''
+            );
+            $model = new TrustCare_Model_FrmCommunity(array('mapperOptions' => array('adapter' => $this->db)));
+            $model->setOptions($params);
+            $model->save();
+    
+            $model1 = TrustCare_Model_FrmCommunity::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $this->assertNull($model1->id_nafdac, "Not NULL 'id_nafdac': %s");
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
+        }
+    
+        /* with null */
+        try {
+            $params = array(
+                'id_pharmacy' => 1,
+                'id_patient' => 2,
+                'date_of_visit' => '2012-07-02',
+                'id_nafdac' => null
+            );
+            $model = new TrustCare_Model_FrmCommunity(array('mapperOptions' => array('adapter' => $this->db)));
+            $model->setOptions($params);
+            $model->save();
+    
+            $model1 = TrustCare_Model_FrmCommunity::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $this->assertNull($model1->id_nafdac, "Not NULL 'id_nafdac': %s");
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
+        }
+    
+        /* with not specified */
+        try {
+            $params = array(
+                'id_pharmacy' => 1,
+                'id_patient' => 2,
+                'date_of_visit' => '2012-07-02',
+            );
+            $model = new TrustCare_Model_FrmCommunity(array('mapperOptions' => array('adapter' => $this->db)));
+            $model->setOptions($params);
+            $model->save();
+    
+            $model1 = TrustCare_Model_FrmCommunity::find($params['id'], array('mapperOptions' => array('adapter' => $this->db)));
+            $this->assertNull($model1->id_nafdac, "Not NULL 'id_nafdac': %s");
+        }
+        catch(Exception $ex) {
+            $this->assertTrue(false, sprintf("Can't save new entity: %s", $ex->getMessage()));
+        }
+    }
+    
+    function testChangeParameters()
+    {
         $model = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         if(!is_null($model)) {
             $dateOfVisit = '2011-03-01' == $model->date_of_visit ? '2011-04-02' : '2011-03-01';
+            $params['id_user'] = 2 == $model->id_user ? 1 : 2;
+            $params['is_commited'] = !$model->is_commited;
             $params['id_pharmacy'] = 2 == $model->id_pharmacy ? 1 : 2;
             $params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
             $params['date_of_visit'] = $dateOfVisit;
@@ -202,12 +284,14 @@ class TestOfFrmCommunity extends UnitTestCase {
             $params['is_ovc_services'] = !$model->is_ovc_services;
             $params['is_patient_younger_15'] = !$model->is_patient_younger_15;
             $params['is_patient_male'] = !$model->is_patient_male;
+            $params['id_nafdac'] = $model->id_nafdac == 1 ? 2 : 1;
             
             try {
                 $model->setOptions($params);
                 $model->save();
                 
                 $params['id'] = $model->id;
+                $params['generation_date'] = $model->generation_date;
                 if(!preg_match('/^(\d{4})-(\d{2})-\d{2}$/', $dateOfVisit, $matches)) {
                     throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
                 }
@@ -220,15 +304,43 @@ class TestOfFrmCommunity extends UnitTestCase {
                 $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
             }
 
-            
+        }
+        else {
+            $this->assertTrue(false, "Can't initialize object");
+        }
+    }
+    
+    
+    function testChangeParametersSetEmpty()
+    {
+        $model = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+    
+        if(!is_null($model)) {
+            /* Check empty values */
+            try {
+                $params = array(
+                    'htc_result_id' => '',
+                    'id_nafdac' => ''
+                );
+                $model->setOptions($params);
+                $model->save();
+    
+                $model1 = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
+                $this->assertEqual($model1->htc_result_id, $params['htc_result_id'], "Incorrect 'htc_result_id': %s");
+            }
+            catch(Exception $ex) {
+                $this->assertTrue(false, sprintf("Unexpected exception: %s", $ex->getMessage()));
+            }
+    
             /* Check null values */
             try {
                 $params = array(
                     'htc_result_id' => null,
+                    'id_nafdac' => null
                 );
                 $model->setOptions($params);
                 $model->save();
-                
+    
                 $model1 = TrustCare_Model_FrmCommunity::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
                 $this->assertEqual($model1->htc_result_id, $params['htc_result_id'], "Incorrect 'htc_result_id': %s");
             }
@@ -327,9 +439,12 @@ class TestOfFrmCommunity extends UnitTestCase {
         }
 
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
+        $this->assertEqual($model->id_user, $params['id_user'], "Incorrect 'id_user': %s");
+        $this->assertIdentical($model->is_commited, !empty($params['is_commited']) ? true : false, "Incorrect 'is_commited': %s");
         $this->assertEqual($model->id_pharmacy, $params['id_pharmacy'], "Incorrect 'id_pharmacy': %s");
         $this->assertEqual($model->id_patient, $params['id_patient'], "Incorrect 'id_patient': %s");
         if($checkTime) {
+            $this->assertEqual($model->generation_date, $params['generation_date'], "Incorrect 'generation_date': %s");
             $this->assertEqual($model->date_of_visit, $params['date_of_visit'], "Incorrect 'date_of_visit': %s");
         }
         $this->assertEqual($model->date_of_visit_month_index, $params['date_of_visit_month_index'], "Incorrect 'date_of_visit_month_index': %s");
@@ -349,6 +464,7 @@ class TestOfFrmCommunity extends UnitTestCase {
         $this->assertIdentical($model->is_ovc_services, !empty($params['is_ovc_services']) ? true : false, "Incorrect 'is_ovc_services': %s");
         $this->assertIdentical($model->is_patient_younger_15, !empty($params['is_patient_younger_15']) ? true : false, "Incorrect 'is_patient_younger_15': %s");
         $this->assertIdentical($model->is_patient_male, !empty($params['is_patient_male']) ? true : false, "Incorrect 'is_patient_male': %s");
+        $this->assertEqual($model->id_nafdac, $params['id_nafdac'], "Incorrect 'id_nafdac': %s");
         
     }
 }

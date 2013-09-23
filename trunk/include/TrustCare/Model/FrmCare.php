@@ -35,7 +35,8 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     protected $_is_patient_male;
     protected $_id_nafdac;
     
-    public function __construct($options = array()) {
+    public function __construct($options = array())
+    {
         parent::__construct($options);
         $this->_logObjectChanges = false;
     
