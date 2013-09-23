@@ -10,6 +10,7 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
 {
     protected $_id;
     protected $_generation_date;
+    protected $_id_user;
     protected $_is_commited;
     protected $_id_pharmacy;
     protected $_id_patient;
@@ -83,6 +84,26 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     public function getGenerationDate()
     {
         return $this->_generation_date;
+    }
+
+    
+    /**
+     * @param  int $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setIdUser($value)
+    {
+        $this->_parameterChanged('id_user', $value);
+        $this->_id_user = (int) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getIdUser()
+    {
+        return $this->_id_user;
     }
     
     

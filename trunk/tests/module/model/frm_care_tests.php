@@ -35,6 +35,7 @@ class TestOfFrmCare extends UnitTestCase {
             $params = array(
                 'id' => $this->db->nextSequenceId('frm_care_id_seq'),
                 'generation_date' => '2012-10-01 11:23:45',
+                'id_user' => 1,
                 'is_commited' => true,
                 'id_pharmacy' => 2,
             	'id_patient' => 1,
@@ -105,6 +106,7 @@ class TestOfFrmCare extends UnitTestCase {
         $params = array(
                 'id' => '1',
                 'generation_date' => '2012-09-01 11:23:45',
+                'id_user' => 2,
                 'is_commited' => false,
                 'id_pharmacy' => 2,
         		'id_patient' => 1,
@@ -153,6 +155,7 @@ class TestOfFrmCare extends UnitTestCase {
     function testSaveNew() {
         $params = array(
                 'generation_date' => '2012-09-01 11:23:45',
+                'id_user' => 1,
                 'is_commited' => true,
                 'id_pharmacy' => 1,
         		'id_patient' => 2,
@@ -260,6 +263,7 @@ class TestOfFrmCare extends UnitTestCase {
         
         if(!is_null($model)) {
             $dateOfVisit = '2011-03-01' == $model->date_of_visit ? '2011-04-02' : '2011-03-01';
+            $params['id_user'] = 2 == $model->id_user ? 1 : 2;
             $params['is_commited'] = !$model->is_commited;
             $params['id_pharmacy'] = 2 == $model->id_pharmacy ? 1 : 2;
             $params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
@@ -403,6 +407,7 @@ class TestOfFrmCare extends UnitTestCase {
         }
 
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
+        $this->assertEqual($model->id_user, $params['id_user'], "Incorrect 'id_user': %s");
         $this->assertIdentical($model->is_commited, !empty($params['is_commited']) ? true : false, "Incorrect 'is_commited': %s");
         $this->assertEqual($model->id_pharmacy, $params['id_pharmacy'], "Incorrect 'id_pharmacy': %s");
         $this->assertEqual($model->id_patient, $params['id_patient'], "Incorrect 'id_patient': %s");

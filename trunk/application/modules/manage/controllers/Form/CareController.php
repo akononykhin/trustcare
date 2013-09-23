@@ -259,6 +259,7 @@ class Form_CareController extends ZendX_Controller_Action
                 
                 $frmModel = new TrustCare_Model_FrmCare(
                     array(
+                        'id_user' => Zend_Registry::get("TrustCare_Registry_User")->getUser()->getId(),
                         'is_commited' => $isCommited,
                         'id_pharmacy' => $idPharmacy,
                     	'id_patient' => $idPatient,
