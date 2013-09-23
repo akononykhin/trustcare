@@ -500,10 +500,13 @@ CREATE TABLE frm_care_adr_intervention (
 
 CREATE TABLE frm_community (
   `id` int NOT NULL,
-  `id_pharmacy` int default NULL,
-  `id_patient` int NOT NULL,
+  `generation_date` datetime default NULL,
+  `id_user` int default NULL,
   `date_of_visit` datetime NOT NULL,
   `date_of_visit_month_index` int default NULL,
+  `is_commited` bool default false,
+  `id_pharmacy` int default NULL,
+  `id_patient` int NOT NULL,
   `is_first_visit_to_pharmacy` int default NULL,
   `is_referred_in` int,
   `is_referred_out` int,
@@ -520,6 +523,7 @@ CREATE TABLE frm_community (
   `is_ovc_services` int,
   `is_patient_younger_15` int default NULL,
   `is_patient_male` int default NULL,
+  `id_nafdac` int default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1029,4 +1033,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130923, 1);
+insert into db_version values (1, 20130923, 2);

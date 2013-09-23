@@ -38,6 +38,13 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
         $db = Zend_Registry::get("Storage")->getPersistantDb(); 
         $data['id'] = $db->nextSequenceId('frm_community_id_seq');
 
+        if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['generation_date']) {
+            $data['generation_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", gmdate("Y-m-d H:i:s")));
+        }
+        else {
+            $data['generation_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d %%H:%%i:%%s')", $data['generation_date']));
+        }
+        
         if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['date_of_visit']) {
             $dateOfVisit = gmdate("Y-m-d");
         }
@@ -49,9 +56,12 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
             throw new Exception(sprintf("Incorrect format of date_of_visit: %s", $dateOfVisit));
         }
         $data['date_of_visit_month_index'] = $matches[1].$matches[2];
-
+        
         if(array_key_exists('htc_result_id', $data) && empty($data['htc_result_id'])) {
             $data['htc_result_id'] = new Zend_Db_Expr('NULL');
+        }
+        if(!array_key_exists('id_nafdac', $data) || empty($data['id_nafdac'])) {
+            $data['id_nafdac'] = new Zend_Db_Expr('NULL');
         }
         
         return parent::insert($data);
@@ -60,7 +70,7 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
     
     public function update(array $data, $where)
     {
-        if(array_key_exists('date_of_visit', $data)) {
+            if(array_key_exists('date_of_visit', $data)) {
             if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['date_of_visit']) {
                 $dateOfVisit = gmdate("Y-m-d");
             }
@@ -73,9 +83,12 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
             }
             $data['date_of_visit_month_index'] = $matches[1].$matches[2];
         }
-
+        
         if(array_key_exists('htc_result_id', $data) && empty($data['htc_result_id'])) {
             $data['htc_result_id'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('id_nafdac', $data) && empty($data['id_nafdac'])) {
+            $data['id_nafdac'] = new Zend_Db_Expr('NULL');
         }
         
         return parent::update($data, $where);

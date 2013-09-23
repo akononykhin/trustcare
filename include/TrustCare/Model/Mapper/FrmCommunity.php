@@ -16,6 +16,15 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
     public function save(TrustCare_Model_FrmCommunity &$model)
     {
         $data = array();
+        if(!$model->isExists() || $model->isParameterChanged('generation_date')) {
+            $data['generation_date'] = $model->getGenerationDate();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('id_user')) {
+            $data['id_user'] = $model->getIdUser();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('is_commited')) {
+            $data['is_commited'] = $model->getIsCommited() ? 1 : 0;
+        }
         if(!$model->isExists() || $model->isParameterChanged('id_pharmacy')) {
             $data['id_pharmacy'] = $model->getIdPharmacy();
         }
@@ -73,6 +82,9 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         if(!$model->isExists() || $model->isParameterChanged('is_patient_male')) {
             $data['is_patient_male'] = $model->getIsPatientMale() ? 1 : 0;
         }
+        if(!$model->isExists() || $model->isParameterChanged('id_nafdac')) {
+            $data['id_nafdac'] = $model->getIdNafdac();
+        }
         
         if (null === ($id = $model->getId())) {
             unset($data['id']);
@@ -94,52 +106,17 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         }
     }
 
-    /**
-     * @param  int $id 
-     * @param  TrustCare_Model_FrmCommunity $model 
-     * @return void
-     */
-    public function find($id, TrustCare_Model_FrmCommunity $model)
+    
+    private function _fillModelForFind(TrustCare_Model_FrmCommunity $model, $row)
     {
-        $query = sprintf("
-        select
-            id,
-            id_pharmacy,
-            id_patient,
-            date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit,
-            date_of_visit_month_index,
-            is_first_visit_to_pharmacy,
-            is_referred_in,
-            is_referred_out,
-            is_referral_completed,
-            is_hiv_risk_assesment_done,
-            is_htc_done,
-            htc_result_id,
-            is_client_received_htc,
-            is_htc_done_in_current_pharmacy,
-            is_palliative_services_to_plwha,
-            is_sti_services,
-            is_reproductive_health_services,
-            is_tuberculosis_services,
-            is_ovc_services,
-            is_patient_younger_15,
-            is_patient_male
-        from %s
-        where id=?;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME));
-        
-        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
-        $result = $this->getDbAdapter()->fetchAll($query, $id);
-        if (0 == count($result)) {
-            return false;
-        }
-        $row = $result[0];
-
-
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
-              ->setIdPharmacy($row->id_pharmacy)
+              ->setGenerationDate($row->generation_date_formatted)
+              ->setIdUser($row->id_user)
+              ->setIsCommited($row->is_commited)
+            ->setIdPharmacy($row->id_pharmacy)
               ->setIdPatient($row->id_patient)
-              ->setDateOfVisit($row->date_of_visit)
+              ->setDateOfVisit($row->date_of_visit_formatted)
               ->setDateOfVisitMonthIndex($row->date_of_visit_month_index)
               ->setIsFirstVisitToPharmacy($row->is_first_visit_to_pharmacy)
               ->setIsReferredIn($row->is_referred_in)
@@ -156,8 +133,33 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
               ->setIsTuberculosisServices($row->is_tuberculosis_services)
               ->setIsOvcServices($row->is_ovc_services)
               ->setIsPatientYounger15($row->is_patient_younger_15)
-              ->setIsPatientMale($row->is_patient_male);
+              ->setIsPatientMale($row->is_patient_male)
+              ->setIdNafdac($row->id_nafdac);
         $model->setSkipTrackChanges(false);
+    }
+    
+    /**
+     * @param  int $id 
+     * @param  TrustCare_Model_FrmCommunity $model 
+     * @return void
+     */
+    public function find($id, TrustCare_Model_FrmCommunity $model)
+    {
+        $query = sprintf("
+        select
+            *,
+            date_format(generation_date, '%%Y-%%m-%%d %%H:%%i:%%s') as generation_date_formatted,
+            date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit_formatted
+        from %s
+        where id=?;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME));
+        
+        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_OBJ);
+        $result = $this->getDbAdapter()->fetchAll($query, $id);
+        if (0 == count($result)) {
+            return false;
+        }
+        $row = $result[0];
+        $this->_fillModelForFind($model, $row);
               
         return true;
     }
