@@ -291,6 +291,9 @@ class NafdacController extends ZendX_Controller_Action
             $form->getSubForm("adr")->getElement('adr_start_date')->setValue($adrStartDate);
             $form->getSubForm("adr")->getElement('adr_stop_date')->setValue($adrStopDate);
             
+            $user = Zend_Registry::get("TrustCare_Registry_User")->getUser();
+            $form->getSubForm("reporter")->getElement('reporter_name')->setValue(sprintf("%s %s", $user->getLastName(), $user->getFirstName()));
+            $form->getSubForm("reporter")->getElement('reporter_contact')->setValue($user->getPhone());
         }
         
         $this->view->form = $form;
