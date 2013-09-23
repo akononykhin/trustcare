@@ -19,6 +19,9 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('generation_date')) {
             $data['generation_date'] = $model->getGenerationDate();
         }
+        if(!$model->isExists() || $model->isParameterChanged('id_user')) {
+            $data['id_user'] = $model->getIdUser();
+        }
         if(!$model->isExists() || $model->isParameterChanged('is_commited')) {
             $data['is_commited'] = $model->getIsCommited() ? 1 : 0;
         }
@@ -112,6 +115,7 @@ class TrustCare_Model_Mapper_FrmCare extends TrustCare_Model_Mapper_Abstract
         $model->setSkipTrackChanges(true);
         $model->setId($row->id)
               ->setGenerationDate($row->generation_date_formatted)
+              ->setIdUser($row->id_user)
               ->setIsCommited($row->is_commited)
               ->setIdPharmacy($row->id_pharmacy)
               ->setIdPatient($row->id_patient)
