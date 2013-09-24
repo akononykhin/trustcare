@@ -153,7 +153,9 @@ class TestOfFrmCareSuspectedAdrMetabolic extends UnitTestCase {
     function testLoadAllForFrmCare() {
         /* clean rows */
         $model = TrustCare_Model_FrmCareSuspectedAdrMetabolic::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-        $model->delete();
+        if(!is_null($model)) {
+            $model->delete();
+        }
 
         $id_frm_care = 2;
         $samples = array();
@@ -223,6 +225,9 @@ class TestOfFrmCareSuspectedAdrMetabolic extends UnitTestCase {
         $model = TrustCare_Model_FrmCareSuspectedAdrMetabolic::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
         
         try {
+            if(is_null($model)) {
+                throw new Exception("Entity not found");
+            }
             $model->delete();
             
             $model1 = TrustCare_Model_FrmCareSuspectedAdrMetabolic::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
@@ -233,10 +238,12 @@ class TestOfFrmCareSuspectedAdrMetabolic extends UnitTestCase {
         }
     }
     
-        function testReplaceForFrmCare() {
+    function testReplaceForFrmCare() {
         /* clean rows */
         $model = TrustCare_Model_FrmCareSuspectedAdrMetabolic::find($this->paramsAtDb['id'], array('mapperOptions' => array('adapter' => $this->db)));
-        $model->delete();
+        if(!is_null($model)) {
+            $model->delete();
+        }
     
         $frmCareId = 2;
         $currentDictIds = array(1,2,4,7);
