@@ -1,8 +1,6 @@
 <?php
 $this->headScript()->appendFile('/js/internalAddress.js');
 $this->headScript()->appendFile('/js/pageAsDlg.js');
-$this->headScript()->appendFile('/js/pharmacyCtrl.js');
-$this->headScript()->appendFile('/js/patientCtrl.js');
 $this->headScript()->appendFile('/js/dictEntitiesCtrl.js');
 $this->headScript()->appendFile('/js/jquery/plugin/showLoading/jquery.showLoading.min.js');
 $this->headScript()->appendFile('/js/jquery/plugin/contextMenu/jquery.ui.position.js');
@@ -22,114 +20,102 @@ a {
 </style>
 
 <script type="text/javascript" charset="utf-8">
-var g_selectedPharmacy = '<?php echo $this->idPharmacy?>';
-var g_dictEntities = new Array();
 <?php foreach($this->dictEntities as $key=>$values) :?>
-    g_dictEntities[<?php echo $key;?>] = [<?php if(is_array($values)) echo join(" , ", $values);?>];
+dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) echo join(" , ", $values);?>]);
 <?php endforeach; ?>
 
-	function checkIsReferredIn()
-	{
-		if(0 == $('input:radio[name=is_referred_in]:checked').val()) {
-			$('#row_referred_in').hide();
-		}
-		else {
-			$('#row_referred_in').show();
-		}
-	}
+    function checkIsReferredIn()
+    {
+        if(0 == $('input:radio[name=is_referred_in]:checked').val()) {
+            $('#row_referred_in').hide();
+        }
+        else {
+            $('#row_referred_in').show();
+        }
+    }
 
-	function checkIsReferredOut()
-	{
-		if(0 == $('input:radio[name=is_referred_out]:checked').val()) {
-			$('#row_referred_out').hide();
-		}
-		else {
-			$('#row_referred_out').show();
-		}
-	}
+    function checkIsReferredOut()
+    {
+        if(0 == $('input:radio[name=is_referred_out]:checked').val()) {
+            $('#row_referred_out').hide();
+        }
+        else {
+            $('#row_referred_out').show();
+        }
+    }
 
-	function checkIsHtcDone()
-	{
-		if(0 == $('input:radio[name=is_htc_done]:checked').val()) {
-			$('#row_htc_result_id').hide();
-		}
-		else {
-			$('#row_htc_result_id').show();
-		}
-	}
+    function checkIsHtcDone()
+    {
+        if(0 == $('input:radio[name=is_htc_done]:checked').val()) {
+            $('#row_htc_result_id').hide();
+        }
+        else {
+            $('#row_htc_result_id').show();
+        }
+    }
 
-	function checkIsPalliativeServicesToPlwha()
-	{
-		if(0 == $('input:radio[name=is_palliative_services_to_plwha]:checked').val()) {
-			$('#row_palliative_care_type').hide();
-		}
-		else {
-			$('#row_palliative_care_type').show();
-		}
-	}
+    function checkIsPalliativeServicesToPlwha()
+    {
+        if(0 == $('input:radio[name=is_palliative_services_to_plwha]:checked').val()) {
+            $('#row_palliative_care_type').hide();
+        }
+        else {
+            $('#row_palliative_care_type').show();
+        }
+    }
 
-	function checkIsStiServices()
-	{
-		if(0 == $('input:radio[name=is_sti_services]:checked').val()) {
-			$('#row_sti_type').hide();
-		}
-		else {
-			$('#row_sti_type').show();
-		}
-	}
-	
-	function checkIsReproductiveHealthServices()
-	{
-		if(0 == $('input:radio[name=is_reproductive_health_services]:checked').val()) {
-			$('#row_reproductive_health_type').hide();
-		}
-		else {
-			$('#row_reproductive_health_type').show();
-		}
-	}
+    function checkIsStiServices()
+    {
+        if(0 == $('input:radio[name=is_sti_services]:checked').val()) {
+            $('#row_sti_type').hide();
+        }
+        else {
+            $('#row_sti_type').show();
+        }
+    }
+    
+    function checkIsReproductiveHealthServices()
+    {
+        if(0 == $('input:radio[name=is_reproductive_health_services]:checked').val()) {
+            $('#row_reproductive_health_type').hide();
+        }
+        else {
+            $('#row_reproductive_health_type').show();
+        }
+    }
 
-	function checkIsTuberculosisServices()
-	{
-		if(0 == $('input:radio[name=is_tuberculosis_services]:checked').val()) {
-			$('#row_tuberculosis_type').hide();
-		}
-		else {
-			$('#row_tuberculosis_type').show();
-		}
-	}
+    function checkIsTuberculosisServices()
+    {
+        if(0 == $('input:radio[name=is_tuberculosis_services]:checked').val()) {
+            $('#row_tuberculosis_type').hide();
+        }
+        else {
+            $('#row_tuberculosis_type').show();
+        }
+    }
 
-	function checkIsOvcServices()
-	{
-		if(0 == $('input:radio[name=is_ovc_services]:checked').val()) {
-			$('#row_ovc_type').hide();
-		}
-		else {
-			$('#row_ovc_type').show();
-		}
-	}
+    function checkIsOvcServices()
+    {
+        if(0 == $('input:radio[name=is_ovc_services]:checked').val()) {
+            $('#row_ovc_type').hide();
+        }
+        else {
+            $('#row_ovc_type').show();
+        }
+    }
 
     $(document).ready(function() {
-		internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+        internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
 
-		i18n.init({
-		    resGetPath: internalAddress.loadI18nDict()
-		    ,dynamicLoad: true 
-		    ,getAsync: false
-		    ,lng: '<?php echo Zend_Registry::get('Zend_Locale');?>'
-		    ,ns: 'js_resources'
-		    ,fallbackLng: false
-		});
-		
-		var newPharmacyDlg = pharmacyCtrl.init('id_pharmacy');
-<?php if ($this->allow_create_pharmacy) : ?>
-        pharmacyCtrl.configureAddLink('link-add-pharmacy');
-<?php endif;?>     
-
-        var newPatientDlg = patientCtrl.init('id_patient', 'patient_name');
-<?php if ($this->allow_create_patient) : ?>
-        patientCtrl.configureAddLink('link-add-patient');
-<?php endif;?>
-
+        i18n.init({
+            resGetPath: internalAddress.loadI18nDict()
+            ,dynamicLoad: true 
+            ,getAsync: false
+            ,lng: '<?php echo Zend_Registry::get('Zend_Locale');?>'
+            ,ns: 'js_resources'
+            ,fallbackLng: false
+        });
+        
         dictEntitiesCtrl.init();
         dictEntitiesCtrl.addCtrl('referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
         dictEntitiesCtrl.addCtrl('referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
@@ -140,40 +126,17 @@ var g_dictEntities = new Array();
         dictEntitiesCtrl.addCtrl('tuberculosis_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
         dictEntitiesCtrl.addCtrl('ovc_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
 
-    	$('#main_form').submit(function() {
-        	if(!$("#id_pharmacy option:selected").val()) {
-            	alert('<?php echo $this->translate(_("Necessary to choose pharmacy"));?>');
-            	$("#id_pharmacy").focus();
-            	return false;
-        	}
-        	if(!$("#patient_name").val()) {
-            	alert('<?php echo $this->translate(_("Necessary to choose patient"));?>');
-            	$("#patient_name").focus();
-            	return false;
-        	}
-        	if($("#patient_name").val() && !$("#id_patient").val()) {
-            	alert('<?php echo $this->translate(_("Unknown patient"));?>');
-            	$("#patient_name").focus();
-            	return false;
-        	}
-        	if(!$('#date_of_visit').val()) {
-            	alert('<?php echo $this->translate(_("Necessary to enter date of visit"));?>');
-            	$("#date_of_visit").focus();
-            	return false;
-        	}
-        	if('<?php echo $textForEmptyAdrStopDate?>' == $('#adr_stop_date').val()) {
-        		$('#adr_stop_date').val('');
-        	}
+        $('#main_form').submit(function() {
             if('1' == $("#is_commited option:selected").val()) {
                 if(window.confirm(i18n.translate("Do You want to fill NAFDAC form at next step?"))) {
                     $('#id_generate_nafdac_form').val('1');
                 }
             }
-        	
-        	return true;
-	    });
+            
+            return true;
+        });
 
-	    
+        
 
 /*** START Bind of OnChange ***/        
         $('input[name = "is_referred_in"]').bind('change', function(){
@@ -211,61 +174,39 @@ var g_dictEntities = new Array();
         checkIsTuberculosisServices();
         checkIsOvcServices();
         
-        $("#date_of_visit").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
 });
-</script>	
+</script>   
 
 
 <?php if(!empty($this->error)) : ?>
 <div class="form_errors"><?php echo $this->error;?></div>
 <?php endif;?>
-<form id="main_form" class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'create'));?>">
+<form id="main_form" class="zend_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url(array('action' => 'edit'));?>">
 <input type="hidden" name="generate_nafdac_form" id="id_generate_nafdac_form" value="0"/>
 <div class="tab_header"><?php echo $this->translate(_("General Tab"));?></div>
 <div class="tab_content">
  <table class="zend_form">
   <tr>
-   <td valign="top"><div class="required"><label for="id_pharmacy"><?php echo $this->translate(_("Pharmacy"));?></label></div></td>
-   <td>
-     <select name="id_pharmacy" id="id_pharmacy">
-        <option value=''></option>
-<?php
-    foreach($this->pharmacies as $key=>$value) {
-        $selectedStr = ($key == $this->idPharmacy) ? 'selected' : '';
-        printf("<option value='%s' %s>%s</option>", $key, $selectedStr, $value);
-    }
-?>     
-     </select>&nbsp;
-<?php if ($this->allow_create_pharmacy) : ?>
-     <a id="link-add-pharmacy" href="#"><?php echo $this->translate(_("Add Pharmacy"));?></a>
-<?php endif;?>     
-   </td>
+   <td valign="top"><div class="required"><?php echo $this->translate(_("Pharmacy"));?></div></td>
+   <td><?php echo $this->pharmacyName;?></td>
   </tr>
   <tr>
-   <td valign="top"><div class="required"><label for="id_patient"><?php echo $this->translate(_("Patient"));?></label></div></td>
-   <td>
-     <input type="hidden" name="id_patient" id="id_patient" value="<?php echo $this->id_patient?>" />
-     <input type="text" size="32" name="patient_name" id="patient_name" value="<?php echo $this->patientName;?>">&nbsp;     
-<?php if ($this->allow_create_patient) : ?>
-     <a id="link-add-patient" href="#"><?php echo $this->translate(_("Add Patient"));?></a>
-<?php endif;?>     
-   </td>
+   <td valign="top"><div class="required"><?php echo $this->translate(_("Patient"));?></div></td>
+   <td><?php echo $this->patientModel->showNameAs();?></td>
   </tr>
   <tr>
-   <td valign="top"><div class="required"><label for="date_of_visit"><?php echo $this->translate(_("Date of Visit"));?></label></div></td>
-   <td>
-     <input type="text" name="date_of_visit" id="date_of_visit" value="<?php echo $this->dateOfVisit;?>">     
-   </td>
+   <td valign="top"><div class="required"><?php echo $this->translate(_("Date of Visit"));?></div></td>
+   <td><?php echo $this->formModel->getDateOfVisit();?></td>
   </tr>
   <tr>
    <td valign="top"><div class="normal"><label for="is_commited"><?php echo $this->translate(_("Save Form as"));?></label></div></td>
    <td>
      <select name="is_commited" id="is_commited">
-        <option value='0'><?php echo $this->translate(_("Draft"));?></option>
-        <option value='1'><?php echo $this->translate(_("Final Result"));?></option>
+        <option value='0' <?php if(!$this->formModel->getIsCommited()) { echo 'selected';} ?>><?php echo $this->translate(_("Draft"));?></option>
+        <option value='1' <?php if($this->formModel->getIsCommited()) { echo 'selected';} ?>><?php echo $this->translate(_("Final Result"));?></option>
      </select>
      <div class="description"><?php echo $this->translate(_("Draft can be modified later."));?></div>
-     </td>
+   </td>
   </tr>
   </table>
 </div>

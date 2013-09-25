@@ -26,6 +26,10 @@ class Form_CommunityController extends ZendX_Controller_Action
                 'title' => Zend_Registry::get("Zend_Translate")->_("ID"),
                 'width' => '3%',
             ),
+            'generation_date' => array(
+                'title' => Zend_Registry::get("Zend_Translate")->_("Generation Date"),
+                'width' => '10%',
+            ),
             'date_of_visit' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Date of Visit"),
                 'width' => '8%',
@@ -46,11 +50,11 @@ class Form_CommunityController extends ZendX_Controller_Action
             ),
             'patient_last_name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Last Name"),
-                'width' => '20%',
+                'width' => '15%',
             ),
             'patient_first_name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("First Name"),
-                'width' => '20%',
+                'width' => '15%',
             ),
         );
 
@@ -92,8 +96,10 @@ class Form_CommunityController extends ZendX_Controller_Action
                                                          ->from('frm_community',
                                                             array(
                                                                 'frm_community.id',
-                                                                'date_of_visit' => new Zend_Db_Expr("date_format(date_of_visit, '%Y-%m-%d')"),
-                                                                ))
+                                                                'date_of_visit' => new Zend_Db_Expr("date_format(frm_community.date_of_visit, '%Y-%m-%d')"),
+                                                                'generation_date' => new Zend_Db_Expr("date_format(frm_community.generation_date, '%Y-%m-%d %H:%i:%s')"),
+                                                                'frm_community.is_commited'
+                                                            ))
                                                          ->joinLeft(array('patient'), 'frm_community.id_patient = patient.id', array('patient_identifier' => 'patient.identifier',
                                                                                                                                      'patient_first_name' => 'patient.first_name',
                                                                                                                                      'patient_last_name' => 'patient.last_name'))
@@ -115,8 +121,9 @@ class Form_CommunityController extends ZendX_Controller_Action
         );
         foreach ($rows as $row) {
             $row['DT_RowId'] = $row['id'];
-            //$row['date_of_visit'] = $this->convertDateToUserTimezone($row['date_of_visit']); /* We don't convert date before saving so it's not necessary to convert it back */
-            
+            $row['generation_date'] = $this->convertDateToUserTimezone($row['generation_date']);
+            $row['date_of_visit'] = $this->showDateAtSpecifiedFormat($row['date_of_visit']);
+                        
             $row['_row_actions_'] = array(
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("View"),
@@ -126,7 +133,8 @@ class Form_CommunityController extends ZendX_Controller_Action
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("Edit"),
                     'url' => $this->view->url(array('action' => 'edit', 'id' => $row['id'])),
-                    'type' => 'edit'
+                    'type' => 'edit',
+                    'conditions' => 'full.is_commited != 1'
                 ),
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("Delete"),
@@ -157,6 +165,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
             $db->beginTransaction();
             try {
+                $isCommited = $this->_getParam('is_commited');
                 $idPharmacy = $this->_getParam('id_pharmacy');
                 $idPatient = $this->_getParam('id_patient');
                 $dateOfVisit = $this->_getParam('date_of_visit');
@@ -253,6 +262,8 @@ class Form_CommunityController extends ZendX_Controller_Action
                 
                 $frmModel = new TrustCare_Model_FrmCommunity(
                     array(
+                        'id_user' => Zend_Registry::get("TrustCare_Registry_User")->getUser()->getId(),
+                        'is_commited' => $isCommited,
                         'id_pharmacy' => $idPharmacy,
                 		'id_patient' => $idPatient,
                 		'date_of_visit' => $dateOfVisit,
@@ -355,7 +366,16 @@ class Form_CommunityController extends ZendX_Controller_Action
                 }
                 
                 $db->commit();
-                $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+                
+                $generateNafdacForm = $this->_getParam('generate_nafdac_form');
+                $isGenerateNafdacForm = $isCommited ? !empty($generateNafdacForm) : false;
+                
+                if(!$isGenerateNafdacForm) {
+                    $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+                }
+                else {
+                    $this->getRedirector()->gotoSimpleAndExit('create', 'nafdac', null, array('id_frm_community' => $frmModel->getId()));
+                }
             }
             catch(Exception $ex) {
                 $db->rollback();
@@ -570,6 +590,282 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->render('view');
         return;
     }
+    
+    
+    public function editActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "edit");
+    }
+    
+    
+    public function editAction()
+    {
+        $id = $this->_getParam('id');
+    
+        $db_options = Zend_Registry::get('dbOptions');
+        $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+    
+        $frmModel = TrustCare_Model_FrmCommunity::find($id, array('mapperOptions' => array('adapter' => $db)));
+        if(is_null($frmModel)) {
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_community.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+            return;
+        }
+    
+        if($frmModel->getIsCommited()) {
+            $this->getRedirector()->gotoSimpleAndExit("view", $this->getRequest()->getControllerName(), null, array('id' => $id));
+        }
+    
+        $patientModel = TrustCare_Model_Patient::find($frmModel->getIdPatient(), array('mapperOptions' => array('adapter' => $db)));
+        if(is_null($patientModel)) {
+            $this->getLogger()->error(sprintf("Failed to load patient.id=%s specified for frm_care.id=%s", $frmModel->getIdPatient(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+    
+    
+        $pharmacyModel = TrustCare_Model_Pharmacy::find($frmModel->getIdPharmacy(), array('mapperOptions' => array('adapter' => $db)));
+        if(is_null($pharmacyModel)) {
+            $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for frm_care.id=%s", $frmModel->getIdPharmacy(), $id));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
+            return;
+        }
+    
+    
+        if($this->getRequest()->isPost()) {
+            $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+    
+            $db->beginTransaction();
+            try {
+                $isCommited = $this->_getParam('is_commited');
+                $isReferredIn = $this->_getParam('is_referred_in');
+                $isReferredOut = $this->_getParam('is_referred_out');
+                $isReferralCompleted = $this->_getParam('is_referral_completed');
+                $isHivRiskAssesmentDone = $this->_getParam('is_hiv_risk_assesment_done');
+                $referredInList = $this->_getParam('referred_in');
+                if(!$isReferredIn) {
+                    $referredInList = array();
+                }
+                $referredOutList = $this->_getParam('referred_out');
+                if(!$isReferredOut) {
+                    $referredOutList = array();
+                }
+                $isHtcDone = $this->_getParam('is_htc_done');
+                $htcResultId = $this->_getParam('htc_result_id');
+                if(!$isHtcDone) {
+                    $htcResultId = null;
+                }
+                $isClientReceivedHtc = $this->_getParam('is_client_received_htc');
+                $isHtcDoneInCurrentPharmacy = $this->_getParam('is_htc_done_in_current_pharmacy');
+                $isPalliativeServicesToPlwha = $this->_getParam('is_palliative_services_to_plwha');
+                $palliativeCareTypeList = $this->_getParam('palliative_care_type');
+                if(!$isPalliativeServicesToPlwha) {
+                    $palliativeCareTypeList = array();
+                }
+                $isStiServices = $this->_getParam('is_sti_services');
+                $stiTypeList = $this->_getParam('sti_type');
+                if(!$isStiServices) {
+                    $stiTypeList = array();
+                }
+                $isReproductiveHealthServices = $this->_getParam('is_reproductive_health_services');
+                $reproductiveHealthTypeList = $this->_getParam('reproductive_health_type');
+                if(!$isReproductiveHealthServices) {
+                    $reproductiveHealthTypeList = array();
+                }
+                $isTuberculosisServices =  $this->_getParam('is_tuberculosis_services');
+                $tuberculosisTypeList = $this->_getParam('tuberculosis_type');
+                if(!$isTuberculosisServices) {
+                    $tuberculosisTypeList = array();
+                }
+                $isOvcServices = $this->_getParam('is_ovc_services');
+                $ovcTypeList = $this->_getParam('ovc_type');
+                if(!$isOvcServices) {
+                    $ovcTypeList = array();
+                }
+
+                $frmModel->setIsCommited($isCommited);
+                $frmModel->setIsReferredIn($isReferredIn);
+                $frmModel->setIsReferredOut($isReferredOut);
+                $frmModel->setIsReferralCompleted($isReferralCompleted);
+                $frmModel->setIsHivRiskAssesmentDone($isHivRiskAssesmentDone);
+                $frmModel->setIsHtcDone($isHtcDone);
+                $frmModel->setHtcResultId($htcResultId);
+                $frmModel->setIsClientReceivedHtc($isClientReceivedHtc);
+                $frmModel->setIsHtcDoneInCurrentPharmacy($isHtcDoneInCurrentPharmacy);
+                $frmModel->setIsPalliativeServicesToPlwha($isPalliativeServicesToPlwha);
+                $frmModel->setIsStiServices($isStiServices);
+                $frmModel->setIsReproductiveHealthServices($isReproductiveHealthServices);
+                $frmModel->setIsTuberculosisServices($isTuberculosisServices);
+                $frmModel->setIsOvcServices($isOvcServices);
+                
+                $frmModel->save();
+                
+                TrustCare_Model_FrmCommunityReferredIn::replaceForFrmCommunity($frmModel->getId(), $referredInList, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCommunityReferredOut::replaceForFrmCommunity($frmModel->getId(), $referredOutList, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCommunityPalliativeCareType::replaceForFrmCommunity($frmModel->getId(), $palliativeCareTypeList, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCommunityStiType::replaceForFrmCommunity($frmModel->getId(), $stiTypeList, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCommunityReproductiveHealthType::replaceForFrmCommunity($frmModel->getId(), $reproductiveHealthTypeList, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCommunityTuberculosisType::replaceForFrmCommunity($frmModel->getId(), $tuberculosisTypeList, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCommunityOvcType::replaceForFrmCommunity($frmModel->getId(), $ovcTypeList, array('mapperOptions' => array('adapter' => $db)));
+                
+                
+                $db->commit();
+    
+                $generateNafdacForm = $this->_getParam('generate_nafdac_form');
+                $isGenerateNafdacForm = $isCommited ? !empty($generateNafdacForm) : false;
+    
+                if(!$isGenerateNafdacForm) {
+                    $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+                }
+                else {
+                    $this->getRedirector()->gotoSimpleAndExit('create', 'nafdac', null, array('id_frm_community' => $frmModel->getId()));
+                }
+    
+            }
+            catch(Exception $ex) {
+                $db->rollback();
+                $message = $ex->getMessage();
+                if(!empty($message)) {
+                    $this->getLogger()->error($message);
+                }
+            }
+            $this->view->error = $errorMsg;
+        }
+        else {
+            $isReferredIn = $frmModel->getIsReferredIn();
+            $isReferredOut = $frmModel->getIsReferredOut();
+            $isReferralCompleted = $frmModel->getIsReferralCompleted();
+            $isHivRiskAssesmentDone = $frmModel->getIsHivRiskAssesmentDone();
+            $isHtcDone = $frmModel->getIsHtcDone();
+            $htcResultId = $frmModel->getHtcResultId();
+            $isClientReceivedHtc = $frmModel->getIsClientReceivedHtc();
+            $isHtcDoneInCurrentPharmacy = $frmModel->getIsHtcDoneInCurrentPharmacy();
+            $isPalliativeServicesToPlwha = $frmModel->getIsPalliativeServicesToPlwha();
+            $isStiServices = $frmModel->getIsStiServices();
+            $isReproductiveHealthServices = $frmModel->getIsReproductiveHealthServices();
+            $isTuberculosisServices =  $frmModel->getIsTuberculosisServices();
+            $isOvcServices = $frmModel->getIsOvcServices();
+            
+    
+            $ovcTypeList = array();
+            $model = new TrustCare_Model_FrmCommunityOvcType(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $ovcTypeList[] = $dict->getId();
+                }
+            }
+    
+            $palliativeCareTypeList = array();
+            $model = new TrustCare_Model_FrmCommunityPalliativeCareType(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $palliativeCareTypeList[] = $dict->getId();
+                }
+            }
+    
+            $referredInList = array();
+            $model = new TrustCare_Model_FrmCommunityReferredIn(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $referredInList[] = $dict->getId();
+                }
+            }
+    
+            $referredOutList = array();
+            $model = new TrustCare_Model_FrmCommunityReferredOut(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $referredOutList[] = $dict->getId();
+                }
+            }
+    
+            $reproductiveHealthTypeList = array();
+            $model = new TrustCare_Model_FrmCommunityReproductiveHealthType(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $reproductiveHealthTypeList[] = $dict->getId();
+                }
+            }
+    
+            $stiTypeList = array();
+            $model = new TrustCare_Model_FrmCommunityStiType(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $stiTypeList[] = $dict->getId();
+                }
+            }
+    
+            $tuberculosisTypeList = array();
+            $model = new TrustCare_Model_FrmCommunityTuberculosisType(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $tuberculosisTypeList[] = $dict->getId();
+                }
+            }
+    
+    
+        }
+    
+        $dictEntities = array(
+            TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE => $ovcTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE => $palliativeCareTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN => $referredInList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT => $referredOutList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE => $reproductiveHealthTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE => $stiTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE => $tuberculosisTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT => array($htcResultId),
+        );
+    
+        $this->view->formModel = $frmModel;
+        $this->view->patientModel = $patientModel;
+        $this->view->pharmacyName = $pharmacyModel->getName();
+        $this->view->dictEntities = $dictEntities;
+        $this->view->isReferredIn = $isReferredIn;
+        $this->view->isReferredOut = $isReferredOut;        
+        $this->view->isReferralCompleted = $isReferralCompleted;        
+        $this->view->isHivRiskAssesmentDone = $isHivRiskAssesmentDone;        
+        $this->view->isHtcDone = $isHtcDone;        
+        $this->view->isClientReceivedHtc = $isClientReceivedHtc;        
+        $this->view->isHtcDoneInCurrentPharmacy = $isHtcDoneInCurrentPharmacy;        
+        $this->view->isPalliativeServicesToPlwha = $isPalliativeServicesToPlwha;        
+        $this->view->isStiServices = $isStiServices;        
+        $this->view->isReproductiveHealthServices = $isReproductiveHealthServices;
+        $this->view->isTuberculosisServices = $isTuberculosisServices;
+        $this->view->isOvcServices = $isOvcServices;
+        
+        $this->render('edit');
+        return;
+    }
+    
     
     public function deleteActionAccess()
     {

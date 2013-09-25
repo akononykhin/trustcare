@@ -225,13 +225,15 @@ class NafdacController extends ZendX_Controller_Action
                     }
                     
                     $frmCare = TrustCare_Model_FrmCare::find($idFrmCare, array('mapperOptions' => array('adapter' => $db)));
-                    $frmCommunity = TrustCare_Model_FrmCommunity::find($idFrmCare, array('mapperOptions' => array('adapter' => $db)));
+                    $frmCommunity = TrustCare_Model_FrmCommunity::find($idFrmCommunity, array('mapperOptions' => array('adapter' => $db)));
+                    
                     if(!is_null($frmCare)) {
                         $frmCare->setIdNafdac($nafdacModel->getId());
                         $frmCare->save();
                     }
                     else if(!is_null($frmCommunity)) {
-                        
+                        $frmCommunity->setIdNafdac($nafdacModel->getId());
+                        $frmCommunity->save();                        
                     }
                     
                     $db->commit();
@@ -269,6 +271,7 @@ class NafdacController extends ZendX_Controller_Action
         }
         else {
             $frmCare = TrustCare_Model_FrmCare::find($idFrmCare);
+            $frmCommunity = TrustCare_Model_FrmCommunity::find($idFrmCommunity);
             if(!is_null($frmCare)) {
                 $patientObj = TrustCare_Model_Patient::find($frmCare->getIdPatient());
                 if(!is_null($patientObj)) {
@@ -284,6 +287,22 @@ class NafdacController extends ZendX_Controller_Action
                 $adrStartDate = $frmCare->getAdrStartDate();
                 $adrStopDate = $frmCare->getAdrStopDate();
             }
+            else if(!is_null($frmCommunity)) {
+                $patientObj = TrustCare_Model_Patient::find($frmCommunity->getIdPatient());
+                if(!is_null($patientObj)) {
+                    $patientName = $patientObj->showNameAs();
+                    $patientId = $patientObj->getId();
+                }
+                $pharmObj = TrustCare_Model_Pharmacy::find($frmCommunity->getIdPharmacy());
+                if(!is_null($pharmObj)) {
+                    $pharmacyId = $pharmObj->getId();
+                }
+                $dateOfVisit = $frmCommunity->getDateOfVisit();
+                
+                //$adrStartDate = $frmCommunity->getAdrStartDate();
+                //$adrStopDate = $frmCommunity->getAdrStopDate();
+            }
+            
             $form->getSubForm("patient")->getElement('patient_name')->setValue($patientName);
             $form->getSubForm("patient")->getElement('id_pharmacy')->setValue($pharmacyId);
             $form->getSubForm("patient")->getElement('date_of_visit')->setValue($dateOfVisit);
