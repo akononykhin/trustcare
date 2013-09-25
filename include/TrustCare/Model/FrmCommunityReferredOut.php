@@ -106,6 +106,40 @@ class TrustCare_Model_FrmCommunityReferredOut extends TrustCare_Model_Abstract
     {
         return $this->getMapper()->fetchAllForFrmCommunity($value);
     }
+
+    
+    /**
+     * Replace current set of pharmacy_dictionary ids to new one
+     *
+     * @param int $id_frm_community
+     * @param array $dictIds
+     * @param array|null $options
+     */
+    public static function replaceForFrmCommunity($id_frm_community, array $dictIds, array $options = null)
+    {
+        $className = __CLASS__;
+        $existingIds = array();
+    
+        $model = new $className($options);
+        $objs = $model->fetchAllForFrmCommunity($id_frm_community);
+        foreach($objs as $obj) {
+            if(in_array($obj->getIdPharmacyDictionary(), $dictIds)) {
+                $existingIds[] = $obj->getIdPharmacyDictionary();
+            }
+            else {
+                $obj->delete();
+            }
+        }
+    
+        $newIds = array_diff($dictIds, $existingIds);
+        foreach($newIds as $dictId) {
+            $model = new $className($options);
+            $model->setIdFrmCommunity($id_frm_community);
+            $model->setIdPharmacyDictionary($dictId);
+            $model->save();
+    
+        }
+    }
     
     public function delete()
     {

@@ -553,7 +553,7 @@ class Form_CareController extends ZendX_Controller_Action
         $id = $this->_getParam('id');
         $formModel = TrustCare_Model_FrmCare::find($id);
         if(is_null($formModel)) {
-            $this->getLogger()->error(sprintf("'%s' tries to view unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->getLogger()->error(sprintf("'%s' tries to view unknown frm_care.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
             return;
         }
@@ -578,7 +578,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $medErrorTypes[] = $dict->getName();
@@ -590,7 +590,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $medAdhProblems[] = $dict->getName();
@@ -602,7 +602,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $medErrorInterventions[] = $dict->getName();
@@ -614,7 +614,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $adhInterventions[] = $dict->getName();
@@ -627,7 +627,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $medErrorInterventionOutcomes[] = $dict->getName();
@@ -639,7 +639,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $adhInterventionOutcomes[] = $dict->getName();
@@ -657,7 +657,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $suspectedAdrHepatic[] = $dict->getName();
@@ -669,7 +669,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $suspectedAdrNervous[] = $dict->getName();
@@ -681,7 +681,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $suspectedAdrCardiovascular[] = $dict->getName();
@@ -693,7 +693,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $suspectedAdrSkin[] = $dict->getName();
@@ -705,7 +705,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $suspectedAdrMetabolic[] = $dict->getName();
@@ -717,7 +717,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $suspectedAdrMusculoskeletal[] = $dict->getName();
@@ -729,7 +729,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $suspectedAdrGeneral[] = $dict->getName();
@@ -741,7 +741,7 @@ class Form_CareController extends ZendX_Controller_Action
         foreach($model->fetchAllForFrmCare($formModel->getId()) as $obj) {
             $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
             if(is_null($dict)) {
-                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
             }
             else {
                 $adrInterventions[] = $dict->getName();
@@ -786,7 +786,7 @@ class Form_CareController extends ZendX_Controller_Action
         
         $frmModel = TrustCare_Model_FrmCare::find($id, array('mapperOptions' => array('adapter' => $db)));
         if(is_null($frmModel)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_care.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
             return;
         }
@@ -940,7 +940,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $medErrorTypes[] = $dict->getId();
@@ -952,7 +952,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $medAdhProblems[] = $dict->getId();
@@ -964,7 +964,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $medErrorInterventions[] = $dict->getId();
@@ -976,7 +976,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $adhInterventions[] = $dict->getId();
@@ -988,7 +988,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $medErrorInterventionOutcomes[] = $dict->getId();
@@ -1000,7 +1000,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $adhInterventionOutcomes[] = $dict->getId();
@@ -1012,7 +1012,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $suspectedAdrHepatic[] = $dict->getId();
@@ -1024,7 +1024,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $suspectedAdrNervous[] = $dict->getId();
@@ -1036,7 +1036,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $suspectedAdrCardiovascular[] = $dict->getId();
@@ -1048,7 +1048,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $suspectedAdrSkin[] = $dict->getId();
@@ -1060,7 +1060,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $suspectedAdrMetabolic[] = $dict->getId();
@@ -1072,7 +1072,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $suspectedAdrMusculoskeletal[] = $dict->getId();
@@ -1084,7 +1084,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $suspectedAdrGeneral[] = $dict->getId();
@@ -1096,7 +1096,7 @@ class Form_CareController extends ZendX_Controller_Action
             foreach($model->fetchAllForFrmCare($frmModel->getId()) as $obj) {
                 $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
                 if(is_null($dict)) {
-                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_card.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_care.id=%s", $obj->getIdPharmacyDictionary(), $id));
                 }
                 else {
                     $adrInterventions[] = $dict->getId();
@@ -1155,7 +1155,7 @@ class Form_CareController extends ZendX_Controller_Action
         $id = $this->_getParam('id');
         $formModel = TrustCare_Model_FrmCare::find($id);
         if(is_null($formModel)) {
-            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_card.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
+            $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_care.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
             return;
         }

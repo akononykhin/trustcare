@@ -51,7 +51,7 @@
         $date->setTimezone($clientTZ);
         $clientdate = $date->toString(Zend_Registry::getInstance()->dateTimeFormat . ' ZZZZ');
     	
-        printf("%s (%s)&nbsp;[<a href='%s'>%s</a>]", Zend_Auth::getInstance()->getIdentity(), $clientdate, $this->url(array('controller' => 'sign', 'action' => "logout")), Zend_Registry::get("Zend_Translate")->_("Logout"));
+        printf("%s (%s)&nbsp;[<a href='%s'>%s</a>]", Zend_Auth::getInstance()->getIdentity(), $clientdate, $this->url(array('controller' => 'sign', 'action' => "logout"), null, false), Zend_Registry::get("Zend_Translate")->_("Logout"));
     }
 ?>    
             </div>

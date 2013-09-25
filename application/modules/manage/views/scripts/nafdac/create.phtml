@@ -45,7 +45,7 @@ $(document).ready(function() {
     checkAdrStopDate();
         
     $("#patient_name").autocomplete({
-        source:     '<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active")); ?>'
+        source:     '<?php echo $this->url(array('controller' => 'patient', "action" => "load-array-of-active"), null, false); ?>'
         ,minLength: 2
         ,delay:     300
         ,focus: function(event, ui ) {
