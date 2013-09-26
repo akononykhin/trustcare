@@ -33,6 +33,7 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     protected $_is_patient_younger_15;
     protected $_is_patient_male;
     protected $_id_nafdac;
+    protected $_hiv_status;
     
     public function __construct($options = array())
     {
@@ -185,7 +186,7 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     
     /**
      * @param  int $value 
-     * @return TrustCare_Model_FrmCare
+     * @return TrustCare_Model_FrmCommunity
      */
     public function setDateOfVisitMonthIndex($value)
     {
@@ -529,6 +530,26 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     public function getIdNafdac()
     {
         return $this->_id_nafdac;
+    }
+
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setHivStatus($value)
+    {
+        $this->_parameterChanged('hiv_status', $value);
+        $this->_hiv_status = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getHivStatus()
+    {
+        return $this->_hiv_status;
     }
     
     

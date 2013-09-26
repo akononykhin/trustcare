@@ -165,6 +165,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
             $db->beginTransaction();
             try {
+                $hivStatus = $this->_getParam('hiv_status');
                 $isCommited = $this->_getParam('is_commited');
                 $idPharmacy = $this->_getParam('id_pharmacy');
                 $idPatient = $this->_getParam('id_patient');
@@ -283,6 +284,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 		'is_ovc_services' => $isOvcServices,
                 		'is_patient_younger_15' => $isPatientYounger15,
                 		'is_patient_male' => $patientModel->getIsMale(),
+                        'hiv_status' => $hivStatus,
                     	'mapperOptions' => array('adapter' => $db)
                     )
                 );
@@ -449,6 +451,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->isTuberculosisServices = $isTuberculosisServices;
         $this->view->isOvcServices = $isOvcServices;
         $this->view->dictEntities = $dictEntities;
+        $this->view->hivStatuses = $this->_getHivStatuses();
         
         $this->render('create');
         return;
@@ -586,6 +589,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->reproductiveHealthTypeList = $reproductiveHealthTypeList;
         $this->view->tuberculosisTypeList = $tuberculosisTypeList;
         $this->view->ovcTypeList = $ovcTypeList;
+        $this->view->hivStatuses = $this->_getHivStatuses();
         
         $this->render('view');
         return;
@@ -637,6 +641,7 @@ class Form_CommunityController extends ZendX_Controller_Action
     
             $db->beginTransaction();
             try {
+                $hivStatus = $this->_getParam('hiv_status');
                 $isCommited = $this->_getParam('is_commited');
                 $isReferredIn = $this->_getParam('is_referred_in');
                 $isReferredOut = $this->_getParam('is_referred_out');
@@ -683,6 +688,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                     $ovcTypeList = array();
                 }
 
+                $frmModel->setHivStatus($hivStatus);
                 $frmModel->setIsCommited($isCommited);
                 $frmModel->setIsReferredIn($isReferredIn);
                 $frmModel->setIsReferredOut($isReferredOut);
@@ -732,6 +738,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             $this->view->error = $errorMsg;
         }
         else {
+            $hivStatus = $frmModel->getHivStatus();
             $isReferredIn = $frmModel->getIsReferredIn();
             $isReferredOut = $frmModel->getIsReferredOut();
             $isReferralCompleted = $frmModel->getIsReferralCompleted();
@@ -861,6 +868,8 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->isReproductiveHealthServices = $isReproductiveHealthServices;
         $this->view->isTuberculosisServices = $isTuberculosisServices;
         $this->view->isOvcServices = $isOvcServices;
+        $this->view->hivStatus = $hivStatus;
+        $this->view->hivStatuses = $this->_getHivStatuses();
         
         $this->render('edit');
         return;
@@ -884,6 +893,15 @@ class Form_CommunityController extends ZendX_Controller_Action
         
         $formModel->delete();
         $this->getRedirector()->gotoSimpleAndExit('list', $this->getRequest()->getControllerName());
+    }
+    
+    private function _getHivStatuses()
+    {
+        return array(
+          '' => Zend_Registry::get("Zend_Translate")->_("Others"),
+          'plwha' => Zend_Registry::get("Zend_Translate")->_("PLWHA"),
+          'paba' => Zend_Registry::get("Zend_Translate")->_("PABA")
+        );
     }
 }
 

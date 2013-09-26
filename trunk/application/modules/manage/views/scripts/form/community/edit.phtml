@@ -199,6 +199,19 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
    <td><?php echo $this->formModel->getDateOfVisit();?></td>
   </tr>
   <tr>
+   <td valign="top"><div class="normal"><label for="hiv_status"><?php echo $this->translate(_("HIV Status"));?></label></div></td>
+   <td>
+     <select name="hiv_status" id="hiv_status">
+<?php
+    foreach($this->hivStatuses as $key=>$value) {
+        $selectedStr = ($key == $this->hivStatus) ? 'selected' : '';
+        printf("<option value='%s' %s>%s</option>", $key, $selectedStr, $value);
+    }
+?>     
+       </select>
+     </td>
+  </tr>
+  <tr>
    <td valign="top"><div class="normal"><label for="is_commited"><?php echo $this->translate(_("Save Form as"));?></label></div></td>
    <td>
      <select name="is_commited" id="is_commited">

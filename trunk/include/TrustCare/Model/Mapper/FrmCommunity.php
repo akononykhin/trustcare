@@ -85,6 +85,9 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         if(!$model->isExists() || $model->isParameterChanged('id_nafdac')) {
             $data['id_nafdac'] = $model->getIdNafdac();
         }
+        if(!$model->isExists() || $model->isParameterChanged('hiv_status')) {
+            $data['hiv_status'] = $model->getHivStatus();
+        }
         
         if (null === ($id = $model->getId())) {
             unset($data['id']);
@@ -114,7 +117,7 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
               ->setGenerationDate($row->generation_date_formatted)
               ->setIdUser($row->id_user)
               ->setIsCommited($row->is_commited)
-            ->setIdPharmacy($row->id_pharmacy)
+              ->setIdPharmacy($row->id_pharmacy)
               ->setIdPatient($row->id_patient)
               ->setDateOfVisit($row->date_of_visit_formatted)
               ->setDateOfVisitMonthIndex($row->date_of_visit_month_index)
@@ -134,7 +137,8 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
               ->setIsOvcServices($row->is_ovc_services)
               ->setIsPatientYounger15($row->is_patient_younger_15)
               ->setIsPatientMale($row->is_patient_male)
-              ->setIdNafdac($row->id_nafdac);
+              ->setIdNafdac($row->id_nafdac)
+              ->setHivStatus($row->hiv_status);
         $model->setSkipTrackChanges(false);
     }
     
