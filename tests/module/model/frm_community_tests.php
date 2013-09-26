@@ -58,6 +58,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
                 'id_nafdac' => 1,
+                'hiv_status' => 'paba',
             );
 
             $columns = array();
@@ -128,6 +129,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
                 'id_nafdac' => 2,
+                'hiv_status' => 'paba1',
                 'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -178,6 +180,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
                 'id_nafdac' => 1,
+                'hiv_status' => 'paba2',
         );
         
         try {
@@ -206,7 +209,8 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'id_pharmacy' => 1,
                 'id_patient' => 2,
                 'date_of_visit' => '2012-07-02',
-                'id_nafdac' => ''
+                'id_nafdac' => '',
+                'hiv_status' => '',
             );
             $model = new TrustCare_Model_FrmCommunity(array('mapperOptions' => array('adapter' => $this->db)));
             $model->setOptions($params);
@@ -225,7 +229,8 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'id_pharmacy' => 1,
                 'id_patient' => 2,
                 'date_of_visit' => '2012-07-02',
-                'id_nafdac' => null
+                'id_nafdac' => null,
+                'hiv_status' => null,
             );
             $model = new TrustCare_Model_FrmCommunity(array('mapperOptions' => array('adapter' => $this->db)));
             $model->setOptions($params);
@@ -285,6 +290,7 @@ class TestOfFrmCommunity extends UnitTestCase {
             $params['is_patient_younger_15'] = !$model->is_patient_younger_15;
             $params['is_patient_male'] = !$model->is_patient_male;
             $params['id_nafdac'] = $model->id_nafdac == 1 ? 2 : 1;
+            $params['hiv_status'] = $model->hiv_status == 'paba' ? 'plwha' : 'paba';
             
             try {
                 $model->setOptions($params);
@@ -320,7 +326,8 @@ class TestOfFrmCommunity extends UnitTestCase {
             try {
                 $params = array(
                     'htc_result_id' => '',
-                    'id_nafdac' => ''
+                    'id_nafdac' => '',
+                    'hiv_status' => '',
                 );
                 $model->setOptions($params);
                 $model->save();
@@ -336,7 +343,8 @@ class TestOfFrmCommunity extends UnitTestCase {
             try {
                 $params = array(
                     'htc_result_id' => null,
-                    'id_nafdac' => null
+                    'id_nafdac' => null,
+                    'hiv_status' => null,
                 );
                 $model->setOptions($params);
                 $model->save();
@@ -465,6 +473,7 @@ class TestOfFrmCommunity extends UnitTestCase {
         $this->assertIdentical($model->is_patient_younger_15, !empty($params['is_patient_younger_15']) ? true : false, "Incorrect 'is_patient_younger_15': %s");
         $this->assertIdentical($model->is_patient_male, !empty($params['is_patient_male']) ? true : false, "Incorrect 'is_patient_male': %s");
         $this->assertEqual($model->id_nafdac, $params['id_nafdac'], "Incorrect 'id_nafdac': %s");
+        $this->assertEqual($model->hiv_status, $params['hiv_status'], "Incorrect 'hiv_status': %s");
         
     }
 }

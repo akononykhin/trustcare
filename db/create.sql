@@ -524,6 +524,7 @@ CREATE TABLE frm_community (
   `is_patient_younger_15` int default NULL,
   `is_patient_male` int default NULL,
   `id_nafdac` int default NULL,
+  `hiv_status` varchar(8) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1033,4 +1034,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130923, 2);
+insert into db_version values (1, 20130926, 1);

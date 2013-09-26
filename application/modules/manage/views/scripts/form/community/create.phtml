@@ -258,6 +258,18 @@ var g_dictEntities = new Array();
    </td>
   </tr>
   <tr>
+   <td valign="top"><div class="normal"><label for="hiv_status"><?php echo $this->translate(_("HIV Status"));?></label></div></td>
+   <td>
+     <select name="hiv_status" id="hiv_status">
+<?php
+    foreach($this->hivStatuses as $key=>$value) {
+        printf("<option value='%s'>%s</option>", $key, $value);
+    }
+?>     
+       </select>
+     </td>
+  </tr>
+  <tr>
    <td valign="top"><div class="normal"><label for="is_commited"><?php echo $this->translate(_("Save Form as"));?></label></div></td>
    <td>
      <select name="is_commited" id="is_commited">

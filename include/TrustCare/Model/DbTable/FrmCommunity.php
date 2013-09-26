@@ -63,6 +63,9 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
         if(!array_key_exists('id_nafdac', $data) || empty($data['id_nafdac'])) {
             $data['id_nafdac'] = new Zend_Db_Expr('NULL');
         }
+        if(!array_key_exists('hiv_status', $data) || empty($data['hiv_status'])) {
+            $data['hiv_status'] = new Zend_Db_Expr('NULL');
+        }
         
         return parent::insert($data);
     }
@@ -70,7 +73,7 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
     
     public function update(array $data, $where)
     {
-            if(array_key_exists('date_of_visit', $data)) {
+        if(array_key_exists('date_of_visit', $data)) {
             if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['date_of_visit']) {
                 $dateOfVisit = gmdate("Y-m-d");
             }
@@ -89,6 +92,9 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
         }
         if(array_key_exists('id_nafdac', $data) && empty($data['id_nafdac'])) {
             $data['id_nafdac'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('hiv_status', $data) && empty($data['hiv_status'])) {
+            $data['hiv_status'] = new Zend_Db_Expr('NULL');
         }
         
         return parent::update($data, $where);
