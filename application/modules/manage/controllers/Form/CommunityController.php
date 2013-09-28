@@ -170,6 +170,11 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $idPharmacy = $this->_getParam('id_pharmacy');
                 $idPatient = $this->_getParam('id_patient');
                 $dateOfVisit = $this->_getParam('date_of_visit');
+                $isReferredFrom = $this->_getParam('is_referred_from');
+                $referredFromList = $this->_getParam('referred_from');
+                if(!$isReferredFrom) {
+                    $referredFromList = array();
+                }
                 $isReferredIn = $this->_getParam('is_referred_in');
                 $isReferredOut = $this->_getParam('is_referred_out');
                 $isReferralCompleted = $this->_getParam('is_referral_completed');
@@ -269,7 +274,8 @@ class Form_CommunityController extends ZendX_Controller_Action
                 		'id_patient' => $idPatient,
                 		'date_of_visit' => $dateOfVisit,
                 		'is_first_visit_to_pharmacy' => TrustCare_Model_FrmCommunity::isFirstVisitOfPatientToPharmacy($idPatient, $idPharmacy),
-                		'is_referred_in' => $isReferredIn,
+                		'is_referred_from' => $isReferredFrom,
+                        'is_referred_in' => $isReferredIn,
                 		'is_referred_out' => $isReferredOut,
                 		'is_referral_completed' => $isReferralCompleted,
                 		'is_hiv_risk_assesment_done' => $isHivRiskAssesmentDone,
@@ -289,6 +295,17 @@ class Form_CommunityController extends ZendX_Controller_Action
                     )
                 );
                 $frmModel->save();
+                
+                foreach($referredFromList  as $dictId) {
+                    $model = new TrustCare_Model_FrmCommunityReferredFrom(
+                        array(
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
+                        )
+                    );
+                    $model->save();
+                }
                 
                 foreach($referredInList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityReferredIn(
@@ -392,6 +409,8 @@ class Form_CommunityController extends ZendX_Controller_Action
             $idPharmacy = null;
             $idPatient = null;
             $dateOfVisit = $this->convertDateToUserTimezone(gmdate("Y-m-d"), 'yyyy-MM-dd');
+            $isReferredFrom = true;
+            $referredFromList = array();
             $isReferredIn = true;
             $referredInList = array();
             $isReferredOut = true;
@@ -415,6 +434,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         }
         
         $dictEntities = array(
+            TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_FROM => $referredFromList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN => $referredInList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT => $referredOutList,
             TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT => array($htcResultId),
@@ -438,6 +458,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->pharmacies = $pharmaciesList;
         $this->view->id_patient = $idPatient;
         $this->view->dateOfVisit = $dateOfVisit;
+        $this->view->isReferredFrom = $isReferredFrom;
         $this->view->isReferredIn = $isReferredIn;
         $this->view->isReferredOut = $isReferredOut;
         $this->view->isReferralCompleted = $isReferralCompleted;
@@ -486,6 +507,18 @@ class Form_CommunityController extends ZendX_Controller_Action
             $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for frm_community.id=%s", $formModel->getIdPharmacy(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Internal Error")));
             return;
+        }
+        
+        $referredFromList = array();
+        $model = new TrustCare_Model_FrmCommunityReferredFrom();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $referredFromList[] = $dict->getName();
+            }
         }
         
         $referredInList = array();
@@ -581,6 +614,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->formModel = $formModel;
         $this->view->patientModel = $patientModel;
         $this->view->pharmacyName = $pharmacyModel->getName();
+        $this->view->referredFromList = $referredFromList;
         $this->view->referredInList = $referredInList;
         $this->view->referredOutList = $referredOutList;
         $this->view->htcResultName = $htcResultName;
@@ -643,6 +677,11 @@ class Form_CommunityController extends ZendX_Controller_Action
             try {
                 $hivStatus = $this->_getParam('hiv_status');
                 $isCommited = $this->_getParam('is_commited');
+                $isReferredFrom = $this->_getParam('is_referred_from');
+                $referredFromList = $this->_getParam('referred_from');
+                if(!$isReferredFrom) {
+                    $referredFromList = array();
+                }
                 $isReferredIn = $this->_getParam('is_referred_in');
                 $isReferredOut = $this->_getParam('is_referred_out');
                 $isReferralCompleted = $this->_getParam('is_referral_completed');
@@ -690,6 +729,7 @@ class Form_CommunityController extends ZendX_Controller_Action
 
                 $frmModel->setHivStatus($hivStatus);
                 $frmModel->setIsCommited($isCommited);
+                $frmModel->setIsReferredFrom($isReferredFrom);
                 $frmModel->setIsReferredIn($isReferredIn);
                 $frmModel->setIsReferredOut($isReferredOut);
                 $frmModel->setIsReferralCompleted($isReferralCompleted);
@@ -706,6 +746,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 
                 $frmModel->save();
                 
+                TrustCare_Model_FrmCommunityReferredFrom::replaceForFrmCommunity($frmModel->getId(), $referredFromList, array('mapperOptions' => array('adapter' => $db)));
                 TrustCare_Model_FrmCommunityReferredIn::replaceForFrmCommunity($frmModel->getId(), $referredInList, array('mapperOptions' => array('adapter' => $db)));
                 TrustCare_Model_FrmCommunityReferredOut::replaceForFrmCommunity($frmModel->getId(), $referredOutList, array('mapperOptions' => array('adapter' => $db)));
                 TrustCare_Model_FrmCommunityPalliativeCareType::replaceForFrmCommunity($frmModel->getId(), $palliativeCareTypeList, array('mapperOptions' => array('adapter' => $db)));
@@ -739,6 +780,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         }
         else {
             $hivStatus = $frmModel->getHivStatus();
+            $isReferredFrom = $frmModel->getIsReferredFrom();
             $isReferredIn = $frmModel->getIsReferredIn();
             $isReferredOut = $frmModel->getIsReferredOut();
             $isReferralCompleted = $frmModel->getIsReferralCompleted();
@@ -777,7 +819,19 @@ class Form_CommunityController extends ZendX_Controller_Action
                     $palliativeCareTypeList[] = $dict->getId();
                 }
             }
-    
+            
+            $referredFromList = array();
+            $model = new TrustCare_Model_FrmCommunityReferredFrom(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $referredFromList[] = $dict->getId();
+                }
+            }
+            
             $referredInList = array();
             $model = new TrustCare_Model_FrmCommunityReferredIn(array('mapperOptions' => array('adapter' => $db)));
             foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
@@ -844,6 +898,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $dictEntities = array(
             TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE => $ovcTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_PALLIATIVE_CARE_TYPE => $palliativeCareTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_FROM => $referredFromList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN => $referredInList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT => $referredOutList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE => $reproductiveHealthTypeList,
@@ -856,6 +911,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->patientModel = $patientModel;
         $this->view->pharmacyName = $pharmacyModel->getName();
         $this->view->dictEntities = $dictEntities;
+        $this->view->isReferredFrom = $isReferredFrom;
         $this->view->isReferredIn = $isReferredIn;
         $this->view->isReferredOut = $isReferredOut;        
         $this->view->isReferralCompleted = $isReferralCompleted;        

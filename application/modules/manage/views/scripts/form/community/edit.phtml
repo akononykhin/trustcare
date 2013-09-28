@@ -24,6 +24,16 @@ a {
 dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) echo join(" , ", $values);?>]);
 <?php endforeach; ?>
 
+    function checkIsReferredFrom()
+    {
+        if(0 == $('input:radio[name=is_referred_from]:checked').val()) {
+            $('#row_referred_from').hide();
+        }
+        else {
+            $('#row_referred_from').show();
+        }
+    }
+
     function checkIsReferredIn()
     {
         if(0 == $('input:radio[name=is_referred_in]:checked').val()) {
@@ -33,7 +43,7 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
             $('#row_referred_in').show();
         }
     }
-
+    
     function checkIsReferredOut()
     {
         if(0 == $('input:radio[name=is_referred_out]:checked').val()) {
@@ -117,6 +127,7 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         });
         
         dictEntitiesCtrl.init();
+        dictEntitiesCtrl.addCtrl('referred_from', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_FROM;?>');
         dictEntitiesCtrl.addCtrl('referred_in', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_IN;?>');
         dictEntitiesCtrl.addCtrl('referred_out', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REFERRED_OUT;?>');
         dictEntitiesCtrl.addCtrl('htc_result_id', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT;?>');
@@ -139,6 +150,9 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         
 
 /*** START Bind of OnChange ***/        
+        $('input[name = "is_referred_from"]').bind('change', function(){
+            checkIsReferredFrom();
+        });
         $('input[name = "is_referred_in"]').bind('change', function(){
             checkIsReferredIn();
         });
@@ -165,6 +179,7 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         });
 /*** END Bind of OnChange ***/        
         
+        checkIsReferredFrom();
         checkIsReferredIn();
         checkIsReferredOut();
         checkIsHtcDone();
@@ -228,7 +243,21 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
 <div class="tab_content">
  <table class="zend_form">
   <tr>
-   <td valign="top"><div class="normal"><label for="is_referred_in"><?php echo $this->translate(_("Referred in?"));?></label></div></td>
+   <td valign="top"><div class="normal"><label for="is_referred_from"><?php echo $this->translate(_("Referred Source?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_referred_from" id="is_referred_from_0" value="0" <?php if(!$this->isReferredFrom) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_referred_from" id="is_referred_from_1" value="1" <?php if($this->isReferredFrom) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_referred_from">
+   <td></td>
+   <td>
+     <select name="referred_from[]" id="referred_from" multiple size="5">
+     </select>&nbsp;
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_referred_in"><?php echo $this->translate(_("Referred In?"));?></label></div></td>
    <td>
      <input type="radio" name="is_referred_in" id="is_referred_in_0" value="0" <?php if(!$this->isReferredIn) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
      <input type="radio" name="is_referred_in" id="is_referred_in_1" value="1" <?php if($this->isReferredIn) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
@@ -243,7 +272,7 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
    </td>
   </tr>
   <tr>
-   <td valign="top"><div class="normal"><label for="is_referred_out"><?php echo $this->translate(_("Referred out?"));?></label></div></td>
+   <td valign="top"><div class="normal"><label for="is_referred_out"><?php echo $this->translate(_("Referred Out?"));?></label></div></td>
    <td>
      <input type="radio" name="is_referred_out" id="is_referred_out_0" value="0" <?php if(!$this->isReferredOut) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
      <input type="radio" name="is_referred_out" id="is_referred_out_1" value="1" <?php if($this->isReferredOut) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
@@ -264,6 +293,12 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
      <input type="radio" name="is_referral_completed" id="is_referral_completed_1" value="1" <?php if($this->isReferralCompleted) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
+ </table>
+</div>
+
+<div class="tab_header"><?php echo $this->translate(_("HCT Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
   <tr>
    <td valign="top"><div class="normal"><label for="is_hiv_risk_assesment_done"><?php echo $this->translate(_("HIV risk assessment & counseling done?"));?></label></div></td>
    <td>
@@ -271,12 +306,6 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
      <input type="radio" name="is_hiv_risk_assesment_done" id="is_hiv_risk_assesment_done_1" value="1" <?php if($this->isHivRiskAssesmentDone) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
    </td>
   </tr>
- </table>
-</div>
-
-<div class="tab_header"><?php echo $this->translate(_("HCT Tab"));?></div>
-<div class="tab_content">
- <table class="zend_form">
   <tr>
    <td valign="top"><div class="normal"><label for="is_htc_done"><?php echo $this->translate(_("HIV Testing done?"));?></label></div></td>
    <td>

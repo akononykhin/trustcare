@@ -24,7 +24,7 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
     const DTYPE_MUSCULOSKELETAL = 14;
     const DTYPE_GENERAL = 15;
     
-    const DTYPE_REFERRED_IN = 16;
+    const DTYPE_REFERRED_FROM = 16;
     const DTYPE_REFERRED_OUT = 17;
     const DTYPE_HTC_RESULT = 18;
     const DTYPE_PALLIATIVE_CARE_TYPE = 19;
@@ -32,6 +32,7 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
     const DTYPE_STI_TYPE = 21;
     const DTYPE_TUBERCULOSIS_TYPE = 22;
     const DTYPE_OVC_TYPE = 23;
+    const DTYPE_REFERRED_IN = 24;
     
     protected $_id;
     protected $_id_pharmacy_dictionary_type;

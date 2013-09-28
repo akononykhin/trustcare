@@ -42,6 +42,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'date_of_visit' => '2012-05-01',
                 'date_of_visit_month_index' => 201205,
                 'is_first_visit_to_pharmacy' => true,
+                'is_referred_from' => true,
                 'is_referred_in' => false,
                 'is_referred_out' => true,
                 'is_referral_completed' => false,
@@ -113,6 +114,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'date_of_visit' => '2012-05-01',
                 'date_of_visit_month_index' => 201206,
                 'is_first_visit_to_pharmacy' => false,
+                'is_referred_from' => false,
                 'is_referred_in' => true,
                 'is_referred_out' => false,
                 'is_referral_completed' => true,
@@ -164,6 +166,7 @@ class TestOfFrmCommunity extends UnitTestCase {
         		'id_patient' => 2,
                 'date_of_visit' => '2012-07-02',
                 'is_first_visit_to_pharmacy' => false,
+                'is_referred_from' => true,
                 'is_referred_in' => true,
                 'is_referred_out' => true,
                 'is_referral_completed' => false,
@@ -274,6 +277,7 @@ class TestOfFrmCommunity extends UnitTestCase {
             $params['id_patient'] = 1 == $model->id_patient ? 2 : 1;
             $params['date_of_visit'] = $dateOfVisit;
             $params['is_first_visit_to_pharmacy'] = !$model->is_first_visit_to_pharmacy;
+            $params['is_referred_from'] = !$model->is_referred_from;
             $params['is_referred_in'] = !$model->is_referred_in;
             $params['is_referred_out'] = !$model->is_referred_out;
             $params['is_referral_completed'] = !$model->is_referral_completed;
@@ -457,6 +461,7 @@ class TestOfFrmCommunity extends UnitTestCase {
         }
         $this->assertEqual($model->date_of_visit_month_index, $params['date_of_visit_month_index'], "Incorrect 'date_of_visit_month_index': %s");
         $this->assertIdentical($model->is_first_visit_to_pharmacy, !empty($params['is_first_visit_to_pharmacy']) ? true : false, "Incorrect 'is_referred_in': %s");
+        $this->assertIdentical($model->is_referred_from, !empty($params['is_referred_from']) ? true : false, "Incorrect 'is_referred_from': %s");
         $this->assertIdentical($model->is_referred_in, !empty($params['is_referred_in']) ? true : false, "Incorrect 'is_referred_in': %s");
         $this->assertIdentical($model->is_referred_out, !empty($params['is_referred_out']) ? true : false, "Incorrect 'is_referred_out': %s");
         $this->assertIdentical($model->is_referral_completed, !empty($params['is_referral_completed']) ? true : false, "Incorrect 'is_referral_completed': %s");
