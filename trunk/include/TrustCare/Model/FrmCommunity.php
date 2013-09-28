@@ -30,6 +30,7 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     protected $_is_sti_services;
     protected $_is_reproductive_health_services;
     protected $_is_tuberculosis_services;
+    protected $_is_malaria_services;
     protected $_is_ovc_services;
     protected $_is_patient_younger_15;
     protected $_is_patient_male;
@@ -454,6 +455,25 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     public function getIsReproductiveHealthServices()
     {
         return !empty($this->_is_reproductive_health_services) ? true : false;
+    }
+    
+    /**
+     * @param  bool $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setIsMalariaServices($value)
+    {
+        $this->_parameterChanged('is_malaria_services', $value, true);
+        $this->_is_malaria_services = !empty($value) ? true : false;
+        return $this;
+    }
+    
+    /**
+     * @return null|bool
+     */
+    public function getIsMalariaServices()
+    {
+        return !empty($this->_is_malaria_services) ? true : false;
     }
     
     /**

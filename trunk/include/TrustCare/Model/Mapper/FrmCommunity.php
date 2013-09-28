@@ -73,6 +73,9 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         if(!$model->isExists() || $model->isParameterChanged('is_reproductive_health_services')) {
             $data['is_reproductive_health_services'] = $model->getIsReproductiveHealthServices() ? 1 : 0;
         }
+        if(!$model->isExists() || $model->isParameterChanged('is_malaria_services')) {
+            $data['is_malaria_services'] = $model->getIsMalariaServices() ? 1 : 0;
+        }
         if(!$model->isExists() || $model->isParameterChanged('is_tuberculosis_services')) {
             $data['is_tuberculosis_services'] = $model->getIsTuberculosisServices() ? 1 : 0;
         }
@@ -137,6 +140,7 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
               ->setIsPalliativeServicesToPlwha($row->is_palliative_services_to_plwha)
               ->setIsStiServices($row->is_sti_services)
               ->setIsReproductiveHealthServices($row->is_reproductive_health_services)
+              ->setIsMalariaServices($row->is_malaria_services)
               ->setIsTuberculosisServices($row->is_tuberculosis_services)
               ->setIsOvcServices($row->is_ovc_services)
               ->setIsPatientYounger15($row->is_patient_younger_15)

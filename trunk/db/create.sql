@@ -136,6 +136,7 @@ insert into pharmacy_dictionary_type(id,ordernum,name) values (21, 21, 'STI Serv
 insert into pharmacy_dictionary_type(id,ordernum,name) values (22, 22, 'Tuberculosis services');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (23, 23, 'OVC Care and Support services');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (24, 24, 'Referred in List');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (25, 25, 'Malaria Services');
 
 CREATE TABLE pharmacy_dictionary (
   `id` int NOT NULL,
@@ -276,6 +277,10 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (461
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (462, 24, 'Psychosocial support');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (463, 24, 'Nutritional support & counseling');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (464, 24, 'Distribution of SBC materials');
+
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (480, 25, 'Malaria prevention (LLITN)');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (481, 25, 'Malaria prevention (IPT)');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (482, 25, 'Malaria Treatment');
 
 
 /************* END Pharmacy Dictionaries **************************************************/
@@ -527,6 +532,7 @@ CREATE TABLE frm_community (
   `is_sti_services` int,
   `is_reproductive_health_services` int,
   `is_tuberculosis_services` int,
+  `is_malaria_services` int,
   `is_ovc_services` int,
   `is_patient_younger_15` int default NULL,
   `is_patient_male` int default NULL,
@@ -592,6 +598,15 @@ CREATE TABLE frm_community_tuberculosis_type (
   UNIQUE KEY `cons_frm_community_tuberculosis_type_1` (`id_frm_community`, `id_pharmacy_dictionary`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_community_malaria_type (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_malaria_type_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE frm_community_ovc_type (
   `id` int NOT NULL,
@@ -966,6 +981,15 @@ alter table frm_community_tuberculosis_type
     add constraint fk_frm_community_tuberculosis_type_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
         references pharmacy_dictionary(id);
 
+alter table frm_community_malaria_type
+    add constraint fk_frm_community_malaria_type_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_malaria_type
+    add constraint fk_frm_community_malaria_type_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
+
 alter table frm_community_ovc_type
     add constraint fk_frm_community_ovc_type_id_frm_community foreign key (id_frm_community)
         references frm_community(id) on delete cascade;
@@ -1049,6 +1073,7 @@ INSERT INTO db_sequence(name,value) VALUES ('frm_community_palliative_care_type_
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_sti_type_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_reproductive_health_type_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_tuberculosis_type_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_malaria_type_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_ovc_type_id_seq', 1);
 
 INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
@@ -1058,4 +1083,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130928, 5);
+insert into db_version values (1, 20130928, 6);
