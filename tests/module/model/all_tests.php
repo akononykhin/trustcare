@@ -48,6 +48,7 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/frm_community_palliative_care_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_sti_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_reproductive_health_type_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/frm_community_malaria_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_tuberculosis_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/frm_community_ovc_type_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/report_care_tests.php');

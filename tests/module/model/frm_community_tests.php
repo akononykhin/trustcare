@@ -55,6 +55,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_sti_services' => false,
                 'is_reproductive_health_services' => true,
                 'is_tuberculosis_services' => false,
+                'is_malaria_services' => true,
                 'is_ovc_services' => true,
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
@@ -127,6 +128,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_sti_services' => true,
                 'is_reproductive_health_services' => false,
                 'is_tuberculosis_services' => true,
+                'is_malaria_services' => false,
                 'is_ovc_services' => false,
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
@@ -179,6 +181,7 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_sti_services' => false,
                 'is_reproductive_health_services' => true,
                 'is_tuberculosis_services' => false,
+                'is_malaria_services' => true,
                 'is_ovc_services' => true,
                 'is_patient_younger_15' => false,
                 'is_patient_male' => true,
@@ -290,6 +293,7 @@ class TestOfFrmCommunity extends UnitTestCase {
             $params['is_sti_services'] = !$model->is_sti_services;
             $params['is_reproductive_health_services'] = !$model->is_reproductive_health_services;
             $params['is_tuberculosis_services'] = !$model->is_tuberculosis_services;
+            $params['is_malaria_services'] = !$model->is_malaria_services;
             $params['is_ovc_services'] = !$model->is_ovc_services;
             $params['is_patient_younger_15'] = !$model->is_patient_younger_15;
             $params['is_patient_male'] = !$model->is_patient_male;
@@ -474,6 +478,7 @@ class TestOfFrmCommunity extends UnitTestCase {
         $this->assertIdentical($model->is_sti_services, !empty($params['is_sti_services']) ? true : false, "Incorrect 'is_sti_services': %s");
         $this->assertIdentical($model->is_reproductive_health_services, !empty($params['is_reproductive_health_services']) ? true : false, "Incorrect 'is_reproductive_health_services': %s");
         $this->assertIdentical($model->is_tuberculosis_services, !empty($params['is_tuberculosis_services']) ? true : false, "Incorrect 'is_tuberculosis_services': %s");
+        $this->assertIdentical($model->is_malaria_services, !empty($params['is_malaria_services']) ? true : false, "Incorrect 'is_malaria_services': %s");
         $this->assertIdentical($model->is_ovc_services, !empty($params['is_ovc_services']) ? true : false, "Incorrect 'is_ovc_services': %s");
         $this->assertIdentical($model->is_patient_younger_15, !empty($params['is_patient_younger_15']) ? true : false, "Incorrect 'is_patient_younger_15': %s");
         $this->assertIdentical($model->is_patient_male, !empty($params['is_patient_male']) ? true : false, "Incorrect 'is_patient_male': %s");
