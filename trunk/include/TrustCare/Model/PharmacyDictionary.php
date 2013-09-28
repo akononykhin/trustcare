@@ -33,6 +33,7 @@ class TrustCare_Model_PharmacyDictionary extends TrustCare_Model_Abstract
     const DTYPE_TUBERCULOSIS_TYPE = 22;
     const DTYPE_OVC_TYPE = 23;
     const DTYPE_REFERRED_IN = 24;
+    const DTYPE_MALARIA_TYPE = 25;
     
     protected $_id;
     protected $_id_pharmacy_dictionary_type;
