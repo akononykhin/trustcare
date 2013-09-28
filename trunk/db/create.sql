@@ -127,7 +127,7 @@ insert into pharmacy_dictionary_type(id,ordernum,name) values (12, 12, 'Skin and
 insert into pharmacy_dictionary_type(id,ordernum,name) values (13, 13, 'Metabolic/Endocrine System Options');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (14, 14, 'Musculoskeletal');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (15, 15, 'Systemic-General Options');
-insert into pharmacy_dictionary_type(id,ordernum,name) values (16, 16, 'Referred in List');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (16, 16, 'Referred Source List');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (17, 17, 'Referred out List');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (18, 18, 'Type of HIV testing results');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (19, 19, 'Palliative Care Services');
@@ -135,6 +135,7 @@ insert into pharmacy_dictionary_type(id,ordernum,name) values (20, 20, 'Reproduc
 insert into pharmacy_dictionary_type(id,ordernum,name) values (21, 21, 'STI Services');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (22, 22, 'Tuberculosis services');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (23, 23, 'OVC Care and Support services');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (24, 24, 'Referred in List');
 
 CREATE TABLE pharmacy_dictionary (
   `id` int NOT NULL,
@@ -230,11 +231,12 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (303
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (320, 17, 'HCT');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (321, 17, 'ART');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (322, 17, 'PMTCT');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (323, 17, 'TB');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (323, 17, 'Tuberculosis services');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (324, 17, 'STI');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (325, 17, 'FP');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (326, 17, 'Support group');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (327, 17, 'OVC services');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (328, 17, 'Post Exposure Prophylaxis (PEP)');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (340, 18, 'Positive');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (341, 18, 'Negative');
@@ -270,6 +272,12 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (443
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (444, 23, 'Legal support/Protection');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (445, 23, 'Health support');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (446, 23, 'Economic support (Skill acquisition)');
+
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (460, 24, 'OVC identification and referral to CBO for enrollment');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (461, 24, 'Adherence counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (462, 24, 'Psychosocial support');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (463, 24, 'Nutritional support & counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (464, 24, 'Distribution of SBC materials');
 
 
 /************* END Pharmacy Dictionaries **************************************************/
@@ -508,6 +516,7 @@ CREATE TABLE frm_community (
   `id_pharmacy` int default NULL,
   `id_patient` int NOT NULL,
   `is_first_visit_to_pharmacy` int default NULL,
+  `is_referred_from` int,
   `is_referred_in` int,
   `is_referred_out` int,
   `is_referral_completed` int,
@@ -529,6 +538,14 @@ CREATE TABLE frm_community (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create index idx_frm_community_date_of_visit_month_index on frm_community(date_of_visit_month_index);
+
+CREATE TABLE frm_community_referred_from (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_referred_from_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE frm_community_referred_in (
   `id` int NOT NULL,
@@ -894,6 +911,14 @@ alter table frm_care_adr_intervention
 
 
 
+alter table frm_community_referred_from
+    add constraint fk_frm_community_referred_from_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_referred_from
+    add constraint fk_frm_community_referred_from_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
 
 alter table frm_community_referred_in
     add constraint fk_frm_community_referred_in_id_frm_community foreign key (id_frm_community)
@@ -1019,6 +1044,7 @@ INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_musculoskele
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_suspected_adr_general_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_care_adr_intervention_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_from_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_in_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_referred_out_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_palliative_care_type_id_seq', 1);
@@ -1034,4 +1060,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130926, 1);
+insert into db_version values (1, 20130928, 2);

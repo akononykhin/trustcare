@@ -17,6 +17,7 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     protected $_date_of_visit;
     protected $_date_of_visit_month_index;
     protected $_is_first_visit_to_pharmacy;
+    protected $_is_referred_from;
     protected $_is_referred_in;
     protected $_is_referred_out;
     protected $_is_referral_completed;
@@ -221,6 +222,26 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     public function getIsFirstVisitToPharmacy()
     {
         return !empty($this->_is_first_visit_to_pharmacy) ? true : false;
+    }
+
+    
+    /**
+     * @param  bool $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setIsReferredFrom($value)
+    {
+        $this->_parameterChanged('is_referred_from', $value, true);
+        $this->_is_referred_from = !empty($value) ? true : false;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getIsReferredFrom()
+    {
+        return !empty($this->_is_referred_from) ? true : false;
     }
     
     
