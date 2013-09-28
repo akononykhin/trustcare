@@ -104,6 +104,16 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         }
     }
 
+    function checkIsMalariaServices()
+    {
+        if(0 == $('input:radio[name=is_malaria_services]:checked').val()) {
+            $('#row_malaria_type').hide();
+        }
+        else {
+            $('#row_malaria_type').show();
+        }
+    }
+    
     function checkIsOvcServices()
     {
         if(0 == $('input:radio[name=is_ovc_services]:checked').val()) {
@@ -135,6 +145,7 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         dictEntitiesCtrl.addCtrl('sti_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE;?>');
         dictEntitiesCtrl.addCtrl('reproductive_health_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE;?>');
         dictEntitiesCtrl.addCtrl('tuberculosis_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
+        dictEntitiesCtrl.addCtrl('malaria_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MALARIA_TYPE;?>');
         dictEntitiesCtrl.addCtrl('ovc_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
 
         $('#main_form').submit(function() {
@@ -174,6 +185,9 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         $('input[name = "is_tuberculosis_services"]').bind('change', function(){
             checkIsTuberculosisServices();
         });
+        $('input[name = "is_malaria_services"]').bind('change', function(){
+            checkIsMalariaServices();
+        });
         $('input[name = "is_ovc_services"]').bind('change', function(){
             checkIsOvcServices();
         });
@@ -187,6 +201,7 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         checkIsStiServices();
         checkIsReproductiveHealthServices();
         checkIsTuberculosisServices();
+        checkIsMalariaServices();
         checkIsOvcServices();
         
 });
@@ -398,6 +413,21 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
      <select name="tuberculosis_type[]" id="tuberculosis_type" multiple size="5">
      </select>&nbsp;
      <a id="link-add-tuberculosis_type"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_malaria_services"><?php echo $this->translate(_("Malaria Services"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_malaria_services" id="is_malaria_services_0" value="0" <?php if(!$this->isMalariaServices) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_malaria_services" id="is_malaria_services_1" value="1" <?php if($this->isMalariaServices) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_malaria_type">
+   <td></td>
+   <td>
+     <select name="malaria_type[]" id="malaria_type" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-malaria_type"><?php echo $this->translate(_("Other"));?></a>
    </td>
   </tr>
   <tr>

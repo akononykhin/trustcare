@@ -214,6 +214,11 @@ class Form_CommunityController extends ZendX_Controller_Action
                 if(!$isTuberculosisServices) {
                     $tuberculosisTypeList = array();
                 }
+                $isMalariaServices =  $this->_getParam('is_malaria_services');
+                $malariaTypeList = $this->_getParam('malaria_type');
+                if(!$isMalariaServices) {
+                    $malariaTypeList = array();
+                }
                 $isOvcServices = $this->_getParam('is_ovc_services');
                 $ovcTypeList = $this->_getParam('ovc_type');
                 if(!$isOvcServices) {
@@ -287,7 +292,8 @@ class Form_CommunityController extends ZendX_Controller_Action
                 		'is_sti_services' => $isStiServices,
                 		'is_reproductive_health_services' => $isReproductiveHealthServices,
                 		'is_tuberculosis_services' => $isTuberculosisServices,
-                		'is_ovc_services' => $isOvcServices,
+                		'is_malaria_services' => $isMalariaServices,
+                        'is_ovc_services' => $isOvcServices,
                 		'is_patient_younger_15' => $isPatientYounger15,
                 		'is_patient_male' => $patientModel->getIsMale(),
                         'hiv_status' => $hivStatus,
@@ -373,6 +379,17 @@ class Form_CommunityController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
+                foreach($malariaTypeList  as $dictId) {
+                    $model = new TrustCare_Model_FrmCommunityMalariaType(
+                        array(
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
+                        )
+                    );
+                    $model->save();
+                }
+                
                 foreach($ovcTypeList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityOvcType(
                         array(
@@ -429,6 +446,8 @@ class Form_CommunityController extends ZendX_Controller_Action
             $reproductiveHealthTypeList = array();
             $isTuberculosisServices = false;
             $tuberculosisTypeList = array();
+            $isMalariaServices = false;
+            $malariaTypeList = array();
             $isOvcServices = false;
             $ovcTypeList = array();
         }
@@ -442,6 +461,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE => $stiTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE => $reproductiveHealthTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE => $tuberculosisTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_MALARIA_TYPE => $malariaTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE => $ovcTypeList,
         );
         
@@ -470,6 +490,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->isStiServices = $isStiServices;
         $this->view->isReproductiveHealthServices = $isReproductiveHealthServices;
         $this->view->isTuberculosisServices = $isTuberculosisServices;
+        $this->view->isMalariaServices = $isMalariaServices;
         $this->view->isOvcServices = $isOvcServices;
         $this->view->dictEntities = $dictEntities;
         $this->view->hivStatuses = $this->_getHivStatuses();
@@ -599,6 +620,18 @@ class Form_CommunityController extends ZendX_Controller_Action
             }
         }
         
+        $malariaTypeList = array();
+        $model = new TrustCare_Model_FrmCommunityMalariaType();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $malariaTypeList[] = $dict->getName();
+            }
+        }
+        
         $ovcTypeList = array();
         $model = new TrustCare_Model_FrmCommunityOvcType();
         foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
@@ -622,6 +655,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->stiTypeList = $stiTypeList;
         $this->view->reproductiveHealthTypeList = $reproductiveHealthTypeList;
         $this->view->tuberculosisTypeList = $tuberculosisTypeList;
+        $this->view->malariaTypeList = $malariaTypeList;
         $this->view->ovcTypeList = $ovcTypeList;
         $this->view->hivStatuses = $this->_getHivStatuses();
         
@@ -721,6 +755,11 @@ class Form_CommunityController extends ZendX_Controller_Action
                 if(!$isTuberculosisServices) {
                     $tuberculosisTypeList = array();
                 }
+                $isMalariaServices =  $this->_getParam('is_malaria_services');
+                $malariaTypeList = $this->_getParam('malaria_type');
+                if(!$isMalariaServices) {
+                    $malariaTypeList = array();
+                }
                 $isOvcServices = $this->_getParam('is_ovc_services');
                 $ovcTypeList = $this->_getParam('ovc_type');
                 if(!$isOvcServices) {
@@ -742,6 +781,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $frmModel->setIsStiServices($isStiServices);
                 $frmModel->setIsReproductiveHealthServices($isReproductiveHealthServices);
                 $frmModel->setIsTuberculosisServices($isTuberculosisServices);
+                $frmModel->setIsMalariaServices($isMalariaServices);
                 $frmModel->setIsOvcServices($isOvcServices);
                 
                 $frmModel->save();
@@ -753,6 +793,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 TrustCare_Model_FrmCommunityStiType::replaceForFrmCommunity($frmModel->getId(), $stiTypeList, array('mapperOptions' => array('adapter' => $db)));
                 TrustCare_Model_FrmCommunityReproductiveHealthType::replaceForFrmCommunity($frmModel->getId(), $reproductiveHealthTypeList, array('mapperOptions' => array('adapter' => $db)));
                 TrustCare_Model_FrmCommunityTuberculosisType::replaceForFrmCommunity($frmModel->getId(), $tuberculosisTypeList, array('mapperOptions' => array('adapter' => $db)));
+                TrustCare_Model_FrmCommunityMalariaType::replaceForFrmCommunity($frmModel->getId(), $malariaTypeList, array('mapperOptions' => array('adapter' => $db)));
                 TrustCare_Model_FrmCommunityOvcType::replaceForFrmCommunity($frmModel->getId(), $ovcTypeList, array('mapperOptions' => array('adapter' => $db)));
                 
                 
@@ -793,6 +834,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             $isStiServices = $frmModel->getIsStiServices();
             $isReproductiveHealthServices = $frmModel->getIsReproductiveHealthServices();
             $isTuberculosisServices =  $frmModel->getIsTuberculosisServices();
+            $isMalariaServices =  $frmModel->getIsMalariaServices();
             $isOvcServices = $frmModel->getIsOvcServices();
             
     
@@ -891,7 +933,19 @@ class Form_CommunityController extends ZendX_Controller_Action
                     $tuberculosisTypeList[] = $dict->getId();
                 }
             }
-    
+            
+            $malariaTypeList = array();
+            $model = new TrustCare_Model_FrmCommunityMalariaType(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $malariaTypeList[] = $dict->getId();
+                }
+            }
+            
     
         }
     
@@ -904,6 +958,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             TrustCare_Model_PharmacyDictionary::DTYPE_REPRODUCTIVE_HEALTH_TYPE => $reproductiveHealthTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_STI_TYPE => $stiTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE => $tuberculosisTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_MALARIA_TYPE => $malariaTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT => array($htcResultId),
         );
     
@@ -923,6 +978,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->isStiServices = $isStiServices;        
         $this->view->isReproductiveHealthServices = $isReproductiveHealthServices;
         $this->view->isTuberculosisServices = $isTuberculosisServices;
+        $this->view->isMalariaServices = $isMalariaServices;
         $this->view->isOvcServices = $isOvcServices;
         $this->view->hivStatus = $hivStatus;
         $this->view->hivStatuses = $this->_getHivStatuses();
