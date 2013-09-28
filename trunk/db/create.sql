@@ -242,28 +242,26 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (340
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (341, 18, 'Negative');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (342, 18, 'Intermediate');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (360, 19, 'Adherence Counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (360, 19, 'Opportunistic Infections Screening & Management');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (361, 19, 'Ol management');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (362, 19, 'Psychosocial support');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (363, 19, 'Pain Management');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (364, 19, 'Nutritional Support and Counseling');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (365, 19, 'Malaria Prevention');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (366, 19, 'Malaria Treatment');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (380, 20, 'Condoms Provided');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (381, 20, 'Emergency Contraceptive Provided');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (382, 20, 'Injectable Contraceptive Provided');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (383, 20, 'Oral Contraceptives Provided');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (384, 20, 'RH/FP Counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (385, 20, 'Counseling on safe sex practices');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (386, 20, 'Health education & promotion');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (400, 21, 'STI Screening');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (401, 21, 'STI Treatment');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (402, 21, 'STI Counseling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (401, 21, 'STIs Screening & Counselling');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (420, 22, 'TB Screening');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (421, 22, 'TB Adherence Support');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (422, 22, 'TB Drugs Refills');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (423, 22, 'DOTs/CTBC');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (424, 22, 'INH Preventive Therapy (IPT)');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (440, 23, 'Enrollment');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (441, 23, 'Educational support');
@@ -1060,4 +1058,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130928, 2);
+insert into db_version values (1, 20130928, 5);
