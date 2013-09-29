@@ -505,7 +505,7 @@ class Form_CareController extends ZendX_Controller_Action
             TrustCare_Model_PharmacyDictionary::DTYPE_MUSCULOSKELETAL => $suspectedAdrMusculoskeletal,
             TrustCare_Model_PharmacyDictionary::DTYPE_GENERAL => $suspectedAdrGeneral,
             TrustCare_Model_PharmacyDictionary::DTYPE_ADR_INTERVENTION_TYPE => $adrInterventions,
-            );
+        );
 
         
         $pharmaciesList = array();

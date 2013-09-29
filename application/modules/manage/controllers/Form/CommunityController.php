@@ -224,6 +224,15 @@ class Form_CommunityController extends ZendX_Controller_Action
                 if(!$isOvcServices) {
                     $ovcTypeList = array();
                 }
+                $isAdrScreened = $this->_getParam('is_adr_screened');
+                $isAdrSymptoms = $this->_getParam('is_adr_symptoms');
+                $adrStartDate = $this->_getParam('adr_start_date');
+                $adrStopDate = $this->_getParam('adr_stop_date');
+                $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
+                $adrInterventions = $this->_getParam('adr_intervention');
+                if(!$isAdrInterventionProvided) {
+                    $adrInterventions = array();
+                }
                 
                 if(empty($idPharmacy)) {
                     $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose pharmacy");
@@ -297,7 +306,12 @@ class Form_CommunityController extends ZendX_Controller_Action
                 		'is_patient_younger_15' => $isPatientYounger15,
                 		'is_patient_male' => $patientModel->getIsMale(),
                         'hiv_status' => $hivStatus,
-                    	'mapperOptions' => array('adapter' => $db)
+                		'is_adr_screened' => $isAdrScreened,
+                		'is_adr_symptoms' => $isAdrSymptoms,
+                        'adr_start_date' => $adrStartDate,
+                        'adr_stop_date' => $adrStopDate,
+                		'is_adr_intervention_provided' => $isAdrInterventionProvided,
+                        'mapperOptions' => array('adapter' => $db)
                     )
                 );
                 $frmModel->save();
@@ -401,6 +415,17 @@ class Form_CommunityController extends ZendX_Controller_Action
                     $model->save();
                 }
                 
+                foreach($adrInterventions  as $dictId) {
+                    $model = new TrustCare_Model_FrmCommunityAdrIntervention(
+                        array(
+          					'id_frm_community' => $frmModel->getId(),
+           					'id_pharmacy_dictionary' => $dictId,
+                           	'mapperOptions' => array('adapter' => $db)
+                        )
+                    );
+                    $model->save();
+                }
+                
                 $db->commit();
                 
                 $generateNafdacForm = $this->_getParam('generate_nafdac_form');
@@ -450,6 +475,12 @@ class Form_CommunityController extends ZendX_Controller_Action
             $malariaTypeList = array();
             $isOvcServices = false;
             $ovcTypeList = array();
+            $isAdrScreened = true;
+            $isAdrSymptoms = false;
+            $adrStartDate = '';
+            $adrStopDate = '';
+            $isAdrInterventionProvided = true;
+            $adrInterventions = array();
         }
         
         $dictEntities = array(
@@ -463,6 +494,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE => $tuberculosisTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_MALARIA_TYPE => $malariaTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE => $ovcTypeList,
+            TrustCare_Model_PharmacyDictionary::DTYPE_COMMUNITY_ADR_INTERVENTION_TYPE => $adrInterventions,
         );
         
         $pharmaciesList = array();
@@ -494,6 +526,11 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->isOvcServices = $isOvcServices;
         $this->view->dictEntities = $dictEntities;
         $this->view->hivStatuses = $this->_getHivStatuses();
+        $this->view->isAdrScreened = $isAdrScreened;
+        $this->view->isAdrSymptoms = $isAdrSymptoms;
+        $this->view->adrStartDate = $adrStartDate;
+        $this->view->adrStopDate = $adrStopDate;
+        $this->view->isAdrInterventionProvided = $isAdrInterventionProvided;
         
         $this->render('create');
         return;
@@ -644,6 +681,19 @@ class Form_CommunityController extends ZendX_Controller_Action
             }
         }
         
+        $adrInterventions = array();
+        $model = new TrustCare_Model_FrmCommunityAdrIntervention();
+        foreach($model->fetchAllForFrmCommunity($formModel->getId()) as $obj) {
+            $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+            if(is_null($dict)) {
+                $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+            }
+            else {
+                $adrInterventions[] = $dict->getName();
+            }
+        }
+        
+        
         $this->view->formModel = $formModel;
         $this->view->patientModel = $patientModel;
         $this->view->pharmacyName = $pharmacyModel->getName();
@@ -658,6 +708,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->malariaTypeList = $malariaTypeList;
         $this->view->ovcTypeList = $ovcTypeList;
         $this->view->hivStatuses = $this->_getHivStatuses();
+        $this->view->adrInterventions = $adrInterventions;
         
         $this->render('view');
         return;
@@ -765,6 +816,16 @@ class Form_CommunityController extends ZendX_Controller_Action
                 if(!$isOvcServices) {
                     $ovcTypeList = array();
                 }
+                $isAdrScreened = $this->_getParam('is_adr_screened');
+                $isAdrSymptoms = $this->_getParam('is_adr_symptoms');
+                $adrStartDate = $this->_getParam('adr_start_date');
+                $adrStopDate = $this->_getParam('adr_stop_date');
+                $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
+                $adrInterventions = $this->_getParam('adr_intervention');
+                if(!$isAdrInterventionProvided) {
+                    $adrInterventions = array();
+                }
+                
 
                 $frmModel->setHivStatus($hivStatus);
                 $frmModel->setIsCommited($isCommited);
@@ -783,6 +844,11 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $frmModel->setIsTuberculosisServices($isTuberculosisServices);
                 $frmModel->setIsMalariaServices($isMalariaServices);
                 $frmModel->setIsOvcServices($isOvcServices);
+                $frmModel->setIsAdrScreened($isAdrScreened);
+                $frmModel->setIsAdrSymptoms($isAdrSymptoms);
+                $frmModel->setAdrStartDate($adrStartDate);
+                $frmModel->setAdrStopDate($adrStopDate);
+                $frmModel->setIsAdrInterventionProvided($isAdrInterventionProvided);
                 
                 $frmModel->save();
                 
@@ -795,7 +861,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 TrustCare_Model_FrmCommunityTuberculosisType::replaceForFrmCommunity($frmModel->getId(), $tuberculosisTypeList, array('mapperOptions' => array('adapter' => $db)));
                 TrustCare_Model_FrmCommunityMalariaType::replaceForFrmCommunity($frmModel->getId(), $malariaTypeList, array('mapperOptions' => array('adapter' => $db)));
                 TrustCare_Model_FrmCommunityOvcType::replaceForFrmCommunity($frmModel->getId(), $ovcTypeList, array('mapperOptions' => array('adapter' => $db)));
-                
+                TrustCare_Model_FrmCommunityAdrIntervention::replaceForFrmCommunity($frmModel->getId(), $adrInterventions, array('mapperOptions' => array('adapter' => $db)));
                 
                 $db->commit();
     
@@ -836,6 +902,11 @@ class Form_CommunityController extends ZendX_Controller_Action
             $isTuberculosisServices =  $frmModel->getIsTuberculosisServices();
             $isMalariaServices =  $frmModel->getIsMalariaServices();
             $isOvcServices = $frmModel->getIsOvcServices();
+            $isAdrScreened = $frmModel->getIsAdrScreened();
+            $isAdrSymptoms = $frmModel->getIsAdrSymptoms();
+            $adrStartDate = $frmModel->getAdrStartDate();
+            $adrStopDate = $frmModel->getAdrStopDate();
+            $isAdrInterventionProvided = $frmModel->getIsAdrInterventionProvided();
             
     
             $ovcTypeList = array();
@@ -946,6 +1017,18 @@ class Form_CommunityController extends ZendX_Controller_Action
                 }
             }
             
+            $adrInterventions = array();
+            $model = new TrustCare_Model_FrmCommunityAdrIntervention(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model->fetchAllForFrmCommunity($frmModel->getId()) as $obj) {
+                $dict = TrustCare_Model_PharmacyDictionary::find($obj->getIdPharmacyDictionary());
+                if(is_null($dict)) {
+                    $this->getLogger()->error(sprintf("Failed to load pharmacy_dictionary.id=%s for frm_community.id=%s", $obj->getIdPharmacyDictionary(), $id));
+                }
+                else {
+                    $adrInterventions[] = $dict->getId();
+                }
+            }
+            
     
         }
     
@@ -960,6 +1043,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE => $tuberculosisTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_MALARIA_TYPE => $malariaTypeList,
             TrustCare_Model_PharmacyDictionary::DTYPE_HTC_RESULT => array($htcResultId),
+            TrustCare_Model_PharmacyDictionary::DTYPE_COMMUNITY_ADR_INTERVENTION_TYPE => $adrInterventions,
         );
     
         $this->view->formModel = $frmModel;
@@ -982,6 +1066,11 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->isOvcServices = $isOvcServices;
         $this->view->hivStatus = $hivStatus;
         $this->view->hivStatuses = $this->_getHivStatuses();
+        $this->view->isAdrScreened = $isAdrScreened;
+        $this->view->isAdrSymptoms = $isAdrSymptoms;
+        $this->view->adrStartDate = $adrStartDate;
+        $this->view->adrStopDate = $adrStopDate;
+        $this->view->isAdrInterventionProvided = $isAdrInterventionProvided;
         
         $this->render('edit');
         return;

@@ -195,3 +195,40 @@
   </tr>
  </table>
 </div>
+
+<div class="tab_header"><?php echo $this->translate(_("ADR Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Is patient screened for ADR symptoms at this visit?"));?></div></td>
+   <td><?php echo $this->formModel->getIsAdrScreened() ? $this->translate(_("Yes")) : $this->translate(_("No"));?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Any signs/symptoms indicating adverse drug reactions (ADRs) at this visit?"));?></div></td>
+   <td><?php echo $this->formModel->getIsAdrSymptoms() ? $this->translate(_("Yes")) : $this->translate(_("No"));?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("ADR Start Date"));?></div></td>
+   <td><?php echo $this->formModel->getAdrStartDate();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("ADR Stop Date"));?></div></td>
+   <td><?php echo $this->formModel->getAdrStopDate();?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Adverse Drug Reaction intervention provided"));?></div></td>
+   <td><?php echo $this->formModel->getIsAdrInterventionProvided() ? $this->translate(_("Yes")) : $this->translate(_("No"));?></td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><?php echo $this->translate(_("Types of ADR intervention"));?></div></td>
+   <td>
+<?php
+    foreach($this->adrInterventions as $name) {
+        echo $name.'<br/>';
+    }
+?>
+   </td>
+  </tr>
+ </table>
+</div>
+
