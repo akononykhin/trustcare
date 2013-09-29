@@ -36,6 +36,11 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     protected $_is_patient_male;
     protected $_id_nafdac;
     protected $_hiv_status;
+    protected $_is_adr_screened;
+    protected $_is_adr_symptoms;
+    protected $_is_adr_intervention_provided;
+    protected $_adr_start_date;
+    protected $_adr_stop_date;
     
     public function __construct($options = array())
     {
@@ -592,6 +597,103 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     {
         return $this->_hiv_status;
     }
+    
+    /**
+     * @param  bool $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setIsAdrScreened($value)
+    {
+        $this->_parameterChanged('is_adr_screened', $value, true);
+        $this->_is_adr_screened = !empty($value) ? true : false;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getIsAdrScreened()
+    {
+        return !empty($this->_is_adr_screened) ? true : false;
+    }
+    
+    /**
+     * @param  bool $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setIsAdrSymptoms($value)
+    {
+        $this->_parameterChanged('is_adr_symptoms', $value, true);
+        $this->_is_adr_symptoms = !empty($value) ? true : false;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getIsAdrSymptoms()
+    {
+        return !empty($this->_is_adr_symptoms) ? true : false;
+    }
+    
+    /**
+     * @param  bool $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setIsAdrInterventionProvided($value)
+    {
+        $this->_parameterChanged('is_adr_intervention_provided', $value, true);
+        $this->_is_adr_intervention_provided = !empty($value) ? true : false;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getIsAdrInterventionProvided()
+    {
+        return !empty($this->_is_adr_intervention_provided) ? true : false;
+    }
+    
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setAdrStartDate($value)
+    {
+        $this->_parameterChanged('adr_start_date', $value);
+        $this->_adr_start_date = (string) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getAdrStartDate()
+    {
+        return $this->_adr_start_date;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_FrmCommunity
+     */
+    public function setAdrStopDate($value)
+    {
+        $this->_parameterChanged('adr_stop_date', $value);
+        $this->_adr_stop_date = (string) $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getAdrStopDate()
+    {
+        return $this->_adr_stop_date;
+    }
+    
     
     
     public function isExists()

@@ -61,6 +61,11 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_patient_male' => true,
                 'id_nafdac' => 1,
                 'hiv_status' => 'paba',
+                'is_adr_screened' => true,
+                'is_adr_symptoms' => false,
+                'is_adr_intervention_provided' => true,
+                'adr_start_date' => '2012-06-01',
+                'adr_stop_date' => '2012-06-08',
             );
 
             $columns = array();
@@ -134,6 +139,11 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_patient_male' => true,
                 'id_nafdac' => 2,
                 'hiv_status' => 'paba1',
+                'is_adr_screened' => true,
+                'is_adr_symptoms' => false,
+                'is_adr_intervention_provided' => true,
+                'adr_start_date' => '2012-06-01',
+                'adr_stop_date' => '2012-06-08',
                 'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -187,6 +197,11 @@ class TestOfFrmCommunity extends UnitTestCase {
                 'is_patient_male' => true,
                 'id_nafdac' => 1,
                 'hiv_status' => 'paba2',
+                'is_adr_screened' => true,
+                'is_adr_symptoms' => false,
+                'is_adr_intervention_provided' => true,
+                'adr_start_date' => '2012-06-01',
+                'adr_stop_date' => '2012-06-08',
         );
         
         try {
@@ -299,6 +314,11 @@ class TestOfFrmCommunity extends UnitTestCase {
             $params['is_patient_male'] = !$model->is_patient_male;
             $params['id_nafdac'] = $model->id_nafdac == 1 ? 2 : 1;
             $params['hiv_status'] = $model->hiv_status == 'paba' ? 'plwha' : 'paba';
+            $params['is_adr_screened'] = !$model->is_adr_screened;
+            $params['is_adr_symptoms'] = !$model->is_adr_symptoms;
+            $params['is_adr_intervention_provided'] = !$model->is_adr_intervention_provided;
+            $params['adr_start_date'] = '2011-06-01' == $model->adr_start_date ? '2011-06-02' : '2011-06-01';
+            $params['adr_stop_date'] = '2011-07-01' == $model->adr_stop_date ? '2011-07-02' : '2011-07-01';
             
             try {
                 $model->setOptions($params);
@@ -462,6 +482,8 @@ class TestOfFrmCommunity extends UnitTestCase {
         if($checkTime) {
             $this->assertEqual($model->generation_date, $params['generation_date'], "Incorrect 'generation_date': %s");
             $this->assertEqual($model->date_of_visit, $params['date_of_visit'], "Incorrect 'date_of_visit': %s");
+            $this->assertEqual($model->adr_start_date, $params['adr_start_date'], "Incorrect 'adr_start_date': %s");
+            $this->assertEqual($model->adr_stop_date, $params['adr_stop_date'], "Incorrect 'adr_stop_date': %s");
         }
         $this->assertEqual($model->date_of_visit_month_index, $params['date_of_visit_month_index'], "Incorrect 'date_of_visit_month_index': %s");
         $this->assertIdentical($model->is_first_visit_to_pharmacy, !empty($params['is_first_visit_to_pharmacy']) ? true : false, "Incorrect 'is_referred_in': %s");
@@ -484,6 +506,9 @@ class TestOfFrmCommunity extends UnitTestCase {
         $this->assertIdentical($model->is_patient_male, !empty($params['is_patient_male']) ? true : false, "Incorrect 'is_patient_male': %s");
         $this->assertEqual($model->id_nafdac, $params['id_nafdac'], "Incorrect 'id_nafdac': %s");
         $this->assertEqual($model->hiv_status, $params['hiv_status'], "Incorrect 'hiv_status': %s");
+        $this->assertIdentical($model->is_adr_screened, !empty($params['is_adr_screened']) ? true : false, "Incorrect 'is_adr_screened': %s");
+        $this->assertIdentical($model->is_adr_symptoms, !empty($params['is_adr_symptoms']) ? true : false, "Incorrect 'is_adr_symptoms': %s");
+        $this->assertIdentical($model->is_adr_intervention_provided, !empty($params['is_adr_intervention_provided']) ? true : false, "Incorrect 'is_adr_intervention_provided': %s");
         
     }
 }

@@ -94,6 +94,21 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         if(!$model->isExists() || $model->isParameterChanged('hiv_status')) {
             $data['hiv_status'] = $model->getHivStatus();
         }
+        if(!$model->isExists() || $model->isParameterChanged('is_adr_screened')) {
+            $data['is_adr_screened'] = $model->getIsAdrScreened() ? 1 : 0;
+        }
+        if(!$model->isExists() || $model->isParameterChanged('is_adr_symptoms')) {
+            $data['is_adr_symptoms'] = $model->getIsAdrSymptoms() ? 1 : 0;
+        }
+        if(!$model->isExists() || $model->isParameterChanged('is_adr_intervention_provided')) {
+            $data['is_adr_intervention_provided'] = $model->getIsAdrInterventionProvided() ? 1 : 0;
+        }
+        if(!$model->isExists() || $model->isParameterChanged('adr_start_date')) {
+            $data['adr_start_date'] = $model->getAdrStartDate();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('adr_stop_date')) {
+            $data['adr_stop_date'] = $model->getAdrStopDate();
+        }
         
         if (null === ($id = $model->getId())) {
             unset($data['id']);
@@ -146,8 +161,13 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
               ->setIsPatientYounger15($row->is_patient_younger_15)
               ->setIsPatientMale($row->is_patient_male)
               ->setIdNafdac($row->id_nafdac)
-              ->setHivStatus($row->hiv_status);
-        $model->setSkipTrackChanges(false);
+              ->setHivStatus($row->hiv_status)
+              ->setIsAdrScreened($row->is_adr_screened)
+              ->setIsAdrSymptoms($row->is_adr_symptoms)
+              ->setIsAdrInterventionProvided($row->is_adr_intervention_provided)
+              ->setAdrStartDate($row->adr_start_date_formatted)
+              ->setAdrStopDate($row->adr_stop_date_formatted);
+          $model->setSkipTrackChanges(false);
     }
     
     /**
@@ -161,7 +181,9 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
         select
             *,
             date_format(generation_date, '%%Y-%%m-%%d %%H:%%i:%%s') as generation_date_formatted,
-            date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit_formatted
+            date_format(date_of_visit, '%%Y-%%m-%%d') as date_of_visit_formatted,
+            date_format(adr_start_date, '%%Y-%%m-%%d') as adr_start_date_formatted,
+            date_format(adr_stop_date, '%%Y-%%m-%%d') as adr_stop_date_formatted
         from %s
         where id=?;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME));
         
