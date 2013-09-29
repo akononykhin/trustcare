@@ -299,8 +299,8 @@ class NafdacController extends ZendX_Controller_Action
                 }
                 $dateOfVisit = $frmCommunity->getDateOfVisit();
                 
-                //$adrStartDate = $frmCommunity->getAdrStartDate();
-                //$adrStopDate = $frmCommunity->getAdrStopDate();
+                $adrStartDate = $frmCommunity->getAdrStartDate();
+                $adrStopDate = $frmCommunity->getAdrStopDate();
             }
             
             $form->getSubForm("patient")->getElement('patient_name')->setValue($patientName);
