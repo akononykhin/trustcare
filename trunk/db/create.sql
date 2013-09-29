@@ -137,6 +137,7 @@ insert into pharmacy_dictionary_type(id,ordernum,name) values (22, 22, 'Tubercul
 insert into pharmacy_dictionary_type(id,ordernum,name) values (23, 23, 'OVC Care and Support services');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (24, 24, 'Referred in List');
 insert into pharmacy_dictionary_type(id,ordernum,name) values (25, 25, 'Malaria Services');
+insert into pharmacy_dictionary_type(id,ordernum,name) values (26, 26, 'Types of Community ADR intervention');
 
 CREATE TABLE pharmacy_dictionary (
   `id` int NOT NULL,
@@ -282,6 +283,9 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (480
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (481, 25, 'Malaria prevention (IPT)');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (482, 25, 'Malaria Treatment');
 
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (500, 26, 'Referred to prescriber / other HCWs/facility for ADR management');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (501, 26, 'Patient counseled on how to manage ADR');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (502, 26, 'Drug therapy initiated/ changed');
 
 /************* END Pharmacy Dictionaries **************************************************/
 
@@ -1105,4 +1109,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130929, 1);
+insert into db_version values (1, 20130929, 2);
