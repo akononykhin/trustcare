@@ -123,7 +123,52 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
             $('#row_ovc_type').show();
         }
     }
+    
+    function checkIsAdrScreened()
+    {
+        if(0 == $('input:radio[name=is_adr_screened]:checked').val()) {
+            $('input[name = "is_adr_symptoms"]').attr("disabled", 'disabled');
+            $('#is_adr_symptoms_0').attr('checked', 'checked');
+        }
+        else {
+            $('input[name = "is_adr_symptoms"]').removeAttr("disabled");
+        }
+        checkIsAdrSymptoms();
+    }
 
+    function checkIsAdrSymptoms()
+    {
+        if(0 == $('input:radio[name=is_adr_symptoms]:checked').val()) {
+            $('#row_adr_severity_id').hide();
+        }
+        else {
+            $('#row_adr_severity_id').show();
+        }
+    }
+
+    function checkIsAdrInterventionProvided()
+    {
+        if(0 == $('input:radio[name=is_adr_intervention_provided]:checked').val()) {
+            $('#row_adr_intervention').hide();
+        }
+        else {
+            $('#row_adr_intervention').show();
+        }
+    }
+    
+
+    function checkAdrStopDate()
+    {
+        var val = $('#adr_stop_date').val();
+        if('' == val || '<?php echo $textForEmptyAdrStopDate;?>' == val) {
+            $('#adr_stop_date').val('<?php echo $textForEmptyAdrStopDate;?>');
+            $('#adr_stop_date').css('color', '#e6e6e6');
+        }
+        else {
+            $('#adr_stop_date').css('color', '#000000');
+        }
+    }
+    
     $(document).ready(function() {
         internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
 
@@ -147,8 +192,12 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         dictEntitiesCtrl.addCtrl('tuberculosis_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_TUBERCULOSIS_TYPE;?>');
         dictEntitiesCtrl.addCtrl('malaria_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_MALARIA_TYPE;?>');
         dictEntitiesCtrl.addCtrl('ovc_type', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_OVC_TYPE;?>');
-
+        dictEntitiesCtrl.addCtrl('adr_intervention', '<?php echo TrustCare_Model_PharmacyDictionary::DTYPE_COMMUNITY_ADR_INTERVENTION_TYPE;?>');
+        
         $('#main_form').submit(function() {
+            if('<?php echo $textForEmptyAdrStopDate?>' == $('#adr_stop_date').val()) {
+                $('#adr_stop_date').val('');
+            }
             if('1' == $("#is_commited option:selected").val()) {
                 if(window.confirm(i18n.translate("Do You want to fill NAFDAC form at next step?"))) {
                     $('#id_generate_nafdac_form').val('1');
@@ -191,6 +240,15 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         $('input[name = "is_ovc_services"]').bind('change', function(){
             checkIsOvcServices();
         });
+        $('input[name = "is_adr_screened"]').bind('change', function(){
+            checkIsAdrScreened();
+        });
+        $('input[name = "is_adr_symptoms"]').bind('change', function(){
+            checkIsAdrSymptoms();
+        });
+        $('input[name = "is_adr_intervention_provided"]').bind('change', function(){
+            checkIsAdrInterventionProvided();
+        });
 /*** END Bind of OnChange ***/        
         
         checkIsReferredFrom();
@@ -203,6 +261,15 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
         checkIsTuberculosisServices();
         checkIsMalariaServices();
         checkIsOvcServices();
+        checkIsAdrScreened();
+        checkIsAdrInterventionProvided();
+        
+        $("#adr_start_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+        $("#adr_stop_date").datepicker({dateFormat : 'yy-mm-dd', appendText: "(yyyy-mm-dd)"});
+        $("#adr_stop_date").bind('change', function(){
+            checkAdrStopDate();
+        });
+        checkAdrStopDate();
         
 });
 </script>   
@@ -448,6 +515,53 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
  </table>
 </div>
 
+
+<div class="tab_header"><?php echo $this->translate(_("ADR Tab"));?></div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adr_screened"><?php echo $this->translate(_("Is patient screened for ADR symptoms at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adr_screened" id="is_adr_screened_0" value="0" <?php if(!$this->isAdrScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_screened" id="is_adr_screened_1" value="1" <?php if($this->isAdrScreened) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adr_symptoms"><?php echo $this->translate(_("Any signs/symptoms indicating adverse drug reactions (ADRs) at this visit?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_0" value="0" <?php if(!$this->isAdrSymptoms) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_symptoms" id="is_adr_symptoms_1" value="1" <?php if($this->isAdrSymptoms) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="adr_start_date"><?php echo $this->translate(_("ADR Start Date"));?></label></div></td>
+   <td>
+     <input type="text" name="adr_start_date" id="adr_start_date" value="<?php echo $this->adrStartDate;?>">     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="adr_stop_date"><?php echo $this->translate(_("ADR Stop Date"));?></label></div></td>
+   <td>
+     <input type="text" name="adr_stop_date" id="adr_stop_date" value="<?php echo $this->adrStopDate;?>">     
+   </td>
+  </tr>
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_adr_intervention_provided"><?php echo $this->translate(_("Adverse Drug Reaction intervention provided"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_adr_intervention_provided" id="is_adr_intervention_provided_0" value="0" <?php if(!$this->isAdrInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+     <input type="radio" name="is_adr_intervention_provided" id="is_adr_intervention_provided_1" value="1" <?php if($this->isAdrInterventionProvided) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+   </td>
+  </tr>
+  <tr id="row_adr_intervention">
+   <td valign="top"><div class="normal"><label for="adr_intervention"><?php echo $this->translate(_("Types of ADR intervention"));?></label></div></td>
+   <td>
+     <select name="adr_intervention[]" id="adr_intervention" class="pharmdict_modify_menu" multiple size="5">
+     </select>&nbsp;
+     <a id="link-add-adr_intervention"><?php echo $this->translate(_("Other"));?></a>
+   </td>
+  </tr>
+ </table>
+</div>
 
 <input type="submit" name="save" value="<?php echo $this->translate(_("Save"));?>"/>     
 </form>
