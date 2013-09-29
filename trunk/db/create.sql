@@ -536,8 +536,13 @@ CREATE TABLE frm_community (
   `is_ovc_services` int,
   `is_patient_younger_15` int default NULL,
   `is_patient_male` int default NULL,
-  `id_nafdac` int default NULL,
   `hiv_status` varchar(8) default NULL,
+  `is_adr_screened` int,
+  `is_adr_symptoms` int,
+  `adr_start_date` datetime default NULL,
+  `adr_stop_date` datetime default NULL,
+  `is_adr_intervention_provided` int,
+  `id_nafdac` int default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -613,6 +618,14 @@ CREATE TABLE frm_community_ovc_type (
   `id_frm_community` int NOT NULL,
   `id_pharmacy_dictionary` int NOT NULL,
   UNIQUE KEY `cons_frm_community_ovc_type_1` (`id_frm_community`, `id_pharmacy_dictionary`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE frm_community_adr_intervention (
+  `id` int NOT NULL,
+  `id_frm_community` int NOT NULL,
+  `id_pharmacy_dictionary` int NOT NULL,
+  UNIQUE KEY `cons_frm_community_adr_intervention_1` (`id_frm_community`, `id_pharmacy_dictionary`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -998,6 +1011,14 @@ alter table frm_community_ovc_type
     add constraint fk_frm_community_ovc_type_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
         references pharmacy_dictionary(id);
 
+alter table frm_community_adr_intervention
+    add constraint fk_frm_community_adr_intervention_id_frm_community foreign key (id_frm_community)
+        references frm_community(id) on delete cascade;
+
+alter table frm_community_adr_intervention
+    add constraint fk_frm_community_adr_intervention_id_pharmacy_dictionary foreign key (id_pharmacy_dictionary)
+        references pharmacy_dictionary(id);
+
 
 
 alter table report_care
@@ -1075,6 +1096,7 @@ INSERT INTO db_sequence(name,value) VALUES ('frm_community_reproductive_health_t
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_tuberculosis_type_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_malaria_type_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('frm_community_ovc_type_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('frm_community_adr_intervention_id_seq', 1);
 
 INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
@@ -1083,4 +1105,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130928, 6);
+insert into db_version values (1, 20130929, 1);

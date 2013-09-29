@@ -66,6 +66,29 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
         if(!array_key_exists('hiv_status', $data) || empty($data['hiv_status'])) {
             $data['hiv_status'] = new Zend_Db_Expr('NULL');
         }
+        if (!array_key_exists('adr_start_date', $data) || empty($data['adr_start_date'])) {
+            $data['adr_start_date'] = new Zend_Db_Expr('NULL');
+        }
+        else {
+            if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['adr_start_date']) {
+                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", gmdate("Y-m-d")));
+            }
+            else {
+                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['adr_start_date']));
+            }
+        }
+        if (!array_key_exists('adr_stop_date', $data) || empty($data['adr_stop_date'])) {
+            $data['adr_stop_date'] = new Zend_Db_Expr('NULL');
+        }
+        else {
+            if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['adr_stop_date']) {
+                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", gmdate("Y-m-d")));
+            }
+            else {
+                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['adr_stop_date']));
+            }
+        }
+        
         
         return parent::insert($data);
     }
@@ -95,6 +118,28 @@ class TrustCare_Model_DbTable_FrmCommunity extends ZendX_Db_Table_Abstract
         }
         if(array_key_exists('hiv_status', $data) && empty($data['hiv_status'])) {
             $data['hiv_status'] = new Zend_Db_Expr('NULL');
+        }
+        if(array_key_exists('adr_start_date', $data)) {
+            if(empty($data['adr_start_date'])) {
+                $data['adr_start_date'] = new Zend_Db_Expr('NULL');
+            }
+            else if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['adr_start_date']) {
+                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", gmdate("Y-m-d")));
+            }
+            else {
+                $data['adr_start_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['adr_start_date']));
+            }
+        }
+        if(array_key_exists('adr_stop_date', $data)) {
+            if(empty($data['adr_stop_date'])) {
+                $data['adr_stop_date'] = new Zend_Db_Expr('NULL');
+            }
+            else if(ZendX_Db_Table_Abstract::LABEL_NOW == $data['adr_stop_date']) {
+                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", gmdate("Y-m-d")));
+            }
+            else {
+                $data['adr_stop_date'] = new Zend_Db_Expr(sprintf("str_to_date('%s', '%%Y-%%m-%%d')", $data['adr_stop_date']));
+            }
         }
         
         return parent::update($data, $where);
