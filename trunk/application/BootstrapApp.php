@@ -249,52 +249,47 @@ class BootstrapApp extends BootstrapMain
             	'pages'         => array(
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmaceutical Care"),
-                        'controller'    => 'report',
+                        'controller'    => 'report_care',
                         'action'        => 'list',
-                        'params'        => array('type' => 'care'),
                     	'resource'      => 'resource:report',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Generate"),
-                                'controller'    => 'report',
+                                'controller'    => 'report_care',
                                 'action'        => 'generate',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'care'),
                     			'resource'      => 'resource:report',
                                 'privilege'     => 'create'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                                'controller'    => 'report',
+                                'controller'    => 'report_care',
                                 'action'        => 'view',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'care'),
                     			'resource'      => 'resource:report',
                                 'privilege'     => 'view'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Load"),
-                                'controller'    => 'report',
+                                'controller'    => 'report_care',
                                 'action'        => 'load',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'care'),
                     			'resource'      => 'resource:report',
                                 'privilege'     => 'view'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'report',
+                                'controller'    => 'report_care',
                                 'action'        => 'create',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'care'),
                     			'resource'      => 'resource:report',
                                 'privilege'     => 'edit'
                             ),
                         ),
                     ),
                     array(
-                        'label'         => Zend_Registry::get("Zend_Translate")->_("Community Pharmacy"),
+                        'label'         => Zend_Registry::get("Zend_Translate")->_("Community MSF"),
                         'controller'    => 'report',
                         'action'        => 'list',
                         'params'        => array('type' => 'community'),
