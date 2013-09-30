@@ -290,45 +290,40 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Community MSF"),
-                        'controller'    => 'report',
+                        'controller'    => 'report_community-msf',
                         'action'        => 'list',
-                        'params'        => array('type' => 'community'),
                     	'resource'      => 'resource:report',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Generate"),
-                                'controller'    => 'report',
+                                'controller'    => 'report_community-msf',
                                 'action'        => 'generate',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:report',
                                 'privilege'     => 'create'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                                'controller'    => 'report',
+                                'controller'    => 'report_community-msf',
                                 'action'        => 'view',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:report',
                                 'privilege'     => 'view'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Load"),
-                                'controller'    => 'report',
+                                'controller'    => 'report_community-msf',
                                 'action'        => 'load',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:report',
                                 'privilege'     => 'view'
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'report',
+                                'controller'    => 'report_community-msf',
                                 'action'        => 'create',
                                 'visible'       => false,
-                        		'params'        => array('type' => 'community'),
                     			'resource'      => 'resource:report',
                                 'privilege'     => 'edit'
                             ),
