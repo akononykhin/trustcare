@@ -662,6 +662,16 @@ CREATE TABLE report_community (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE report_community_services (
+  `id` int NOT NULL,
+  `generation_date` datetime NOT NULL,
+  `period` int,
+  `id_user` int default NULL,
+  `id_pharmacy` int NOT NULL,
+  `filename` varchar(255),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE nafdac (
   `id` int NOT NULL,
@@ -709,6 +719,71 @@ CREATE TABLE nafdac_medicine (
   `reason` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE tmp_community_report_register (
+  `report_uid`              varchar(32) NOT NULL,
+  `client_name`             varchar(255),
+  `is_plhiv_paba`           bool,
+  `fe_provided_preventive`  bool,
+  `fe_provided_clinical`    bool,
+  `fe_provided_supportive`  bool,
+  `plwha_young_male`        bool,
+  `plwha_young_female`      bool,
+  `plwha_adult_male`        bool,
+  `plwha_adult_female`      bool,
+  `paba_young_male`         bool,
+  `paba_young_female`       bool,
+  `paba_adult_male`         bool,
+  `paba_adult_female`       bool,
+  `other_young_male`        bool,
+  `other_young_female`      bool,
+  `other_adult_male`        bool,
+  `other_adult_female`      bool,
+  `se_provided_preventive`  bool,
+  `se_provided_clinical`    bool,
+  `se_provided_supportive`  bool,
+  `preventive_1`            bool,
+  `preventive_2`            bool,
+  `preventive_3`            bool,
+  `preventive_4`            bool,
+  `preventive_5`            bool,
+  `preventive_6`            bool,
+  `supportive_out_1`        bool,
+  `supportive_out_2`        bool,
+  `supportive_out_3`        bool,
+  `supportive_out_4`        bool,
+  `supportive_out_5`        bool,
+  `supportive_out_6`        bool,
+  `supportive_in_1`         bool,
+  `supportive_in_2`         bool,
+  `supportive_in_3`         bool,
+  `supportive_in_4`         bool,
+  `supportive_in_5`         bool,
+  `clinical_sti_1`          bool,
+  `clinical_sti_2`          bool,
+  `clinical_malaria_1`      bool,
+  `clinical_malaria_2`      bool,
+  `clinical_malaria_3`      bool,
+  `clinical_reproductive_1` bool,
+  `clinical_reproductive_2` bool,
+  `clinical_reproductive_3` bool,
+  `clinical_reproductive_4` bool,
+  `clinical_tb_1`           bool,
+  `clinical_tb_2`           bool,
+  `clinical_tb_3`           bool,
+  `clinical_tb_4`           bool,
+  `clinical_tb_5`           bool,
+  `clinical_palliative_1`   bool,
+  `clinical_palliative_2`   bool,
+  `adr_screened`            bool,
+  `adr_not_detected`        bool,
+  `adr_detected`            bool,
+  `nafdac_filled`           bool,
+  `adr_intervention_1`      bool,
+  `adr_intervention_2`      bool,
+  `adr_intervention_3`      bool
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 alter table state
@@ -1041,6 +1116,14 @@ alter table report_community
     add constraint fk_report_community_id_user foreign key (id_user)
         references user(id) on delete set NULL;
 
+alter table report_community_services
+    add constraint fk_report_community_services_1 foreign key (id_pharmacy)
+        references pharmacy(id) on delete cascade;
+
+alter table report_community_services
+    add constraint fk_report_community_services_2 foreign key (id_user)
+        references user(id) on delete set NULL;
+
 alter table nafdac
     add constraint fk_nafdac_id_user foreign key (id_user)
         references user(id);
@@ -1104,9 +1187,10 @@ INSERT INTO db_sequence(name,value) VALUES ('frm_community_adr_intervention_id_s
 
 INSERT INTO db_sequence(name,value) VALUES ('report_care_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('report_community_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('report_community_services_id_seq', 1);
 
 
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20130929, 2);
+insert into db_version values (1, 20131001, 1);
