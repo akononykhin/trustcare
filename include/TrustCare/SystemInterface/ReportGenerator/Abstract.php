@@ -8,6 +8,7 @@ abstract class TrustCare_SystemInterface_ReportGenerator_Abstract
 {
     const CODE_CARE = 'care';
     const CODE_COMMUNITY = 'community';
+    const CODE_COMMUNITY_SERVICES = 'community_services';
     const CODE_NAFDAC = 'nafdac';
     
     protected $_runTimePrefix = '';
