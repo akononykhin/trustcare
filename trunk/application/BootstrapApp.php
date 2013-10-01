@@ -329,7 +329,48 @@ class BootstrapApp extends BootstrapMain
                             ),
                         ),
                     ),
-                    
+            	    array(
+            	        'label'         => Zend_Registry::get("Zend_Translate")->_("Community Services Register"),
+            	        'controller'    => 'report_community-services',
+            	        'action'        => 'list',
+            	        'resource'      => 'resource:report',
+            	        'privilege'     => 'view',
+            	        'pages'         => array(
+            	            array(
+            	                'label'         => Zend_Registry::get("Zend_Translate")->_("Generate"),
+            	                'controller'    => 'report_community-services',
+            	                'action'        => 'generate',
+            	                'visible'       => false,
+            	                'resource'      => 'resource:report',
+            	                'privilege'     => 'create'
+            	            ),
+            	            array(
+            	                'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
+            	                'controller'    => 'report_community-services',
+            	                'action'        => 'view',
+            	                'visible'       => false,
+            	                'resource'      => 'resource:report',
+            	                'privilege'     => 'view'
+            	            ),
+            	            array(
+            	                'label'         => Zend_Registry::get("Zend_Translate")->_("Load"),
+            	                'controller'    => 'report_community-services',
+            	                'action'        => 'load',
+            	                'visible'       => false,
+            	                'resource'      => 'resource:report',
+            	                'privilege'     => 'view'
+            	            ),
+            	            array(
+            	                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
+            	                'controller'    => 'report_community-services',
+            	                'action'        => 'create',
+            	                'visible'       => false,
+            	                'resource'      => 'resource:report',
+            	                'privilege'     => 'edit'
+            	            ),
+            	        ),
+            	    ),
+            	     
                 ),
             ),
             
