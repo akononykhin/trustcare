@@ -209,7 +209,7 @@ class Report_CommunityMsfController extends ZendX_Controller_Action
         $id = $this->_getParam('id');
         $reportModel = TrustCare_Model_ReportCommunity::find($id);
         if(is_null($reportModel)) {
-            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown FReport")));
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Report")));
             return;
         }
         
