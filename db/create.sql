@@ -256,8 +256,8 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (384
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (385, 20, 'Counseling on safe sex practices');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (386, 20, 'Health education & promotion');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (400, 21, 'STI Screening');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (401, 21, 'STIs Screening & Counselling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (400 21, 'STIs Screening & Counselling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (401, 21, 'STIs Treatment');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (420, 22, 'TB Screening');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (421, 22, 'TB Adherence Support');
@@ -1193,4 +1193,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_services_id_seq', 
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20131001, 1);
+insert into db_version values (1, 20131008, 1);
