@@ -157,7 +157,6 @@ class Report_CommunityServicesController extends ZendX_Controller_Action
                 try {
                     $idPharmacy = $form->getValue('id_pharmacy');
                     $period = $form->getValue('period');
-                    $format = $form->getValue('format');
                     
                     if(!preg_match("/^(\d{4})-(\d{2})$/", $period, $matches)) {
                         throw new Exception(sprintf("Incorrect period=%s for generating report.", $period));
@@ -173,7 +172,11 @@ class Report_CommunityServicesController extends ZendX_Controller_Action
                                 'year' => $year,
                                 'month' => $month,
                                 'month_index' => sprintf("%04s%02s", $year, $month),
-                    ), $format);
+                    ), 'XLSX');
+                    if(is_null($obj)) {
+                        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+                        throw new Exception('');
+                    }
                     $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $obj->getFilename());
                     
                     if(!file_exists($fileReportOutput)) {
@@ -300,12 +303,6 @@ class Report_CommunityServicesController extends ZendX_Controller_Action
             $periodList[gmdate("Y-m", $time)] = gmdate("Y-m", $time);
         }
         
-        $formatList = array(
-            'PDF' => 'PDF',
-            'HTML' => 'HTML',
-            'XLS' => 'Excel',
-        );
-        
         $form = new ZendX_Form();
         $form->setMethod('post');
 
@@ -325,14 +322,6 @@ class Report_CommunityServicesController extends ZendX_Controller_Action
             'value'         => gmdate("Y-m", gmmktime(0, 0, 0, gmdate("m"), gmdate("d"), gmdate("Y"))),
             'multioptions'  => $periodList,
         ));
-        $form->addElement('select', 'format', array(
-            'label'         => Zend_Registry::get("Zend_Translate")->_("Format"),
-            'tabindex'      => $tabIndex++,
-            'required'      => true,
-            'value'         => 'PDF',
-            'multioptions'  => $formatList,
-        ));
-        
         
         $form->addElement('submit', 'send', array(
             'label'     => Zend_Registry::get("Zend_Translate")->_("Generate"),

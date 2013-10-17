@@ -161,6 +161,7 @@ class TrustCare_SystemInterface_ReportGenerator_CommunityServices extends TrustC
             $parameters[] = sprintf("month=%s", $month);
             $parameters[] = sprintf("year=%s", $year);
             $parameters[] = sprintf("id_pharmacy=%s", $id_pharmacy);
+            $parameters[] = sprintf("report_uid=%s", $uuid);
             
             $this->_generateReportFile($designFile, $fileReportOutput, $parameters, $format);
             
