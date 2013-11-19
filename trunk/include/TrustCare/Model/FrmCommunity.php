@@ -739,21 +739,6 @@ class TrustCare_Model_FrmCommunity extends TrustCare_Model_Abstract
     }
     
     
-    /**
-     * 
-     * Check either specified patient has already visited specified pharmacy
-     * @param int $patientId
-     * @param int $pharmacyId
-     * @param array $options
-     * 
-     * @return bool
-     */
-    public static function isFirstVisitOfPatientToPharmacy($patientId, $pharmacyId, array $options = null)
-    {
-        $model = new TrustCare_Model_FrmCommunity($options);
-        return $model->getMapper()->isFirstVisitOfPatientToPharmacy($patientId, $pharmacyId);
-    }
-    
     public function delete()
     {
     	parent::delete();

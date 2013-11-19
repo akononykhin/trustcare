@@ -296,6 +296,13 @@ dictEntitiesCtrl.addSelected(<?php echo $key;?>, [<?php if(is_array($values)) ec
    <td><?php echo $this->formModel->getDateOfVisit();?></td>
   </tr>
   <tr>
+   <td valign="top"><div class="normal"><label for="is_first_visit_to_pharmacy"><?php echo $this->translate(_("Is this the FIRST encounter?"));?></label></div></td>
+   <td>
+     <input type="radio" name="is_first_visit_to_pharmacy" id="is_first_visit_to_pharmacy_1" value="1" <?php if($this->isFirstVisitToPharmacy) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("Yes"));?>     
+     <input type="radio" name="is_first_visit_to_pharmacy" id="is_first_visit_to_pharmacy_0" value="0" <?php if(!$this->isFirstVisitToPharmacy) echo 'checked';?>>&nbsp;<?php echo $this->translate(_("No"));?><br/>     
+   </td>
+  </tr>
+  <tr>
    <td valign="top"><div class="normal"><label for="hiv_status"><?php echo $this->translate(_("HIV Status"));?></label></div></td>
    <td>
      <select name="hiv_status" id="hiv_status">
