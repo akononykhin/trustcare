@@ -242,7 +242,7 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (328
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (340, 18, 'Positive');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (341, 18, 'Negative');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (342, 18, 'Intermediate');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (342, 18, 'Indeterminate');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (360, 19, 'Opportunistic Infections Screening & Management');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (361, 19, 'Ol management');
@@ -262,7 +262,7 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (401
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (420, 22, 'TB Screening');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (421, 22, 'TB Adherence Support');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (422, 22, 'TB Drugs Refills');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (423, 22, 'DOTs/CTBC');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (423, 22, 'DOTs');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (424, 22, 'INH Preventive Therapy (IPT)');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (440, 23, 'Enrollment');
@@ -1193,4 +1193,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_services_id_seq', 
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20131008, 1);
+insert into db_version values (1, 20131119, 1);
