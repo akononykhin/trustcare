@@ -328,16 +328,6 @@ a {
      <input type="text" name="date_of_visit" id="date_of_visit" value="<?php echo $this->dateOfVisit;?>">     
    </td>
   </tr>
-  <tr>
-   <td valign="top"><div class="normal"><label for="is_commited"><?php echo $this->translate(_("Save Form as"));?></label></div></td>
-   <td>
-     <select name="is_commited" id="is_commited">
-        <option value='0'><?php echo $this->translate(_("Draft"));?></option>
-        <option value='1'><?php echo $this->translate(_("Final Result"));?></option>
-     </select>
-     <div class="description"><?php echo $this->translate(_("Draft can be modified later."));?></div>
-     </td>
-  </tr>
   
   <tr>
    <td valign="top"><div class="normal"><label for="is_pregnant"><?php echo $this->translate(_("Is pregnant"));?></label></div></td>
@@ -607,6 +597,22 @@ a {
  </table>
 </div>
 
+<div class="tab_header">&nbsp;</div>
+<div class="tab_content">
+ <table class="zend_form">
+  <tr>
+   <td valign="top"><div class="normal"><label for="is_commited"><?php echo $this->translate(_("Save Form as"));?></label></div></td>
+   <td>
+     <select name="is_commited" id="is_commited">
+        <option value='0'><?php echo $this->translate(_("Draft"));?></option>
+        <option value='1'><?php echo $this->translate(_("Final Result"));?></option>
+     </select>
+     <div class="description"><?php echo $this->translate(_("Draft can be modified later."));?></div>
+     </td>
+  </tr>
+ </table>
+</div>
+  
 <input type="submit" name="save" value="<?php echo $this->translate(_("Save"));?>"/>     
 </form>
 
