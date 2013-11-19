@@ -215,21 +215,6 @@ class TrustCare_Model_Mapper_FrmCommunity extends TrustCare_Model_Mapper_Abstrac
     
     
     /**
-     * 
-     * Check either specified patient has already visited specified pharmacy
-     * @param int $patientId
-     * @param int $pharmacyId
-     */
-    public function isFirstVisitOfPatientToPharmacy($patientId, $pharmacyId)
-    {
-        $query = sprintf("select count(id) from %s where id_patient=%d and id_pharmacy=%d;", $this->getDbTable()->info(Zend_Db_Table_Abstract::NAME), $patientId, $pharmacyId);
-        $this->getDbAdapter()->setFetchMode(Zend_Db::FETCH_NUM);
-        $result = $this->getDbAdapter()->fetchAll($query);
-        
-        return ($result[0][0] > 0) ? true : false;
-    }
-    
-    /**
      * @return array
      */
     public function fetchAll(array $clauses = array())

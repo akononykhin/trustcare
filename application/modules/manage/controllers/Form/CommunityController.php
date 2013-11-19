@@ -170,6 +170,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $idPharmacy = $this->_getParam('id_pharmacy');
                 $idPatient = $this->_getParam('id_patient');
                 $dateOfVisit = $this->_getParam('date_of_visit');
+                $isFirstVisitToPharmacy = $this->_getParam('is_first_visit_to_pharmacy');
                 $isReferredFrom = $this->_getParam('is_referred_from');
                 $referredFromList = $this->_getParam('referred_from');
                 if(!$isReferredFrom) {
@@ -287,7 +288,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                         'id_pharmacy' => $idPharmacy,
                 		'id_patient' => $idPatient,
                 		'date_of_visit' => $dateOfVisit,
-                		'is_first_visit_to_pharmacy' => TrustCare_Model_FrmCommunity::isFirstVisitOfPatientToPharmacy($idPatient, $idPharmacy),
+                		'is_first_visit_to_pharmacy' => $isFirstVisitToPharmacy,
                 		'is_referred_from' => $isReferredFrom,
                         'is_referred_in' => $isReferredIn,
                 		'is_referred_out' => $isReferredOut,
@@ -451,6 +452,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             $idPharmacy = null;
             $idPatient = null;
             $dateOfVisit = $this->convertDateToUserTimezone(gmdate("Y-m-d"), 'yyyy-MM-dd');
+            $isFirstVisitToPharmacy = true;
             $isReferredFrom = true;
             $referredFromList = array();
             $isReferredIn = true;
@@ -510,6 +512,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->pharmacies = $pharmaciesList;
         $this->view->id_patient = $idPatient;
         $this->view->dateOfVisit = $dateOfVisit;
+        $this->view->isFirstVisitToPharmacy = $isFirstVisitToPharmacy;
         $this->view->isReferredFrom = $isReferredFrom;
         $this->view->isReferredIn = $isReferredIn;
         $this->view->isReferredOut = $isReferredOut;
@@ -760,6 +763,7 @@ class Form_CommunityController extends ZendX_Controller_Action
     
             $db->beginTransaction();
             try {
+                $isFirstVisitToPharmacy = $this->_getParam('is_first_visit_to_pharmacy');
                 $hivStatus = $this->_getParam('hiv_status');
                 $isCommited = $this->_getParam('is_commited');
                 $isReferredFrom = $this->_getParam('is_referred_from');
@@ -827,6 +831,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 }
                 
 
+                $frmModel->setIsFirstVisitToPharmacy($isFirstVisitToPharmacy);
                 $frmModel->setHivStatus($hivStatus);
                 $frmModel->setIsCommited($isCommited);
                 $frmModel->setIsReferredFrom($isReferredFrom);
@@ -886,6 +891,7 @@ class Form_CommunityController extends ZendX_Controller_Action
             $this->view->error = $errorMsg;
         }
         else {
+            $isFirstVisitToPharmacy = $frmModel->getIsFirstVisitToPharmacy();
             $hivStatus = $frmModel->getHivStatus();
             $isReferredFrom = $frmModel->getIsReferredFrom();
             $isReferredIn = $frmModel->getIsReferredIn();
@@ -1050,6 +1056,7 @@ class Form_CommunityController extends ZendX_Controller_Action
         $this->view->patientModel = $patientModel;
         $this->view->pharmacyName = $pharmacyModel->getName();
         $this->view->dictEntities = $dictEntities;
+        $this->view->isFirstVisitToPharmacy = $isFirstVisitToPharmacy;
         $this->view->isReferredFrom = $isReferredFrom;
         $this->view->isReferredIn = $isReferredIn;
         $this->view->isReferredOut = $isReferredOut;        
