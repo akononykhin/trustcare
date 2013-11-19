@@ -577,15 +577,17 @@ class NafdacController extends ZendX_Controller_Action
                 'tabindex'      => $tabIndex++,
                 'required'      => false
         ));
-        $adrSubForm->addElement('checkbox', 'was_admitted', array(
+        $adrSubForm->addElement('radio', 'was_admitted', array(
                 'label'         => Zend_Registry::get("Zend_Translate")->_("Was Patient Admited Due to ADR?"),
                 'tabindex'      => $tabIndex++,
-                'checked'      => false
+                'multioptions'  => array(true => 'Yes', false => 'No'),
+                'value'      => false
         ));
-        $adrSubForm->addElement('checkbox', 'was_hospitalization_prolonged', array(
+        $adrSubForm->addElement('radio', 'was_hospitalization_prolonged', array(
                 'label'         => Zend_Registry::get("Zend_Translate")->_("If Already Hospitalized, Was it Prolonged Due to ADR?"),
                 'tabindex'      => $tabIndex++,
-                'checked'      => false
+                'multioptions'  => array(true => 'Yes', false => 'No'),
+                'value'      => false
         ));
         $adrSubForm->addElement('text', 'duration_of_admission', array(
                 'label'         => Zend_Registry::get("Zend_Translate")->_("Duration of Admission (days)"),
