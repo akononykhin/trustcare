@@ -270,7 +270,6 @@ class Report_CareController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Report")));
             return;
         }
-
         
         $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
         if(!array_key_exists($model->getIdPharmacy(), $availablePharmacies)) {
