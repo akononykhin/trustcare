@@ -84,6 +84,7 @@ class NafdacController extends ZendX_Controller_Action
         $iTotal = $result[0][0];
     
     
+        $pharmacyIds = array_keys(Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies());
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_ASSOC);
         $select = Zend_Registry::getInstance()->dbAdapter->select()
                                                          ->from('nafdac',
@@ -93,8 +94,9 @@ class NafdacController extends ZendX_Controller_Action
                                                                  'generation_date' => new Zend_Db_Expr("date_format(nafdac.generation_date, '%Y-%m-%d %H:%i:%s')")
                                                              ))
                                                          ->joinLeft(array('patient'), 'nafdac.id_patient = patient.id', array('patient_identifier' => 'patient.identifier'))
-                                                         ->joinLeft(array('pharmacy'), 'nafdac.id_pharmacy = pharmacy.id', array('pharmacy_name' => 'pharmacy.name'));
-         
+                                                         ->joinLeft(array('pharmacy'), 'nafdac.id_pharmacy = pharmacy.id', array('pharmacy_name' => 'pharmacy.name'))
+                                                         ->where(sprintf("nafdac.id_pharmacy in (%s)", join(",", $pharmacyIds)));
+        
         $this->processListLoadAjaxRequest($select, array('pharmacy_name' => 'pharmacy.name',
                                                          'patient_identifier' => 'patient.identifier'));
     
@@ -154,19 +156,26 @@ class NafdacController extends ZendX_Controller_Action
         $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
-                
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+                
                 $db_options = Zend_Registry::get('dbOptions');
                 $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
                 $db->beginTransaction();
                 $transactionStarted = true;
                 try {
+                    $idPharmacy = $form->getSubForm("patient")->getValue('id_pharmacy');
+                    if(!array_key_exists($idPharmacy, Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies())) {
+                        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied");
+                        throw new Exception('');
+                    }
+                    
+                    
                     $nafdacModel = new TrustCare_Model_Nafdac(
                             array(
                                     'id_user' => Zend_Registry::get("TrustCare_Registry_User")->getUser()->getId(),
                                     'id_patient' => $patientId,
                                     'generation_date' => ZendX_Db_Table_Abstract::LABEL_NOW,
-                                    'id_pharmacy' => $form->getSubForm("patient")->getValue('id_pharmacy'),
+                                    'id_pharmacy' => $idPharmacy,
                                     'date_of_visit' => $form->getSubForm("patient")->getValue('date_of_visit'),
                                     'adr_start_date' => $form->getSubForm("adr")->getValue('adr_start_date'),
                                     'adr_stop_date' => $form->getSubForm("adr")->getValue('adr_stop_date'),
@@ -341,7 +350,13 @@ class NafdacController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown NAFDAC")));
             return;
         }
-
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($model->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
+            return;
+        }
+        
         $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
         $fileName = $model->getFilename();
         
@@ -369,6 +384,12 @@ class NafdacController extends ZendX_Controller_Action
         $model = TrustCare_Model_Nafdac::find($id);
         if(is_null($model)) {
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown NAFDAC")));
+            return;
+        }
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($model->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
             return;
         }
         
@@ -423,7 +444,13 @@ class NafdacController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown NAFDAC")));
             return;
         }
-    
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($model->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
+            return;
+        }
+        
         $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
         $fileName = $model->getFilename();
     
@@ -453,7 +480,13 @@ class NafdacController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown NAFDAC")));
             return;
         }
-    
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($model->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
+            return;
+        }
+        
         $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
         $fileName = $model->getFilename();
     
@@ -492,13 +525,7 @@ class NafdacController extends ZendX_Controller_Action
      */
     private function _getParametersForm()
     {
-        $pharmacyList = array();
-        $pharmacyList[''] = '';
-        $model = new TrustCare_Model_Pharmacy();
-        foreach($model->fetchAll(array("is_active!=0"), 'name') as $obj) {
-            $pharmacyList[$obj->getId()] = $obj->getName();
-        }
-        
+        $pharmacyList = array('' => '') + Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
         
         $dateValidator = new Zend_Validate_Date('yyyy-MM-dd');
         $dateValidator->setMessage(Zend_Registry::get("Zend_Translate")->_("Incorrect date"));
