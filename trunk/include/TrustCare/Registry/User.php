@@ -44,6 +44,9 @@ class TrustCare_Registry_User
     public function getListOfAvailablePharmacies($ids = array())
     {
         $pharmacy = TrustCare_Model_Pharmacy::find($this->getUser()->getIdPharmacy());
+        /**
+         * If $pharmacy=null - it's a user without assigned Pharmacy. She has access to all active pharmacies
+         */
         
         if(!is_array($ids)) {
             if(empty($ids)) {
