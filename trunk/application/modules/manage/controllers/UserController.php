@@ -158,6 +158,11 @@ class UserController extends ZendX_Controller_Action
                         throw new Exception("");
                     }
                     
+                    $role = $form->getValue("role");
+                    if(is_null($pharmacy)) {
+                        $role = 'pharmacy_manager';
+                    }
+                    
                     
                     $model = new TrustCare_Model_User();
                     $model->setLogin($form->getValue('login'));
@@ -165,7 +170,7 @@ class UserController extends ZendX_Controller_Action
                     $model->setIsActive($form->getValue("is_active"));
                     $model->setFirstName($form->getValue("first_name"));
                     $model->setLastName($form->getValue("last_name"));
-                    $model->setRole($form->getValue("role"));
+                    $model->setRole($role);
                     $model->setIdPharmacy($form->getValue("id_pharmacy"));
                     $model->setIdCountry($form->getValue("id_country"));
                     $model->setIdState($form->getValue("id_state"));
