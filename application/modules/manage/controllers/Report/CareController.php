@@ -77,24 +77,25 @@ class Report_CareController extends ZendX_Controller_Action
     
     public function listLoadAction()
     {
-        $table = 'report_care';
-
-        $select = Zend_Registry::getInstance()->dbAdapter->select()->from($table, array('count(id)'));
+        $select = Zend_Registry::getInstance()->dbAdapter->select()->from('report_care', array('count(id)'));
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_NUM);
         $result = Zend_Registry::getInstance()->dbAdapter->fetchAll($select);
         $iTotal = $result[0][0];
 
 
+        $pharmacyIds = array_keys(Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies());
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_ASSOC);
         $select = Zend_Registry::getInstance()->dbAdapter->select()
-        ->from($table,
+        ->from('report_care',
             array(
-                $table.'.id',
-                'generation_date' => new Zend_Db_Expr(sprintf("date_format(%s.generation_date, '%%Y-%%m-%%d %%H:%%i:%%s')", $table)),
-                $table.'.period'
+                'report_care.id',
+                'generation_date' => new Zend_Db_Expr("date_format(report_care.generation_date, '%Y-%m-%d %H:%i:%s')"),
+                'report_care.period'
             ))
-            ->joinLeft(array('user'), $table.'.id_user = user.id', array('user_login' => 'user.login'))
-            ->joinLeft(array('pharmacy'), $table.'.id_pharmacy = pharmacy.id', array('pharmacy_name' => 'pharmacy.name'));
+            ->joinLeft(array('user'), 'report_care.id_user = user.id', array('user_login' => 'user.login'))
+            ->joinLeft(array('pharmacy'), 'report_care.id_pharmacy = pharmacy.id', array('pharmacy_name' => 'pharmacy.name'))
+            ->where(sprintf("report_care.id_pharmacy in (%s)", join(",", $pharmacyIds)));
+            
          
         $this->processListLoadAjaxRequest($select, array(
             'user_login' => 'user.login',
@@ -156,6 +157,11 @@ class Report_CareController extends ZendX_Controller_Action
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
                 try {
                     $idPharmacy = $form->getValue('id_pharmacy');
+                    if(!array_key_exists($idPharmacy, Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies())) {
+                        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied");
+                        throw new Exception('');
+                    }
+                    
                     $period = $form->getValue('period');
                     if(!preg_match("/^(\d{4})-(\d{2})$/", $period, $matches)) {
                         throw new Exception(sprintf("Incorrect period=%s for generating report.", $period));
@@ -222,7 +228,13 @@ class Report_CareController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Report")));
             return;
         }
-
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($reportModel->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
+            return;
+        }
+        
         $pharmacyModel = TrustCare_Model_Pharmacy::find($reportModel->getIdPharmacy());
         if(is_null($pharmacyModel)) {
             $this->getLogger()->error(sprintf("Failed to load pharmacy.id=%s specified for report_care.id=%s", $reportModel->getIdPharmacy(), $id));
@@ -259,6 +271,13 @@ class Report_CareController extends ZendX_Controller_Action
             return;
         }
 
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($model->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
+            return;
+        }
+        
         $fileReportOutput = sprintf("%s/%s", TrustCare_SystemInterface_ReportGenerator_Abstract::reportsDirectory(), $model->getFilename());
 
         if(!file_exists($fileReportOutput)) {
@@ -283,6 +302,13 @@ class Report_CareController extends ZendX_Controller_Action
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Report")));
             return;
         }
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($reportModel->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
+            return;
+        }
+        
         $fileName = $reportModel->getFilename();
         
         $reportModel->delete();
@@ -296,12 +322,7 @@ class Report_CareController extends ZendX_Controller_Action
      */
     private function _getGenerateReportForm()
     {
-        $pharmacyList = array();
-        $pharmacyList[''] = '';
-        $model = new TrustCare_Model_Pharmacy();
-        foreach($model->fetchAll(array("is_active!=0"), 'name') as $obj) {
-            $pharmacyList[$obj->getId()] = $obj->getName();
-        }
+        $pharmacyList = array('' => '') + Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
         
         $periodList = array();
         for($i = 0; $i <= 11; $i++) {
