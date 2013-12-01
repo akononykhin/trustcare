@@ -220,6 +220,11 @@ class Form_CareController extends ZendX_Controller_Action
                     $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose pharmacy");
                     throw new Exception('');
                 }
+                if(!array_key_exists($idPharmacy, Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies())) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied");
+                    throw new Exception('');
+                }
+                
                 if(empty($idPatient)) {
                     $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose patient");
                     throw new Exception('');
@@ -511,17 +516,11 @@ class Form_CareController extends ZendX_Controller_Action
         );
 
         
-        $pharmaciesList = array();
-        $pharmModel = new TrustCare_Model_Pharmacy();
-        foreach($pharmModel->fetchAll("is_active != 0", "name") as $obj) {
-            $pharmaciesList[$obj->getId()] = $obj->getName();
-        }    
-            
         $this->view->allow_create_patient = Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.patient", "create");
         $this->view->allow_create_pharmacy = Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:admin.pharmacy", "create");
         
         $this->view->idPharmacy = $idPharmacy;
-        $this->view->pharmacies = $pharmaciesList;
+        $this->view->pharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
         $this->view->id_patient = $idPatient;
         $this->view->dateOfVisit = $dateOfVisit;
         $this->view->isPregnant = $isPregnant;
