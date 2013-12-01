@@ -91,6 +91,7 @@ class Form_CareController extends ZendX_Controller_Action
         $iTotal = $result[0][0];
 
 
+        $pharmacyIds = array_keys(Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies());
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_ASSOC);
         $select = Zend_Registry::getInstance()->dbAdapter->select()
                                                          ->from('frm_care',
@@ -103,7 +104,9 @@ class Form_CareController extends ZendX_Controller_Action
                                                          ->joinLeft(array('patient'), 'frm_care.id_patient = patient.id', array('patient_identifier' => 'patient.identifier',
                                                                                                                                 'patient_first_name' => 'patient.first_name',
                                                                                                                                 'patient_last_name' => 'patient.last_name'))
-                                                         ->joinLeft(array('pharmacy'), 'frm_care.id_pharmacy = pharmacy.id', array('pharmacy_name' => 'pharmacy.name'));
+                                                         ->joinLeft(array('pharmacy'), 'frm_care.id_pharmacy = pharmacy.id', array('pharmacy_name' => 'pharmacy.name'))
+                                                         ->where(sprintf("frm_care.id_pharmacy in (%s)", join(",", $pharmacyIds)));
+      
          
         $this->processListLoadAjaxRequest($select, array('pharmacy_name' => 'pharmacy.name',
             'patient_identifier' => 'patient.identifier',
@@ -558,6 +561,14 @@ class Form_CareController extends ZendX_Controller_Action
             return;
         }
         
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($formModel->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
+            return;
+        }
+        
+        
+        
         $patientModel = TrustCare_Model_Patient::find($formModel->getIdPatient());
         if(is_null($patientModel)) {
             $this->getLogger()->error(sprintf("Failed to load patient.id=%s specified for frm_care.id=%s", $formModel->getIdPatient(), $id));
@@ -788,6 +799,13 @@ class Form_CareController extends ZendX_Controller_Action
         if(is_null($frmModel)) {
             $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_care.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+            return;
+        }
+        
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($frmModel->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
             return;
         }
         
@@ -1157,6 +1175,13 @@ class Form_CareController extends ZendX_Controller_Action
         if(is_null($formModel)) {
             $this->getLogger()->error(sprintf("'%s' tries to edit unknown frm_care.id='%s'", Zend_Auth::getInstance()->getIdentity(), $id));
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown Form")));
+            return;
+        }
+        
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($formModel->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
             return;
         }
         
