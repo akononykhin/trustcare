@@ -237,11 +237,15 @@ class Form_CommunityController extends ZendX_Controller_Action
                     $adrInterventions = array();
                 }
                 
+                if(empty($idPharmacy)) {
+                    $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose pharmacy");
+                    throw new Exception('');
+                }
                 if(!array_key_exists($idPharmacy, Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies())) {
                     $errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied");
                     throw new Exception('');
                 }
-                
+                                
                 if(empty($idPatient)) {
                     $errorMsg = Zend_Registry::get("Zend_Translate")->_("Necessary to choose patient");
                     throw new Exception('');
