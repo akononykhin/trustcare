@@ -177,7 +177,7 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (101
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (102, 6, 'Adherence issue(s) NOT resolved');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (120, 7, 'Mild');
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (121, 7, 'Noderate');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (121, 7, 'Moderate');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (122, 7, 'Severe');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (123, 7, 'Life-threatening');
 
@@ -1193,4 +1193,4 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_services_id_seq', 
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 
-insert into db_version values (1, 20131119, 1);
+insert into db_version values (1, 20131218, 1);
