@@ -111,7 +111,7 @@ class NafdacController extends ZendX_Controller_Action
         );
         foreach ($rows as $row) {
             $row['DT_RowId'] = $row['id'];
-            $row['generation_date'] = $this->convertDateToUserTimezone($row['generation_date']);
+            $row['generation_date'] = $this->convertTimeToUserTimezone($row['generation_date'], Zend_Registry::getInstance()->dateFormat); 
             $row['date_of_visit'] = $this->showDateAtSpecifiedFormat($row['date_of_visit']);
             
             $row['_row_actions_'] = array(

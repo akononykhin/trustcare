@@ -341,35 +341,38 @@ class ZendX_Controller_Action extends Zend_Controller_Action
      * 
      * @param string $time Time at GMT timezone and YYYY-MM-DD HH:MI:SS format
      */
-    protected function convertTimeToUserTimezone($time)
+    protected function convertTimeToUserTimezone($time, $format = '')
     {
         if(empty($time)) {
             return '';
         }
+        if(empty($format)) {
+            $format = Zend_Registry::getInstance()->dateTimeFormat;
+        }
         $zendDate  = new Zend_Date($time.'Z', "yyyy-MM-dd HH:mm:ssZ");
         $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
         $zendDate->setTimezone($clientTZ);
-        return $zendDate->toString(Zend_Registry::getInstance()->dateTimeFormat);
+        return $zendDate->toString($format);
     }
 
     /**
      * 
      * @param string $date Date at GMT timezone and YYYY-MM-DD format
      */
-    protected function convertDateToUserTimezone($date, $format = '')
+    protected function getCurrentDate($format = '')
     {
-        if(empty($date)) {
-            return '';
-        }
         if(empty($format)) {
             $format = Zend_Registry::getInstance()->dateFormat;
         }
-        $zendDate  = new Zend_Date($date.'Z', "yyyy-MM-ddZ");
+        
+        $zendDate = new Zend_Date();
+        $zendDate->setTimezone('UTC');
+        $zendDate->set(gmmktime(), Zend_Date::TIMESTAMP);
         $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
         $zendDate->setTimezone($clientTZ);
         return $zendDate->toString($format);
     }
-
+    
     /**
      * 
      * @param string $date at YYYY-MM-DD format
