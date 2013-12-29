@@ -108,7 +108,8 @@ class FacilityController extends ZendX_Controller_Action
                                                          ->joinLeft(array('facility_type'), 'facility.id_facility_type = facility_type.id', array('facility_type_name' => 'facility_type.name'))
                                                          ->joinLeft(array('facility_level'), 'facility.id_facility_level = facility_level.id', array('facility_level_name' => 'facility_level.name'));
 
-        $this->processListLoadAjaxRequest($select, array('lga_name' => 'lga.id',
+        $this->processListLoadAjaxRequest($select, array('name' => 'facility.name',
+                                                         'lga_name' => 'lga.id',
                                                          'facility_type_name' => 'facility_type.id',
                                                          'facility_level_name' => 'facility_level.id'));
         
