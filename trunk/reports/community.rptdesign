@@ -352,7 +352,8 @@ from
       frm_community
     where
       date_of_visit_month_index=? and
-      frm_community.id_pharmacy=?
+      frm_community.id_pharmacy=? and
+      is_client_received_htc=1
     group by
       is_male,is_younger_15
  ) as t
@@ -458,7 +459,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_sti_services=1
+      is_sti_services=1
     group by
       is_male,is_younger_15
  ) as t
@@ -564,7 +565,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_reproductive_health_services=1
+      is_reproductive_health_services=1
     group by
       is_male,is_younger_15
  ) as t
@@ -670,7 +671,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_tuberculosis_services=1
+      is_tuberculosis_services=1
     group by
       is_male,is_younger_15
  ) as t
@@ -1418,7 +1419,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_referred_out=1
+      is_referred_out=1
     group by
       is_male,is_younger_15
  ) as t
@@ -1524,8 +1525,8 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_referred_out=1 and
-	  exists (select id from frm_community_referred_out where id_frm_community=frm_community.id and id_pharmacy_dictionary=323)
+      is_referred_out=1 and
+      exists (select id from frm_community_referred_out where id_frm_community=frm_community.id and id_pharmacy_dictionary=323)
     group by
       is_male,is_younger_15
  ) as t
@@ -1631,7 +1632,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_referred_in=1
+      is_referred_in=1
     group by
       is_male,is_younger_15
  ) as t
@@ -1737,7 +1738,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_malaria_services=1
+      is_malaria_services=1
     group by
       is_male,is_younger_15
  ) as t
@@ -1843,7 +1844,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_adr_screened=1
+      is_adr_screened=1
     group by
       is_male,is_younger_15
  ) as t
@@ -1949,7 +1950,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_adr_symptoms=1
+      is_adr_symptoms=1
     group by
       is_male,is_younger_15
  ) as t
@@ -2055,7 +2056,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  id_nafdac is not NULL
+      id_nafdac is not NULL
     group by
       is_male,is_younger_15
  ) as t
@@ -2161,7 +2162,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  is_adr_intervention_provided=1
+      is_adr_intervention_provided=1
     group by
       is_male,is_younger_15
  ) as t
@@ -2267,7 +2268,7 @@ from
     where
       date_of_visit_month_index=? and
       frm_community.id_pharmacy=? and
-	  (is_palliative_services_to_plwha=1 or is_sti_services=1 or is_malaria_services=1 or is_reproductive_health_services=1 or is_tuberculosis_services=1 or is_ovc_services=1)
+      (is_palliative_services_to_plwha=1 or is_sti_services=1 or is_malaria_services=1 or is_reproductive_health_services=1 or is_tuberculosis_services=1 or is_ovc_services=1)
     group by
       is_male,is_younger_15
  ) as t
@@ -3484,7 +3485,7 @@ from
                         <property name="fontSize">10pt</property>
                         <property name="fontWeight">bold</property>
                         <property name="textAlign">left</property>
-                        <text-property name="text">Number of clients who were counseled,tested and received results</text-property>
+                        <text-property name="text">Number of clients who were counseled,tested and received results for HIV</text-property>
                     </label>
                 </cell>
                 <cell id="1282">
