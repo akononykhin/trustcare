@@ -80,9 +80,9 @@ class ZendX_Controller_Action extends Zend_Controller_Action
      */
     public function getLogger()
     {
-    	if(is_null($this->_logger)) {
-    		$this->_logger = LoggerManager::getLogger(get_class($this));
-    	}
+        if(is_null($this->_logger)) {
+            $this->_logger = LoggerManager::getLogger(get_class($this));
+        }
         return $this->_logger;
     }
     
@@ -367,7 +367,7 @@ class ZendX_Controller_Action extends Zend_Controller_Action
         
         $zendDate = new Zend_Date();
         $zendDate->setTimezone('UTC');
-        $zendDate->set(gmmktime(), Zend_Date::TIMESTAMP);
+        $zendDate->set(time(), Zend_Date::TIMESTAMP);
         $clientTZ = Zend_Registry::getInstance()->clientTimeZone;
         $zendDate->setTimezone($clientTZ);
         return $zendDate->toString($format);
