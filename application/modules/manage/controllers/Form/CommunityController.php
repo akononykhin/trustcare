@@ -839,7 +839,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $adrStartDate = $this->_getParam('adr_start_date');
                 $adrStopDate = $this->_getParam('adr_stop_date');
                 $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
-                $adrInterventions = $this->_getParam('adr_intervention');
+                $adrInterventions = $this->_getParam('adr_intervention', array());
                 if(!$isAdrInterventionProvided) {
                     $adrInterventions = array();
                 }
