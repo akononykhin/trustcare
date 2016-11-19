@@ -16,7 +16,7 @@
                     E_STRICT          => "Runtime Notice"
                     );
       
-        if ($errno & ini_get('error_reporting')) {
+        if ($errno & error_reporting()) {
             $logger = LoggerManager::getLogger("PHP");
             $dt = gmdate("Y-m-d H:i:s O");
             

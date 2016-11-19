@@ -162,9 +162,6 @@ class Zend_Loader
      */
     public static function isReadable($filename)
     {
-        if(!file_exists($filename)) {       /* For PHP 7 */
-            return false;
-        }
         if (!$fh = @fopen($filename, 'r', true)) {
             return false;
         }
