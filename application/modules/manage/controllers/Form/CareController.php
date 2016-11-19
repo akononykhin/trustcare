@@ -762,7 +762,7 @@ class Form_CareController extends ZendX_Controller_Action
         $this->view->patientModel = $patientModel;
         $this->view->pharmacyName = $pharmacyModel->getName();
         $this->view->medErrorTypes = $medErrorTypes;
-        $this->view->medErrorInterventions = $medErrorInterventions;
+        $this->view->medAdhProblems = $medAdhProblems;
         $this->view->medErrorInterventions = $medErrorInterventions;
         $this->view->adhInterventions = $adhInterventions;
         $this->view->medErrorInterventionOutcomes = $medErrorInterventionOutcomes;
