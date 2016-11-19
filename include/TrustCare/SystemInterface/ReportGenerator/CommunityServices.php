@@ -56,6 +56,7 @@ class TrustCare_SystemInterface_ReportGenerator_CommunityServices extends TrustC
             $dataRow['se_provided_supportive'] = $this->isSupportiveProvided($db, $monthIndex, $pharmacyId, $patientId, false);
             $dataRow['se_provided_clinical'] = $this->isClinicalProvided($db, $monthIndex, $pharmacyId, $patientId, false);
 
+
             $reproductiveServices = $this->getReproductiveHealthServices($db, $monthIndex, $pharmacyId, $patientId);
             $referredOutServices = $this->getReferredOutServices($db, $monthIndex, $pharmacyId, $patientId);
             $referredInServices = $this->getReferredInServices($db, $monthIndex, $pharmacyId, $patientId);
@@ -68,9 +69,9 @@ class TrustCare_SystemInterface_ReportGenerator_CommunityServices extends TrustC
             $dataRow['preventive_1'] = $this->isPreventive1($db, $monthIndex, $pharmacyId, $patientId);
             $dataRow['preventive_2'] = $this->isPreventive2($db, $monthIndex, $pharmacyId, $patientId);
             $dataRow['preventive_3'] = $this->isPreventive3($db, $monthIndex, $pharmacyId, $patientId);
-            $dataRow['preventive_4'] = in_array(385, $healthServices) ? 1 : 0;   /* Counseling on safe sex practices */
-            $dataRow['preventive_5'] = in_array(380, $healthServices) ? 1 : 0;   /* Condoms provided */
-            $dataRow['preventive_6'] = in_array(386, $healthServices) ? 1 : 0;   /* Health education & promotion */
+            $dataRow['preventive_4'] = in_array(385, $reproductiveServices) ? 1 : 0;   /* Counseling on safe sex practices */
+            $dataRow['preventive_5'] = in_array(380, $reproductiveServices) ? 1 : 0;   /* Condoms provided */
+            $dataRow['preventive_6'] = in_array(386, $reproductiveServices) ? 1 : 0;   /* Health education & promotion */
 
             $dataRow['supportive_out_1'] = in_array(320, $referredOutServices) ? 1 : 0;   /* HCT */
             $dataRow['supportive_out_2'] = in_array(321, $referredOutServices) ? 1 : 0;   /* ART */
