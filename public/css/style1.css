@@ -1,0 +1,99 @@
+/* CSS Document */
+body{
+background: #CCCCCC;
+margin:auto;
+}
+.container {
+	background:#FFFFFF;
+}
+.howard_university{
+	padding-bottom:20px;
+	padding-top:0px;
+}
+.trust_care {
+	padding-bottom:20px;
+}
+.login_form {
+	padding-bottom:50px;
+}
+.clinical_documentation {
+	color:#666666;
+	font-weight:bold;
+	
+}
+.footer {
+background:#1B0259;
+height:40px;
+}
+.footer_text {
+color:#FFFFFF;
+font-family:Arial, Helvetica, sans-serif;
+font-size:18px;
+
+/*font-weight:bold;*/
+}
+.form_label {
+font-family:Arial, Helvetica, sans-serif;
+font-size:16px;
+color:#666666;
+}
+.remember_me{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#666666;
+}
+.form_spacing{
+padding:5px 5px 5px 5px;
+}
+.textfield {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	background:url(../images/field_image.png) right;
+	background-position:right;
+	background-repeat:no-repeat;
+	height:25px;
+
+}
+.login_submit{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	background:url(../img/field_image.png) right;
+	background-position:right;
+	background-repeat:no-repeat;
+	height:35px;
+	width:110px;
+	color:#666666;
+}
+
+.login_form input[type='text']{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	background:url(../img/field_image.png) right;
+	background-position:right;
+	background-repeat:no-repeat;
+	height:20px;
+	width:180px;
+}
+
+.login_form input[type='submit']{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	background:url(../img/field_image.png) right;
+	background-position:right;
+	background-repeat:no-repeat;
+	height:30px;
+	width:100px;
+	color:#666666;
+	
+}
+
+
+.login_form input[type='password']{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	background:url(../img/field_image.png) right;
+	background-position:right;
+	background-repeat:no-repeat;
+	height:20px;
+	width:180px;
+}
