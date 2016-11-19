@@ -108,7 +108,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                                                          ->where(sprintf("frm_community.id_pharmacy in (%s)", join(",", $pharmacyIds)));
                                                           
         $this->processListLoadAjaxRequest($select, array('pharmacy_name' => 'pharmacy.name',
-        												 'patient_identifier' => 'patient.identifier',
+                                                         'patient_identifier' => 'patient.identifier',
                                                          'patient_first_name' => 'patient.first_name',
                                                          'patient_last_name' => 'patient.last_name'));
 
@@ -141,8 +141,8 @@ class Form_CommunityController extends ZendX_Controller_Action
                 array(
                     'title' => Zend_Registry::get("Zend_Translate")->_("Delete"),
                     'url' => $this->view->url(array('action' => 'delete', 'id' => $row['id'])),
-                	'type' => 'delete',
-                	'askConfirm' => sprintf(Zend_Registry::get("Zend_Translate")->_("Are you sure you want to delete form %s generated %s?"), $row['id'], $row['date_of_visit']),
+                    'type' => 'delete',
+                    'askConfirm' => sprintf(Zend_Registry::get("Zend_Translate")->_("Are you sure you want to delete form %s generated %s?"), $row['id'], $row['date_of_visit']),
                 ),
             );
             $output['aaData'][] = $row;
@@ -174,7 +174,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $dateOfVisit = $this->_getParam('date_of_visit');
                 $isFirstVisitToPharmacy = $this->_getParam('is_first_visit_to_pharmacy');
                 $isReferredFrom = $this->_getParam('is_referred_from');
-                $referredFromList = $this->_getParam('referred_from');
+                $referredFromList = $this->_getParam('referred_from', array());
                 if(!$isReferredFrom) {
                     $referredFromList = array();
                 }
@@ -182,11 +182,11 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $isReferredOut = $this->_getParam('is_referred_out');
                 $isReferralCompleted = $this->_getParam('is_referral_completed');
                 $isHivRiskAssesmentDone = $this->_getParam('is_hiv_risk_assesment_done');
-                $referredInList = $this->_getParam('referred_in');
+                $referredInList = $this->_getParam('referred_in', array());
                 if(!$isReferredIn) {
                     $referredInList = array();
                 }
-                $referredOutList = $this->_getParam('referred_out');
+                $referredOutList = $this->_getParam('referred_out', array());
                 if(!$isReferredOut) {
                     $referredOutList = array();
                 }
@@ -232,7 +232,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $adrStartDate = $this->_getParam('adr_start_date');
                 $adrStopDate = $this->_getParam('adr_stop_date');
                 $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
-                $adrInterventions = $this->_getParam('adr_intervention');
+                $adrInterventions = $this->_getParam('adr_intervention', array());
                 if(!$isAdrInterventionProvided) {
                     $adrInterventions = array();
                 }
@@ -293,32 +293,32 @@ class Form_CommunityController extends ZendX_Controller_Action
                         'id_user' => Zend_Registry::get("TrustCare_Registry_User")->getUser()->getId(),
                         'is_commited' => $isCommited,
                         'id_pharmacy' => $idPharmacy,
-                		'id_patient' => $idPatient,
-                		'date_of_visit' => $dateOfVisit,
-                		'is_first_visit_to_pharmacy' => $isFirstVisitToPharmacy,
-                		'is_referred_from' => $isReferredFrom,
+                        'id_patient' => $idPatient,
+                        'date_of_visit' => $dateOfVisit,
+                        'is_first_visit_to_pharmacy' => $isFirstVisitToPharmacy,
+                        'is_referred_from' => $isReferredFrom,
                         'is_referred_in' => $isReferredIn,
-                		'is_referred_out' => $isReferredOut,
-                		'is_referral_completed' => $isReferralCompleted,
-                		'is_hiv_risk_assesment_done' => $isHivRiskAssesmentDone,
-                		'is_htc_done' => $isHtcDone,
+                        'is_referred_out' => $isReferredOut,
+                        'is_referral_completed' => $isReferralCompleted,
+                        'is_hiv_risk_assesment_done' => $isHivRiskAssesmentDone,
+                        'is_htc_done' => $isHtcDone,
                         'htc_result_id' => $htcResultId,
-                		'is_client_received_htc' => $isClientReceivedHtc,
-                		'is_htc_done_in_current_pharmacy' => $isHtcDoneInCurrentPharmacy,
-                		'is_palliative_services_to_plwha' => $isPalliativeServicesToPlwha,
-                		'is_sti_services' => $isStiServices,
-                		'is_reproductive_health_services' => $isReproductiveHealthServices,
-                		'is_tuberculosis_services' => $isTuberculosisServices,
-                		'is_malaria_services' => $isMalariaServices,
+                        'is_client_received_htc' => $isClientReceivedHtc,
+                        'is_htc_done_in_current_pharmacy' => $isHtcDoneInCurrentPharmacy,
+                        'is_palliative_services_to_plwha' => $isPalliativeServicesToPlwha,
+                        'is_sti_services' => $isStiServices,
+                        'is_reproductive_health_services' => $isReproductiveHealthServices,
+                        'is_tuberculosis_services' => $isTuberculosisServices,
+                        'is_malaria_services' => $isMalariaServices,
                         'is_ovc_services' => $isOvcServices,
-                		'is_patient_younger_15' => $isPatientYounger15,
-                		'is_patient_male' => $patientModel->getIsMale(),
+                        'is_patient_younger_15' => $isPatientYounger15,
+                        'is_patient_male' => $patientModel->getIsMale(),
                         'hiv_status' => $hivStatus,
-                		'is_adr_screened' => $isAdrScreened,
-                		'is_adr_symptoms' => $isAdrSymptoms,
+                        'is_adr_screened' => $isAdrScreened,
+                        'is_adr_symptoms' => $isAdrSymptoms,
                         'adr_start_date' => $adrStartDate,
                         'adr_stop_date' => $adrStopDate,
-                		'is_adr_intervention_provided' => $isAdrInterventionProvided,
+                        'is_adr_intervention_provided' => $isAdrInterventionProvided,
                         'mapperOptions' => array('adapter' => $db)
                     )
                 );
@@ -338,9 +338,9 @@ class Form_CommunityController extends ZendX_Controller_Action
                 foreach($referredInList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityReferredIn(
                         array(
-          					'id_frm_community' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
                         )
                     );
                     $model->save();
@@ -349,9 +349,9 @@ class Form_CommunityController extends ZendX_Controller_Action
                 foreach($referredOutList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityReferredOut(
                         array(
-          					'id_frm_community' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
                         )
                     );
                     $model->save();
@@ -360,9 +360,9 @@ class Form_CommunityController extends ZendX_Controller_Action
                 foreach($palliativeCareTypeList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityPalliativeCareType(
                         array(
-          					'id_frm_community' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
                         )
                     );
                     $model->save();
@@ -371,9 +371,9 @@ class Form_CommunityController extends ZendX_Controller_Action
                 foreach($stiTypeList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityStiType(
                         array(
-          					'id_frm_community' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
                         )
                     );
                     $model->save();
@@ -382,9 +382,9 @@ class Form_CommunityController extends ZendX_Controller_Action
                 foreach($reproductiveHealthTypeList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityReproductiveHealthType(
                         array(
-          					'id_frm_community' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
                         )
                     );
                     $model->save();
@@ -393,9 +393,9 @@ class Form_CommunityController extends ZendX_Controller_Action
                 foreach($tuberculosisTypeList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityTuberculosisType(
                         array(
-          					'id_frm_community' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
                         )
                     );
                     $model->save();
@@ -415,9 +415,9 @@ class Form_CommunityController extends ZendX_Controller_Action
                 foreach($ovcTypeList  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityOvcType(
                         array(
-          					'id_frm_community' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
                         )
                     );
                     $model->save();
@@ -426,9 +426,9 @@ class Form_CommunityController extends ZendX_Controller_Action
                 foreach($adrInterventions  as $dictId) {
                     $model = new TrustCare_Model_FrmCommunityAdrIntervention(
                         array(
-          					'id_frm_community' => $frmModel->getId(),
-           					'id_pharmacy_dictionary' => $dictId,
-                           	'mapperOptions' => array('adapter' => $db)
+                            'id_frm_community' => $frmModel->getId(),
+                            'id_pharmacy_dictionary' => $dictId,
+                            'mapperOptions' => array('adapter' => $db)
                         )
                     );
                     $model->save();
