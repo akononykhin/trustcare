@@ -866,14 +866,14 @@ class Form_CareController extends ZendX_Controller_Action
                 }
                 $medErrorInterventionOutcomes = $this->_getParam('med_error_intervention_outcome', array());
                 $adhInterventionOutcomes = $this->_getParam('adh_intervention_outcome', array());
-                $suspectedAdrHepatic = $this->_getParam('suspected_adr_hepatic');
-                $suspectedAdrNervous = $this->_getParam('suspected_adr_nervous');
+                $suspectedAdrHepatic = $this->_getParam('suspected_adr_hepatic', array());
+                $suspectedAdrNervous = $this->_getParam('suspected_adr_nervous', array());
                 $suspectedAdrCardiovascular = $this->_getParam('suspected_adr_cardiovascular');
                 $suspectedAdrSkin = $this->_getParam('suspected_adr_skin');
                 $suspectedAdrMetabolic = $this->_getParam('suspected_adr_metabolic');
                 $suspectedAdrMusculoskeletal = $this->_getParam('suspected_adr_musculoskeletal');
                 $suspectedAdrGeneral = $this->_getParam('suspected_adr_general');
-                $adrInterventions = $this->_getParam('adr_intervention');
+                $adrInterventions = $this->_getParam('adr_intervention', array());
                 if(!$isAdrInterventionProvided) {
                     $adrInterventions = array();
                 }
