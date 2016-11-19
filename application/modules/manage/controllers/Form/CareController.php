@@ -848,24 +848,24 @@ class Form_CareController extends ZendX_Controller_Action
                 $adrStartDate = $this->_getParam('adr_start_date');
                 $adrStopDate = $this->_getParam('adr_stop_date');
                 $isAdrInterventionProvided = $this->_getParam('is_adr_intervention_provided');
-                $medErrorTypes = $this->_getParam('med_error_type');
+                $medErrorTypes = $this->_getParam('med_error_type', array());
                 if(!$isMedErrorIdentified) {
                     $medErrorTypes = array();
                 }
-                $medAdhProblems = $this->_getParam('med_adh_problem');
+                $medAdhProblems = $this->_getParam('med_adh_problem', array());
                 if(!$isMedAdhProblemIdentified) {
                     $medAdhProblems = array();
                 }
-                $medErrorInterventions = $this->_getParam('med_error_intervention');
+                $medErrorInterventions = $this->_getParam('med_error_intervention', array());
                 if(!$isMedErrorInterventionProvided) {
                     $medErrorInterventions = array();
                 }
-                $adhInterventions = $this->_getParam('adh_intervention');
+                $adhInterventions = $this->_getParam('adh_intervention', array());
                 if(!$isAdhInterventionProvided) {
                     $adhInterventions = array();
                 }
-                $medErrorInterventionOutcomes = $this->_getParam('med_error_intervention_outcome');
-                $adhInterventionOutcomes = $this->_getParam('adh_intervention_outcome');
+                $medErrorInterventionOutcomes = $this->_getParam('med_error_intervention_outcome', array());
+                $adhInterventionOutcomes = $this->_getParam('adh_intervention_outcome', array());
                 $suspectedAdrHepatic = $this->_getParam('suspected_adr_hepatic');
                 $suspectedAdrNervous = $this->_getParam('suspected_adr_nervous');
                 $suspectedAdrCardiovascular = $this->_getParam('suspected_adr_cardiovascular');
