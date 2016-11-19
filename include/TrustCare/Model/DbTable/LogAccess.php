@@ -40,12 +40,12 @@ class TrustCare_Model_DbTable_LogAccess extends ZendX_Db_Table_Abstract
         return parent::insert($data);
     }
     
-    public function update()
+    public function update(array $data, $where)
     {
         throw new Exception("Can't update LogAccess entity");
     }
     
-    public function delete()
+    public function delete($where)
     {
         throw new Exception("Can't delete LogAccess entity");
     }
