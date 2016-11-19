@@ -34,7 +34,7 @@ class BootstrapApp extends BootstrapMain
         
         $translate = new ZendX_Translate(
                             'gettext',
-                            APPLICATION_PATH . '/language/manage',
+                            APPLICATION_PATH . '/language/portal',
                             $locale,
                             array('scan' => Zend_Translate::LOCALE_DIRECTORY));
                             
@@ -149,14 +149,16 @@ class BootstrapApp extends BootstrapMain
             	'pages'         => array(
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmaceutical Care"),
-                        'controller'    => 'form_care',
+                		'module'        => 'portal',
+                    	'controller'    => 'form_care',
                         'action'        => 'list',
                     	'resource'      => 'resource:form',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'form_care',
+                				'module'        => 'portal',
+                            	'controller'    => 'form_care',
                                 'action'        => 'create',
                                 'visible'       => false,
                     			'resource'      => 'resource:form',
@@ -164,7 +166,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                                'controller'    => 'form_care',
+                				'module'        => 'portal',
+                            	'controller'    => 'form_care',
                                 'action'        => 'view',
                                 'visible'       => false,
                     			'resource'      => 'resource:form',
@@ -172,7 +175,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'form_care',
+                				'module'        => 'portal',
+                            	'controller'    => 'form_care',
                                 'action'        => 'edit',
                                 'visible'       => false,
                     			'resource'      => 'resource:form',
@@ -182,14 +186,16 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Community Pharmacy"),
-                        'controller'    => 'form_community',
+                		'module'        => 'portal',
+                    	'controller'    => 'form_community',
                         'action'        => 'list',
                     	'resource'      => 'resource:form',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'form_community',
+                				'module'        => 'portal',
+                            	'controller'    => 'form_community',
                                 'action'        => 'create',
                                 'visible'       => false,
                     			'resource'      => 'resource:form',
@@ -197,7 +203,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                                'controller'    => 'form_community',
+                				'module'        => 'portal',
+                            	'controller'    => 'form_community',
                                 'action'        => 'view',
                                 'visible'       => false,
                     			'resource'      => 'resource:form',
@@ -205,7 +212,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'form_community',
+                				'module'        => 'portal',
+                            	'controller'    => 'form_community',
                                 'action'        => 'edit',
                                 'visible'       => false,
                     			'resource'      => 'resource:form',
@@ -218,14 +226,16 @@ class BootstrapApp extends BootstrapMain
             ),
             array(
                 'label'         => Zend_Registry::get("Zend_Translate")->_("NAFDAC"),
-                'controller'    => 'nafdac',
+                'module'        => 'portal',
+            	'controller'    => 'nafdac',
                 'action'        => 'list',
                 'resource'      => 'resource:form',
                 'privilege'     => 'view',
                 'pages'         => array(
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                        'controller'    => 'nafdac',
+                		'module'        => 'portal',
+                    	'controller'    => 'nafdac',
                         'action'        => 'create',
                         'visible'       => false,
                         'resource'      => 'resource:form',
@@ -233,7 +243,8 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                        'controller'    => 'nafdac',
+                		'module'        => 'portal',
+                    	'controller'    => 'nafdac',
                         'action'        => 'view',
                         'visible'       => false,
                         'resource'      => 'resource:form',
@@ -249,14 +260,16 @@ class BootstrapApp extends BootstrapMain
             	'pages'         => array(
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmaceutical Care"),
-                        'controller'    => 'report_care',
+                		'module'        => 'portal',
+                    	'controller'    => 'report_care',
                         'action'        => 'list',
                     	'resource'      => 'resource:report',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Generate"),
-                                'controller'    => 'report_care',
+                				'module'        => 'portal',
+                            	'controller'    => 'report_care',
                                 'action'        => 'generate',
                                 'visible'       => false,
                     			'resource'      => 'resource:report',
@@ -264,7 +277,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                                'controller'    => 'report_care',
+                				'module'        => 'portal',
+                            	'controller'    => 'report_care',
                                 'action'        => 'view',
                                 'visible'       => false,
                     			'resource'      => 'resource:report',
@@ -272,7 +286,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Load"),
-                                'controller'    => 'report_care',
+                				'module'        => 'portal',
+                            	'controller'    => 'report_care',
                                 'action'        => 'load',
                                 'visible'       => false,
                     			'resource'      => 'resource:report',
@@ -280,7 +295,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'report_care',
+                				'module'        => 'portal',
+                            	'controller'    => 'report_care',
                                 'action'        => 'create',
                                 'visible'       => false,
                     			'resource'      => 'resource:report',
@@ -290,14 +306,16 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Community MSF"),
-                        'controller'    => 'report_community-msf',
+                		'module'        => 'portal',
+                    	'controller'    => 'report_community-msf',
                         'action'        => 'list',
                     	'resource'      => 'resource:report',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Generate"),
-                                'controller'    => 'report_community-msf',
+                				'module'        => 'portal',
+                            	'controller'    => 'report_community-msf',
                                 'action'        => 'generate',
                                 'visible'       => false,
                     			'resource'      => 'resource:report',
@@ -305,7 +323,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-                                'controller'    => 'report_community-msf',
+                				'module'        => 'portal',
+                            	'controller'    => 'report_community-msf',
                                 'action'        => 'view',
                                 'visible'       => false,
                     			'resource'      => 'resource:report',
@@ -313,7 +332,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Load"),
-                                'controller'    => 'report_community-msf',
+                				'module'        => 'portal',
+                            	'controller'    => 'report_community-msf',
                                 'action'        => 'load',
                                 'visible'       => false,
                     			'resource'      => 'resource:report',
@@ -321,7 +341,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'report_community-msf',
+                				'module'        => 'portal',
+                            	'controller'    => 'report_community-msf',
                                 'action'        => 'create',
                                 'visible'       => false,
                     			'resource'      => 'resource:report',
@@ -331,14 +352,16 @@ class BootstrapApp extends BootstrapMain
                     ),
             	    array(
             	        'label'         => Zend_Registry::get("Zend_Translate")->_("Community Services Register"),
-            	        'controller'    => 'report_community-services',
+                		'module'        => 'portal',
+            	    	'controller'    => 'report_community-services',
             	        'action'        => 'list',
             	        'resource'      => 'resource:report',
             	        'privilege'     => 'view',
             	        'pages'         => array(
             	            array(
             	                'label'         => Zend_Registry::get("Zend_Translate")->_("Generate"),
-            	                'controller'    => 'report_community-services',
+                				'module'        => 'portal',
+            	            	'controller'    => 'report_community-services',
             	                'action'        => 'generate',
             	                'visible'       => false,
             	                'resource'      => 'resource:report',
@@ -346,7 +369,8 @@ class BootstrapApp extends BootstrapMain
             	            ),
             	            array(
             	                'label'         => Zend_Registry::get("Zend_Translate")->_("View"),
-            	                'controller'    => 'report_community-services',
+                				'module'        => 'portal',
+            	            	'controller'    => 'report_community-services',
             	                'action'        => 'view',
             	                'visible'       => false,
             	                'resource'      => 'resource:report',
@@ -354,7 +378,8 @@ class BootstrapApp extends BootstrapMain
             	            ),
             	            array(
             	                'label'         => Zend_Registry::get("Zend_Translate")->_("Load"),
-            	                'controller'    => 'report_community-services',
+                				'module'        => 'portal',
+            	            	'controller'    => 'report_community-services',
             	                'action'        => 'load',
             	                'visible'       => false,
             	                'resource'      => 'resource:report',
@@ -362,7 +387,8 @@ class BootstrapApp extends BootstrapMain
             	            ),
             	            array(
             	                'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-            	                'controller'    => 'report_community-services',
+                				'module'        => 'portal',
+            	            	'controller'    => 'report_community-services',
             	                'action'        => 'create',
             	                'visible'       => false,
             	                'resource'      => 'resource:report',
@@ -386,14 +412,16 @@ class BootstrapApp extends BootstrapMain
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Countries"),
-                                'controller'    => 'country',
+                				'module'        => 'portal',
+                            	'controller'    => 'country',
                                 'action'        => 'list',
                                 'resource'      => 'resource:admin.system_dict',
                                 'privilege'     => 'view',
                                 'pages'         => array(
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                        'controller'    => 'country',
+                						'module'        => 'portal',
+                                    	'controller'    => 'country',
                                         'action'        => 'create',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -401,7 +429,8 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                        'controller'    => 'country',
+                						'module'        => 'portal',
+                                    	'controller'    => 'country',
                                         'action'        => 'edit',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -409,7 +438,8 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Import"),
-                                        'controller'    => 'country',
+                						'module'        => 'portal',
+                                    	'controller'    => 'country',
                                         'action'        => 'import',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -419,14 +449,16 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("States"),
-                                'controller'    => 'state',
+                				'module'        => 'portal',
+                            	'controller'    => 'state',
                                 'action'        => 'list',
                                 'resource'      => 'resource:admin.system_dict',
                                 'privilege'     => 'view',
                                 'pages'         => array(
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                        'controller'    => 'state',
+                						'module'        => 'portal',
+                                    	'controller'    => 'state',
                                         'action'        => 'create',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -434,7 +466,8 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                        'controller'    => 'state',
+                						'module'        => 'portal',
+                                    	'controller'    => 'state',
                                         'action'        => 'edit',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -442,7 +475,8 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Import"),
-                                        'controller'    => 'state',
+                						'module'        => 'portal',
+                                    	'controller'    => 'state',
                                         'action'        => 'import',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -452,14 +486,16 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("LGAs"),
-                                'controller'    => 'lga',
+                				'module'        => 'portal',
+                            	'controller'    => 'lga',
                                 'action'        => 'list',
                                 'resource'      => 'resource:admin.system_dict',
                                 'privilege'     => 'view',
                                 'pages'         => array(
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                        'controller'    => 'lga',
+                						'module'        => 'portal',
+                                    	'controller'    => 'lga',
                                         'action'        => 'create',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -467,7 +503,8 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                        'controller'    => 'lga',
+                						'module'        => 'portal',
+                                    	'controller'    => 'lga',
                                         'action'        => 'edit',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -475,7 +512,8 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => 'LGA',
-                                        'controller'    => 'lga',
+                						'module'        => 'portal',
+                                    	'controller'    => 'lga',
                                         'action'        => 'import',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -485,14 +523,16 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Facilities"),
-                                'controller'    => 'facility',
+                				'module'        => 'portal',
+                            	'controller'    => 'facility',
                                 'action'        => 'list',
                                 'resource'      => 'resource:admin.system_dict',
                                 'privilege'     => 'view',
                                 'pages'         => array(
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                        'controller'    => 'facility',
+                						'module'        => 'portal',
+                                    	'controller'    => 'facility',
                                         'action'        => 'create',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -500,7 +540,8 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                        'controller'    => 'facility',
+                						'module'        => 'portal',
+                                    	'controller'    => 'facility',
                                         'action'        => 'edit',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -508,7 +549,8 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Import"),
-                                        'controller'    => 'facility',
+                						'module'        => 'portal',
+                                    	'controller'    => 'facility',
                                         'action'        => 'import',
                                         'visible'       => false,
                                         'resource'      => 'resource:admin.system_dict',
@@ -516,14 +558,16 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Types"),
-                                        'controller'    => 'facility_type',
+                						'module'        => 'portal',
+                                    	'controller'    => 'facility_type',
                                         'action'        => 'list',
                                         'resource'      => 'resource:admin.system_dict',
                                         'privilege'     => 'view',
                                         'pages'         => array(
                                             array(
                                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                                'controller'    => 'facility_type',
+                								'module'        => 'portal',
+                                            	'controller'    => 'facility_type',
                                                 'action'        => 'create',
                                                 'visible'       => false,
                                                 'resource'      => 'resource:admin.system_dict',
@@ -531,7 +575,8 @@ class BootstrapApp extends BootstrapMain
                                             ),
                                             array(
                                                     'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                                    'controller'    => 'facility_type',
+                									'module'        => 'portal',
+                                            		'controller'    => 'facility_type',
                                                     'action'        => 'edit',
                                                     'visible'       => false,
                                                     'resource'      => 'resource:admin.system_dict',
@@ -541,14 +586,16 @@ class BootstrapApp extends BootstrapMain
                                     ),
                                     array(
                                         'label'         => Zend_Registry::get("Zend_Translate")->_("Levels"),
-                                        'controller'    => 'facility_level',
+                						'module'        => 'portal',
+                                    	'controller'    => 'facility_level',
                                         'action'        => 'list',
                                         'resource'      => 'resource:admin.system_dict',
                                         'privilege'     => 'view',
                                         'pages'         => array(
                                             array(
                                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                                'controller'    => 'facility_level',
+                								'module'        => 'portal',
+                                            	'controller'    => 'facility_level',
                                                 'action'        => 'create',
                                                 'visible'       => false,
                                                 'resource'      => 'resource:admin.system_dict',
@@ -556,7 +603,8 @@ class BootstrapApp extends BootstrapMain
                                             ),
                                             array(
                                                     'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                                    'controller'    => 'facility_level',
+                									'module'        => 'portal',
+                                            		'controller'    => 'facility_level',
                                                     'action'        => 'edit',
                                                     'visible'       => false,
                                                     'resource'      => 'resource:admin.system_dict',
@@ -570,14 +618,16 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmacy Dictionaries"),
-                		'controller'    => "pharm-dict",
+                		'module'        => 'portal',
+                    	'controller'    => "pharm-dict",
                         'action'        => 'types-list',
                     	'resource'      => 'resource:admin.pharm_dict',
                     	'privilege'		=> 'view',
                     	'pages'			=> array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("List"),
-                                'controller'    => 'pharm-dict',
+                				'module'        => 'portal',
+                            	'controller'    => 'pharm-dict',
                                 'action'        => 'list',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.pharm_dict',
@@ -585,7 +635,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'pharm-dict',
+                				'module'        => 'portal',
+                            	'controller'    => 'pharm-dict',
                                 'action'        => 'create',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.pharm_dict',
@@ -593,7 +644,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'pharm-dict',
+                				'module'        => 'portal',
+                            	'controller'    => 'pharm-dict',
                                 'action'        => 'edit',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.pharm_dict',
@@ -603,14 +655,16 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Users"),
-                        'controller'    => 'user',
+                		'module'        => 'portal',
+                    	'controller'    => 'user',
                         'action'        => 'list',
                         'resource'      => 'resource:admin.user',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'user',
+                				'module'        => 'portal',
+                            	'controller'    => 'user',
                                 'action'        => 'create',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.user',
@@ -618,7 +672,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'user',
+                				'module'        => 'portal',
+                            	'controller'    => 'user',
                                 'action'        => 'edit',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.user',
@@ -628,14 +683,16 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Pharmacies"),
-                        'controller'    => 'pharmacy',
+                		'module'        => 'portal',
+                    	'controller'    => 'pharmacy',
                         'action'        => 'list',
                         'resource'      => 'resource:admin.pharmacy',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'pharmacy',
+                				'module'        => 'portal',
+                            	'controller'    => 'pharmacy',
                                 'action'        => 'create',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.pharmacy',
@@ -643,7 +700,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'pharmacy',
+                				'module'        => 'portal',
+                            	'controller'    => 'pharmacy',
                                 'action'        => 'edit',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.pharmacy',
@@ -653,14 +711,16 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Physicians"),
-                        'controller'    => 'physician',
+                		'module'        => 'portal',
+                    	'controller'    => 'physician',
                         'action'        => 'list',
                         'resource'      => 'resource:admin.physician',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'physician',
+                				'module'        => 'portal',
+                            	'controller'    => 'physician',
                                 'action'        => 'create',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.physician',
@@ -668,7 +728,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'physician',
+                				'module'        => 'portal',
+                            	'controller'    => 'physician',
                                 'action'        => 'edit',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.physician',
@@ -678,14 +739,16 @@ class BootstrapApp extends BootstrapMain
                     ),
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Patients"),
-                        'controller'    => 'patient',
+                		'module'        => 'portal',
+                    	'controller'    => 'patient',
                         'action'        => 'list',
                         'resource'      => 'resource:admin.patient',
                         'privilege'     => 'view',
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Create"),
-                                'controller'    => 'patient',
+                				'module'        => 'portal',
+                            	'controller'    => 'patient',
                                 'action'        => 'create',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.patient',
@@ -693,7 +756,8 @@ class BootstrapApp extends BootstrapMain
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                                'controller'    => 'patient',
+                				'module'        => 'portal',
+                            	'controller'    => 'patient',
                                 'action'        => 'edit',
                                 'visible'       => false,
                                 'resource'      => 'resource:admin.patient',
@@ -710,17 +774,20 @@ class BootstrapApp extends BootstrapMain
                         'pages'         => array(
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Objects"),
-                                'controller'    => 'system_log',
+                				'module'        => 'portal',
+                            	'controller'    => 'system_log',
                                 'action'        => 'objects',
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Access"),
-                                'controller'    => 'system_log',
+                				'module'        => 'portal',
+                            	'controller'    => 'system_log',
                                 'action'        => 'access',
                             ),
                             array(
                                 'label'         => Zend_Registry::get("Zend_Translate")->_("Errors"),
-                                'controller'    => 'system_log',
+                				'module'        => 'portal',
+                            	'controller'    => 'system_log',
                                 'action'        => 'errors',
                             ),
                         ),
@@ -729,12 +796,14 @@ class BootstrapApp extends BootstrapMain
             ),
             array(
                 'label'         => Zend_Registry::get("Zend_Translate")->_("Settings"),
-                'controller'    => 'index',
+                'module'        => 'portal',
+            	'controller'    => 'index',
                 'action'        => 'settings',
                 'pages'         => array(
                     array(
                         'label'         => Zend_Registry::get("Zend_Translate")->_("Edit"),
-                        'controller'    => 'index',
+                		'module'        => 'portal',
+                    	'controller'    => 'index',
                         'action'        => 'settings',
                         'visible'       => false,
                     ),

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TrustCare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-18 00:59+0400\n"
-"PO-Revision-Date: 2013-06-18 00:59+0400\n"
+"POT-Creation-Date: 2016-11-20 00:02+0300\n"
+"PO-Revision-Date: 2016-11-20 00:03+0300\n"
 "Last-Translator: Alexey Kononykhin <konon@astelnet.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -12,26 +12,54 @@ msgstr ""
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: C:\\work\\oDesk\\VernOhaya\\trustcare\\src\\trunk\\public\\js\n"
+"X-Poedit-SearchPath-0: C:\\work\\oDesk\\VernOhaya\\trustcare\\public\\js\n"
+
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:33
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:48
+msgid "Add"
+msgstr ""
+
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:36
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:113
+msgid "Name"
+msgstr ""
+
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:54
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:132
+msgid "Necessary to enter value"
+msgstr ""
+
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:74
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:152
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:220
+msgid "Internal Error"
+msgstr "Internal Error"
+
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:88
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:166
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:234
+msgid "Cancel"
+msgstr ""
+
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:110
+msgid "Edit"
+msgstr ""
+
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:126
+msgid "Save"
+msgstr ""
+
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:188
+msgid "Warning"
+msgstr ""
+
+# C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:191
+msgid "__NameDiv__ will be removed. Are You sure?"
+msgstr ""
 
 msgid "Add Patient"
 msgstr ""
 
 msgid "Add Pharmacy"
 msgstr ""
-
-#~ msgid "Create"
-#~ msgstr "Create"
-
-#, fuzzy
-#~ msgid "Route of Administration"
-#~ msgstr "FMC Administrator"
-
-#, fuzzy
-#~ msgid "FMC Billing Administrator"
-#~ msgstr "FMC Administrator"
-
-#, fuzzy
-#~ msgid "Administrators"
-#~ msgstr "FMC Administrator"
 

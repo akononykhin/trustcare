@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TrustCare\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-18 16:58+0400\n"
-"PO-Revision-Date: 2016-11-19 18:22+0300\n"
+"POT-Creation-Date: 2016-11-20 00:03+0300\n"
+"PO-Revision-Date: 2016-11-20 00:04+0300\n"
 "Last-Translator: Alexey Kononykhin <konon@astelnet.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: C:\\work\\oDesk\\VernOhaya\\trustcare\\src\\trunk\\public\\js\n"
+"X-Poedit-SearchPath-0: C:\\work\\oDesk\\VernOhaya\\trustcare\\public\\js\n"
 
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:19
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:34
@@ -62,19 +62,4 @@ msgstr ""
 
 msgid "Add Pharmacy"
 msgstr ""
-
-#~ msgid "Create"
-#~ msgstr "Create"
-
-#, fuzzy
-#~ msgid "Route of Administration"
-#~ msgstr "FMC Administrator"
-
-#, fuzzy
-#~ msgid "FMC Billing Administrator"
-#~ msgstr "FMC Administrator"
-
-#, fuzzy
-#~ msgid "Administrators"
-#~ msgstr "FMC Administrator"
 
