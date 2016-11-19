@@ -781,7 +781,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $hivStatus = $this->_getParam('hiv_status');
                 $isCommited = $this->_getParam('is_commited');
                 $isReferredFrom = $this->_getParam('is_referred_from');
-                $referredFromList = $this->_getParam('referred_from');
+                $referredFromList = $this->_getParam('referred_from', array());
                 if(!$isReferredFrom) {
                     $referredFromList = array();
                 }
@@ -789,7 +789,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 $isReferredOut = $this->_getParam('is_referred_out');
                 $isReferralCompleted = $this->_getParam('is_referral_completed');
                 $isHivRiskAssesmentDone = $this->_getParam('is_hiv_risk_assesment_done');
-                $referredInList = $this->_getParam('referred_in');
+                $referredInList = $this->_getParam('referred_in', array());
                 if(!$isReferredIn) {
                     $referredInList = array();
                 }
