@@ -117,7 +117,7 @@ class Portal_CountryController extends ZendX_Controller_Action
     public function createAction()
     {
         $form = $this->_getParametersForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/create");
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 
@@ -161,7 +161,7 @@ class Portal_CountryController extends ZendX_Controller_Action
     public function editAction()
     {
         $form = $this->_getParametersForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/edit");
         
         $id = $this->_getParam('id');
         $model = TrustCare_Model_Country::find($id);
@@ -243,7 +243,7 @@ class Portal_CountryController extends ZendX_Controller_Action
     public function importAction()
     {
         $form = $this->_getImportForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/import");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/import");
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 if(!$form->import_file->receive()) {

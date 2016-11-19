@@ -206,7 +206,7 @@ class Portal_PharmDictController extends ZendX_Controller_Action
         $typeModel = TrustCare_Model_PharmacyDictionaryType::find($typeId);
         
         $form = $this->_getParametersForm($typeId, true);
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/create");
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 
@@ -250,7 +250,7 @@ class Portal_PharmDictController extends ZendX_Controller_Action
         $typeModel = TrustCare_Model_PharmacyDictionaryType::find($typeId);
         
         $form = $this->_getParametersForm($typeId, false);
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/edit");
         
         $id = $this->_getParam('id');
         $model = TrustCare_Model_PharmacyDictionary::find($id);

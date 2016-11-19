@@ -156,7 +156,7 @@ class Portal_PharmacyController extends ZendX_Controller_Action
     public function createAction()
     {
         $form = $this->_getParametersForm(true);
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/create");
         
         $forDialog = $this->_getParam('for_dialog');
         if(!empty($forDialog)) {
@@ -209,7 +209,7 @@ class Portal_PharmacyController extends ZendX_Controller_Action
     public function editAction()
     {
         $form = $this->_getParametersForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/edit");
         
         $id = $this->_getParam('id');
         $model = TrustCare_Model_Pharmacy::find($id);

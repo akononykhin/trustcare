@@ -149,7 +149,7 @@ class Portal_Report_CareController extends ZendX_Controller_Action
     public function generateAction()
     {
         $form = $this->_getGenerateReportForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/generate");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/generate");
         
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {

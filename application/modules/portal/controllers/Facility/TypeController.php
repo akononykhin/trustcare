@@ -107,7 +107,7 @@ class Portal_Facility_TypeController extends ZendX_Controller_Action
     public function createAction()
     {
         $form = $this->_getParametersForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/create");
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 
@@ -150,7 +150,7 @@ class Portal_Facility_TypeController extends ZendX_Controller_Action
     public function editAction()
     {
         $form = $this->_getParametersForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/edit");
         
         $id = $this->_getParam('id');
         $model = TrustCare_Model_FacilityType::find($id);

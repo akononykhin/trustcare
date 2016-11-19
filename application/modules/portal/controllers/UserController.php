@@ -137,7 +137,7 @@ class Portal_UserController extends ZendX_Controller_Action
     public function createAction()
     {
         $form = $this->_getParametersForm(true);
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/create");
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 
@@ -212,7 +212,7 @@ class Portal_UserController extends ZendX_Controller_Action
         }
         
         $form = $this->_getParametersForm(false, $model->getIdPharmacy());
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/edit");
         $form->getElement("login")->setAttrib('readonly', true);
         
         if($this->getRequest()->isPost()) {

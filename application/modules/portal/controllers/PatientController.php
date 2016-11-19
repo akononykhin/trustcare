@@ -159,7 +159,7 @@ class Portal_PatientController extends ZendX_Controller_Action
     public function createAction()
     {
         $form = $this->_getParametersForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/create");
         
         $forDialog = $this->_getParam('for_dialog');
         if(!empty($forDialog)) {
@@ -235,7 +235,7 @@ class Portal_PatientController extends ZendX_Controller_Action
         }
         
         $form = $this->_getParametersForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/edit");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/edit");
         
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {

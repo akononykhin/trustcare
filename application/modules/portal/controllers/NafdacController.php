@@ -153,7 +153,7 @@ class Portal_NafdacController extends ZendX_Controller_Action
         $patientId = $this->_getParam('id_patient');
         
         $form = $this->_getParametersForm();
-        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getControllerName() . "/create");
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/create");
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
