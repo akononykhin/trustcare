@@ -793,7 +793,7 @@ class Form_CommunityController extends ZendX_Controller_Action
                 if(!$isReferredIn) {
                     $referredInList = array();
                 }
-                $referredOutList = $this->_getParam('referred_out');
+                $referredOutList = $this->_getParam('referred_out', array());
                 if(!$isReferredOut) {
                     $referredOutList = array();
                 }
