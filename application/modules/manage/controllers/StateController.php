@@ -27,7 +27,7 @@ class StateController extends ZendX_Controller_Action
         }
             
         $columnsInfo = array(
-            'name' => array(
+            'state_name' => array(
                 'title' => Zend_Registry::get("Zend_Translate")->_("Name"),
                 'filter' => array(
                     'type' => 'text',
