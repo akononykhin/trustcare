@@ -36,7 +36,7 @@ class LanguageController extends Zend_Controller_Action
             
             $messages = $translate->getMessages();
             
-            $o->$language->$namespace = $messages;
+            $o->{$language}[$namespace] = $messages;
             
         }
         catch(Exception $ex) {
