@@ -48,6 +48,6 @@ interface LoggerConfigurator {
     * @param string $url The URL to parse
     * @param LoggerHierarchy $repository
     */
-    public static function configure($url, &$repository);
+    public static function configure($url, $repository);
     
 }

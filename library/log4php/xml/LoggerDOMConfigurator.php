@@ -129,7 +129,7 @@ class LoggerDOMConfigurator implements LoggerConfigurator {
      * @param string $url
      * @static
      */
-    public static function configure($url = '', &$repository) {
+    public static function configure($url = '', $repository) {
         $configurator = new LoggerDOMConfigurator();
         //$repository = LoggerManager::getLoggerRepository();
         return $configurator->doConfigure($url, $repository);

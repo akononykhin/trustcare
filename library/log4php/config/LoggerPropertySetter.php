@@ -74,7 +74,7 @@ class LoggerPropertySetter {
      * @param string $prefix Only keys having the specified prefix will be set.
      * @static
      */
-    function setPropertiesByObject(&$obj, $properties, $prefix)
+    public static function setPropertiesByObject(&$obj, $properties, $prefix)
     {
         $pSetter = new LoggerPropertySetter($obj);
         return $pSetter->setProperties($properties, $prefix);

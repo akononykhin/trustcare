@@ -119,7 +119,7 @@ class LoggerPropertyConfigurator implements LoggerConfigurator {
      * @return boolean configuration result
      * @static
      */
-    public static function configure($url = '', &$repository) {
+    public static function configure($url = '', $repository) {
         $configurator = new LoggerPropertyConfigurator();
         //$repository = & LoggerManager::singleton()->getLoggerRepository();
         return $configurator->doConfigure($url, $repository);
@@ -320,7 +320,7 @@ class LoggerPropertyConfigurator implements LoggerConfigurator {
      *                    configuration information is stored.
      * @param LoggerHierarchy &$repository the repository to apply the configuration
      */
-    function doConfigure($url, &$repository)
+    function doConfigure($url, $repository)
     {
         $properties = @parse_ini_file($url);
         if ($properties === false) {
@@ -338,7 +338,7 @@ class LoggerPropertyConfigurator implements LoggerConfigurator {
      * @param array $properties
      * @param LoggerHierarchy &$hierarchy
      */
-    function doConfigureProperties($properties, &$hierarchy)
+    function doConfigureProperties($properties, $hierarchy)
     {
         $value = @$properties[LOG4PHP_LOGGER_PROPERTY_CONFIGURATOR_LOGGER_DEBUG_KEY];
         
@@ -428,7 +428,7 @@ class LoggerPropertyConfigurator implements LoggerConfigurator {
                 "Could not find root logger information. Is this OK?"
             );
         } else {
-            $root =& $hierarchy->getRootLogger();
+            $root = $hierarchy->getRootLogger();
             // synchronized(root) {
                 $this->parseCategory(
                 $props, 
@@ -457,7 +457,7 @@ class LoggerPropertyConfigurator implements LoggerConfigurator {
                     } elseif (strpos($key, LOG4PHP_LOGGER_PROPERTY_CONFIGURATOR_LOGGER_PREFIX) === 0) {
                     $loggerName = substr($key, strlen(LOG4PHP_LOGGER_PROPERTY_CONFIGURATOR_LOGGER_PREFIX));
                 }
-                $logger =& $hierarchy->getLogger($loggerName, $this->loggerFactory);
+                $logger = $hierarchy->getLogger($loggerName, $this->loggerFactory);
                     // synchronized(logger) {
                     $this->parseCategory($props, $logger, $key, $loggerName, $value);
                     $this->parseAdditivityForLogger($props, $logger, $loggerName);
@@ -560,7 +560,7 @@ class LoggerPropertyConfigurator implements LoggerConfigurator {
                 "LoggerPropertyConfigurator::parseCategory() ".
                 "Parsing appender named [{$appenderName}]."
             );
-            $appender =& $this->parseAppender($props, $appenderName);
+            $appender = $this->parseAppender($props, $appenderName);
             if($appender !== null) {
                     $logger->addAppender($appender);
             }
@@ -574,7 +574,7 @@ class LoggerPropertyConfigurator implements LoggerConfigurator {
      */
     function &parseAppender($props, $appenderName)
     {
-        $appender =& LoggerAppender::singleton($appenderName);
+        $appender = LoggerAppender::singleton($appenderName);
         if($appender !== null) {
             LoggerLog::debug(
                 "LoggerPropertyConfigurator::parseAppender() ".
@@ -588,7 +588,7 @@ class LoggerPropertyConfigurator implements LoggerConfigurator {
         $filterPrefix = $prefix . ".filter";
         $appenderClass = @$props[$prefix];
         if (!empty($appenderClass)) {
-            $appender =& LoggerAppender::singleton($appenderName, $appenderClass);
+            $appender = LoggerAppender::singleton($appenderName, $appenderClass);
             if($appender === null) {
                 LoggerLog::warn(
                     "LoggerPropertyConfigurator::parseAppender() ".
