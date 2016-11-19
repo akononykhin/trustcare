@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: TrustCare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-18 16:58+0400\n"
-"PO-Revision-Date: 2013-06-18 16:58+0400\n"
+"PO-Revision-Date: 2016-11-19 18:22+0300\n"
 "Last-Translator: Alexey Kononykhin <konon@astelnet.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:19
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:34
 msgid "Add"
-msgstr ""
+msgstr "Добавить"
 
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:22
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:90
@@ -33,7 +33,7 @@ msgstr ""
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:129
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:189
 msgid "Internal Error"
-msgstr ""
+msgstr "Внутренняя ошибка"
 
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:73
 # C:\work\oDesk\VernOhaya\trustcare\src\trunk\public\js/dictEntitiesCtrl.js:143
