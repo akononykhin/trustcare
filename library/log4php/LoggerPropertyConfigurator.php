@@ -105,7 +105,7 @@ class LoggerPropertyConfigurator implements LoggerConfigurator {
     /**
      * Constructor
      */
-    public function LoggerPropertyConfigurator() {
+    public function __construct() {
         $this->loggerFactory = new LoggerDefaultCategoryFactory();
     }
     
