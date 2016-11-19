@@ -124,7 +124,7 @@ class CountryController extends ZendX_Controller_Action
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
                 try {
                     $name = $form->getValue('name');
-                    $iso_3166 = $form->getValue('iso_3166');
+                    $iso_3166 = substr($form->getValue('iso_3166'), 0, 2);
                     
                     $checkModel = TrustCare_Model_Country::findByIso($iso_3166);
                     if(!is_null($checkModel)) {
@@ -351,6 +351,7 @@ class CountryController extends ZendX_Controller_Action
             'label'         => 'ISO-3166-1 alpha 2',
             'description'   => "",
             'size'          => 4,
+            'maxlength'     => 2,
             'tabindex'      => $tabIndex++,
             'required'      => true
         ));

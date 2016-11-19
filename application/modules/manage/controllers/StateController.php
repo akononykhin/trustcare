@@ -82,10 +82,10 @@ class StateController extends ZendX_Controller_Action
         Zend_Registry::getInstance()->dbAdapter->setFetchMode(Zend_Db::FETCH_ASSOC);
         $select = Zend_Registry::getInstance()->dbAdapter->select()
                                                          ->from("state",
-                                                                array('state.*'))
+                                                                array('state.id', 'state_name' => 'state.name'))
                                                          ->joinLeft(array('country'), 'state.id_country = country.id', array('country_name' => 'country.name'));
 
-        $this->processListLoadAjaxRequest($select, array('country_name' => 'country.id'));
+        $this->processListLoadAjaxRequest($select, array('country_name' => 'country.id', 'state_name' => 'state.name'));
         
         $rows = Zend_Registry::getInstance()->dbAdapter->selectWithLimit($select->__toString(), $iFilteredTotal);
         
