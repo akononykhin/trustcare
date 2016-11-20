@@ -1,0 +1,18 @@
+[production]
+db.adapter            = "Mysql"
+db.params.adapterNamespace    = "ZendX_Db_Adapter_Pdo"
+db.params.dbname      = %DB_DBNAME%
+db.params.username    = %DB_USERNAME%
+db.params.password    = %DB_PASSWORD%
+db.params.host        = %DB_HOST%
+db.params.port        = 3306
+db.params.charset     = "utf8"
+
+[staging : production]
+
+[development : production]
+
+[testing : production]
+
+db.params.dbname      =
+
