@@ -164,7 +164,7 @@ a {
     }
     
     $(document).ready(function() {
-        internalAddress.setUrlBase('<?php echo $this->url(array('controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+        internalAddress.setUrlBase('<?php echo $this->url(array('module' => 'client', 'controller' => '__controller__', "action" => "__action__"), null, true); ?>');
 
         i18n.init({
             resGetPath: internalAddress.loadI18nDict()
