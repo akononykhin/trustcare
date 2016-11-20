@@ -53,7 +53,7 @@ class Portal_SignController extends ZendX_Controller_Action
 
         Zend_Session::forgetMe();
         Zend_Auth::getInstance()->clearIdentity();
-        $this->_redirect("index");
+        $this->_redirect($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/index");
     }
     
     /**
@@ -62,7 +62,7 @@ class Portal_SignController extends ZendX_Controller_Action
     private function _getSignForm()
     {
         $form = new ZendX_Form();
-        $form->setAction('/sign');
+        $form->setAction($this->getRequest()->getBaseUrl() . '/' . $this->getRequest()->getModuleName() . '/' . $this->getRequest()->getControllerName() . "/index");
         $form->setMethod('post');
 
         $tabIndex = 1;
