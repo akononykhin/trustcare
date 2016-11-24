@@ -363,7 +363,7 @@ CREATE TABLE patient (
 CREATE TABLE frm_care (
   `id` int NOT NULL,
   `generation_date` datetime default NULL,
-  `id_user` int default NULL
+  `id_user` int default NULL,
   `date_of_visit` datetime NOT NULL,
   `date_of_visit_month_index` int default NULL,
   `is_commited` bool default false,
