@@ -256,7 +256,7 @@ insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (384
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (385, 20, 'Counseling on safe sex practices');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (386, 20, 'Health education & promotion');
 
-insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (400 21, 'STIs Screening & Counselling');
+insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (400, 21, 'STIs Screening & Counselling');
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (401, 21, 'STIs Treatment');
 
 insert into pharmacy_dictionary(id,id_pharmacy_dictionary_type,name) values (420, 22, 'TB Screening');
