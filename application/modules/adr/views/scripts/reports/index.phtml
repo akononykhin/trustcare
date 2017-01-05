@@ -1,0 +1,25 @@
+<h4><?php echo $this->translate(_("Reports"))?></h4>
+<div data-ng-controller="AdrReportsListCtrl">
+	<div>
+    	<div class="row" data-ng-repeat="report in list" data-ng-cloak>
+       		<div class="col-sm-1">
+            	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("View"))?>" data-ng-click="edit(report.id)"><span class="glyphicon glyphicon-edit"></span></button>
+            	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("Download"))?>" data-ng-click="download(report.id)"><span class="glyphicon glyphicon-download-alt"></span></button>
+            	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("Delete"))?>" data-ng-click="delete(report.id)"><span class="glyphicon glyphicon-trash"></span></button>
+       		</div>
+          	<div class="col-sm-2">{{report.gd}}</div>
+   	       	<div class="col-sm-2">{{report.vd}}</div>
+       	   	<div class="col-sm-3">{{report.pi}}</div>
+       		<div class="col-sm-3">{{report.ph}}</div>
+   		</div>
+   		<div class="row">
+   			<div class="col-sm-2">
+		        <button type="button" data-ng-click="loadMoreReports()" data-ng-show="showLoadingBtn()" data-ng-cloak><?php echo $this->translate(_("Load more reports"))?></button>
+   			</div>
+   		</div>
+   	</div>
+   	<div data-ng-show="!list.length" data-ng-cloak>
+   	<?php echo $this->translate(_("No data"))?>
+   	</div>
+</div>
+

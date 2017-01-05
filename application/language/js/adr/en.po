@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TrustCare\n"
+"Project-Id-Version: PV-ADR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-20 00:02+0300\n"
-"PO-Revision-Date: 2016-11-20 00:03+0300\n"
+"PO-Revision-Date: 2017-01-05 23:19+0300\n"
 "Last-Translator: Alexey Kononykhin <alexey.kononykhin@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: C:\\work\\oDesk\\VernOhaya\\trustcare\\public\\js\n"
+"X-Poedit-SearchPath-0: C:\\work\\oDesk\\VernOhaya\\trustcare\\public_adr\\app\n"
 
 # C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:33
 # C:\work\oDesk\VernOhaya\trustcare\public\js/dictEntitiesCtrl.js:48

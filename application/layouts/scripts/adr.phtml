@@ -1,5 +1,5 @@
 <?php echo $this->doctype(); ?>
-<html  data-ng-app="adr"> 
+<html  data-ng-app="trustrx"> 
 <head>
   <?php echo $this->headMeta(); ?>  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +21,6 @@
     <![endif]-->  
 <style>
 body { padding-top: 55px; }
-.navbar .navbar-brand {padding: 0px 15px 0px;}
 </style>  
 
 <script type="text/javascript" charset="utf-8">
@@ -39,12 +38,7 @@ body { padding-top: 55px; }
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".sidebar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+            <div class="navbar-brand"><?php echo Zend_Registry::get("Zend_Translate")->_("PV-ADR Reporter");?></div>
         </div>
         <nav class="collapse navbar-collapse" role="navigation">
         
@@ -112,12 +106,36 @@ body { padding-top: 55px; }
   <script src="<?php echo $this->baseUrl("/lib/angular/angular-ui/ui-bootstrap/ui-bootstrap-tpls-0.14.3.min.js");?>"></script>
   
   <?php if(APPLICATION_ENV == 'development') : ?>
+  <script src="<?php echo $this->baseUrl("/app/_app_adr.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/filters/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/filters/nl2br.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/directives/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/services/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/services/internalAddress.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/reports/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/reports/listCtrl.js");?>"></script>
   <?php else :?>
   <?php endif;?>
   
   
   
   <script type="text/javascript">
+  angular.module('trustrx').run(function(AdrInternalAddressSvc) {
+      AdrInternalAddressSvc.setUrlBase('<?php echo $this->url(array(), null, true); ?>', '<?php echo $this->url(array('module' => 'adr', 'controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+      
+      i18n.init({
+          resGetPath: AdrInternalAddressSvc.loadI18nDict()
+          ,dynamicLoad: true 
+          ,getAsync: false
+          ,lng: '<?php echo Zend_Registry::get('Zend_Locale');?>'
+          ,ns: 'js_adr'
+          ,fallbackLng: false
+          ,keyseparator: '::'
+      });
+  });
+
   <?php /* Fix for stacking modals. See http://miles-by-motorcycle.com/fv-b-8-670/stacking-bootstrap-dialogs-using-event-callbacks */ ?>
   $('.modal').on('hidden.bs.modal', function( event ) {
       $(this).removeClass( 'fv-modal-stack' );
