@@ -64,7 +64,7 @@ class TrustCare_Controller_Plugin_Init extends Zend_Controller_Plugin_Abstract
         $view = $layout->getView();
 
         Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session('TrustCare_Manage_Zend_Auth'));
-        $layout->setLayout('client');
+        $layout->setLayout('portal');
 
         $this->initNavigationPortal();
         
