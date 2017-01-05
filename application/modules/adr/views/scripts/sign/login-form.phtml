@@ -1,0 +1,71 @@
+<style>
+body {
+  background-color: #eee;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin #username {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin #password {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+</style>
+
+<?php
+if($this->form->isErrors()) {
+?>
+  <div class="alert alert-danger">
+<?php
+    foreach($this->form->getErrorMessages() as $errorMessage) {
+        echo $errorMessage."<br/>";
+    }
+?>
+  </div>
+<?php
+}
+?>
+
+<form class="form-signin" role="form" method="post" action="<?php echo $this->form->getAction();?>">
+  <div class="form-group11">
+    <label class="sr-only" for="username"><?php echo $this->translate(_("Username"))?></label>
+    <input type="text" class="form-control" id="username" name="username" value="<?php echo $this->form->getValue('username');?>" placeholder="<?php echo $this->translate(_("Username"))?>" required autofocus>
+  </div>
+  <div class="form-group11">
+    <label class="sr-only" for="password"><?php echo $this->translate(_("Password"))?></label>
+    <input type="password" class="form-control" id="password" name="password" placeholder="<?php echo $this->translate(_("Password"))?>" required>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="remember" name="remember" value="1" <?php if($this->form->getElement('remember')->isChecked()) echo 'checked'; ?> ><?php echo $this->translate(_("Remember me"))?>
+    </label>
+  </div>
+  <button type="submit" class="btn btn-lg btn-primary btn-block"><?php echo $this->translate(_("Sign In"))?></button>
+</form>

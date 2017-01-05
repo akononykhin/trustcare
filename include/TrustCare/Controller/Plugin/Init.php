@@ -4,23 +4,22 @@ class TrustCare_Controller_Plugin_Init extends Zend_Controller_Plugin_Abstract
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
         $moduleName = $this->getRequest()->getModuleName();
-        if('default' != $moduleName) {
-            $this->prepareLocale();
-        }
     	switch ($moduleName) {
-            case 'portal':
-                $this->prepareModulePortal();
-                
-                $defaultSessionNamespace = new Zend_Session_Namespace();
-                $defaultSessionNamespace->module = $this->getRequest()->getModuleName();
-                break;
             case 'adr':
-                $this->prepareModuleAdr();
+            	$this->prepareLocale();
+            	$this->prepareModuleAdr();
             	
                 $defaultSessionNamespace = new Zend_Session_Namespace();
                 $defaultSessionNamespace->module = $this->getRequest()->getModuleName();
                 break;
+    		case 'portal':
             default:
+            	$this->prepareLocale();
+            	$this->prepareModulePortal();
+                
+                $defaultSessionNamespace = new Zend_Session_Namespace();
+                $defaultSessionNamespace->module = $this->getRequest()->getModuleName();
+                break;
         }
         
         $front = Zend_Controller_Front::getInstance();
@@ -73,6 +72,20 @@ class TrustCare_Controller_Plugin_Init extends Zend_Controller_Plugin_Abstract
         $view->headTitle(Zend_Registry::get("Zend_Translate")->_("TrustCare Application"));
     }
     
+
+    private function prepareModuleAdr()
+    {
+    	$layout = Zend_Layout::getMvcInstance();
+    	$view = $layout->getView();
+    
+    	$layout->setLayout('adr');
+    
+    	//$this->initNavigationAdr();
+    
+    	$view->doctype('XHTML1_STRICT');
+    	$view->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
+    	$view->headTitle(Zend_Registry::get("Zend_Translate")->_("PV-ADR Reporter"));
+    }
     
     private function initNavigationPortal()
     {
