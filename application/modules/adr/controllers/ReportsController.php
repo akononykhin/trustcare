@@ -58,5 +58,98 @@ class Adr_ReportsController extends ZendX_Controller_Action
     }
     
 
+    public function deleteActionAccess()
+    {
+        return true;
+    }
+    
+    
+    public function deleteAction()
+    {
+    	$id = $this->_getParam('id');
+    	$db_options = Zend_Registry::get('dbOptions');
+    	$db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+    
+    	$responseObj = new stdClass();
+    	$responseObj->success = false;
+    	$errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+    	$db->beginTransaction();
+    	try {
+    		if(!Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "delete")) {
+    			$errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied.");
+    			throw new Exception();
+    		}
+    
+    		$model = TrustCare_Model_Nafdac::find($id);
+    		if(is_null($model)) {
+    			throw new Exception(sprintf("Failed to load nafdac.id=%s", $id));
+    		}
+    		
+    		$availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+    		if(!array_key_exists($model->getIdPharmacy(), $availablePharmacies)) {
+    			$errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied.");
+    			throw new Exception();
+    		}
+    		
+    		$generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+    		$fileName = $model->getFilename();
+    		
+    		$fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
+    		if(file_exists($fileReportOutput) && is_file($fileReportOutput)) {
+    			unlink($fileReportOutput);
+    		}
+    		$model->delete();
+    
+    		$db->commit();
+    
+    		$responseObj->success = true;
+    	}
+    	catch(Exception $ex) {
+    		$db->rollBack();
+    		$exMessage = $ex->getMessage();
+    		if(!empty($exMessage)) {
+    			$this->getLogger()->error(sprintf("'%s': %s", Zend_Auth::getInstance()->getIdentity(), $exMessage));
+    		}
+    		$responseObj->message = $errorMsg;
+    	}
+    	$this->_helper->json($responseObj);
+    }
+    
+
+    public function downloadActionAccess()
+    {
+        return Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "view");
+    }
+
+    
+    public function downloadAction()
+    {
+        $id = $this->_getParam('id');
+    
+        $model = TrustCare_Model_Nafdac::find($id);
+        if(is_null($model)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown report")));
+            return;
+        }
+        
+        $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+        if(!array_key_exists($model->getIdPharmacy(), $availablePharmacies)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Access Denied")));
+            return;
+        }
+        
+        $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+        $fileName = $model->getFilename();
+        
+        $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
+        if(!file_exists($fileReportOutput) || !is_file($fileReportOutput)) {
+            $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Report file not found")));
+            return;
+        }
+        
+        $this->outputFileAsAttachment($fileReportOutput);
+        die;
+    }
+
 }
 

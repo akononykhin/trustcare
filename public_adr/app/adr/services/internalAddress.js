@@ -26,6 +26,12 @@ angular.module('trustrx.adr.services')
         },
         reportsList: function (offset, quantity) {
             return replacePatterns('reports', 'list') + "/offset/" + offset + "/quantity/" + quantity + "?_=" + Date.now().toString();
+        },
+        reportsDelete: function(id) {
+            return replacePatterns('reports', 'delete') + '/id/' + id;
+        },
+        reportsDownload: function(id) {
+            return replacePatterns('reports', 'download') + '/id/' + id;
         }
     };
 });

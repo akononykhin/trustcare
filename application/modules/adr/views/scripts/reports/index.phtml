@@ -3,9 +3,9 @@
 	<div>
     	<div class="row" data-ng-repeat="report in list" data-ng-cloak>
        		<div class="col-sm-1">
-            	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("View"))?>" data-ng-click="edit(report.id)"><span class="glyphicon glyphicon-edit"></span></button>
-            	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("Download"))?>" data-ng-click="download(report.id)"><span class="glyphicon glyphicon-download-alt"></span></button>
-            	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("Delete"))?>" data-ng-click="delete(report.id)"><span class="glyphicon glyphicon-trash"></span></button>
+            	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("View"))?>" data-ng-click="edit($index)"><span class="glyphicon glyphicon-edit"></span></button>
+            	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("Download"))?>" data-ng-click="download($index)"><span class="glyphicon glyphicon-download-alt"></span></button>
+            	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("Delete"))?>" data-ng-click="delete($index)"><span class="glyphicon glyphicon-trash"></span></button>
        		</div>
           	<div class="col-sm-2">{{report.gd}}</div>
    	       	<div class="col-sm-2">{{report.vd}}</div>

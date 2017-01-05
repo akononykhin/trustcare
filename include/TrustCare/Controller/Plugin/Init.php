@@ -80,7 +80,7 @@ class TrustCare_Controller_Plugin_Init extends Zend_Controller_Plugin_Abstract
     
     	$layout->setLayout('adr');
     
-    	//$this->initNavigationAdr();
+    	$this->initNavigationAdr();
     
     	$view->doctype('XHTML1_STRICT');
     	$view->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
@@ -860,5 +860,45 @@ class TrustCare_Controller_Plugin_Init extends Zend_Controller_Plugin_Abstract
 
         Zend_Registry::set('clientTimeZoneOffset', $tzOffset);
         Zend_Registry::set('clientTimeZone', $zone);
+    }
+
+    
+    private function initNavigationAdr()
+    {
+    	$acl = new Zend_Acl();
+    	
+    	$acl->addRole(new Zend_Acl_Role('pharmacy_manager'));
+    	$acl->addRole(new Zend_Acl_Role('pharmacist'));
+    	$acl->addRole(new Zend_Acl_Role('guest'));
+    	
+    	$acl->add(new Zend_Acl_Resource('resource:form'));
+    	$acl->add(new Zend_Acl_Resource('resource:report'));
+    	$acl->add(new Zend_Acl_Resource('resource:admin'));
+    	$acl->add(new Zend_Acl_Resource('resource:admin.system_dict'));
+    	$acl->add(new Zend_Acl_Resource('resource:admin.pharm_dict'));
+    	$acl->add(new Zend_Acl_Resource('resource:admin.user'));
+    	$acl->add(new Zend_Acl_Resource('resource:admin.pharmacy'));
+    	$acl->add(new Zend_Acl_Resource('resource:admin.physician'));
+    	$acl->add(new Zend_Acl_Resource('resource:admin.patient'));
+    	$acl->add(new Zend_Acl_Resource('resource:admin.system_log'));
+    	
+    	$acl->allow('pharmacy_manager');
+    	
+    	$acl->allow('pharmacist');
+    	$acl->deny('pharmacist', 'resource:admin.system_dict');
+    	$acl->deny('pharmacist', 'resource:admin.user');
+    	$acl->deny('pharmacist', 'resource:admin.pharmacy');
+    	$acl->deny('pharmacist', 'resource:admin.physician');
+    	$acl->deny('pharmacist', 'resource:admin.system_log');
+    	
+    	Zend_Registry::set('Zend_Acl', $acl);
+    	
+    	Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(Zend_Registry::get("Zend_Acl"));
+    	$role = 'guest';
+    	$modelUser = Zend_Registry::get("TrustCare_Registry_User")->getUser();
+    	if(!is_null($modelUser)) {
+    		$role = $modelUser->role;
+    	}
+    	Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole((string)$role);
     }
 }
