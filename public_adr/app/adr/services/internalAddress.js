@@ -24,14 +24,25 @@ angular.module('trustrx.adr.services')
         loadFile: function (file) {
             return webRoot + file;
         },
-        reportsList: function (offset, quantity) {
-            return replacePatterns('reports', 'list') + "/offset/" + offset + "/quantity/" + quantity + "?_=" + Date.now().toString();
+        reportList: function (offset, quantity) {
+            return replacePatterns('report', 'list') + "/offset/" + offset + "/quantity/" + quantity + "?_=" + Date.now().toString();
         },
-        reportsDelete: function(id) {
-            return replacePatterns('reports', 'delete') + '/id/' + id;
+        reportDelete: function(id) {
+            return replacePatterns('report', 'delete') + '/id/' + id;
         },
-        reportsDownload: function(id) {
-            return replacePatterns('reports', 'download') + '/id/' + id;
+        reportDownload: function(id) {
+            return replacePatterns('report', 'download') + '/id/' + id;
+        },
+
+        patientGet: function(id) {
+            return replacePatterns('patient', 'get') + '/id/' + id;
+        },
+        patientFilterAccessable: function() {
+            return replacePatterns('patient', 'filter-accessable');
+        },
+
+        pharmacyListActive: function () {
+            return replacePatterns('pharmacy', 'list-active');
         }
     };
 });

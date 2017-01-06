@@ -1,6 +1,11 @@
 <h4><?php echo $this->translate(_("Reports"))?></h4>
 <div data-ng-controller="AdrReportsListCtrl">
 	<div>
+		<div class="row">
+   			<div class="col-sm-2">
+		        <button type="button" class="btn btn-primary btn-xs" data-ng-click="create()"><?php echo $this->translate(_("New Report"))?></button>
+   			</div>
+		</div>
     	<div class="row" data-ng-repeat="report in list" data-ng-cloak>
        		<div class="col-sm-1">
             	<button type="button" class="btn btn-default btn-xs" title="<?php echo $this->translate(_("View"))?>" data-ng-click="edit($index)"><span class="glyphicon glyphicon-edit"></span></button>
@@ -14,7 +19,7 @@
    		</div>
    		<div class="row">
    			<div class="col-sm-2">
-		        <button type="button" data-ng-click="loadMoreReports()" data-ng-show="showLoadingBtn()" data-ng-cloak><?php echo $this->translate(_("Load more reports"))?></button>
+		        <button type="button" class="btn btn-default btn-xs" data-ng-click="loadMoreReports()" data-ng-show="showLoadingBtn()" data-ng-cloak><?php echo $this->translate(_("Load more reports"))?></button>
    			</div>
    		</div>
    	</div>

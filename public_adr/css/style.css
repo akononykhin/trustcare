@@ -1,0 +1,42 @@
+a tab-heading {
+    cursor: pointer;
+}
+
+div.bootbox.modal.fade.in {
+  z-index: 1900; !important;
+}
+
+.bootbox-danger {
+  z-index: 2000; !important;
+}
+
+.bootbox-danger div.modal-content {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+.bootbox-danger hr {
+  border-top-color: #e4b9c0;
+}
+
+.bootbox-warning div.modal-content {
+  color: #c09853;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+
+.bootbox-warning hr {
+  border-top-color: #f7e1b5;
+}
+
+
+legend {
+  font-size: 14px !important;
+}
+
+select option[disabled] {
+  font-style:italic;
+  color: grey;
+}
+

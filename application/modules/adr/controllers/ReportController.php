@@ -1,6 +1,6 @@
 <?php
 
-class Adr_ReportsController extends ZendX_Controller_Action
+class Adr_ReportController extends ZendX_Controller_Action
 {
 
     public function init()

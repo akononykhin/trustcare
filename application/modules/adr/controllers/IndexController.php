@@ -10,7 +10,7 @@ class Adr_IndexController extends ZendX_Controller_Action
 
     public function indexAction()
     {
-        $this->getRedirector()->gotoSimpleAndExit("index", "reports");
+        $this->getRedirector()->gotoSimpleAndExit("index", "report");
     }
 
 }

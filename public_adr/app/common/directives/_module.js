@@ -1,1 +1,3 @@
-angular.module('trustrx.common.directives', []);
+angular.module('trustrx.common.directives', [
+    'ui.bootstrap'
+]);

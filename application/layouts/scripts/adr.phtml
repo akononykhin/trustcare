@@ -6,6 +6,7 @@
   <?php echo $this->headTitle(); ?>
   <?php
         echo $this->headLink()->prependStylesheet('/lib/bootstrap/css/bootstrap.min.css')
+                              ->appendStylesheet('/css/style.css');
   ?>
 
   <?php 
@@ -112,11 +113,13 @@ body { padding-top: 55px; }
   <script src="<?php echo $this->baseUrl("/app/common/filters/_module.js");?>"></script>
   <script src="<?php echo $this->baseUrl("/app/common/filters/nl2br.js");?>"></script>
   <script src="<?php echo $this->baseUrl("/app/common/directives/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/directives/mySelectPatient.js");?>"></script>
   <script src="<?php echo $this->baseUrl("/app/adr/_module.js");?>"></script>
   <script src="<?php echo $this->baseUrl("/app/adr/services/_module.js");?>"></script>
   <script src="<?php echo $this->baseUrl("/app/adr/services/internalAddress.js");?>"></script>
-  <script src="<?php echo $this->baseUrl("/app/adr/reports/_module.js");?>"></script>
-  <script src="<?php echo $this->baseUrl("/app/adr/reports/listCtrl.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/report/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/report/listCtrl.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/report/newCtrl.js");?>"></script>
   <?php else :?>
   <?php endif;?>
   

@@ -1,6 +1,6 @@
-var adrReportsModule = angular.module('trustrx.adr.reports');
+var adrReportsModule = angular.module('trustrx.adr.report');
 
-adrReportsModule.controller('AdrReportsListCtrl', ['$scope', '$timeout', '$window', '$http', 'AdrInternalAddressSvc', function($scope, $timeout, $window, $http, AdrInternalAddressSvc) {
+adrReportsModule.controller('AdrReportsListCtrl', ['$scope', '$templateCache', '$window', '$http', '$uibModal', 'AdrInternalAddressSvc', function($scope, $templateCache, $window, $http, $uibModal, AdrInternalAddressSvc) {
     /* Data */
     $scope.list = [];
     $scope.listIsLoading = false;
@@ -17,7 +17,7 @@ adrReportsModule.controller('AdrReportsListCtrl', ['$scope', '$timeout', '$windo
         }
         $scope.listIsLoading = true;
 
-        $http.get(AdrInternalAddressSvc.reportsList(offset, quantity)).
+        $http.get(AdrInternalAddressSvc.reportList(offset, quantity)).
             success(function(response) {
                 $scope.list = $scope.list.concat(response.list);
                 $scope.listIsLoading = false;
@@ -42,6 +42,27 @@ adrReportsModule.controller('AdrReportsListCtrl', ['$scope', '$timeout', '$windo
         return (!$scope.listIsLoading && !$scope.listIsLoaded) ? true : false;
     };
 
+    $scope.create = function () {
+        var modalInstance = $uibModal.open({
+            template : $templateCache.get('adr/report/new.tpl.html'),
+            controller  : 'AdrReportsNewCtrl',
+            resolve     : {
+                params: function () {
+                    return {
+                        id: null,
+                    };
+                }
+            },
+            windowClass : 'newReportsDlg',
+            backdrop    : 'static'
+        });
+
+        modalInstance.result.then(function () {
+            $scope.refreshList();
+        }, function () {
+        });
+    };
+
     $scope.delete = function (index) {
         if(index < 0 || index >= $scope.list.length) {
             return;
@@ -57,7 +78,7 @@ adrReportsModule.controller('AdrReportsListCtrl', ['$scope', '$timeout', '$windo
                     label: 'OK',
                     className: "btn-danger",
                     callback: function() {
-                        $http({url: AdrInternalAddressSvc.reportsDelete(report.id), method: 'POST', data: {}})
+                        $http({url: AdrInternalAddressSvc.reportDelete(report.id), method: 'POST', data: {}})
                             .success(function(data, status, headers, config) {
                                 if (!data.success) {
                                     var errorMsg = data.message ? data.message : i18n.translate("Internal Error");
@@ -104,7 +125,7 @@ adrReportsModule.controller('AdrReportsListCtrl', ['$scope', '$timeout', '$windo
         }
         var report = $scope.list[index];
 
-        $window.open(AdrInternalAddressSvc.reportsDownload(report.id), '_download');
+        $window.open(AdrInternalAddressSvc.reportDownload(report.id), '_download');
     };
 
 
