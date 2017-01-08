@@ -23,7 +23,15 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
         was_admitted: false,
         was_hospitalization_prolonged: false,
         duration_of_admission: null,
-        suspected_drugs: []
+        suspected_drugs: [],
+        concomitant_drugs: [],
+        relevant_data: null,
+        relevant_history: null,
+        reporter_name: null,
+        reporter_address: null,
+        reporter_profession: null,
+        reporter_contact: null,
+        reporter_email: null
     };
     $scope.onsetTypes = [
         {value: 'mins', name: i18n.translate("mins")},
@@ -119,6 +127,15 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
         }
         $scope.params.suspected_drugs.splice(index, 1);
     };
+    $scope.addConcomitantDrug = function () {
+        $scope.params.concomitant_drugs.push({generic_name: '', dosage: '', batch_number: '', date_started: '', date_stopped: '', indication_for_use: ''});
+    };
+    $scope.removeConcomitantDrug = function (index) {
+        if (0 == index) {
+            return;
+        }
+        $scope.params.concomitant_drugs.splice(index, 1);
+    };
 
 
     $scope.create = function () {
@@ -152,4 +169,5 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
     $scope.loadPharmacies();
     $scope.loadLists();
     $scope.addSuspectedDrug();
+    $scope.addConcomitantDrug();
 }]);

@@ -218,65 +218,206 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "            </fieldset>"+
             "            <fieldset>"+
             "                <legend>{{translate('Suspected Drug')}}</legend>"+
-            "                <table class=\"table\">"+
-            "                    <thead>"+
-            "                        <tr>"+
-            "                            <th>#</th>"+
-            "                            <th>{{translate('Product / Generic Name')}}</th>"+
-            "                            <th>{{translate('Dose & Frequency Given')}}</th>"+
-            "                            <th>{{translate('MAL and Batch No.')}}</th>"+
-            "                            <th>{{translate('Therapy started')}}</th>"+
-            "                            <th>{{translate('Therapy stopped')}}</th>"+
-            "                            <th>{{translate('Indication')}}</th>"+
-            "                        </tr>"+
-            "                    </thead>"+
-            "                    <tbody>"+
-            "                        <tr data-ng-repeat=\"drug in params.suspected_drugs\">"+
-            "                            <data-ng-form name=\"subForm\">"+
-            "                            <th>{{$index + 1}}."+
-            "                                <button type=\"button\" class=\"btn btn-default\" data-ng-click=\"addSuspectedDrug();\"><i class=\"glyphicon glyphicon-plus\"></i></button>"+
-            "                                <button type=\"button\" class=\"btn btn-default\" data-ng-click=\"removeSuspectedDrug($index);\" data-ng-show=\"0 != $index\"><i class=\"glyphicon glyphicon-trash\"></i></button>"+
-            "                            </th>"+
-            "                            <td  data-ng-class=\"{'has-error': subForm.generic_name.$invalid}\">"+
-            "                                <input type=\"text\" class=\"form-control\" name=\"generic_name\" data-ng-model=\"drug.generic_name\" required>"+
-            "                                <div class=\"help-block\" data-ng-show=\"subForm.generic_name.$dirty && subForm.generic_name.$invalid\">"+
-            "                                    <span data-ng-show=\"subForm.generic_name.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                <div  data-ng-repeat=\"drug in params.suspected_drugs\">"+
+            "                    <div class=\"col-sm-2\">"+
+            "                        <button type=\"button\" class=\"btn btn-default\" data-ng-click=\"addSuspectedDrug();\"><i class=\"glyphicon glyphicon-plus\"></i></button>"+
+            "                        <button type=\"button\" class=\"btn btn-default\" data-ng-click=\"removeSuspectedDrug($index);\" data-ng-show=\"0 != $index\"><i class=\"glyphicon glyphicon-trash\"></i></button>"+
+            "                    </div>"+
+            "                    <div class=\"col-sm-10\">"+
+            "                        <data-ng-form name=\"subForm\">"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.generic_name.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"generic_name\">{{translate('Product / Generic Name')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"generic_name\" data-ng-model=\"drug.generic_name\" required>"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.generic_name.$dirty && subForm.generic_name.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.generic_name.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
             "                                </div>"+
-            "                            </td>"+
-            "                            <td  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
-            "                                <input type=\"text\" class=\"form-control\" name=\"dosage\" data-ng-model=\"drug.dosage\" required>"+
-            "                                <div class=\"help-block\" data-ng-show=\"subForm.dosage.$dirty && subForm.dosage.$invalid\">"+
-            "                                    <span data-ng-show=\"subForm.dosage.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"dosage\">{{translate('Dose & Frequency Given')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"dosage\" data-ng-model=\"drug.dosage\" required>"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.dosage.$dirty && subForm.dosage.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.dosage.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
             "                                </div>"+
-            "                            </td>"+
-            "                            <td  data-ng-class=\"{'has-error': subForm.batch_number.$invalid}\">"+
-            "                                <input type=\"text\" class=\"form-control\" name=\"batch_number\" data-ng-model=\"drug.batch_number\" required>"+
-            "                                <div class=\"help-block\" data-ng-show=\"subForm.batch_number.$dirty && subForm.batch_number.$invalid\">"+
-            "                                    <span data-ng-show=\"subForm.batch_number.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.batch_number.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"batch_number\">{{translate('MAL and Batch No.')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"batch_number\" data-ng-model=\"drug.batch_number\" required>"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.batch_number.$dirty && subForm.batch_number.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.batch_number.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
             "                                </div>"+
-            "                            </td>"+
-            "                            <td  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
-            "                                <input type=\"text\" class=\"form-control\" name=\"date_started\" data-ng-model=\"drug.date_started\" required>"+
-            "                                <div class=\"help-block\" data-ng-show=\"subForm.date_started.$dirty && subForm.date_started.$invalid\">"+
-            "                                    <span data-ng-show=\"subForm.date_started.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"date_started\">{{translate('Therapy started')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"date_started\" data-ng-model=\"drug.date_started\" required>"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.date_started.$dirty && subForm.date_started.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.date_started.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
             "                                </div>"+
-            "                            </td>"+
-            "                            <td  data-ng-class=\"{'has-error': subForm.date_stopped.$invalid}\">"+
-            "                                <input type=\"text\" class=\"form-control\" name=\"date_stopped\" data-ng-model=\"drug.date_stopped\" required>"+
-            "                                <div class=\"help-block\" data-ng-show=\"subForm.date_stopped.$dirty && subForm.date_stopped.$invalid\">"+
-            "                                    <span data-ng-show=\"subForm.date_stopped.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_stopped.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"date_stopped\">{{translate('Therapy stopped')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"date_stopped\" data-ng-model=\"drug.date_stopped\" required>"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.date_stopped.$dirty && subForm.date_stopped.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.date_stopped.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
             "                                </div>"+
-            "                            </td>"+
-            "                            <td  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
-            "                                <input type=\"text\" class=\"form-control\" name=\"indication_for_use\" data-ng-model=\"drug.indication_for_use\" required>"+
-            "                                <div class=\"help-block\" data-ng-show=\"subForm.indication_for_use.$dirty && subForm.indication_for_use.$invalid\">"+
-            "                                    <span data-ng-show=\"subForm.indication_for_use.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"indication_for_use\">{{translate('Indication')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"indication_for_use\" data-ng-model=\"drug.indication_for_use\" required>"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.indication_for_use.$dirty && subForm.indication_for_use.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.indication_for_use.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
             "                                </div>"+
-            "                            </td>"+
-            "                            </data-ng-form>"+
-            "                        </tr>"+
-            "                    </tbody>"+
-            "                </table>"+
+            "                            </div>"+
+            "                        </data-ng-form>"+
+            "                    </div>"+
+            "                </div>"+
+            "            </fieldset>"+
+            "            <fieldset>"+
+            "                <legend>{{translate('Concomitant Drug')}}</legend>"+
+            "                <div  data-ng-repeat=\"drug in params.concomitant_drugs\">"+
+            "                    <div class=\"col-sm-2\">"+
+            "                        <button type=\"button\" class=\"btn btn-default\" data-ng-click=\"addConcomitantDrug();\"><i class=\"glyphicon glyphicon-plus\"></i></button>"+
+            "                        <button type=\"button\" class=\"btn btn-default\" data-ng-click=\"removeConcomitantDrug($index);\" data-ng-show=\"0 != $index\"><i class=\"glyphicon glyphicon-trash\"></i></button>"+
+            "                    </div>"+
+            "                    <div class=\"col-sm-10\">"+
+            "                        <data-ng-form name=\"subForm\">"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.generic_name.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"generic_name\">{{translate('Product / Generic Name')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"generic_name\" data-ng-model=\"drug.generic_name\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.generic_name.$dirty && subForm.generic_name.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.generic_name.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"dosage\">{{translate('Dose & Frequency Given')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"dosage\" data-ng-model=\"drug.dosage\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.dosage.$dirty && subForm.dosage.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.dosage.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.batch_number.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"batch_number\">{{translate('MAL and Batch No.')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"batch_number\" data-ng-model=\"drug.batch_number\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.batch_number.$dirty && subForm.batch_number.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.batch_number.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"date_started\">{{translate('Therapy started')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"date_started\" data-ng-model=\"drug.date_started\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.date_started.$dirty && subForm.date_started.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.date_started.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_stopped.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"date_stopped\">{{translate('Therapy stopped')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"date_stopped\" data-ng-model=\"drug.date_stopped\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.date_stopped.$dirty && subForm.date_stopped.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.date_stopped.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"indication_for_use\">{{translate('Indication')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"indication_for_use\" data-ng-model=\"drug.indication_for_use\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.indication_for_use.$dirty && subForm.indication_for_use.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.indication_for_use.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                        </data-ng-form>"+
+            "                    </div>"+
+            "                </div>"+
+            "            </fieldset>"+
+            "            <fieldset>"+
+            "                <legend>{{translate('Relevant Information')}}</legend>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.relevant_data.$invalid}\">"+
+            "                    <label class=\"col-sm-3 control-label\" for=\"relevant_data\">{{translate('Relevant Investigations / Laboratory Data')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <textarea autocomplete=\"off\" class=\"form-control\" name=\"relevant_data\" id=\"relevant_data\" data-ng-model=\"params.relevant_data\" ng-trim=\"true\"/>"+
+            "                        <div class=\"help-block\" data-ng-show=\"infoForm.relevant_data.$dirty && infoForm.relevant_data.$invalid\">"+
+            "                            <span data-ng-show=\"infoForm.relevant_data.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                        </div>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.relevant_history.$invalid}\">"+
+            "                    <label class=\"col-sm-3 control-label\" for=\"relevant_history\">{{translate('Relevant Medical History')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <textarea autocomplete=\"off\" class=\"form-control\" name=\"relevant_history\" id=\"relevant_history\" data-ng-model=\"params.relevant_history\" ng-trim=\"true\"/>"+
+            "                        <div class=\"help-block\" data-ng-show=\"infoForm.relevant_history.$dirty && infoForm.relevant_history.$invalid\">"+
+            "                            <span data-ng-show=\"infoForm.relevant_history.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                        </div>"+
+            "                    </div>"+
+            "                </div>"+
+            "            </fieldset>"+
+            "            <fieldset>"+
+            "                <legend>{{translate('Reporter Details')}}</legend>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_name.$invalid}\">"+
+            "                    <label class=\"col-sm-3 control-label\" for=\"reporter_name\">{{translate('Name')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <input type=\"text\" name=\"reporter_name\" class=\"form-control\" ng-model=\"params.reporter_name\" required />"+
+            "                        <div class=\"help-block\" data-ng-show=\"infoForm.reporter_name.$dirty && infoForm.reporter_name.$invalid\">"+
+            "                            <span data-ng-show=\"infoForm.reporter_name.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                        </div>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_address.$invalid}\">"+
+            "                    <label class=\"col-sm-3 control-label\" for=\"reporter_address\">{{translate('Address')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <input type=\"text\" name=\"reporter_address\" class=\"form-control\" ng-model=\"params.reporter_address\" required />"+
+            "                        <div class=\"help-block\" data-ng-show=\"infoForm.reporter_address.$dirty && infoForm.reporter_address.$invalid\">"+
+            "                            <span data-ng-show=\"infoForm.reporter_address.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                        </div>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_profession.$invalid}\">"+
+            "                    <label class=\"col-sm-3 control-label\" for=\"reporter_profession\">{{translate('Profession')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <input type=\"text\" name=\"reporter_profession\" class=\"form-control\" ng-model=\"params.reporter_profession\" />"+
+            "                        <div class=\"help-block\" data-ng-show=\"infoForm.reporter_profession.$dirty && infoForm.reporter_profession.$invalid\">"+
+            "                            <span data-ng-show=\"infoForm.reporter_profession.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                        </div>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_contact.$invalid}\">"+
+            "                    <label class=\"col-sm-3 control-label\" for=\"reporter_contact\">{{translate('Tel No')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <input type=\"text\" name=\"reporter_contact\" class=\"form-control\" ng-model=\"params.reporter_contact\" required />"+
+            "                        <div class=\"help-block\" data-ng-show=\"infoForm.reporter_contact.$dirty && infoForm.reporter_contact.$invalid\">"+
+            "                            <span data-ng-show=\"infoForm.reporter_contact.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                        </div>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_email.$invalid}\">"+
+            "                    <label class=\"col-sm-3 control-label\" for=\"reporter_email\">Email</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <input type=\"text\" name=\"reporter_email\" class=\"form-control\" ng-model=\"params.reporter_email\" required />"+
+            "                        <div class=\"help-block\" data-ng-show=\"infoForm.reporter_email.$dirty && infoForm.reporter_email.$invalid\">"+
+            "                            <span data-ng-show=\"infoForm.reporter_email.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                        </div>"+
+            "                    </div>"+
+            "                </div>"+
             "            </fieldset>"+
             "            <div class=\"row\">"+
             "                <div class=\"col-sm-offset-3 col-sm-9\">"+
