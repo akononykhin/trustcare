@@ -22,7 +22,8 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
         treatment_of_reaction: '',
         was_admitted: false,
         was_hospitalization_prolonged: false,
-        duration_of_admission: null
+        duration_of_admission: null,
+        suspected_drugs: []
     };
     $scope.onsetTypes = [
         {value: 'mins', name: i18n.translate("mins")},
@@ -107,7 +108,18 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
     };
     $scope.showDeathComment = function () {
         return $scope.params.outcome_of_reaction_type == 3 ? true : false; /* 3 == death */
-    }
+    };
+
+    $scope.addSuspectedDrug = function () {
+        $scope.params.suspected_drugs.push({generic_name: '', dosage: '', batch_number: '', date_started: '', date_stopped: '', indication_for_use: ''});
+    };
+    $scope.removeSuspectedDrug = function (index) {
+        if (0 == index) {
+            return;
+        }
+        $scope.params.suspected_drugs.splice(index, 1);
+    };
+
 
     $scope.create = function () {
         var params = angular.copy($scope.params);
@@ -139,4 +151,5 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
     /* initialization */
     $scope.loadPharmacies();
     $scope.loadLists();
+    $scope.addSuspectedDrug();
 }]);
