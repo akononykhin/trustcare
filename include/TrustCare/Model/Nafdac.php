@@ -9,12 +9,36 @@
 class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
 {
     const OUTCOME_REACTION_RECOVERED_FULLY = 1;
-    const OUTCOME_REACTION_CONGENITAL_ABNORMALITY = 2;
+    const OUTCOME_REACTION_RECOVERING = 2;
+    const OUTCOME_REACTION_NOT_RECOVERED = 4;
     const OUTCOME_REACTION_DEATH = 3;
-    const OUTCOME_REACTION_RECOVERED_WITH_DISABILITY = 4;
-    const OUTCOME_REACTION_LIFE_THREATENING = 5;
-    const OUTCOME_REACTION_OTHER = 6;
+    const OUTCOME_REACTION_UNKNOWN = 6;
     
+    const SUBSIDED_YES = 'yes';
+    const SUBSIDED_NO = 'no';
+    const SUBSIDED_UNKNOWN = 'unknown';
+    const SUBSIDED_NA = 'na';
+
+    const REAPPEARED_YES = 'yes';
+    const REAPPEARED_NO = 'no';
+    const REAPPEARED_UNKNOWN = 'unknown';
+    const REAPPEARED_NA = 'na';
+
+    const EXTENT_MILD = 'mild';
+    const EXTENT_MODERATE = 'moderate';
+    const EXTENT_SEVERE = 'severe';
+    
+    const SERIOUSNESS_LIFE_THREAT = 1;
+    const SERIOUSNESS_HOSPITAL = 2;
+    const SERIOUSNESS_DISABILITY = 3;
+    const SERIOUSNESS_BIRTH_DEFECT = 4;
+    const SERIOUSNESS_NA = 5;
+
+    const DRUG_REACTION_CERTAIN = 'certain';
+    const DRUG_REACTION_PROBABLE = 'probable';
+    const DRUG_REACTION_POSSIBLE = 'possible';
+    const DRUG_REACTION_UNLIKELY = 'unlikely';
+    const DRUG_REACTION_UNCLASSIFIED = 'unclassified';
     
     protected $_id;
     protected $_id_user;
@@ -697,12 +721,72 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         $types = array();
         
         $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_RECOVERED_FULLY] = Zend_Registry::get("Zend_Translate")->_("Recovered Fully");
-        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_CONGENITAL_ABNORMALITY] = Zend_Registry::get("Zend_Translate")->_("Congenital Abnormality");
-        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_DEATH] = Zend_Registry::get("Zend_Translate")->_("Death");
-        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_RECOVERED_WITH_DISABILITY] = Zend_Registry::get("Zend_Translate")->_("Recovered with Disability");
-        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_LIFE_THREATENING] = Zend_Registry::get("Zend_Translate")->_("Life Threatening");
-        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_OTHER] = Zend_Registry::get("Zend_Translate")->_("Other");
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_RECOVERING] = Zend_Registry::get("Zend_Translate")->_("Recovering");
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_NOT_RECOVERED] = Zend_Registry::get("Zend_Translate")->_("Not recovered");
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_UNKNOWN] = Zend_Registry::get("Zend_Translate")->_("Unknown");
+        $types[TrustCare_Model_Nafdac::OUTCOME_REACTION_DEATH] = Zend_Registry::get("Zend_Translate")->_("Fatal");
         
         return $types;
+    }
+    
+    public static function getSubsidedValues()
+    {
+        $values = array();
+        
+        $values[TrustCare_Model_Nafdac::SUBSIDED_YES] = Zend_Registry::get("Zend_Translate")->_("Yes");
+        $values[TrustCare_Model_Nafdac::SUBSIDED_NO] = Zend_Registry::get("Zend_Translate")->_("No");
+        $values[TrustCare_Model_Nafdac::SUBSIDED_UNKNOWN] = Zend_Registry::get("Zend_Translate")->_("Unknown");
+        $values[TrustCare_Model_Nafdac::SUBSIDED_NA] = Zend_Registry::get("Zend_Translate")->_("N/A (drug continued)");
+        
+        return $values;
+    }
+    
+    public static function getReappearedValues()
+    {
+        $values = array();
+        
+        $values[TrustCare_Model_Nafdac::REAPPEARED_YES] = Zend_Registry::get("Zend_Translate")->_("Yes");
+        $values[TrustCare_Model_Nafdac::REAPPEARED_NO] = Zend_Registry::get("Zend_Translate")->_("No");
+        $values[TrustCare_Model_Nafdac::REAPPEARED_UNKNOWN] = Zend_Registry::get("Zend_Translate")->_("Unknown");
+        $values[TrustCare_Model_Nafdac::REAPPEARED_NA] = Zend_Registry::get("Zend_Translate")->_("N/A (not reintroduced)");
+        
+        return $values;
+    }
+    
+    public static function getExtentValues()
+    {
+        $values = array();
+        
+        $values[TrustCare_Model_Nafdac::EXTENT_MILD] = Zend_Registry::get("Zend_Translate")->_("Mild");
+        $values[TrustCare_Model_Nafdac::EXTENT_MODERATE] = Zend_Registry::get("Zend_Translate")->_("Moderate");
+        $values[TrustCare_Model_Nafdac::EXTENT_SEVERE] = Zend_Registry::get("Zend_Translate")->_("Severe");
+        
+        return $values;
+    }
+    
+    public static function getSeriousnessValues()
+    {
+        $values = array();
+        
+        $values[TrustCare_Model_Nafdac::SERIOUSNESS_LIFE_THREAT] = Zend_Registry::get("Zend_Translate")->_("Life threatening");
+        $values[TrustCare_Model_Nafdac::SERIOUSNESS_HOSPITAL] = Zend_Registry::get("Zend_Translate")->_("Caused or prolonged hospitalisation");
+        $values[TrustCare_Model_Nafdac::SERIOUSNESS_DISABILITY] = Zend_Registry::get("Zend_Translate")->_("Caused disability or incapacity");
+        $values[TrustCare_Model_Nafdac::SERIOUSNESS_BIRTH_DEFECT] = Zend_Registry::get("Zend_Translate")->_("Caused birth defect");
+        $values[TrustCare_Model_Nafdac::SERIOUSNESS_NA] = Zend_Registry::get("Zend_Translate")->_("N/A (not serious)");
+        
+        return $values;
+    }
+    
+    public static function getRelationshipValues()
+    {
+        $values = array();
+        
+        $values[TrustCare_Model_Nafdac::DRUG_REACTION_CERTAIN] = Zend_Registry::get("Zend_Translate")->_("Certain");
+        $values[TrustCare_Model_Nafdac::DRUG_REACTION_PROBABLE] = Zend_Registry::get("Zend_Translate")->_("Probable");
+        $values[TrustCare_Model_Nafdac::DRUG_REACTION_POSSIBLE] = Zend_Registry::get("Zend_Translate")->_("Possible");
+        $values[TrustCare_Model_Nafdac::DRUG_REACTION_UNLIKELY] = Zend_Registry::get("Zend_Translate")->_("Unlikely");
+        $values[TrustCare_Model_Nafdac::DRUG_REACTION_UNCLASSIFIED] = Zend_Registry::get("Zend_Translate")->_("Unclassifiable");
+        
+        return $values;
     }
 }

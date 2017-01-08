@@ -151,5 +151,17 @@ class Adr_ReportController extends ZendX_Controller_Action
         die;
     }
 
+    public function attrListsAction()
+    {
+    	$o = new stdClass();
+    	$o->outcome = TrustCare_Model_Nafdac::getOutcomeReactionTypes();
+    	$o->subsided = TrustCare_Model_Nafdac::getSubsidedValues();
+    	$o->reappeared = TrustCare_Model_Nafdac::getReappearedValues();
+    	$o->extent = TrustCare_Model_Nafdac::getExtentValues();
+    	$o->seriousness = TrustCare_Model_Nafdac::getSeriousnessValues();
+    	$o->relationship = TrustCare_Model_Nafdac::getRelationshipValues();
+    	 
+    	$this->_helper->json($o);
+    }
 }
 

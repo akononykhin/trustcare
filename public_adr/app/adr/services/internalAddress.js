@@ -33,6 +33,9 @@ angular.module('trustrx.adr.services')
         reportDownload: function(id) {
             return replacePatterns('report', 'download') + '/id/' + id;
         },
+        reportAttrLists: function() {
+            return replacePatterns('report', 'attr-lists');
+        },
 
         patientGet: function(id) {
             return replacePatterns('patient', 'get') + '/id/' + id;

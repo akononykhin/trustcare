@@ -40,3 +40,6 @@ select option[disabled] {
   color: grey;
 }
 
+.newReportsDlg .modal-dialog {
+    width: 70% !important;
+}
