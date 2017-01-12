@@ -220,6 +220,100 @@ class Adr_ReportController extends ZendX_Controller_Action
         $this->_helper->json($responseObj);
     }
     
+
+    public function getAction()
+    {
+        $id = $this->_getParam('id');
+        $db_options = Zend_Registry::get('dbOptions');
+        $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+    
+        $responseObj = new stdClass();
+        $responseObj->success = false;
+        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+        try {
+            if(!Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "view")) {
+                $errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied.");
+                throw new Exception();
+            }
+    
+            $model = TrustCare_Model_Nafdac::find($id, array('mapperOptions' => array('adapter' => $db)));
+            if(is_null($model)) {
+                throw new Exception(sprintf("Failed to load nafdac.id=%s", $id));
+            }
+
+            $patientModel = TrustCare_Model_Patient::find($model->getIdPatient(), array('mapperOptions' => array('adapter' => $db)));
+            $pharmacyModel = TrustCare_Model_Pharmacy::find($model->getIdPharmacy(), array('mapperOptions' => array('adapter' => $db)));
+            
+            $suspected_drugs = array();
+            $model1 = new TrustCare_Model_NafdacDrug(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model1->fetchAllByIdNafdac($model->getId()) as $obj) {
+                $suspected_drugs[] = array(
+                    'generic_name' => $obj->getName(),
+                    'dosage' => $obj->getDosage(),
+                    'batch_number' => $obj->getBatch(),
+                    'date_started' => $obj->getStarted(),
+                    'date_stopped' => $obj->getStopped(),
+                    'indication_for_use' => $obj->getReason(),
+                );
+            }
+            
+            $concomitant_drugs = array();
+            $model2 = new TrustCare_Model_NafdacMedicine(array('mapperOptions' => array('adapter' => $db)));
+            foreach($model2->fetchAllByIdNafdac($model->getId()) as $obj) {
+                $concomitant_drugs[] = array(
+                    'generic_name' => $obj->getName(),
+                    'dosage' => $obj->getDosage(),
+                    'batch_number' => $obj->getRoute(),
+                    'date_started' => $obj->getStarted(),
+                    'date_stopped' => $obj->getStopped(),
+                    'indication_for_use' => $obj->getReason(),
+                );
+            }
+            
+            
+            $responseObj->info = array(
+                'patient' => !is_null($patientModel) ? sprintf("%s %s", $patientModel->getLastName(), $patientModel->getFirstName()) : $model->getIdPatient(),
+                'generation_date' => $model->getGenerationDate(),
+                'pharmacy' => !is_null($pharmacyModel) ? $pharmacyModel->getName() : $model->getIdPharmacy(),
+                'date_of_visit' => $model->getDateOfVisit(),
+                'adr_start_date' => $model->getAdrStartDate(),
+                'adr_stop_date' => $model->getAdrStopDate(),
+                'adr_description' => $model->getAdrDescription(),
+                'was_admitted' => $model->getWasAdmitted(),
+                'was_hospitalization_prolonged' => $model->getWasHospitalizationProlonged(),
+                'duration_of_admission' => $model->getDurationOfAdmission(),
+                'treatment_of_reaction' => $model->getTreatmentOfReaction(),
+                'outcome_of_reaction_type' => $model->getOutcomeReactionTypeName($model->getOutcomeOfReactionType()),
+                'outcome_of_reaction_desc' => $model->getOutcomeOfReactionDesc(),
+                'reporter_name' => $model->getReporterName(),
+                'reporter_address' => $model->getReporterAddress(),
+                'reporter_profession' => $model->getReporterProfession(),
+                'reporter_contact' => $model->getReporterContact(),
+                'reporter_email' => $model->getReporterEmail(),
+                'onset_time' => $model->getOnsetTime(),
+                'onset_type' => $model->getOnsetType(),
+                'subsided' => $model->getSubsidedValueName($model->getSubsided()),
+                'reappeared' => $model->getReappearedValueName($model->getReappeared()),
+                'extent' => $model->getExtentValueName($model->getExtent()),
+                'seriousness' => $model->getSeriousnessValueName($model->getSeriousness()),
+                'relationship' => $model->getRelationshipValueName($model->getRelationship()),
+                'relevant_data' => $model->getRelevantData(),
+                'relevant_history' => $model->getRelevantHistory(),
+                'suspected_drugs' => $suspected_drugs,
+                'concomitant_drugs' => $concomitant_drugs
+            );
+            $responseObj->success = true;
+        }
+        catch(Exception $ex) {
+            $exMessage = $ex->getMessage();
+            if(!empty($exMessage)) {
+                $this->getLogger()->error(sprintf("'%s': %s", Zend_Auth::getInstance()->getIdentity(), $exMessage));
+            }
+            $responseObj->message = $errorMsg;
+        }
+        $this->_helper->json($responseObj);
+    }
+    
     
     public function deleteAction()
     {
@@ -237,7 +331,7 @@ class Adr_ReportController extends ZendX_Controller_Action
     			throw new Exception();
     		}
     
-    		$model = TrustCare_Model_Nafdac::find($id);
+    		$model = TrustCare_Model_Nafdac::find($id, array('mapperOptions' => array('adapter' => $db)));
     		if(is_null($model)) {
     			throw new Exception(sprintf("Failed to load nafdac.id=%s", $id));
     		}
@@ -283,7 +377,7 @@ class Adr_ReportController extends ZendX_Controller_Action
     {
         $id = $this->_getParam('id');
     
-        $model = TrustCare_Model_Nafdac::find($id);
+        $model = TrustCare_Model_Nafdac::find($id, array('mapperOptions' => array('adapter' => $db)));
         if(is_null($model)) {
             $this->_forward("message", "error", null, array('message' => Zend_Registry::get("Zend_Translate")->_("Unknown report")));
             return;

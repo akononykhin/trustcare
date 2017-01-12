@@ -43,3 +43,7 @@ select option[disabled] {
 .newReportsDlg .modal-dialog {
     width: 70% !important;
 }
+
+.viewReportsDlg .modal-dialog {
+    width: 70% !important;
+}

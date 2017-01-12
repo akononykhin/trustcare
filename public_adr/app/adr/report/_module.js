@@ -428,5 +428,291 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "    </div>"+
             "</div><!-- /.modal-content -->"
     );
+
+    $templateCache.put("adr/report/view.tpl.html",
+        "<div class=\"modal-content\">"+
+            "    <div class=\"modal-header\">"+
+            "        <button type=\"button\" class=\"close\" data-ng-click=\"cancel();\">&times;</button>"+
+            "        <h4 class=\"modal-title\">{{translate('View Report')}}</h4>"+
+            "    </div>"+
+            "    <div class=\"modal-body\">"+
+            "        <div class=\"alert alert-danger\" data-ng-show=\"formErrorMessage\">"+
+            "            <span>{{formErrorMessage}}</span>"+
+            "        </div>"+
+            "        <form class=\"form-horizontal\" role=\"form\" name=\"infoForm\" novalidate>"+
+            "            <fieldset>"+
+            "                <legend>{{translate('Patient Information')}}</legend>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.patient_id.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"patient_id\">{{translate('Patient')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.patient}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.id_pharmacy.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"id_pharmacy\">{{translate('Pharmacy')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.pharmacy}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.date_of_visit.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"date_of_visit\">{{translate('Date of Visit')}}</label>"+
+            "                    <div class=\"col-sm-3\">"+
+            "                        <p class=\"form-control-static\">{{params.date_of_visit}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "            </fieldset>"+
+            "            <fieldset>"+
+            "                <legend>{{translate('Adverse Drug Reaction')}}</legend>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.adr_description.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"adr_description\">{{translate('Description')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.adr_description}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"row form-group\"  data-ng-class=\"{'has-error': infoForm.onset_time.$invalid || infoForm.onset_type.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\">{{translate('Time to onset of reaction')}}</label>"+
+            "                    <div class=\"col-sm-1\">"+
+            "                        <p class=\"form-control-static\">{{params.onset_time}}</p>"+
+            "                    </div>"+
+            "                    <div class=\"col-sm-2\">"+
+            "                        <p class=\"form-control-static\">{{getOnsetType(params.onset_type)}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.adr_start_date.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"adr_start_date\">{{translate('Date start of reaction')}}</label>"+
+            "                    <div class=\"col-sm-3\">"+
+            "                        <p class=\"form-control-static\">{{params.adr_start_date}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.adr_stop_date.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"adr_stop_date\">{{translate('Date end of reaction')}}</label>"+
+            "                    <div class=\"col-sm-3\">"+
+            "                        <p class=\"form-control-static\">{{params.adr_stop_date}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.subsided.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"subsided\">{{translate('Reaction subsided after stopping drug / reducing dose')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.subsided}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reappeared.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"reappeared\">{{translate('Reaction reappeared after reintroducing drug')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.reappeared}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.extent.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"extent\">{{translate('Extent of reaction')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.extent}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.seriousness.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"seriousness\">{{translate('Seriousness of reaction')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.seriousness}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.treatment_of_reaction.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"treatment_of_reaction\">{{translate('Treatment of adverse reaction & action taken')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.treatment_of_reaction}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.outcome_of_reaction_type.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"outcome_of_reaction_type\">{{translate('Outcome')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <div class=\"row\">"+
+            "                            <div class=\"col-sm-4\">"+
+            "                                <p class=\"form-control-static\">{{params.outcome_of_reaction_type}}</p>"+
+            "                            </div>"+
+            "                        </div>"+
+            "                        <div class=\"row\" data-ng-show=\"params.outcome_of_reaction_desc\">"+
+            "                            <p class=\"form-control-static\">{{params.outcome_of_reaction_desc}}</p>"+
+            "                        </div>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.relationship.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"relationship\">{{translate('Drug-Reaction Relationship')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.relationship}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.was_admitted.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"was_admitted\">{{translate('Was Patient Admitted Due to ADR?')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\" data-ng-show=\"params.was_admitted\">{{translate('Yes')}}</p>"+
+            "                        <p class=\"form-control-static\" data-ng-show=\"!params.was_admitted\">{{translate('No')}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.was_hospitalization_prolonged.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"was_hospitalization_prolonged\">{{translate('If Already Hospitalized, Was it Prolonged Due to ADR?')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\" data-ng-show=\"params.was_hospitalization_prolonged\">{{translate('Yes')}}</p>"+
+            "                        <p class=\"form-control-static\" data-ng-show=\"!params.was_hospitalization_prolonged\">{{translate('No')}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.duration_of_admission.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"duration_of_admission\">{{translate('Duration of Admission (days)')}}</label>"+
+            "                    <div class=\"col-sm-8\">"+
+            "                        <p class=\"form-control-static\">{{params.duration_of_admission}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "            </fieldset>"+
+            "            <fieldset>"+
+            "                <legend>{{translate('Suspected Drug')}}</legend>"+
+            "                <div  data-ng-repeat=\"drug in params.suspected_drugs\">"+
+            "                    <div class=\"col-sm-2\">"+
+            "                        #{{$index}}"+
+            "                    </div>"+
+            "                    <div class=\"col-sm-10\">"+
+            "                        <data-ng-form name=\"subForm\">"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.generic_name.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"generic_name\">{{translate('Product / Generic Name')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.generic_name}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"dosage\">{{translate('Dose & Frequency Given')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.dosage}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.batch_number.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"batch_number\">{{translate('MAL and Batch No.')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.batch_number}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"date_started\">{{translate('Therapy started')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.date_started}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_stopped.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"date_stopped\">{{translate('Therapy stopped')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.date_stopped}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"indication_for_use\">{{translate('Indication')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.indication_of_use}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                        </data-ng-form>"+
+            "                    </div>"+
+            "                </div>"+
+            "            </fieldset>"+
+            "            <fieldset>"+
+            "                <legend>{{translate('Concomitant Drug')}}</legend>"+
+            "                <div  data-ng-repeat=\"drug in params.concomitant_drugs\">"+
+            "                    <div class=\"col-sm-2\">"+
+            "                        #{{$index}}"+
+            "                    </div>"+
+            "                    <div class=\"col-sm-10\">"+
+            "                        <data-ng-form name=\"subForm\">"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.generic_name.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"generic_name\">{{translate('Product / Generic Name')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.generic_name}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"dosage\">{{translate('Dose & Frequency Given')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.dosage}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.batch_number.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"batch_number\">{{translate('MAL and Batch No.')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.batch_number}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"date_started\">{{translate('Therapy started')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.date_started}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_stopped.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"date_stopped\">{{translate('Therapy stopped')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.date_stopped}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"indication_for_use\">{{translate('Indication')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.indication_of_use}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                        </data-ng-form>"+
+            "                    </div>"+
+            "                </div>"+
+            "            </fieldset>"+
+            "            <fieldset>"+
+            "                <legend>{{translate('Relevant Information')}}</legend>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.relevant_data.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"relevant_data\">{{translate('Relevant Investigations / Laboratory Data')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.relevant_data}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.relevant_history.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"relevant_history\">{{translate('Relevant Medical History')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.relevant_history}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "            </fieldset>"+
+            "            <fieldset>"+
+            "                <legend>{{translate('Reporter Details')}}</legend>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_name.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"reporter_name\">{{translate('Name')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.reporter_name}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_address.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"reporter_address\">{{translate('Address')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.reporter_address}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_profession.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"reporter_profession\">{{translate('Profession')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.reporter_profession}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_contact.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"reporter_contact\">{{translate('Tel No')}}</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.reporter_contact}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.reporter_email.$invalid}\">"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"reporter_email\">Email</label>"+
+            "                    <div class=\"col-sm-6\">"+
+            "                        <p class=\"form-control-static\">{{params.reporter_email}}</p>"+
+            "                    </div>"+
+            "                </div>"+
+            "            </fieldset>"+
+            "            <div class=\"row\">"+
+            "                <div class=\"col-sm-offset-4 col-sm-9\">"+
+            "                    <button type=\"button\" class=\"btn btn-primary\" data-ng-click=\"download();\">{{translate('Download')}}</button>"+
+            "                    <button type=\"button\" class=\"btn btn-default\" data-ng-click=\"regenerate();\" data-ng-disabled=\"infoForm.$invalid || isWaitAnswer()\">{{translate('Regenerate')}}</button>"+
+            "                </div>"+
+            "            </div>"+
+            "        </form>"+
+            "    </div>"+
+            "</div><!-- /.modal-content -->"
+    );
 }]);
 

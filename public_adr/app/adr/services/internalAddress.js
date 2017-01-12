@@ -33,6 +33,9 @@ angular.module('trustrx.adr.services')
         reportDelete: function(id) {
             return replacePatterns('report', 'delete') + '/id/' + id;
         },
+        reportGet: function(id) {
+            return replacePatterns('report', 'get') + '/id/' + id;
+        },
         reportDownload: function(id) {
             return replacePatterns('report', 'download') + '/id/' + id;
         },

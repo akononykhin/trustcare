@@ -931,6 +931,12 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         return $types;
     }
     
+    public static function getOutcomeReactionTypeName($value)
+    {
+        $list = self::getOutcomeReactionTypes();
+        return array_key_exists($value, $list) ? $list[$value] : $value;
+    }
+    
     public static function getSubsidedValues()
     {
         $values = array();
@@ -941,6 +947,12 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         $values[TrustCare_Model_Nafdac::SUBSIDED_NA] = Zend_Registry::get("Zend_Translate")->_("N/A (drug continued)");
         
         return $values;
+    }
+
+    public static function getSubsidedValueName($value)
+    {
+        $list = self::getSubsidedValues();
+        return array_key_exists($value, $list) ? $list[$value] : $value;
     }
     
     public static function getReappearedValues()
@@ -954,6 +966,12 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         
         return $values;
     }
+
+    public static function getReappearedValueName($value)
+    {
+        $list = self::getReappearedValues();
+        return array_key_exists($value, $list) ? $list[$value] : $value;
+    }
     
     public static function getExtentValues()
     {
@@ -964,6 +982,12 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         $values[TrustCare_Model_Nafdac::EXTENT_SEVERE] = Zend_Registry::get("Zend_Translate")->_("Severe");
         
         return $values;
+    }
+
+    public static function getExtentValueName($value)
+    {
+        $list = self::getExtentValues();
+        return array_key_exists($value, $list) ? $list[$value] : $value;
     }
     
     public static function getSeriousnessValues()
@@ -978,6 +1002,12 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         
         return $values;
     }
+
+    public static function getSeriousnessValueName($value)
+    {
+        $list = self::getSeriousnessValues();
+        return array_key_exists($value, $list) ? $list[$value] : $value;
+    }
     
     public static function getRelationshipValues()
     {
@@ -990,5 +1020,11 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         $values[TrustCare_Model_Nafdac::DRUG_REACTION_UNCLASSIFIED] = Zend_Registry::get("Zend_Translate")->_("Unclassifiable");
         
         return $values;
+    }
+
+    public static function getRelationshipValueName($value)
+    {
+        $list = self::getRelationshipValues();
+        return array_key_exists($value, $list) ? $list[$value] : $value;
     }
 }

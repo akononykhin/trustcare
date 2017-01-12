@@ -2,7 +2,6 @@ var adrReportsModule = angular.module('trustrx.adr.report');
 
 adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModalInstance', '$http', 'AdrInternalAddressSvc', 'params', function($scope, $filter, $uibModalInstance, $http, AdrInternalAddressSvc, params) {
     /* Data */
-    $scope.realmId = null;
     $scope.params = {
         patient_id: null,
         id_pharmacy: null,

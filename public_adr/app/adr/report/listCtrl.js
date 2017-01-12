@@ -49,11 +49,38 @@ adrReportsModule.controller('AdrReportsListCtrl', ['$scope', '$templateCache', '
             resolve     : {
                 params: function () {
                     return {
-                        id: null,
+                        id: null
                     };
                 }
             },
             windowClass : 'newReportsDlg',
+            backdrop    : 'static'
+        });
+
+        modalInstance.result.then(function () {
+            $scope.refreshList();
+        }, function () {
+        });
+    };
+
+
+    $scope.edit = function (index) {
+        if(index < 0 || index >= $scope.list.length) {
+            return;
+        }
+        var report = $scope.list[index];
+
+        var modalInstance = $uibModal.open({
+            template : $templateCache.get('adr/report/view.tpl.html'),
+            controller  : 'AdrReportsViewCtrl',
+            resolve     : {
+                params: function () {
+                    return {
+                        id: report.id
+                    };
+                }
+            },
+            windowClass : 'viewReportsDlg',
             backdrop    : 'static'
         });
 
