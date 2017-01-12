@@ -58,9 +58,166 @@ class Adr_ReportController extends ZendX_Controller_Action
     }
     
 
-    public function deleteActionAccess()
+    public function createAction()
     {
-        return true;
+        $responseObj = new stdClass();
+        $responseObj->success = false;
+        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+    
+        $db_options = Zend_Registry::get('dbOptions');
+        $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error.");
+        $db->beginTransaction();
+        try {
+            if(!Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "create")) {
+                $errorMsg = Zend_Registry::get("Zend_Translate")->_("You don't have enougth rights.");
+                throw new Exception();
+            }
+            
+            $rawBody = $this->getRequest()->getRawBody();
+            $params = Zend_Json::decode($rawBody);
+    
+            $idPharmacy = array_key_exists('id_pharmacy', $params) ? $params['id_pharmacy'] : -1;
+            if(!array_key_exists($idPharmacy, Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies())) {
+                $errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied");
+                throw new Exception('');
+            }
+            $patientId = array_key_exists('patient_id', $params) ? $params['patient_id'] : null;
+            if(is_null(TrustCare_Model_Patient::find($patientId, array('mapperOptions' => array('adapter' => $db))))) {
+                $errorMsg = Zend_Registry::get("Zend_Translate")->_("Unknown patient");
+                throw new Exception('');
+            }
+
+            $date_of_visit = array_key_exists('date_of_visit', $params) ? $params['date_of_visit'] : null;
+            $adr_description = array_key_exists('adr_description', $params) ? $params['adr_description'] : null;
+            $onset_time = array_key_exists('onset_time', $params) ? $params['onset_time'] : null;
+            $onset_type = array_key_exists('onset_type', $params) ? $params['onset_type'] : null;
+            $adr_start_date = array_key_exists('adr_start_date', $params) ? $params['adr_start_date'] : null;
+            $adr_stop_date = array_key_exists('adr_stop_date', $params) ? $params['adr_stop_date'] : null;
+            $outcome_of_reaction_type = array_key_exists('outcome_of_reaction_type', $params) ? $params['outcome_of_reaction_type'] : null;
+            $outcome_of_reaction_desc = array_key_exists('outcome_of_reaction_desc', $params) ? $params['outcome_of_reaction_desc'] : null;
+            $subsided = array_key_exists('subsided', $params) ? $params['subsided'] : null;
+            $reappeared = array_key_exists('reappeared', $params) ? $params['reappeared'] : null;
+            $extent = array_key_exists('extent', $params) ? $params['extent'] : null;
+            $seriousness = array_key_exists('seriousness', $params) ? $params['seriousness'] : null;
+            $relationship = array_key_exists('relationship', $params) ? $params['relationship'] : null;
+            $treatment_of_reaction = array_key_exists('treatment_of_reaction', $params) ? $params['treatment_of_reaction'] : null;
+            $was_admitted = array_key_exists('was_admitted', $params) && !empty($params['was_admitted']) ? true : false;
+            $was_hospitalization_prolonged = array_key_exists('was_hospitalization_prolonged', $params) && !empty($params['was_hospitalization_prolonged']) ? true : false;
+            $duration_of_admission = array_key_exists('duration_of_admission', $params) ? $params['duration_of_admission'] : null;
+            $relevant_data = array_key_exists('relevant_data', $params) ? $params['relevant_data'] : null;
+            $relevant_history = array_key_exists('relevant_history', $params) ? $params['relevant_history'] : null;
+            $reporter_name = array_key_exists('reporter_name', $params) ? $params['reporter_name'] : null;
+            $reporter_address = array_key_exists('reporter_address', $params) ? $params['reporter_address'] : null;
+            $reporter_profession = array_key_exists('reporter_profession', $params) ? $params['reporter_profession'] : null;
+            $reporter_contact = array_key_exists('reporter_contact', $params) ? $params['reporter_contact'] : null;
+            $reporter_email = array_key_exists('reporter_email', $params) ? $params['reporter_email'] : null;
+            
+            $nafdacModel = new TrustCare_Model_Nafdac(
+                array(
+                    'id_user' => Zend_Registry::get("TrustCare_Registry_User")->getUser()->getId(),
+                    'id_patient' => $patientId,
+                    'generation_date' => ZendX_Db_Table_Abstract::LABEL_NOW,
+                    'id_pharmacy' => $idPharmacy,
+                    'date_of_visit' => $date_of_visit,
+                    'adr_start_date' => $adr_start_date,
+                    'adr_stop_date' => $adr_stop_date,
+                    'adr_description' => $adr_description,
+                    'was_admitted' => $was_admitted,
+                    'was_hospitalization_prolonged' => $was_hospitalization_prolonged,
+                    'duration_of_admission' => $duration_of_admission,
+                    'treatment_of_reaction' => $treatment_of_reaction,
+                    'outcome_of_reaction_type' => $outcome_of_reaction_type,
+                    'outcome_of_reaction_desc' => $outcome_of_reaction_desc,
+                    'reporter_name' => $reporter_name,
+                    'reporter_address' => $reporter_address,
+                    'reporter_profession' => $reporter_profession,
+                    'reporter_contact' => $reporter_contact,
+                    'reporter_email' => $reporter_email,
+                    'onset_time' => $onset_time,
+                    'onset_type' => $onset_type,
+                    'subsided' => $subsided,
+                    'reappeared' => $reappeared,
+                    'extent' => $extent,
+                    'seriousness' => $seriousness,
+                    'relationship' => $relationship,
+                    'relevant_data' => $relevant_data,
+                    'relevant_history' => $relevant_history,
+                    'mapperOptions' => array('adapter' => $db)
+                )
+            );
+            $nafdacModel->save();
+
+
+            $suspectedDrugs = array_key_exists('suspected_drugs', $params) ? $params['suspected_drugs'] : array();
+            foreach($suspectedDrugs as $drug) {
+                $generic_name = array_key_exists('generic_name', $drug) ? $drug['generic_name'] : '';
+                $dosage = array_key_exists('dosage', $drug) ? $drug['dosage'] : '';
+                $batch_number = array_key_exists('batch_number', $drug) ? $drug['batch_number'] : '';
+                $date_started = array_key_exists('date_started', $drug) ? $drug['date_started'] : '';
+                $date_stopped = array_key_exists('date_stopped', $drug) ? $drug['date_stopped'] : '';
+                $indication_for_use = array_key_exists('indication_for_use', $drug) ? $drug['indication_for_use'] : '';
+            
+                if(empty($generic_name)) {
+                    continue;
+                }
+                $drugModel = new TrustCare_Model_NafdacDrug(array(
+                    'id_nafdac' => $nafdacModel->getId(),
+                    'name' => $generic_name,
+                    'dosage' => $dosage,
+                    'batch' => $batch_number,
+                    'started' => $date_started,
+                    'stopped' => $date_stopped,
+                    'reason' => $indication_for_use,
+                    'mapperOptions' => array('adapter' => $db)
+                ));
+                $drugModel->save();
+            }
+            
+            $concomitantDrugs = array_key_exists('concomitant_drugs', $params) ? $params['concomitant_drugs'] : array();
+            foreach($concomitantDrugs as $drug) {
+                $generic_name = array_key_exists('generic_name', $drug) ? $drug['generic_name'] : '';
+                $dosage = array_key_exists('dosage', $drug) ? $drug['dosage'] : '';
+                $batch_number = array_key_exists('batch_number', $drug) ? $drug['batch_number'] : '';
+                $date_started = array_key_exists('date_started', $drug) ? $drug['date_started'] : '';
+                $date_stopped = array_key_exists('date_stopped', $drug) ? $drug['date_stopped'] : '';
+                $indication_for_use = array_key_exists('indication_for_use', $drug) ? $drug['indication_for_use'] : '';
+                
+                if(empty($generic_name)) {
+                    continue;
+                }
+                $medModel = new TrustCare_Model_NafdacMedicine(array(
+                    'id_nafdac' => $nafdacModel->getId(),
+                    'name' => $generic_name,
+                    'dosage' => $dosage,
+                    'route' => $batch_number,
+                    'started' => $date_started,
+                    'stopped' => $date_stopped,
+                    'reason' => $indication_for_use,
+                    'mapperOptions' => array('adapter' => $db)
+                ));
+                $medModel->save();
+            }
+    
+            $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+            
+            $fileName = $generator->generate(array('id' => $nafdacModel->getId()));
+            
+            $nafdacModel->setFilename($fileName);
+            $nafdacModel->save();
+            
+            $db->commit();
+            $responseObj->success = true;
+        }
+        catch(Exception $ex) {
+            $db->rollBack();
+            $exMessage = $ex->getMessage();
+            if(!empty($exMessage)) {
+                $this->getLogger()->error(sprintf("Failed to create report: %s", $exMessage));
+            }
+            $responseObj->message = $errorMsg;
+        }
+        $this->_helper->json($responseObj);
     }
     
     

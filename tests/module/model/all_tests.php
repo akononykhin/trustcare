@@ -57,6 +57,7 @@ class ModelGroupTest extends GroupTest {
         $this->addTestFile(dirname(__FILE__) . '/report_community_services_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/nafdac_tests.php');
         $this->addTestFile(dirname(__FILE__) . '/nafdac_medicine_tests.php');
+        $this->addTestFile(dirname(__FILE__) . '/nafdac_drug_tests.php');
         
     }
 }

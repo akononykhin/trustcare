@@ -27,6 +27,9 @@ angular.module('trustrx.adr.services')
         reportList: function (offset, quantity) {
             return replacePatterns('report', 'list') + "/offset/" + offset + "/quantity/" + quantity + "?_=" + Date.now().toString();
         },
+        reportCreate: function() {
+            return replacePatterns('report', 'create');
+        },
         reportDelete: function(id) {
             return replacePatterns('report', 'delete') + '/id/' + id;
         },

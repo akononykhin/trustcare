@@ -137,13 +137,37 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
         $scope.params.concomitant_drugs.splice(index, 1);
     };
 
+    $scope.formatDate = function (date) {
+        if(!date) {
+            return null;
+        }
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
-    $scope.create = function () {
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    };
+
+    $scope.save = function () {
+        var url = AdrInternalAddressSvc.reportCreate();
         var params = angular.copy($scope.params);
-        var url = ClientInternalAddressSvc.nasCreate($scope.realmId);
+        if($scope.params.date_of_visit) {
+            params.date_of_visit = $scope.formatDate($scope.params.date_of_visit);
+        }
+        if($scope.params.adr_start_date) {
+            params.adr_start_date = $scope.formatDate($scope.params.adr_start_date);
+        }
+        if($scope.params.adr_stop_date) {
+            params.adr_stop_date = $scope.formatDate($scope.params.adr_stop_date);
+        }
+
         $scope.is_wait_answer = true;
         $scope.formErrorMessage = '';
-        $http({url: url, method: 'POST', data: params, cache: false}).
+        $http({url: url, method: 'POST', data: params, cache: false, timeout: 120000}).
             success(function (data) {
                 $scope.is_wait_answer = false;
                 if (!data.success) {

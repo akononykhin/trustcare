@@ -1,0 +1,217 @@
+<?php
+/**
+ *
+ * Alexey Kononykhin
+ * alexey.kononykhin@gmail.com
+ *
+ */
+
+class TrustCare_Model_NafdacDrug extends TrustCare_Model_Abstract
+{
+    protected $_id;
+    protected $_id_nafdac;
+    protected $_name;
+    protected $_dosage;
+    protected $_batch;
+    protected $_started;
+    protected $_stopped;
+    protected $_reason;
+    
+    /**
+     * @param  int $value 
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setId($value)
+    {
+        $this->_parameterChanged('id', $value);
+        $this->_id = (int) $value;
+        return $this;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+    
+    /**
+     * @param  int $value 
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setIdNafdac($value)
+    {
+        $this->_parameterChanged('id_nafdac', $value);
+        $this->_id_nafdac = (int) $value;
+        return $this;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getIdNafdac()
+    {
+        return $this->_id_nafdac;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setName($value)
+    {
+        $this->_parameterChanged('name', $value);
+        $this->_name = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getName()
+    {
+        return $this->_name;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setDosage($value)
+    {
+        $this->_parameterChanged('dosage', $value);
+        $this->_dosage = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getDosage()
+    {
+        return $this->_dosage;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setBatch($value)
+    {
+        $this->_parameterChanged('batch', $value);
+        $this->_batch = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getBatch()
+    {
+        return $this->_batch;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setStarted($value)
+    {
+        $this->_parameterChanged('started', $value);
+        $this->_started = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getStarted()
+    {
+        return $this->_started;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setStopped($value)
+    {
+        $this->_parameterChanged('stopped', $value);
+        $this->_stopped = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getStopped()
+    {
+        return $this->_stopped;
+    }
+    
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setReason($value)
+    {
+        $this->_parameterChanged('reason', $value);
+        $this->_reason = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getReason()
+    {
+        return $this->_reason;
+    }
+    
+
+    
+    public function isExists()
+    {
+        return !is_null($this->getId());
+    }
+    
+    
+    /**
+     * Find an entry by id
+     *
+     * @param  string $id 
+     * @param array|null $options
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public static function find($id, array $options = null)
+    {
+        $newEntity = new TrustCare_Model_NafdacDrug($options);
+        $result = $newEntity->getMapper()->find($id, $newEntity);
+        
+        if(!$result) {
+            unset($newEntity);
+            $newEntity = null;
+        }
+        
+        return $newEntity;
+    }
+
+    
+    /**
+     * Fetch all for specified $id_nafdac
+     *
+     * @param  int $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function fetchAllByIdNafdac($value)
+    {
+        return $this->getMapper()->fetchAllByIdNafdac($value);
+    }
+    
+    public function delete()
+    {
+        parent::delete();
+        $this->id = null;
+    }
+}

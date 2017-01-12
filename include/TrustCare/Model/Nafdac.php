@@ -71,7 +71,17 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     protected $_reporter_address;
     protected $_reporter_profession;
     protected $_reporter_contact;
-
+    protected $_reporter_email;
+    protected $_onset_time;
+    protected $_onset_type;
+    protected $_subsided;
+    protected $_reappeared;
+    protected $_extent;
+    protected $_seriousness;
+    protected $_relationship;
+    protected $_relevant_data;
+    protected $_relevant_history;
+    
     
     public function __construct($options = array()) {
         parent::__construct($options);
@@ -125,7 +135,7 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     
     /**
      * @param  string $value
-     * @return TrustCare_Model_FrmCare
+     * @return TrustCare_Model_Nafdac
      */
     public function setDateOfVisit($value)
     {
@@ -224,7 +234,7 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     
     /**
      * @param  string $value
-     * @return TrustCare_Model_FrmCare
+     * @return TrustCare_Model_Nafdac
      */
     public function setAdrStartDate($value)
     {
@@ -243,7 +253,7 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     
     /**
      * @param  string $value
-     * @return TrustCare_Model_FrmCare
+     * @return TrustCare_Model_Nafdac
      */
     public function setAdrStopDate($value)
     {
@@ -681,6 +691,198 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         return $this->_reporter_contact;
     }
     
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setReporterEmail($value)
+    {
+        $this->_parameterChanged('reporter_email', $value);
+        $this->_reporter_email = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getReporterEmail()
+    {
+        return $this->_reporter_email;
+    }
+
+    /**
+     * @param  null|int $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setOnsetTime($value)
+    {
+        $this->_parameterChanged('onset_time', $value);
+        $this->_onset_time = !is_null($value) ? (int) $value : null;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getOnsetTime()
+    {
+        return $this->_onset_time;
+    }
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setOnsetType($value)
+    {
+        $this->_parameterChanged('onset_type', $value);
+        $this->_onset_type = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getOnsetType()
+    {
+        return $this->_onset_type;
+    }
+    
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setSubsided($value)
+    {
+        $this->_parameterChanged('subsided', $value);
+        $this->_subsided = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getSubsided()
+    {
+        return $this->_subsided;
+    }
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setReappeared($value)
+    {
+        $this->_parameterChanged('reappeared', $value);
+        $this->_reappeared = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getReappeared()
+    {
+        return $this->_reappeared;
+    }
+
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setExtent($value)
+    {
+        $this->_parameterChanged('extent', $value);
+        $this->_extent = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getExtent()
+    {
+        return $this->_extent;
+    }
+
+    /**
+     * @param  null|int $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setSeriousness($value)
+    {
+        $this->_parameterChanged('seriousness', $value);
+        $this->_seriousness = !is_null($value) ? (int) $value : null;
+        return $this;
+    }
+    
+    /**
+     * @return null|int
+     */
+    public function getSeriousness()
+    {
+        return $this->_seriousness;
+    }
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setRelationship($value)
+    {
+        $this->_parameterChanged('relationship', $value);
+        $this->_relationship = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getRelationship()
+    {
+        return $this->_relationship;
+    }
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setRelevantData($value)
+    {
+        $this->_parameterChanged('relevant_data', $value);
+        $this->_relevant_data = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getRelevantData()
+    {
+        return $this->_relevant_data;
+    }
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_Nafdac
+     */
+    public function setRelevantHistory($value)
+    {
+        $this->_parameterChanged('relevant_history', $value);
+        $this->_relevant_history = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getRelevantHistory()
+    {
+        return $this->_relevant_history;
+    }
     
     
     public function isExists()
