@@ -272,6 +272,7 @@ class Adr_ReportController extends ZendX_Controller_Action
             
             
             $responseObj->info = array(
+                'id' => $model->getId(),
                 'patient' => !is_null($patientModel) ? sprintf("%s %s", $patientModel->getLastName(), $patientModel->getFirstName()) : $model->getIdPatient(),
                 'generation_date' => $model->getGenerationDate(),
                 'pharmacy' => !is_null($pharmacyModel) ? $pharmacyModel->getName() : $model->getIdPharmacy(),
@@ -402,6 +403,59 @@ class Adr_ReportController extends ZendX_Controller_Action
         die;
     }
 
+
+    public function regenerateAction()
+    {
+        $id = $this->_getParam('id');
+        $db_options = Zend_Registry::get('dbOptions');
+        $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
+    
+        $responseObj = new stdClass();
+        $responseObj->success = false;
+        $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error");
+        try {
+            if(!Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "edit")) {
+                $errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied.");
+                throw new Exception();
+            }
+
+            $model = TrustCare_Model_Nafdac::find($id, array('mapperOptions' => array('adapter' => $db)));
+            if(is_null($model)) {
+                throw new Exception(sprintf("Failed to load nafdac.id=%s", $id));
+            }
+            
+            $availablePharmacies = Zend_Registry::get("TrustCare_Registry_User")->getListOfAvailablePharmacies();
+            if(!array_key_exists($model->getIdPharmacy(), $availablePharmacies)) {
+                $errorMsg = Zend_Registry::get("Zend_Translate")->_("Access Denied");
+                throw new Exception('');
+            }
+            
+            $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+            $fileName = $model->getFilename();
+            
+            $fileReportOutput = sprintf("%s/%s", $generator->reportsDirectory(), $fileName);
+            if(file_exists($fileReportOutput) && is_file($fileReportOutput)) {
+                unlink($fileReportOutput);
+            }
+            
+            $fileName = $generator->generate(array('id' => $model->getId()));
+            
+            $model->setFilename($fileName);
+            $model->save();
+            
+            $responseObj->success = true;
+        }
+        catch(Exception $ex) {
+            $exMessage = $ex->getMessage();
+            if(!empty($exMessage)) {
+                $this->getLogger()->error(sprintf("'%s': %s", Zend_Auth::getInstance()->getIdentity(), $exMessage));
+            }
+            $responseObj->message = $errorMsg;
+        }
+        $this->_helper->json($responseObj);
+    }
+    
+    
     public function attrListsAction()
     {
     	$o = new stdClass();
