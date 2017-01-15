@@ -10,8 +10,8 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
 {
     const OUTCOME_REACTION_RECOVERED_FULLY = 1;
     const OUTCOME_REACTION_RECOVERING = 2;
-    const OUTCOME_REACTION_NOT_RECOVERED = 4;
     const OUTCOME_REACTION_DEATH = 3;
+    const OUTCOME_REACTION_NOT_RECOVERED = 4;
     const OUTCOME_REACTION_UNKNOWN = 6;
     
     const SUBSIDED_YES = 'yes';

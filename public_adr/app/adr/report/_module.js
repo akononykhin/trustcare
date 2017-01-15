@@ -706,7 +706,7 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "            </fieldset>"+
             "            <div class=\"row\">"+
             "                <div class=\"col-sm-offset-4 col-sm-9\">"+
-            "                    <button type=\"button\" class=\"btn btn-primary\" data-ng-click=\"download();\">{{translate('Download')}}</button>"+
+            "                    <button type=\"button\" class=\"btn btn-primary\" data-ng-click=\"download();\" data-ng-disabled=\"infoForm.$invalid || isWaitAnswer()\">{{translate('Download')}}</button>"+
             "                    <button type=\"button\" class=\"btn btn-default\" data-ng-click=\"regenerate();\" data-ng-disabled=\"infoForm.$invalid || isWaitAnswer()\">{{translate('Regenerate')}}</button>"+
             "                </div>"+
             "            </div>"+

@@ -75,8 +75,10 @@ adrReportsModule.controller('AdrReportsViewCtrl', ['$scope', '$filter', '$uibMod
                     label: 'OK',
                     className: "btn-primary",
                     callback: function() {
+                        $scope.is_wait_answer = true;
                         $http({url: AdrInternalAddressSvc.reportRegenerate($scope.params.id), method: 'POST', data: {}})
                             .success(function(data, status, headers, config) {
+                                $scope.is_wait_answer = false;
                                 if (!data.success) {
                                     var errorMsg = data.message ? data.message : i18n.translate("Internal Error");
                                     bootbox.dialog({
@@ -94,6 +96,7 @@ adrReportsModule.controller('AdrReportsViewCtrl', ['$scope', '$filter', '$uibMod
                                 $uibModalInstance.close();
                             })
                             .error(function(data, status, headers, config) {
+                                $scope.is_wait_answer = false;
                                 bootbox.dialog({
                                     message: "Request Failed",
                                     className: 'bootbox-danger',

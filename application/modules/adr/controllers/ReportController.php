@@ -198,15 +198,20 @@ class Adr_ReportController extends ZendX_Controller_Action
                 ));
                 $medModel->save();
             }
-    
-            $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+            $db->commit(); /* Otherwise generator won't have access to thet report */
             
-            $fileName = $generator->generate(array('id' => $nafdacModel->getId()));
+            try {
+                $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
+                
+                $fileName = $generator->generate(array(
+                    'id' => $nafdacModel->getId()
+                ));
+                
+                $nafdacModel->setFilename($fileName);
+                $nafdacModel->save();
+            }
+            catch(Exception $ex) {}
             
-            $nafdacModel->setFilename($fileName);
-            $nafdacModel->save();
-            
-            $db->commit();
             $responseObj->success = true;
         }
         catch(Exception $ex) {
