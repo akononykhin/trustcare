@@ -177,7 +177,7 @@ class LoggerPatternLayout extends LoggerLayout {
     public function __construct($pattern = null)
     {
         if ($pattern === null) {    
-            $this->LoggerPatternLayout(LOG4PHP_LOGGER_PATTERN_LAYOUT_DEFAULT_CONVERSION_PATTERN);
+            $this->pattern = LOG4PHP_LOGGER_PATTERN_LAYOUT_DEFAULT_CONVERSION_PATTERN;
         } else {
             $this->pattern = $pattern;
         }                
