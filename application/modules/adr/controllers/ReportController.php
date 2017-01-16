@@ -68,6 +68,7 @@ class Adr_ReportController extends ZendX_Controller_Action
         $db = Zend_Db::factory($db_options['adapter'], $db_options['params']);
         $errorMsg = Zend_Registry::get("Zend_Translate")->_("Internal Error.");
         $db->beginTransaction();
+        $startedTransaction = true;
         try {
             if(!Zend_Registry::get("Zend_Acl")->isAllowed(Zend_Registry::get("TrustCare_Registry_User")->getUser()->role, "resource:form", "create")) {
                 $errorMsg = Zend_Registry::get("Zend_Translate")->_("You don't have enougth rights.");
@@ -199,6 +200,7 @@ class Adr_ReportController extends ZendX_Controller_Action
                 $medModel->save();
             }
             $db->commit(); /* Otherwise generator won't have access to thet report */
+            $startedTransaction = false;
             
             try {
                 $generator = TrustCare_SystemInterface_ReportGenerator_Abstract::factory(TrustCare_SystemInterface_ReportGenerator_Abstract::CODE_NAFDAC);
@@ -210,12 +212,17 @@ class Adr_ReportController extends ZendX_Controller_Action
                 $nafdacModel->setFilename($fileName);
                 $nafdacModel->save();
             }
-            catch(Exception $ex) {}
+            catch(Exception $ex) {
+                $nafdacModel->delete();
+                throw new Exception(sprintf("Report generation failed: %s", $ex->getMessage()));
+            }
             
             $responseObj->success = true;
         }
         catch(Exception $ex) {
-            $db->rollBack();
+            if($startedTransaction) {
+                $db->rollBack();
+            }
             $exMessage = $ex->getMessage();
             if(!empty($exMessage)) {
                 $this->getLogger()->error(sprintf("Failed to create report: %s", $exMessage));
