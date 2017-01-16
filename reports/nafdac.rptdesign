@@ -1899,6 +1899,7 @@ REACTIONS]]></text-property>
                                                             <property name="borderTopColor">#000000</property>
                                                             <property name="borderTopStyle">solid</property>
                                                             <property name="borderTopWidth">thin</property>
+                                                            <property name="textAlign">center</property>
                                                             <property name="height">25px</property>
                                                             <property name="width">25px</property>
                                                             <property name="dataSet">nafdac</property>
@@ -2661,6 +2662,7 @@ Cause of death:</text-property>
                                                             <property name="borderTopColor">#000000</property>
                                                             <property name="borderTopStyle">solid</property>
                                                             <property name="borderTopWidth">thin</property>
+                                                            <property name="textAlign">center</property>
                                                             <property name="height">25px</property>
                                                             <property name="width">25px</property>
                                                             <property name="dataSet">nafdac</property>
@@ -2697,7 +2699,7 @@ Cause of death:</text-property>
                                                             <property name="borderTopColor">#000000</property>
                                                             <property name="borderTopStyle">solid</property>
                                                             <property name="borderTopWidth">thin</property>
-                                                            <property name="textAlign">right</property>
+                                                            <property name="textAlign">center</property>
                                                             <property name="height">25px</property>
                                                             <property name="width">25px</property>
                                                             <property name="dataSet">nafdac</property>
@@ -2734,6 +2736,7 @@ Cause of death:</text-property>
                                                             <property name="borderTopColor">#000000</property>
                                                             <property name="borderTopStyle">solid</property>
                                                             <property name="borderTopWidth">thin</property>
+                                                            <property name="textAlign">center</property>
                                                             <property name="height">25px</property>
                                                             <property name="width">25px</property>
                                                             <property name="dataSet">nafdac</property>

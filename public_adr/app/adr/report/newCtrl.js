@@ -164,10 +164,16 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
             params.adr_stop_date = $scope.formatDate($scope.params.adr_stop_date);
         }
 
+        var warnDialog = bootbox.dialog({
+            message: '<p class="text-center">'+i18n.translate("Please wait. Report is generating ...")+'</p>',
+            className: 'bootbox-warning',
+            closeButton: false
+        });
         $scope.is_wait_answer = true;
         $scope.formErrorMessage = '';
         $http({url: url, method: 'POST', data: params, cache: false, timeout: 120000}).
             success(function (data) {
+                warnDialog.modal('hide');
                 $scope.is_wait_answer = false;
                 if (!data.success) {
                     var messageStr = data.message ? data.message : i18n.translate("Internal Error");
@@ -177,6 +183,7 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
                 $uibModalInstance.close();
             }).
             error(function () {
+                warnDialog.modal('hide');
                 $scope.is_wait_answer = false;
                 $scope.formErrorMessage = i18n.translate("Request Failed");
             }

@@ -76,8 +76,14 @@ adrReportsModule.controller('AdrReportsViewCtrl', ['$scope', '$filter', '$uibMod
                     className: "btn-primary",
                     callback: function() {
                         $scope.is_wait_answer = true;
+                        var warnDialog = bootbox.dialog({
+                            message: '<p class="text-center">'+i18n.translate("Please wait. Report is generating ...")+'</p>',
+                            className: 'bootbox-warning',
+                            closeButton: false
+                        });
                         $http({url: AdrInternalAddressSvc.reportRegenerate($scope.params.id), method: 'POST', data: {}})
                             .success(function(data, status, headers, config) {
+                                warnDialog.modal('hide');
                                 $scope.is_wait_answer = false;
                                 if (!data.success) {
                                     var errorMsg = data.message ? data.message : i18n.translate("Internal Error");
@@ -96,6 +102,7 @@ adrReportsModule.controller('AdrReportsViewCtrl', ['$scope', '$filter', '$uibMod
                                 $uibModalInstance.close();
                             })
                             .error(function(data, status, headers, config) {
+                                warnDialog.modal('hide');
                                 $scope.is_wait_answer = false;
                                 bootbox.dialog({
                                     message: "Request Failed",
