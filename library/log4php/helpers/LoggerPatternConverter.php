@@ -481,7 +481,7 @@ class LoggerCategoryPatternConverter extends LoggerNamedPatternConverter {
     {
         LoggerLog::debug("LoggerCategoryPatternConverter::LoggerCategoryPatternConverter() precision='$precision'");    
     
-        $this->LoggerNamedPatternConverter($formattingInfo, $precision);
+        parent::__construct($formattingInfo, $precision);
     }
 
     /**
@@ -493,5 +493,3 @@ class LoggerCategoryPatternConverter extends LoggerNamedPatternConverter {
       return $event->getLoggerName();
     }
 }
-
-?>
