@@ -106,6 +106,36 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
         if(!$model->isExists() || $model->isParameterChanged('reporter_contact')) {
             $data['reporter_contact'] = $model->getReporterContact();
         }
+        if(!$model->isExists() || $model->isParameterChanged('reporter_email')) {
+            $data['reporter_email'] = $model->getReporterEmail();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('onset_time')) {
+            $data['onset_time'] = $model->getOnsetTime();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('onset_type')) {
+            $data['onset_type'] = $model->getOnsetType();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('subsided')) {
+            $data['subsided'] = $model->getSubsided();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('reappeared')) {
+            $data['reappeared'] = $model->getReappeared();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('extent')) {
+            $data['extent'] = $model->getExtent();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('seriousness')) {
+            $data['seriousness'] = $model->getSeriousness();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('relationship')) {
+            $data['relationship'] = $model->getRelationship();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('relevant_data')) {
+            $data['relevant_data'] = $model->getRelevantData();
+        }
+        if(!$model->isExists() || $model->isParameterChanged('relevant_history')) {
+            $data['relevant_history'] = $model->getRelevantHistory();
+        }
         
         if(!count($data)) {
             return;
@@ -174,7 +204,17 @@ class TrustCare_Model_Mapper_Nafdac extends TrustCare_Model_Mapper_Abstract
               ->setReporterName($row->reporter_name)
               ->setReporterAddress($row->reporter_address)
               ->setReporterProfession($row->reporter_profession)
-              ->setReporterContact($row->reporter_contact);
+              ->setReporterContact($row->reporter_contact)
+              ->setReporterEmail($row->reporter_email)
+              ->setOnsetTime($row->onset_time)
+              ->setOnsetType($row->onset_type)
+              ->setSubsided($row->subsided)
+              ->setReappeared($row->reappeared)
+              ->setExtent($row->extent)
+              ->setSeriousness($row->seriousness)
+              ->setRelationship($row->relationship)
+              ->setRelevantData($row->relevant_data)
+              ->setRelevantHistory($row->relevant_history);
         $model->setSkipTrackChanges(false);
     }
     

@@ -106,7 +106,7 @@ class LoggerPatternParser {
      *
      * @param string $pattern
      */
-    function LoggerPatternParser($pattern)
+    public function __construct($pattern)
     {
         LoggerLog::debug("LoggerPatternParser::LoggerPatternParser() pattern='$pattern'");
     

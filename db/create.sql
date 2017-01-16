@@ -705,8 +705,31 @@ CREATE TABLE nafdac (
   `reporter_address` varchar(255) default NULL,
   `reporter_profession` varchar(255) default NULL,
   `reporter_contact` varchar(255) default NULL,
+  `reporter_email` varchar(128) default NULL,
+  `onset_time` int default NULL,
+  `onset_type` varchar(8) default NULL,
+  `subsided` varchar(16) default NULL,
+  `reappeared` varchar(16) default NULL,
+  `extent` varchar(16) default NULL,
+  `seriousness` int default NULL,
+  `relationship` varchar(16) default NULL,
+  `relevant_data` text default NULL,
+  `relevant_history` text default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE nafdac_drug (
+  `id` int NOT NULL,
+  `id_nafdac` int NOT NULL,
+  `name` varchar(255) default NULL,
+  `dosage` varchar(255) default NULL,
+  `batch` varchar(255) default NULL,
+  `started` varchar(255) default NULL,
+  `stopped` varchar(255) default NULL,
+  `reason` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE nafdac_medicine (
   `id` int NOT NULL,
@@ -1140,6 +1163,10 @@ alter table nafdac_medicine
     add constraint fk_nafdac_medicine_id_nafdac foreign key (id_nafdac)
         references nafdac(id) on delete cascade;
 
+alter table nafdac_drug
+    add constraint fk_nafdac_drug_1 foreign key (id_nafdac)
+        references nafdac(id) on delete cascade;
+
 
 
 insert into user(id, login, password, is_active,role) values (1, 'admin', MD5('admin'), 1, 'pharmacy_manager');
@@ -1192,5 +1219,6 @@ INSERT INTO db_sequence(name,value) VALUES ('report_community_services_id_seq', 
 
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
+INSERT INTO db_sequence(name,value) VALUES ('nafdac_drug_id_seq', 1);
 
-insert into db_version values (1, 20131218, 1);
+insert into db_version values (1, 20170110, 3);

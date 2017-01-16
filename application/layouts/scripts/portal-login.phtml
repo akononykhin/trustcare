@@ -1,0 +1,75 @@
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>
+  <?php echo $this->headMeta(); ?>  
+  <?php echo $this->headTitle(); ?>
+  <?php echo $this->headLink()->prependStylesheet('/css/style.css')
+  								->prependStylesheet('/css/style1.css')
+                              ->appendStylesheet('/js/jquery/themes/base/jquery.ui.all.css')
+                              ->appendStylesheet('/js/jquery/plugin/superfish/css/superfish.css')
+  							  ->appendStylesheet('/js/jquery/plugin/superfish/css/superfish-vertical.css'); ?>
+
+  <?php echo $this->headScript()->prependFile('/js/jquery/jquery.js')
+                                ->appendFile('/js/jquery/external/jquery.cookie.js')
+                                ->appendFile('/js/jquery/ui/jquery-ui-1.8.23.custom.min.js')
+                                ->appendFile('/js/jquery/plugin/superfish/js/hoverIntent.js')
+                                ->appendFile('/js/jquery/plugin/superfish/js/superfish.js');
+?>
+
+<script language="JavaScript">
+  $.cookie('tz_offset', -(new Date()).getTimezoneOffset());
+  $(document).ready(function(){ 
+      $("ul.sf-menu").superfish(); 
+  }); 
+
+</script>
+</head> 
+<body>
+<table width="70%" border="0"  align="center" class="container">
+  <tr>
+    <td class="howard_university"><table width="95%" border="0" align="center">
+      <tr>
+        <td align="left" valign="top">&nbsp;</td>
+        <td align="right" valign="top">
+        </td>
+      </tr>
+      <tr>
+        <td width="50%" align="left" valign="top"><img src="/img/howard_university.png" width="150" height="120" /></td>
+        <td width="50%" align="right" valign="top"><img src="/img/hiv_aids.png" width="200" height="70" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="trust_care"><table width="100%" border="0">
+      <tr>
+        <td align="center" valign="top" class="trust_care"><img src="/img/hugin.jpg" width="820" height="50" /></td><!-- trust_care.png -->
+      </tr>
+      <tr>
+        <td align="center" valign="top"><span class="clinical_documentation">CLINICAL DOCUMENTATION AND REPORTING TOOL FOR<br /> PHARMACISTS AND HEALTH SYSTEMS</span></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" class="login_form">
+	<?php echo $this->navigation()->breadcrumbs()->setRenderInvisible(true)->render();?></div>
+<?php echo $this->layout()->content; ?>
+	</td>
+  </tr>
+  <tr>
+    <td class="trust_care"><table width="95%" border="0" align="center">
+      <tr>
+        <td width="50%" align="left" valign="top"><img src="/img/us_aid.png" width="150" height="90" /></td>
+        <td width="50%" align="right" valign="top"><img src="/img/partnership_to_fight.png" width="150" height="90" /></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="footer"><table width="100%" border="0">
+      <tr>
+        <td align="center" valign="top"><span class="footer_text">Powered by Trustee Drugs Inc. Forest Park, GA 30297</span> </td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</body>
+</html>

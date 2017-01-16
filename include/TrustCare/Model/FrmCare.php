@@ -90,7 +90,7 @@ class TrustCare_Model_FrmCare extends TrustCare_Model_Abstract
     
     /**
      * @param  int $value
-     * @return TrustCare_Model_FrmCommunity
+     * @return TrustCare_Model_FrmCare
      */
     public function setIdUser($value)
     {

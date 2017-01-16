@@ -64,6 +64,16 @@ class TestOfNafdac extends UnitTestCase {
                 'reporter_address' => '18',
                 'reporter_profession' => '19',
                 'reporter_contact' => '20',
+                'reporter_email' => 'test@mail.com',
+                'onset_time' => 5,
+                'onset_type' => 'hours',
+                'subsided' => 'unknown',
+                'reappeared' => 'na',
+                'extent' => 'mild',
+                'seriousness' => 2,
+                'relationship' => 'certain',
+                'relevant_data' => 'rdata',
+                'relevant_history' => 'rhistory',
             );
 
             $columns = array();
@@ -136,6 +146,16 @@ class TestOfNafdac extends UnitTestCase {
             'reporter_address' => '18',
             'reporter_profession' => '19',
             'reporter_contact' => '20',
+        	'reporter_email' => 'test@mail',
+            'onset_time' => 15,
+            'onset_type' => 'minutes',
+            'subsided' => 'unknown1',
+            'reappeared' => 'na1',
+            'extent' => 'severe',
+            'seriousness' => NULL,
+            'relationship' => 'probable',
+            'relevant_data' => 'rdata1',
+            'relevant_history' => 'rhistory1',
             'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -192,6 +212,16 @@ class TestOfNafdac extends UnitTestCase {
             'reporter_address' => '18',
             'reporter_profession' => '19',
             'reporter_contact' => '20',
+            'reporter_email' => 'test1@mail',
+            'onset_time' => 2,
+            'onset_type' => 'days',
+            'subsided' => 'unknown2',
+            'reappeared' => 'na2',
+            'extent' => 'severe1',
+            'seriousness' => 3,
+            'relationship' => 'possible',
+            'relevant_data' => 'rdata2',
+            'relevant_history' => 'rhistory2',
         );
         
         try {
@@ -299,8 +329,16 @@ class TestOfNafdac extends UnitTestCase {
         $this->assertEqual($model->reporter_address, $params['reporter_address'], "Incorrect 'reporter_address': %s");
         $this->assertEqual($model->reporter_profession, $params['reporter_profession'], "Incorrect 'reporter_profession': %s");
         $this->assertEqual($model->reporter_contact, $params['reporter_contact'], "Incorrect 'reporter_contact': %s");
-        
-        
+        $this->assertEqual($model->reporter_email, $params['reporter_email'], "Incorrect 'reporter_email': %s");
+        $this->assertEqual($model->onset_time, $params['onset_time'], "Incorrect 'onset_time': %s");
+        $this->assertEqual($model->onset_type, $params['onset_type'], "Incorrect 'onset_type': %s");
+        $this->assertEqual($model->subsided, $params['subsided'], "Incorrect 'subsided': %s");
+        $this->assertEqual($model->reappeared, $params['reappeared'], "Incorrect 'reappeared': %s");
+        $this->assertEqual($model->extent, $params['extent'], "Incorrect 'extent': %s");
+        $this->assertEqual($model->seriousness, $params['seriousness'], "Incorrect 'seriousness': %s");
+        $this->assertEqual($model->relationship, $params['relationship'], "Incorrect 'relationship': %s");
+        $this->assertEqual($model->relevant_data, $params['relevant_data'], "Incorrect 'relevant_data': %s");
+        $this->assertEqual($model->relevant_history, $params['relevant_history'], "Incorrect 'relevant_history': %s");
         
     }
 }

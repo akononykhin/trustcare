@@ -1,0 +1,153 @@
+<?php echo $this->doctype(); ?>
+<html  data-ng-app="trustrx"> 
+<head>
+  <?php echo $this->headMeta(); ?>  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <?php echo $this->headTitle(); ?>
+  <?php
+        echo $this->headLink()->prependStylesheet('/lib/bootstrap/css/bootstrap.min.css')
+                              ->appendStylesheet('/css/style.css');
+  ?>
+
+  <?php 
+  echo $this->headScript()->prependFile('/js/jquery/jquery.min.js')
+                          ->appendFile('/js/jquery/external/jquery.cookie.js');
+  ?>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->  
+<style>
+body { padding-top: 55px; }
+</style>  
+
+<script type="text/javascript" charset="utf-8">
+  $.cookie('tz_offset', -(new Date()).getTimezoneOffset());
+</script>
+</head> 
+
+<body>
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-brand"><?php echo Zend_Registry::get("Zend_Translate")->_("PV-ADR Reporter");?></div>
+        </div>
+        <nav class="collapse navbar-collapse" role="navigation">
+        
+<?php
+    if(Zend_Auth::getInstance()->hasIdentity()) {
+        echo $this->navigation()->navbarMenu()->setUlClass("nav navbar-nav");
+    }
+?>          
+
+            <ul class="nav navbar-nav navbar-right">
+<?php            
+    if(Zend_Auth::getInstance()->hasIdentity()) {
+?>      
+              <li><p class='navbar-text'><?php echo Zend_Auth::getInstance()->getIdentity(); ?></p></li>
+<?php            
+    }
+?>
+              <li class="dropdown">
+                  <button type="button" class="btn btn-default dropdown-toggle navbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cog"></span></button>
+                  <ul class="dropdown-menu">
+<?php            
+    if(Zend_Auth::getInstance()->hasIdentity()) {
+?>
+                    <li><a href="<?php echo $this->url(array('controller' => 'sign', 'action' => "logout"));?>"><span class="glyphicon glyphicon-off"></span> <?php echo Zend_Registry::get("Zend_Translate")->_("Logout");?></a></li>
+<?php            
+    }
+    else {
+?>
+                    <li><a href='<?php echo $this->url(array('controller' => 'index', 'action' => "index"))?>'><?php echo Zend_Registry::get("Zend_Translate")->_("Sign In")?></a></li>
+<?php
+    }
+?>
+                  </ul>
+              </li>
+          </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="container-fluid">
+<?php
+    if(Zend_Auth::getInstance()->hasIdentity()) {
+?>      
+    <div class="row">
+        <div class="col-sm-12 main">
+            <?php echo $this->layout()->content; ?>
+        </div>
+    </div>
+<?php        
+    }
+    else {
+        echo $this->layout()->content;
+    }
+?>          
+</div>
+ 
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="<?php echo $this->baseUrl("/lib/i18n/i18next-1.6.3.min.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/lib/bootstrap/js/bootstrap.min.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/lib/bootbox/bootbox.min.js");?>"></script>
+  
+  <script src="<?php echo $this->baseUrl("/lib/angular/1.4.3/angular.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/lib/angular/1.4.3/angular-sanitize.min.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/lib/angular/1.4.3/angular-resource.min.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/lib/angular/1.4.3/angular-messages.min.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/lib/angular/angular-ui/ui-bootstrap/ui-bootstrap-tpls-0.14.3.min.js");?>"></script>
+  
+  <?php if(APPLICATION_ENV == 'development') : ?>
+  <script src="<?php echo $this->baseUrl("/app/_app_adr.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/filters/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/filters/nl2br.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/directives/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/common/directives/mySelectPatient.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/services/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/services/internalAddress.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/report/_module.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/report/listCtrl.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/report/newCtrl.js");?>"></script>
+  <script src="<?php echo $this->baseUrl("/app/adr/report/viewCtrl.js");?>"></script>
+  <?php else :?>
+  <?php endif;?>
+  
+  
+  
+  <script type="text/javascript">
+  angular.module('trustrx').run(function(AdrInternalAddressSvc) {
+      AdrInternalAddressSvc.setUrlBase('<?php echo $this->url(array(), null, true); ?>', '<?php echo $this->url(array('module' => 'adr', 'controller' => '__controller__', "action" => "__action__"), null, true); ?>');
+      
+      i18n.init({
+          resGetPath: AdrInternalAddressSvc.loadI18nDict()
+          ,dynamicLoad: true 
+          ,getAsync: false
+          ,lng: '<?php echo Zend_Registry::get('Zend_Locale');?>'
+          ,ns: 'js_adr'
+          ,fallbackLng: false
+          ,keyseparator: '::'
+      });
+  });
+
+  <?php /* Fix for stacking modals. See http://miles-by-motorcycle.com/fv-b-8-670/stacking-bootstrap-dialogs-using-event-callbacks */ ?>
+  $('.modal').on('hidden.bs.modal', function( event ) {
+      $(this).removeClass( 'fv-modal-stack' );
+      $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) - 1 );
+  });
+
+  </script>
+</body>
+</html>
+

@@ -20,6 +20,8 @@ class Portal_SignController extends ZendX_Controller_Action
     
     public function indexAction() 
     {
+    	$this->getHelper('layout')->setLayout('portal-login');
+    	 
         $form = $this->_getSignForm();
         if($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
