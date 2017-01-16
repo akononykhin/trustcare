@@ -267,7 +267,7 @@ class LoggerDatePatternConverter extends LoggerPatternConverter {
     {
         LoggerLog::debug("LoggerDatePatternConverter::LoggerDatePatternConverter() dateFormat='$df'");    
     
-        $this->LoggerPatternConverter($formattingInfo);
+        parent::__construct($formattingInfo);
         $this->df = $df;
     }
 
@@ -308,7 +308,7 @@ class LoggerMDCPatternConverter extends LoggerPatternConverter {
     {
       LoggerLog::debug("LoggerMDCPatternConverter::LoggerMDCPatternConverter() key='$key'");    
 
-      $this->LoggerPatternConverter($formattingInfo);
+      parent::__construct($formattingInfo);
       $this->key = $key;
     }
 
@@ -344,7 +344,7 @@ class LoggerLocationPatternConverter extends LoggerPatternConverter {
     {
       LoggerLog::debug("LoggerLocationPatternConverter::LoggerLocationPatternConverter() type='$type'");    
     
-      $this->LoggerPatternConverter($formattingInfo);
+      parent::__construct($formattingInfo);
       $this->type = $type;
     }
 
@@ -393,7 +393,7 @@ class LoggerNamedPatternConverter extends LoggerPatternConverter {
     {
       LoggerLog::debug("LoggerNamedPatternConverter::LoggerNamedPatternConverter() precision='$precision'");    
     
-      $this->LoggerPatternConverter($formattingInfo);
+      parent::__construct($formattingInfo);
       $this->precision =  $precision;
     }
 
