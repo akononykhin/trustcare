@@ -167,7 +167,7 @@ class LoggerBasicPatternConverter extends LoggerPatternConverter {
     {
       LoggerLog::debug("LoggerBasicPatternConverter::LoggerBasicPatternConverter() type='$type'");    
     
-      $this->LoggerPatternConverter($formattingInfo);
+      parent::__construct($formattingInfo);
       $this->type = $type;
     }
 
