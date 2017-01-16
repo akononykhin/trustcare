@@ -58,7 +58,7 @@ class LoggerPatternConverter {
      *
      * @param LoggerFormattingInfo $fi
      */
-    function LoggerPatternConverter($fi = null) 
+    public function __construct($fi = null) 
     {  
         if ($fi !== null) {
             $this->min = $fi->min;
@@ -163,7 +163,7 @@ class LoggerBasicPatternConverter extends LoggerPatternConverter {
      * @param string $formattingInfo
      * @param integer $type
      */
-    function LoggerBasicPatternConverter($formattingInfo, $type)
+    public function __construct($formattingInfo, $type)
     {
       LoggerLog::debug("LoggerBasicPatternConverter::LoggerBasicPatternConverter() type='$type'");    
     
@@ -219,7 +219,7 @@ class LoggerLiteralPatternConverter extends LoggerPatternConverter {
      *
      * @param string $value
      */
-    function LoggerLiteralPatternConverter($value)
+    public function __construct($value)
     {
         LoggerLog::debug("LoggerLiteralPatternConverter::LoggerLiteralPatternConverter() value='$value'");    
     
@@ -263,7 +263,7 @@ class LoggerDatePatternConverter extends LoggerPatternConverter {
      * @param string $formattingInfo
      * @param string $df
      */
-    function LoggerDatePatternConverter($formattingInfo, $df)
+    public function __construct($formattingInfo, $df)
     {
         LoggerLog::debug("LoggerDatePatternConverter::LoggerDatePatternConverter() dateFormat='$df'");    
     
@@ -304,7 +304,7 @@ class LoggerMDCPatternConverter extends LoggerPatternConverter {
      * @param string $formattingInfo
      * @param string $key
      */
-    function LoggerMDCPatternConverter($formattingInfo, $key)
+    public function __construct($formattingInfo, $key)
     {
       LoggerLog::debug("LoggerMDCPatternConverter::LoggerMDCPatternConverter() key='$key'");    
 
@@ -340,7 +340,7 @@ class LoggerLocationPatternConverter extends LoggerPatternConverter {
      * @param string $formattingInfo
      * @param integer $type
      */
-    function LoggerLocationPatternConverter($formattingInfo, $type)
+    public function __construct($formattingInfo, $type)
     {
       LoggerLog::debug("LoggerLocationPatternConverter::LoggerLocationPatternConverter() type='$type'");    
     
@@ -389,7 +389,7 @@ class LoggerNamedPatternConverter extends LoggerPatternConverter {
      * @param string $formattingInfo
      * @param integer $precision
      */
-    function LoggerNamedPatternConverter($formattingInfo, $precision)
+    public function __construct($formattingInfo, $precision)
     {
       LoggerLog::debug("LoggerNamedPatternConverter::LoggerNamedPatternConverter() precision='$precision'");    
     
@@ -447,7 +447,7 @@ class LoggerClassNamePatternConverter extends LoggerNamedPatternConverter {
      * @param string $formattingInfo
      * @param integer $precision
      */
-    function LoggerClassNamePatternConverter($formattingInfo, $precision)
+    public function __construct($formattingInfo, $precision)
     {
         LoggerLog::debug("LoggerClassNamePatternConverter::LoggerClassNamePatternConverter() precision='$precision'");    
     
@@ -477,7 +477,7 @@ class LoggerCategoryPatternConverter extends LoggerNamedPatternConverter {
      * @param string $formattingInfo
      * @param integer $precision
      */
-    function LoggerCategoryPatternConverter($formattingInfo, $precision)
+    public function __construct($formattingInfo, $precision)
     {
         LoggerLog::debug("LoggerCategoryPatternConverter::LoggerCategoryPatternConverter() precision='$precision'");    
     

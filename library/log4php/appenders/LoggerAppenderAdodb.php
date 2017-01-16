@@ -106,7 +106,7 @@ class LoggerAppenderAdodb extends LoggerAppenderSkeleton {
      *
      * @param string $name appender name
      */
-    function LoggerAppenderDb($name)
+    public function __construct($name)
     {
         $this->LoggerAppenderSkeleton($name);
     }

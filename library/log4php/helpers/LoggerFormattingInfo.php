@@ -37,7 +37,7 @@ class LoggerFormattingInfo {
     /**
      * Constructor
      */
-    function LoggerFormattingInfo() {}
+    public function __construct() {}
     
     function reset()
     {
