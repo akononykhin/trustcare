@@ -42,12 +42,12 @@ body { padding-top: 55px; }
 <?php            
     if(Zend_Auth::getInstance()->hasIdentity()) {
 ?>
-            <div class="navbar-brand"><a href='<?php echo $this->url(array('controller' => 'report', 'action' => "index"))?>'><?php echo Zend_Registry::get("Zend_Translate")->_("PV-ADR Reporter");?></a></div>
+            <div class="navbar-brand"><a href='<?php echo $this->url(array('controller' => 'report', 'action' => "index"))?>'><?php echo Zend_Registry::get("Zend_Translate")->_("ADR Reporter");?></a></div>
 <?php            
     }
     else {
 ?>
-            <div class="navbar-brand"><?php echo Zend_Registry::get("Zend_Translate")->_("PV-ADR Reporter");?></div>
+            <div class="navbar-brand"><?php echo Zend_Registry::get("Zend_Translate")->_("ADR Reporter");?></div>
 <?php
     }
 ?>

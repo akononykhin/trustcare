@@ -84,7 +84,7 @@ class TrustCare_Controller_Plugin_Init extends Zend_Controller_Plugin_Abstract
     
     	$view->doctype('XHTML1_STRICT');
     	$view->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
-    	$view->headTitle(Zend_Registry::get("Zend_Translate")->_("PV-ADR Reporter"));
+    	$view->headTitle(Zend_Registry::get("Zend_Translate")->_("ADR Reporter"));
     }
     
     private function initNavigationPortal()

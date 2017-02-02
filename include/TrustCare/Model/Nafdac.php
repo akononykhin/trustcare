@@ -29,7 +29,6 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
     const EXTENT_SEVERE = 'severe';
     
     const SERIOUSNESS_LIFE_THREAT = 1;
-    const SERIOUSNESS_HOSPITAL = 2;
     const SERIOUSNESS_DISABILITY = 3;
     const SERIOUSNESS_BIRTH_DEFECT = 4;
     const SERIOUSNESS_NA = 5;
@@ -995,7 +994,6 @@ class TrustCare_Model_Nafdac extends TrustCare_Model_Abstract
         $values = array();
         
         $values[TrustCare_Model_Nafdac::SERIOUSNESS_LIFE_THREAT] = Zend_Registry::get("Zend_Translate")->_("Life threatening");
-        $values[TrustCare_Model_Nafdac::SERIOUSNESS_HOSPITAL] = Zend_Registry::get("Zend_Translate")->_("Caused or prolonged hospitalisation");
         $values[TrustCare_Model_Nafdac::SERIOUSNESS_DISABILITY] = Zend_Registry::get("Zend_Translate")->_("Caused disability or incapacity");
         $values[TrustCare_Model_Nafdac::SERIOUSNESS_BIRTH_DEFECT] = Zend_Registry::get("Zend_Translate")->_("Caused birth defect");
         $values[TrustCare_Model_Nafdac::SERIOUSNESS_NA] = Zend_Registry::get("Zend_Translate")->_("N/A (not serious)");
