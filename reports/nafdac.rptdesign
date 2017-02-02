@@ -881,6 +881,31 @@ order by id]]></xml-property>
                         <property name="name">reason</property>
                         <property name="dataType">string</property>
                     </structure>
+                    <structure>
+                        <property name="position">7</property>
+                        <property name="name">generic_name</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">8</property>
+                        <property name="name">nafdac_number</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">9</property>
+                        <property name="name">expiry_date</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">10</property>
+                        <property name="name">manufactor</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">11</property>
+                        <property name="name">route_of_administration</property>
+                        <property name="dataType">string</property>
+                    </structure>
                 </list-property>
             </structure>
             <property name="dataSource">DataSource</property>
@@ -921,6 +946,36 @@ order by id]]></xml-property>
                     <property name="nativeName">reason</property>
                     <property name="dataType">string</property>
                 </structure>
+                <structure>
+                    <property name="position">7</property>
+                    <property name="name">generic_name</property>
+                    <property name="nativeName">generic_name</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">8</property>
+                    <property name="name">nafdac_number</property>
+                    <property name="nativeName">nafdac_number</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">9</property>
+                    <property name="name">expiry_date</property>
+                    <property name="nativeName">expiry_date</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">10</property>
+                    <property name="name">manufactor</property>
+                    <property name="nativeName">manufactor</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">11</property>
+                    <property name="name">route_of_administration</property>
+                    <property name="nativeName">route_of_administration</property>
+                    <property name="dataType">string</property>
+                </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select 
   nafdac_drug.name,
@@ -928,7 +983,12 @@ order by id]]></xml-property>
   nafdac_drug.batch,
   nafdac_drug.started,
   nafdac_drug.stopped,
-  nafdac_drug.reason
+  nafdac_drug.reason,
+  nafdac_drug.generic_name,
+  nafdac_drug.nafdac_number,
+  nafdac_drug.expiry_date,
+  nafdac_drug.manufactor,
+  nafdac_drug.route_of_administration
 from
   nafdac_drug
   where id_nafdac=?
@@ -2850,6 +2910,7 @@ Cause of death:</text-property>
                         <row id="2313">
                             <cell id="2314">
                                 <table id="2748">
+                                    <property name="width">9.791666666666666in</property>
                                     <property name="dataSet">suspected_drugs</property>
                                     <list-property name="boundDataColumns">
                                         <structure>
@@ -2888,17 +2949,83 @@ Cause of death:</text-property>
                                             <expression name="expression" type="javascript">dataSetRow["reason"]</expression>
                                             <property name="dataType">string</property>
                                         </structure>
+                                        <structure>
+                                            <property name="name">generic_name</property>
+                                            <text-property name="displayName">generic_name</text-property>
+                                            <expression name="expression" type="javascript">dataSetRow["generic_name"]</expression>
+                                            <property name="dataType">string</property>
+                                        </structure>
+                                        <structure>
+                                            <property name="name">nafdac_number</property>
+                                            <text-property name="displayName">nafdac_number</text-property>
+                                            <expression name="expression" type="javascript">dataSetRow["nafdac_number"]</expression>
+                                            <property name="dataType">string</property>
+                                        </structure>
+                                        <structure>
+                                            <property name="name">expiry_date</property>
+                                            <text-property name="displayName">expiry_date</text-property>
+                                            <expression name="expression" type="javascript">dataSetRow["expiry_date"]</expression>
+                                            <property name="dataType">string</property>
+                                        </structure>
+                                        <structure>
+                                            <property name="name">manufactor</property>
+                                            <text-property name="displayName">manufactor</text-property>
+                                            <expression name="expression" type="javascript">dataSetRow["manufactor"]</expression>
+                                            <property name="dataType">string</property>
+                                        </structure>
+                                        <structure>
+                                            <property name="name">route_of_administration</property>
+                                            <text-property name="displayName">route_of_administration</text-property>
+                                            <expression name="expression" type="javascript">dataSetRow["route_of_administration"]</expression>
+                                            <property name="dataType">string</property>
+                                        </structure>
                                     </list-property>
-                                    <column id="2782"/>
-                                    <column id="2783"/>
-                                    <column id="2784"/>
-                                    <column id="2785"/>
-                                    <column id="2786"/>
-                                    <column id="2787"/>
+                                    <column id="2782">
+                                        <property name="width">0.8333333333333334in</property>
+                                    </column>
+                                    <column id="2813">
+                                        <property name="width">0.7604166666666666in</property>
+                                    </column>
+                                    <column id="2784">
+                                        <property name="repeat">1</property>
+                                        <property name="width">0.8333333333333334in</property>
+                                    </column>
+                                    <column id="2819">
+                                        <property name="repeat">1</property>
+                                        <property name="width">0.7916666666666666in</property>
+                                    </column>
+                                    <column id="2825">
+                                        <property name="repeat">1</property>
+                                        <property name="width">0.8645833333333334in</property>
+                                    </column>
+                                    <column id="2831">
+                                        <property name="repeat">1</property>
+                                        <property name="width">1.2291666666666667in</property>
+                                    </column>
+                                    <column id="2837">
+                                        <property name="repeat">1</property>
+                                        <property name="width">1in</property>
+                                    </column>
+                                    <column id="2783">
+                                        <property name="width">0.8333333333333334in</property>
+                                    </column>
+                                    <column id="2843">
+                                        <property name="width">1.0208333333333333in</property>
+                                    </column>
+                                    <column id="2785">
+                                        <property name="width">0.7708333333333334in</property>
+                                    </column>
+                                    <column id="2786">
+                                        <property name="width">0.84375in</property>
+                                    </column>
+                                    <column id="2787">
+                                        <property name="width">0.010416666666666666in</property>
+                                    </column>
                                     <header>
                                         <row id="2749">
                                             <property name="backgroundColor">#808080</property>
                                             <property name="color">white</property>
+                                            <property name="height">0.4791666666666667in</property>
                                             <cell id="2750">
                                                 <property name="borderBottomStyle">solid</property>
                                                 <property name="borderBottomWidth">thin</property>
@@ -2909,18 +3036,20 @@ Cause of death:</text-property>
                                                 <property name="borderTopStyle">solid</property>
                                                 <property name="borderTopWidth">thin</property>
                                                 <label id="2751">
-                                                    <text-property name="text">Product / Generic Name</text-property>
+                                                    <text-property name="text">Brand Name</text-property>
                                                 </label>
                                             </cell>
-                                            <cell id="2752">
+                                            <cell id="2810">
                                                 <property name="borderBottomStyle">solid</property>
                                                 <property name="borderBottomWidth">thin</property>
+                                                <property name="borderLeftStyle">solid</property>
+                                                <property name="borderLeftWidth">thin</property>
                                                 <property name="borderRightStyle">solid</property>
                                                 <property name="borderRightWidth">thin</property>
                                                 <property name="borderTopStyle">solid</property>
                                                 <property name="borderTopWidth">thin</property>
-                                                <label id="2753">
-                                                    <text-property name="text">Dose &amp; Frequency Given</text-property>
+                                                <label id="2814">
+                                                    <text-property name="text">Generic Name</text-property>
                                                 </label>
                                             </cell>
                                             <cell id="2754">
@@ -2931,7 +3060,73 @@ Cause of death:</text-property>
                                                 <property name="borderTopStyle">solid</property>
                                                 <property name="borderTopWidth">thin</property>
                                                 <label id="2755">
-                                                    <text-property name="text">MAL and Batch No.</text-property>
+                                                    <text-property name="text">Batch No.</text-property>
+                                                </label>
+                                            </cell>
+                                            <cell id="2816">
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <property name="borderTopStyle">solid</property>
+                                                <property name="borderTopWidth">thin</property>
+                                                <label id="2820">
+                                                    <text-property name="text">NAFDAC No.</text-property>
+                                                </label>
+                                            </cell>
+                                            <cell id="2822">
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <property name="borderTopStyle">solid</property>
+                                                <property name="borderTopWidth">thin</property>
+                                                <label id="2826">
+                                                    <text-property name="text">Expiry Date</text-property>
+                                                </label>
+                                            </cell>
+                                            <cell id="2828">
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <property name="borderTopStyle">solid</property>
+                                                <property name="borderTopWidth">thin</property>
+                                                <label id="2832">
+                                                    <text-property name="text">Manufacturer</text-property>
+                                                </label>
+                                            </cell>
+                                            <cell id="2834">
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <property name="borderTopStyle">solid</property>
+                                                <property name="borderTopWidth">thin</property>
+                                                <label id="2838">
+                                                    <text-property name="text">Indication for Use</text-property>
+                                                </label>
+                                            </cell>
+                                            <cell id="2752">
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <property name="borderTopStyle">solid</property>
+                                                <property name="borderTopWidth">thin</property>
+                                                <label id="2753">
+                                                    <text-property name="text">Dosage</text-property>
+                                                </label>
+                                            </cell>
+                                            <cell id="2840">
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <property name="borderTopStyle">solid</property>
+                                                <property name="borderTopWidth">thin</property>
+                                                <label id="2844">
+                                                    <text-property name="text">Route</text-property>
                                                 </label>
                                             </cell>
                                             <cell id="2756">
@@ -2942,7 +3137,7 @@ Cause of death:</text-property>
                                                 <property name="borderTopStyle">solid</property>
                                                 <property name="borderTopWidth">thin</property>
                                                 <label id="2757">
-                                                    <text-property name="text">Therapy Started</text-property>
+                                                    <text-property name="text">Date Started</text-property>
                                                 </label>
                                             </cell>
                                             <cell id="2758">
@@ -2953,7 +3148,7 @@ Cause of death:</text-property>
                                                 <property name="borderTopStyle">solid</property>
                                                 <property name="borderTopWidth">thin</property>
                                                 <label id="2759">
-                                                    <text-property name="text">Therapy Stopped</text-property>
+                                                    <text-property name="text">Date Stopped</text-property>
                                                 </label>
                                             </cell>
                                             <cell id="2760">
@@ -2971,6 +3166,8 @@ Cause of death:</text-property>
                                     </header>
                                     <detail>
                                         <row id="2762">
+                                            <property name="fontSize">9pt</property>
+                                            <property name="height">0.2708333333333333in</property>
                                             <cell id="2763">
                                                 <property name="borderBottomColor">#000000</property>
                                                 <property name="borderBottomStyle">solid</property>
@@ -2985,15 +3182,18 @@ Cause of death:</text-property>
                                                     <property name="resultSetColumn">name</property>
                                                 </data>
                                             </cell>
-                                            <cell id="2765">
+                                            <cell id="2811">
                                                 <property name="borderBottomColor">#000000</property>
                                                 <property name="borderBottomStyle">solid</property>
                                                 <property name="borderBottomWidth">thin</property>
+                                                <property name="borderLeftColor">#000000</property>
+                                                <property name="borderLeftStyle">solid</property>
+                                                <property name="borderLeftWidth">thin</property>
                                                 <property name="borderRightColor">#000000</property>
                                                 <property name="borderRightStyle">solid</property>
                                                 <property name="borderRightWidth">thin</property>
-                                                <data id="2766">
-                                                    <property name="resultSetColumn">dosage</property>
+                                                <data id="2815">
+                                                    <property name="resultSetColumn">generic_name</property>
                                                 </data>
                                             </cell>
                                             <cell id="2767">
@@ -3005,6 +3205,72 @@ Cause of death:</text-property>
                                                 <property name="borderRightWidth">thin</property>
                                                 <data id="2768">
                                                     <property name="resultSetColumn">batch</property>
+                                                </data>
+                                            </cell>
+                                            <cell id="2817">
+                                                <property name="borderBottomColor">#000000</property>
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightColor">#000000</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <data id="2821">
+                                                    <property name="resultSetColumn">nafdac_number</property>
+                                                </data>
+                                            </cell>
+                                            <cell id="2823">
+                                                <property name="borderBottomColor">#000000</property>
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightColor">#000000</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <data id="2827">
+                                                    <property name="resultSetColumn">expiry_date</property>
+                                                </data>
+                                            </cell>
+                                            <cell id="2829">
+                                                <property name="borderBottomColor">#000000</property>
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightColor">#000000</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <data id="2833">
+                                                    <property name="resultSetColumn">manufactor</property>
+                                                </data>
+                                            </cell>
+                                            <cell id="2835">
+                                                <property name="borderBottomColor">#000000</property>
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightColor">#000000</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <data id="2839">
+                                                    <property name="resultSetColumn">reason</property>
+                                                </data>
+                                            </cell>
+                                            <cell id="2765">
+                                                <property name="borderBottomColor">#000000</property>
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightColor">#000000</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <data id="2766">
+                                                    <property name="resultSetColumn">dosage</property>
+                                                </data>
+                                            </cell>
+                                            <cell id="2841">
+                                                <property name="borderBottomColor">#000000</property>
+                                                <property name="borderBottomStyle">solid</property>
+                                                <property name="borderBottomWidth">thin</property>
+                                                <property name="borderRightColor">#000000</property>
+                                                <property name="borderRightStyle">solid</property>
+                                                <property name="borderRightWidth">thin</property>
+                                                <data id="2845">
+                                                    <property name="resultSetColumn">route_of_administration</property>
                                                 </data>
                                             </cell>
                                             <cell id="2769">
@@ -3044,9 +3310,16 @@ Cause of death:</text-property>
                                     </detail>
                                     <footer>
                                         <row id="2775">
+                                            <property name="height">0.16666666666666666in</property>
                                             <cell id="2776"/>
-                                            <cell id="2777"/>
+                                            <cell id="2812"/>
                                             <cell id="2778"/>
+                                            <cell id="2818"/>
+                                            <cell id="2824"/>
+                                            <cell id="2830"/>
+                                            <cell id="2836"/>
+                                            <cell id="2777"/>
+                                            <cell id="2842"/>
                                             <cell id="2779"/>
                                             <cell id="2780"/>
                                             <cell id="2781"/>
@@ -3148,7 +3421,7 @@ Cause of death:</text-property>
                                     <property name="borderTopWidth">thin</property>
                                     <label id="2394">
                                         <property name="fontWeight">normal</property>
-                                        <text-property name="text">Product / Generic Name</text-property>
+                                        <text-property name="text">Brand or Generic Name</text-property>
                                     </label>
                                 </cell>
                                 <cell id="2395">
@@ -3163,7 +3436,7 @@ Cause of death:</text-property>
                                     <property name="borderTopWidth">thin</property>
                                     <label id="2396">
                                         <property name="fontWeight">normal</property>
-                                        <text-property name="text">Dose &amp; Frequency Given</text-property>
+                                        <text-property name="text">Dosage</text-property>
                                     </label>
                                 </cell>
                                 <cell id="2397">
@@ -3178,7 +3451,7 @@ Cause of death:</text-property>
                                     <property name="borderTopWidth">thin</property>
                                     <label id="2398">
                                         <property name="fontWeight">normal</property>
-                                        <text-property name="text">MAL and Batch No.</text-property>
+                                        <text-property name="text">Route</text-property>
                                     </label>
                                 </cell>
                                 <cell id="2399">
@@ -3190,7 +3463,7 @@ Cause of death:</text-property>
                                     <property name="borderRightWidth">thin</property>
                                     <label id="2400">
                                         <property name="fontWeight">normal</property>
-                                        <text-property name="text">Therapy Started</text-property>
+                                        <text-property name="text">Date Started</text-property>
                                     </label>
                                 </cell>
                                 <cell id="2401">
@@ -3205,7 +3478,7 @@ Cause of death:</text-property>
                                     <property name="borderTopWidth">thin</property>
                                     <label id="2402">
                                         <property name="fontWeight">normal</property>
-                                        <text-property name="text">Therapy Stopped</text-property>
+                                        <text-property name="text">Date Stopped</text-property>
                                     </label>
                                 </cell>
                                 <cell id="2403">
@@ -3220,7 +3493,7 @@ Cause of death:</text-property>
                                     <property name="borderTopWidth">thin</property>
                                     <label id="2404">
                                         <property name="fontWeight">normal</property>
-                                        <text-property name="text">Indication</text-property>
+                                        <text-property name="text">Reason for Use</text-property>
                                     </label>
                                 </cell>
                             </row>
