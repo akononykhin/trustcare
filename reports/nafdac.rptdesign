@@ -3167,7 +3167,7 @@ Cause of death:</text-property>
                                     <detail>
                                         <row id="2762">
                                             <property name="fontSize">9pt</property>
-                                            <property name="height">0.2708333333333333in</property>
+                                            <property name="height">0.34375in</property>
                                             <cell id="2763">
                                                 <property name="borderBottomColor">#000000</property>
                                                 <property name="borderBottomStyle">solid</property>
