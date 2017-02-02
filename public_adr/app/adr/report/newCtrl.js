@@ -73,6 +73,17 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
             $scope.calendar.adr_stop_date_opened = true;
         }
     };
+    $scope.concomitant_calendar_open = function(type, index) {
+        if(index >= $scope.params.concomitant_drugs.length) {
+            return;
+        }
+        if('date_started' == type) {
+            $scope.params.concomitant_drugs[index].date_started_opened = true;
+        }
+        else if('date_stopped' == type) {
+            $scope.params.concomitant_drugs[index].date_stopped_opened = true;
+        }
+    };
 
     $scope.isWaitAnswer = function () {
         return $scope.is_wait_answer;

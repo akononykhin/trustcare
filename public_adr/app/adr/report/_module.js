@@ -293,7 +293,7 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                    <div class=\"col-sm-10\">"+
             "                        <data-ng-form name=\"subForm\">"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.generic_name.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"generic_name\">{{translate('Product / Generic Name')}}</label>"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"generic_name\">{{translate('Brand or Generic Name')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <input type=\"text\" class=\"form-control\" name=\"generic_name\" data-ng-model=\"drug.generic_name\">"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.generic_name.$dirty && subForm.generic_name.$invalid\">"+
@@ -302,7 +302,7 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"dosage\">{{translate('Dose & Frequency Given')}}</label>"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"dosage\">{{translate('Dosage')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <input type=\"text\" class=\"form-control\" name=\"dosage\" data-ng-model=\"drug.dosage\">"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.dosage.$dirty && subForm.dosage.$invalid\">"+
@@ -311,7 +311,7 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.batch_number.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"batch_number\">{{translate('MAL and Batch No.')}}</label>"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"batch_number\">{{translate('Route')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <input type=\"text\" class=\"form-control\" name=\"batch_number\" data-ng-model=\"drug.batch_number\">"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.batch_number.$dirty && subForm.batch_number.$invalid\">"+
@@ -320,25 +320,35 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"date_started\">{{translate('Therapy started')}}</label>"+
-            "                                <div class=\"col-sm-6\">"+
-            "                                    <input type=\"text\" class=\"form-control\" name=\"date_started\" data-ng-model=\"drug.date_started\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"date_started\">{{translate('Date started')}}</label>"+
+            "                                <div class=\"col-sm-3\">"+
+            "                                    <p class=\"input-group\">"+
+            "                                        <input type=\"text\" name=\"date_started\" class=\"form-control\" readonly=\"readonly\" uib-datepicker-popup=\"yyyy-MM-dd\" data-ng-model=\"drug.date_started\" is-open=\"drug.date_started_opened\" datepicker-options=\"dateOptions\" />"+
+            "                                        <span class=\"input-group-btn\">"+
+            "                                            <button type=\"button\" class=\"btn btn-default\" ng-click=\"concomitant_calendar_open('date_started', $index)\"><i class=\"glyphicon glyphicon-calendar\"></i></button>"+
+            "                                        </span>"+
+            "                                    </p>"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.date_started.$dirty && subForm.date_started.$invalid\">"+
             "                                        <span data-ng-show=\"subForm.date_started.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
             "                                    </div>"+
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_stopped.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"date_stopped\">{{translate('Therapy stopped')}}</label>"+
-            "                                <div class=\"col-sm-6\">"+
-            "                                    <input type=\"text\" class=\"form-control\" name=\"date_stopped\" data-ng-model=\"drug.date_stopped\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"date_stopped\">{{translate('Date stopped')}}</label>"+
+            "                                <div class=\"col-sm-3\">"+
+            "                                    <p class=\"input-group\">"+
+            "                                        <input type=\"text\" name=\"date_stopped\" class=\"form-control\" readonly=\"readonly\" uib-datepicker-popup=\"yyyy-MM-dd\" data-ng-model=\"drug.date_stopped\" is-open=\"drug.date_stopped_opened\" datepicker-options=\"dateOptions\" />"+
+            "                                        <span class=\"input-group-btn\">"+
+            "                                            <button type=\"button\" class=\"btn btn-default\" ng-click=\"concomitant_calendar_open('date_stopped', $index)\"><i class=\"glyphicon glyphicon-calendar\"></i></button>"+
+            "                                        </span>"+
+            "                                    </p>"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.date_stopped.$dirty && subForm.date_stopped.$invalid\">"+
             "                                        <span data-ng-show=\"subForm.date_stopped.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
             "                                    </div>"+
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"indication_for_use\">{{translate('Indication')}}</label>"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"indication_for_use\">{{translate('Reason for Use')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <input type=\"text\" class=\"form-control\" name=\"indication_for_use\" data-ng-model=\"drug.indication_for_use\">"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.indication_for_use.$dirty && subForm.indication_for_use.$invalid\">"+
@@ -617,37 +627,37 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                    <div class=\"col-sm-10\">"+
             "                        <data-ng-form name=\"subForm\">"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.generic_name.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"generic_name\">{{translate('Product / Generic Name')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"generic_name\">{{translate('Brand or Generic Name')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.generic_name}}</p>"+
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"dosage\">{{translate('Dose & Frequency Given')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"dosage\">{{translate('Dosage')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.dosage}}</p>"+
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.batch_number.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"batch_number\">{{translate('MAL and Batch No.')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"batch_number\">{{translate('Route')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.batch_number}}</p>"+
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"date_started\">{{translate('Therapy started')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"date_started\">{{translate('Date started')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.date_started}}</p>"+
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_stopped.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"date_stopped\">{{translate('Therapy stopped')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"date_stopped\">{{translate('Date stopped')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.date_stopped}}</p>"+
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"indication_for_use\">{{translate('Indication')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"indication_for_use\">{{translate('Reason for Use')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.indication_of_use}}</p>"+
             "                                </div>"+
