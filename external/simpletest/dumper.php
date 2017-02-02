@@ -364,7 +364,7 @@
          *    @access public
          *    @static
          */
-        function getFormattedAssertionLine($stack) {
+        public static function getFormattedAssertionLine($stack) {
             foreach ($stack as $frame) {
                 if (isset($frame['file'])) {
                     if (strpos($frame['file'], SIMPLE_TEST) !== false) {
@@ -386,7 +386,7 @@
          *    @access private
          *    @static
          */
-        function _stackFrameIsAnAssertion($frame) {
+        public static function _stackFrameIsAnAssertion($frame) {
             if (($frame['function'] == 'fail') || ($frame['function'] == 'pass')) {
                 return true;
             }

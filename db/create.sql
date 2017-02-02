@@ -722,8 +722,13 @@ CREATE TABLE nafdac_drug (
   `id` int NOT NULL,
   `id_nafdac` int NOT NULL,
   `name` varchar(255) default NULL,
+  `generic_name` varchar(255) DEFAULT NULL,
   `dosage` varchar(255) default NULL,
   `batch` varchar(255) default NULL,
+  `nafdac_number` varchar(255) DEFAULT NULL,
+  `expiry_date` varchar(32) DEFAULT NULL,
+  `manufactor` varchar(255) DEFAULT NULL,
+  `route_of_administration` varchar(255) DEFAULT NULL,
   `started` varchar(255) default NULL,
   `stopped` varchar(255) default NULL,
   `reason` varchar(255) default NULL,
@@ -1221,4 +1226,4 @@ INSERT INTO db_sequence(name,value) VALUES ('nafdac_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_medicine_id_seq', 1);
 INSERT INTO db_sequence(name,value) VALUES ('nafdac_drug_id_seq', 1);
 
-insert into db_version values (1, 20170110, 3);
+insert into db_version values (1, 20170202, 1);

@@ -225,8 +225,17 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                    </div>"+
             "                    <div class=\"col-sm-10\">"+
             "                        <data-ng-form name=\"subForm\">"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.brand_name.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"brand_name\">{{translate('Brand Name')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"brand_name\" data-ng-model=\"drug.brand_name\" required>"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.brand_name.$dirty && subForm.brand_name.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.brand_name.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.generic_name.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"generic_name\">{{translate('Product / Generic Name')}}</label>"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"generic_name\">{{translate('Generic Name')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <input type=\"text\" class=\"form-control\" name=\"generic_name\" data-ng-model=\"drug.generic_name\" required>"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.generic_name.$dirty && subForm.generic_name.$invalid\">"+
@@ -234,17 +243,8 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                                    </div>"+
             "                                </div>"+
             "                            </div>"+
-            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"dosage\">{{translate('Dose & Frequency Given')}}</label>"+
-            "                                <div class=\"col-sm-6\">"+
-            "                                    <input type=\"text\" class=\"form-control\" name=\"dosage\" data-ng-model=\"drug.dosage\" required>"+
-            "                                    <div class=\"help-block\" data-ng-show=\"subForm.dosage.$dirty && subForm.dosage.$invalid\">"+
-            "                                        <span data-ng-show=\"subForm.dosage.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
-            "                                    </div>"+
-            "                                </div>"+
-            "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.batch_number.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"batch_number\">{{translate('MAL and Batch No.')}}</label>"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"batch_number\">{{translate('Batch No.')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <input type=\"text\" class=\"form-control\" name=\"batch_number\" data-ng-model=\"drug.batch_number\" required>"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.batch_number.$dirty && subForm.batch_number.$invalid\">"+
@@ -252,30 +252,85 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                                    </div>"+
             "                                </div>"+
             "                            </div>"+
-            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"date_started\">{{translate('Therapy started')}}</label>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.nafdac_number.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"nafdac_number\">{{translate('NAFDAC No.')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
-            "                                    <input type=\"text\" class=\"form-control\" name=\"date_started\" data-ng-model=\"drug.date_started\" required>"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"nafdac_number\" data-ng-model=\"drug.nafdac_number\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.nafdac_number.$dirty && subForm.nafdac_number.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.nafdac_number.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.expiry_date.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"expiry_date\">{{translate('Expiry Date')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"expiry_date\" data-ng-model=\"drug.expiry_date\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.expiry_date.$dirty && subForm.expiry_date.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.expiry_date.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.manufactor.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"manufactor\">{{translate('Name & Address of Manufacturer')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"manufactor\" data-ng-model=\"drug.manufactor\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.manufactor.$dirty && subForm.manufactor.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.manufactor.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"indication_for_use\">{{translate('Indication for Use')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"indication_for_use\" data-ng-model=\"drug.indication_for_use\" required>"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.indication_for_use.$dirty && subForm.indication_for_use.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.indication_for_use.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"dosage\">{{translate('Dosage')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"dosage\" data-ng-model=\"drug.dosage\" required>"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.dosage.$dirty && subForm.dosage.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.dosage.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.route_of_administration.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"route_of_administration\">{{translate('Route of Administration')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <input type=\"text\" class=\"form-control\" name=\"route_of_administration\" data-ng-model=\"drug.route_of_administration\">"+
+            "                                    <div class=\"help-block\" data-ng-show=\"subForm.route_of_administration.$dirty && subForm.route_of_administration.$invalid\">"+
+            "                                        <span data-ng-show=\"subForm.route_of_administration.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
+            "                                    </div>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"date_started\">{{translate('Date started')}}</label>"+
+            "                                <div class=\"col-sm-3\">"+
+            "                                    <p class=\"input-group\">"+
+            "                                        <input type=\"text\" name=\"date_started\" class=\"form-control\" readonly=\"readonly\" uib-datepicker-popup=\"yyyy-MM-dd\" data-ng-model=\"drug.date_started\" is-open=\"drug.date_started_opened\" datepicker-options=\"dateOptions\" />"+
+            "                                        <span class=\"input-group-btn\">"+
+            "                                            <button type=\"button\" class=\"btn btn-default\" ng-click=\"suspected_calendar_open('date_started', $index)\"><i class=\"glyphicon glyphicon-calendar\"></i></button>"+
+            "                                        </span>"+
+            "                                    </p>"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.date_started.$dirty && subForm.date_started.$invalid\">"+
             "                                        <span data-ng-show=\"subForm.date_started.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
             "                                    </div>"+
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_stopped.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"date_stopped\">{{translate('Therapy stopped')}}</label>"+
-            "                                <div class=\"col-sm-6\">"+
-            "                                    <input type=\"text\" class=\"form-control\" name=\"date_stopped\" data-ng-model=\"drug.date_stopped\" required>"+
+            "                                <label class=\"col-sm-3 control-label\" for=\"date_stopped\">{{translate('Date stopped')}}</label>"+
+            "                                <div class=\"col-sm-3\">"+
+            "                                    <p class=\"input-group\">"+
+            "                                        <input type=\"text\" name=\"date_stopped\" class=\"form-control\" readonly=\"readonly\" uib-datepicker-popup=\"yyyy-MM-dd\" data-ng-model=\"drug.date_stopped\" is-open=\"drug.date_stopped_opened\" datepicker-options=\"dateOptions\" />"+
+            "                                        <span class=\"input-group-btn\">"+
+            "                                            <button type=\"button\" class=\"btn btn-default\" ng-click=\"suspected_calendar_open('date_stopped', $index)\"><i class=\"glyphicon glyphicon-calendar\"></i></button>"+
+            "                                        </span>"+
+            "                                    </p>"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.date_stopped.$dirty && subForm.date_stopped.$invalid\">"+
             "                                        <span data-ng-show=\"subForm.date_stopped.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
-            "                                    </div>"+
-            "                                </div>"+
-            "                            </div>"+
-            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
-            "                                <label class=\"col-sm-3 control-label\" for=\"indication_for_use\">{{translate('Indication')}}</label>"+
-            "                                <div class=\"col-sm-6\">"+
-            "                                    <input type=\"text\" class=\"form-control\" name=\"indication_for_use\" data-ng-model=\"drug.indication_for_use\" required>"+
-            "                                    <div class=\"help-block\" data-ng-show=\"subForm.indication_for_use.$dirty && subForm.indication_for_use.$invalid\">"+
-            "                                        <span data-ng-show=\"subForm.indication_for_use.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
             "                                    </div>"+
             "                                </div>"+
             "                            </div>"+
@@ -578,40 +633,70 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                    </div>"+
             "                    <div class=\"col-sm-10\">"+
             "                        <data-ng-form name=\"subForm\">"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.brand_name.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"brand_name\">{{translate('Brand Name')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.brand_name}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.generic_name.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"generic_name\">{{translate('Product / Generic Name')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"generic_name\">{{translate('Generic Name')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.generic_name}}</p>"+
             "                                </div>"+
             "                            </div>"+
-            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"dosage\">{{translate('Dose & Frequency Given')}}</label>"+
-            "                                <div class=\"col-sm-6\">"+
-            "                                    <p class=\"form-control-static\">{{drug.dosage}}</p>"+
-            "                                </div>"+
-            "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.batch_number.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"batch_number\">{{translate('MAL and Batch No.')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"batch_number\">{{translate('Batch No.')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.batch_number}}</p>"+
             "                                </div>"+
             "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.nafdac_number.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"nafdac_number\">{{translate('NAFDAC No.')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.nafdac_number}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.expiry_date.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"expiry_date\">{{translate('Expiry Date')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.expiry_date}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.manufactor.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"manufactor\">{{translate('Name & Address of Manufacturer')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.manufactor}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"indication_for_use\">{{translate('Indication for Use')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.indication_for_use}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.dosage.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"dosage\">{{translate('Dosage')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.dosage}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
+            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.route_of_administration.$invalid}\">"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"route_of_administration\">{{translate('Route of Administration')}}</label>"+
+            "                                <div class=\"col-sm-6\">"+
+            "                                    <p class=\"form-control-static\">{{drug.route_of_administration}}</p>"+
+            "                                </div>"+
+            "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_started.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"date_started\">{{translate('Therapy started')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"date_started\">{{translate('Date started')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.date_started}}</p>"+
             "                                </div>"+
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.date_stopped.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"date_stopped\">{{translate('Therapy stopped')}}</label>"+
+            "                                <label class=\"col-sm-4 control-label\" for=\"date_stopped\">{{translate('Date stopped')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
             "                                    <p class=\"form-control-static\">{{drug.date_stopped}}</p>"+
-            "                                </div>"+
-            "                            </div>"+
-            "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
-            "                                <label class=\"col-sm-4 control-label\" for=\"indication_for_use\">{{translate('Indication')}}</label>"+
-            "                                <div class=\"col-sm-6\">"+
-            "                                    <p class=\"form-control-static\">{{drug.indication_of_use}}</p>"+
             "                                </div>"+
             "                            </div>"+
             "                        </data-ng-form>"+
@@ -659,7 +744,7 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.indication_for_use.$invalid}\">"+
             "                                <label class=\"col-sm-4 control-label\" for=\"indication_for_use\">{{translate('Reason for Use')}}</label>"+
             "                                <div class=\"col-sm-6\">"+
-            "                                    <p class=\"form-control-static\">{{drug.indication_of_use}}</p>"+
+            "                                    <p class=\"form-control-static\">{{drug.indication_for_use}}</p>"+
             "                                </div>"+
             "                            </div>"+
             "                        </data-ng-form>"+

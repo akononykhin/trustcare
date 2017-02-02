@@ -65,7 +65,7 @@
          *    @static
          *    @access public
          */
-        function ignoreParentsIfIgnored($classes) {
+        public static function ignoreParentsIfIgnored($classes) {
             $registry = &SimpleTest::_getRegistry();
             foreach ($classes as $class) {
                 if (SimpleTest::isIgnored($class)) {
@@ -88,7 +88,7 @@
          *    @access public
          *    @static
          */
-        function isIgnored($class) {
+        public static function isIgnored($class) {
             $registry = &SimpleTest::_getRegistry();
             return isset($registry['IgnoreList'][strtolower($class)]);
         }
@@ -164,7 +164,7 @@
          *    @access public
          *    @static
          */
-        function setCurrent(&$test) {
+        public static function setCurrent(&$test) {
             $registry = &SimpleTest::_getRegistry();
             $registry['CurrentTestCase'] = &$test;
         }
@@ -186,7 +186,7 @@
          *    @access private
          *    @static
          */
-        function &_getRegistry() {
+        public static function &_getRegistry() {
             static $registry = false;
             if (! $registry) {
                 $registry = SimpleTest::_getDefaults();
@@ -200,7 +200,7 @@
          *    @access private
          *    @static
          */
-        function _getDefaults() {
+        public static function _getDefaults() {
             return array(
                     'StubBaseClass' => 'SimpleStub',
                     'MockBaseClass' => 'SimpleMock',
@@ -233,7 +233,7 @@
         /**
          *    @deprecated
          */
-        function isIgnored($class) {
+        public static function isIgnored($class) {
             return Simpletest::isIgnored($class);
         }
 
@@ -279,4 +279,3 @@
             return Simpletest::getDefaultProxyPassword();
         }
     }
-?>

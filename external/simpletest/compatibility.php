@@ -37,7 +37,7 @@
          *    @access public
          *    @static
          */
-        function isIdentical($first, $second) {
+        public static function isIdentical($first, $second) {
             if ($first != $second) {
                 return false;
             }
@@ -55,7 +55,7 @@
          *    @access private
          *    @static
          */
-        function _isIdenticalType($first, $second) {
+        public static function _isIdenticalType($first, $second) {
             if (gettype($first) != gettype($second)) {
                 return false;
             }
@@ -132,7 +132,7 @@
          *    @access public
          *    @static
          */
-        function isA($object, $class) {
+        public static function isA($object, $class) {
             if (function_exists('is_a')) {
                 return is_a($object, $class);
             }
@@ -174,11 +174,10 @@
          *    @access public
          *    @static
          */
-        function getStackTrace() {
+        public static function getStackTrace() {
             if (function_exists('debug_backtrace')) {
                 return array_reverse(debug_backtrace());
             }
             return array();
         }
     }
-?>

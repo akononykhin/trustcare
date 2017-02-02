@@ -152,24 +152,34 @@ class Adr_ReportController extends ZendX_Controller_Action
 
             $suspectedDrugs = array_key_exists('suspected_drugs', $params) ? $params['suspected_drugs'] : array();
             foreach($suspectedDrugs as $drug) {
+                $brand_name = array_key_exists('brand_name', $drug) ? $drug['brand_name'] : '';
                 $generic_name = array_key_exists('generic_name', $drug) ? $drug['generic_name'] : '';
                 $dosage = array_key_exists('dosage', $drug) ? $drug['dosage'] : '';
                 $batch_number = array_key_exists('batch_number', $drug) ? $drug['batch_number'] : '';
                 $date_started = array_key_exists('date_started', $drug) ? $drug['date_started'] : '';
                 $date_stopped = array_key_exists('date_stopped', $drug) ? $drug['date_stopped'] : '';
                 $indication_for_use = array_key_exists('indication_for_use', $drug) ? $drug['indication_for_use'] : '';
-            
-                if(empty($generic_name)) {
+                $nafdac_number = array_key_exists('nafdac_number', $drug) ? $drug['nafdac_number'] : '';
+                $expiry_date = array_key_exists('expiry_date', $drug) ? $drug['expiry_date'] : '';
+                $manufactor = array_key_exists('manufactor', $drug) ? $drug['manufactor'] : '';
+                $route_of_administration = array_key_exists('route_of_administration', $drug) ? $drug['route_of_administration'] : '';
+                
+                if(empty($brand_name)) {
                     continue;
                 }
                 $drugModel = new TrustCare_Model_NafdacDrug(array(
                     'id_nafdac' => $nafdacModel->getId(),
-                    'name' => $generic_name,
+                    'name' => $brand_name,
+                    'generic_name' => $generic_name,
                     'dosage' => $dosage,
                     'batch' => $batch_number,
                     'started' => $date_started,
                     'stopped' => $date_stopped,
                     'reason' => $indication_for_use,
+                    'nafdac_number' => $nafdac_number,
+                    'expiry_date' => $expiry_date,
+                    'manufactor' => $manufactor,
+                    'route_of_administration' => $route_of_administration,
                     'mapperOptions' => array('adapter' => $db)
                 ));
                 $drugModel->save();
@@ -260,12 +270,17 @@ class Adr_ReportController extends ZendX_Controller_Action
             $model1 = new TrustCare_Model_NafdacDrug(array('mapperOptions' => array('adapter' => $db)));
             foreach($model1->fetchAllByIdNafdac($model->getId()) as $obj) {
                 $suspected_drugs[] = array(
-                    'generic_name' => $obj->getName(),
+                    'brand_name' => $obj->getName(),
+                    'generic_name' => $obj->getGenericName(),
                     'dosage' => $obj->getDosage(),
                     'batch_number' => $obj->getBatch(),
                     'date_started' => $obj->getStarted(),
                     'date_stopped' => $obj->getStopped(),
                     'indication_for_use' => $obj->getReason(),
+                    'nafdac_number' => $obj->getNafdacNumber(),
+                    'expiry_date' => $obj->getExpiryDate(),
+                    'manufactor' => $obj->getManufactor(),
+                    'route_of_administration' => $obj->getRouteOfAdministration(),
                 );
             }
             

@@ -11,11 +11,16 @@ class TrustCare_Model_NafdacDrug extends TrustCare_Model_Abstract
     protected $_id;
     protected $_id_nafdac;
     protected $_name;
+    protected $_generic_name;
     protected $_dosage;
     protected $_batch;
     protected $_started;
     protected $_stopped;
     protected $_reason;
+    protected $_nafdac_number;
+    protected $_expiry_date;
+    protected $_manufactor;
+    protected $_route_of_administration;
     
     /**
      * @param  int $value 
@@ -72,6 +77,26 @@ class TrustCare_Model_NafdacDrug extends TrustCare_Model_Abstract
     public function getName()
     {
         return $this->_name;
+    }
+
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setGenericName($value)
+    {
+        $this->_parameterChanged('generic_name', $value);
+        $this->_generic_name = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getGenericName()
+    {
+        return $this->_generic_name;
     }
     
     /**
@@ -170,6 +195,84 @@ class TrustCare_Model_NafdacDrug extends TrustCare_Model_Abstract
     }
     
 
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setNafdacNumber($value)
+    {
+        $this->_parameterChanged('nafdac_number', $value);
+        $this->_nafdac_number = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getNafdacNumber()
+    {
+        return $this->_nafdac_number;
+    }
+    
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setExpiryDate($value)
+    {
+        $this->_parameterChanged('expiry_date', $value);
+        $this->_expiry_date = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getExpiryDate()
+    {
+        return $this->_expiry_date;
+    }
+    
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setManufactor($value)
+    {
+        $this->_parameterChanged('manufactor', $value);
+        $this->_manufactor = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getManufactor()
+    {
+        return $this->_manufactor;
+    }
+
+
+    /**
+     * @param  string $value
+     * @return TrustCare_Model_NafdacDrug
+     */
+    public function setRouteOfAdministration($value)
+    {
+        $this->_parameterChanged('route_of_administration', $value);
+        $this->_route_of_administration = $value;
+        return $this;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getRouteOfAdministration()
+    {
+        return $this->_route_of_administration;
+    }
     
     public function isExists()
     {

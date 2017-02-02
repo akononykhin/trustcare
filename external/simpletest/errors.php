@@ -121,7 +121,7 @@
          *    @access public
          *    @static
          */
-        function &instance() {
+        public static function &instance() {
             static $queue = false;
             if (! $queue) {
                 $queue = new SimpleErrorQueue();
@@ -137,7 +137,7 @@
          *    @access public
          *    @static
          */
-        function getSeverityAsString($severity) {
+        public static function getSeverityAsString($severity) {
             static $map = array(
                     E_STRICT => 'E_STRICT',
                     E_ERROR => 'E_ERROR',

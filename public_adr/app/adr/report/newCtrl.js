@@ -84,6 +84,17 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
             $scope.params.concomitant_drugs[index].date_stopped_opened = true;
         }
     };
+    $scope.suspected_calendar_open = function(type, index) {
+        if(index >= $scope.params.suspected_drugs.length) {
+            return;
+        }
+        if('date_started' == type) {
+            $scope.params.suspected_drugs[index].date_started_opened = true;
+        }
+        else if('date_stopped' == type) {
+            $scope.params.suspected_drugs[index].date_stopped_opened = true;
+        }
+    };
 
     $scope.isWaitAnswer = function () {
         return $scope.is_wait_answer;
@@ -129,7 +140,7 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
     };
 
     $scope.addSuspectedDrug = function () {
-        $scope.params.suspected_drugs.push({generic_name: '', dosage: '', batch_number: '', date_started: '', date_stopped: '', indication_for_use: ''});
+        $scope.params.suspected_drugs.push({brand_name: '', generic_name: '', dosage: '', batch_number: '', date_started: '', date_stopped: '', indication_for_use: '', nafdac_number: '', expiry_date: '', manufactor: '', route_of_administration: ''});
     };
     $scope.removeSuspectedDrug = function (index) {
         if (0 == index) {
@@ -174,6 +185,23 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
         if($scope.params.adr_stop_date) {
             params.adr_stop_date = $scope.formatDate($scope.params.adr_stop_date);
         }
+        $.each(params.suspected_drugs, function(index, drug) {
+            if(drug.date_started) {
+                drug.date_started = $scope.formatDate(drug.date_started);
+            }
+            if(drug.date_stopped) {
+                drug.date_stopped = $scope.formatDate(drug.date_stopped);
+            }
+        });
+        $.each(params.concomitant_drugs, function(index, drug) {
+            if(drug.date_started) {
+                drug.date_started = $scope.formatDate(drug.date_started);
+            }
+            if(drug.date_stopped) {
+                drug.date_stopped = $scope.formatDate(drug.date_stopped);
+            }
+        });
+
 
         var warnDialog = bootbox.dialog({
             message: '<p class="text-center">'+i18n.translate("Please wait. Report is generating ...")+'</p>',

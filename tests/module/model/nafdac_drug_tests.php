@@ -36,11 +36,16 @@ class TestOfNafdacDrug extends UnitTestCase {
                 'id' => $this->db->nextSequenceId('nafdac_drug_id_seq'),
                 'id_nafdac' => 1,
                 'name' => '11',
+                'generic_name' => 'generic_11',
                 'dosage' => '12',
                 'batch'   => '100',
                 'started' => '13',
                 'stopped' => '14',
                 'reason' => '15',
+                'nafdac_number' => 'nafnum_1',
+                'expiry_date' => 'ed_111',
+                'manufactor' => 'm45',
+                'route_of_administration' => 'rofa_6',
             );
 
             $columns = array();
@@ -88,11 +93,16 @@ class TestOfNafdacDrug extends UnitTestCase {
             'id' => '1',
             'id_nafdac' => 2,
             'name' => '11',
+            'generic_name' => 'generic_11',
             'dosage' => '12',
             'batch'   => '100',
             'started' => '13',
             'stopped' => '14',
             'reason' => '15',
+            'nafdac_number' => 'nafnum_1',
+            'expiry_date' => 'ed_111',
+            'manufactor' => 'm45',
+            'route_of_administration' => 'rofa_6',
             'mapperOptions' => array('adapter' => $this->db)
         );
         
@@ -121,11 +131,16 @@ class TestOfNafdacDrug extends UnitTestCase {
         $params = array(
             'id_nafdac' => 1,
             'name' => '11',
+            'generic_name' => 'generic_11',
             'dosage' => '12',
             'batch'   => '100',
             'started' => '13',
             'stopped' => '14',
             'reason' => '15',
+            'nafdac_number' => 'nafnum_1',
+            'expiry_date' => 'ed_111',
+            'manufactor' => 'm45',
+            'route_of_administration' => 'rofa_6',
         );
         
         try {
@@ -150,11 +165,16 @@ class TestOfNafdacDrug extends UnitTestCase {
         if(!is_null($model)) {
             $params['id_nafdac'] = 1 == $model->id_nafdac ? 2 : 1;
             $params['name'] = $model->name . '_11';
+            $params['generic_name'] = $model->generic_name . '_g11';
             $params['dosage'] = $model->dosage . '_12';
             $params['batch'] = $model->batch . '_100';
             $params['started'] = $model->started . '_13';
             $params['stopped'] = $model->stopped . '_14';
             $params['reason'] = $model->reason . '_15';
+            $params['nafdac_number'] = $model->nafdac_number . '_nn15';
+            $params['expiry_date'] = $model->expiry_date . '_ed3';
+            $params['manufactor'] = $model->manufactor . '_m4';
+            $params['route_of_administration'] = $model->route_of_administration . '_rofa2';
             
             try {
                 $model->setOptions($params);
@@ -279,11 +299,16 @@ class TestOfNafdacDrug extends UnitTestCase {
         $this->assertEqual($model->id, $params['id'], "Incorrect 'id': %s");
         $this->assertEqual($model->id_nafdac, $params['id_nafdac'], "Incorrect 'id_nafdac': %s");
         $this->assertEqual($model->name, $params['name'], "Incorrect 'name': %s");
+        $this->assertEqual($model->generic_name, $params['generic_name'], "Incorrect 'generic_name': %s");
+        $this->assertEqual($model->nafdac_number, $params['nafdac_number'], "Incorrect 'nafdac_number': %s");
         $this->assertEqual($model->dosage, $params['dosage'], "Incorrect 'dosage': %s");
         $this->assertEqual($model->batch, $params['batch'], "Incorrect 'batch': %s");
         $this->assertEqual($model->name, $params['name'], "Incorrect 'name': %s");
         $this->assertEqual($model->stopped, $params['stopped'], "Incorrect 'stopped': %s");
         $this->assertEqual($model->reason, $params['reason'], "Incorrect 'reason': %s");
+        $this->assertEqual($model->expiry_date, $params['expiry_date'], "Incorrect 'expiry_date': %s");
+        $this->assertEqual($model->manufactor, $params['manufactor'], "Incorrect 'manufactor': %s");
+        $this->assertEqual($model->route_of_administration, $params['route_of_administration'], "Incorrect 'route_of_administration': %s");
     }
 }
 
