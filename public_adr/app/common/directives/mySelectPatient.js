@@ -46,19 +46,17 @@ angular.module('trustrx.common.directives')
         };
 
         $scope.allowCreate = function () {
-            return false/*$scope.withAdd()*/;
+            return true/*$scope.withAdd()*/;
         };
 
-        $scope.createUser = function () {
-            /*
+        $scope.createPatient = function () {
             var modalInstance = $uibModal.open({
-                template : $templateCache.get('client/users/info.tpl.html'),
-                controller  : 'ClientUsersInfoCtrl',
+                template : $templateCache.get('adr/patient/info.tpl.html'),
+                controller  : 'AdrPatientInfoCtrl',
                 resolve     : {
                     params: function () {
                         return {
-                            id: null,
-                            realm_id: $scope.realmId
+                            id: null
                         };
                     }
                 },
@@ -69,7 +67,6 @@ angular.module('trustrx.common.directives')
                 $scope.getPatientInfo(id);
             }, function () {
             });
-             */
         };
 
     }];
@@ -88,7 +85,7 @@ angular.module('trustrx.common.directives')
             "        placeholder=\"" + i18n.translate("Enter patient name or identifier") + "\""+
             "        data-ng-required=\"required\">"+
             "    <div data-ng-show='allowCreate()' class='input-group-btn'>"+
-            "        <button type=\"button\" class=\"btn btn-default\" data-ng-attr-title=\"{{translate('Create User')}}\" data-ng-click=\"createUser();\"><span class=\"glyphicon glyphicon-plus\"></span></button>"+
+            "        <button type=\"button\" class=\"btn btn-default\" data-ng-attr-title=\"{{translate('Create Patient')}}\" data-ng-click=\"createPatient();\"><span class=\"glyphicon glyphicon-plus\"></span></button>"+
             "    </div>"+
             "</div>"+
             "<div class=\"help-block\" data-ng-show=\"getFormControlProperty('$dirty') && getFormControlProperty('$invalid')\" data-ng-messages=\"getFormControlProperty('$error')\">"+
@@ -97,8 +94,7 @@ angular.module('trustrx.common.directives')
             "<img data-ng-show=\"loading\" class=\"addon\" src=\""+AdrInternalAddressSvc.loadFile("img/loading.gif")+"\">",
         restrict: 'EA',
         scope: {
-            withAdd: '&',    /* @ means no binding, just evaluation as string. = means two-way binding as variable, & - one-way binding */
-            realmId: '@'
+            withAdd: '&'    /* @ means no binding, just evaluation as string. = means two-way binding as variable, & - one-way binding */
         },
         controller: controller,
         require: ['^form', 'ngModel'],

@@ -97,7 +97,7 @@ class Adr_PharmacyController extends ZendX_Controller_Action
             }
             $exMessage = $ex->getMessage();
             if(!empty($exMessage)) {
-                $this->getLogger()->error(sprintf("Failed to create report: %s", $exMessage));
+                $this->getLogger()->error(sprintf("Failed to create pharmacy: %s", $exMessage));
             }
             $responseObj->message = $errorMsg;
         }

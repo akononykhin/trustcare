@@ -46,6 +46,12 @@ angular.module('trustrx.adr.services')
             return replacePatterns('report', 'attr-lists');
         },
 
+        patientCreate: function () {
+            return replacePatterns('patient', 'create');
+        },
+        patientSave: function (id) {
+            return replacePatterns('patiant', 'save') + '/id/' + id;
+        },
         patientGet: function(id) {
             return replacePatterns('patient', 'get') + '/id/' + id;
         },
@@ -74,6 +80,9 @@ angular.module('trustrx.adr.services')
         },
         facilityList: function (lga_id) {
             return replacePatterns('facility', 'list') + '/lga_id/' + lga_id;
+        },
+        physicianList: function() {
+            return replacePatterns('physician', 'list');
         }
     };
 });
