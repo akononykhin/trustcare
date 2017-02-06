@@ -55,6 +55,25 @@ angular.module('trustrx.adr.services')
 
         pharmacyListActive: function () {
             return replacePatterns('pharmacy', 'list-active');
+        },
+        pharmacyCreate: function () {
+            return replacePatterns('pharmacy', 'create');
+        },
+        pharmacySave: function (id) {
+            return replacePatterns('pharmacy', 'save') + '/id/' + id;
+        },
+
+        countryList: function () {
+            return replacePatterns('country', 'list');
+        },
+        stateList: function (country_id) {
+            return replacePatterns('state', 'list') + '/country_id/' + country_id;
+        },
+        lgaList: function (state_id) {
+            return replacePatterns('lga', 'list') + '/state_id/' + state_id;
+        },
+        facilityList: function (lga_id) {
+            return replacePatterns('facility', 'list') + '/lga_id/' + lga_id;
         }
     };
 });

@@ -1,6 +1,6 @@
 var adrReportsModule = angular.module('trustrx.adr.report');
 
-adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModalInstance', '$http', 'AdrInternalAddressSvc', 'params', function($scope, $filter, $uibModalInstance, $http, AdrInternalAddressSvc, params) {
+adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModalInstance', '$uibModal', '$http', '$templateCache', 'AdrInternalAddressSvc', 'params', function($scope, $filter, $uibModalInstance, $uibModal, $http, $templateCache, AdrInternalAddressSvc, params) {
     /* Data */
     $scope.params = {
         patient_id: null,
@@ -232,6 +232,27 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
+
+    $scope.pharmacyAdd = function () {
+        var modalInstance = $uibModal.open({
+            template : $templateCache.get('adr/pharmacy/info.tpl.html'),
+            controller  : 'AdrPharmacyInfoCtrl',
+            resolve     : {
+                params: function () {
+                    return {
+                        id: null
+                    };
+                }
+            },
+            backdrop    : 'static'
+        });
+
+        modalInstance.result.then(function (id) {
+            $scope.params.id_pharmacy = ""+id;
+            $scope.loadPharmacies();
+        }, function () {
+        });
+    }
 
 
     /* initialization */

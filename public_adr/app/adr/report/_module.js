@@ -19,15 +19,20 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                <legend>{{translate('Patient Information')}}</legend>"+
             "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.patient_id.$invalid}\">"+
             "                    <label class=\"col-sm-3 control-label\" for=\"patient_id\">{{translate('Patient')}}</label>"+
-            "                    <div class=\"col-sm-6\">"+
+            "                    <div class=\"col-sm-4\">"+
             "                        <my-select-patient with-add=\"false\" name=\"patient_id\" data-ng-model=\"params.patient_id\" required></my-select-patient>"+
             "                    </div>"+
             "                </div>"+
             "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.id_pharmacy.$invalid}\">"+
             "                    <label class=\"col-sm-3 control-label\" for=\"id_pharmacy\">{{translate('Pharmacy')}}</label>"+
-            "                    <div class=\"col-sm-6\">"+
-            "                        <select name=\"id_pharmacy\" id=\"id_pharmacy\" class=\"form-control\" data-ng-model=\"params.id_pharmacy\" data-ng-options=\"o.id as o.name for o in pharmacies | orderBy:'name'\" required>"+
-            "                        </select>"+
+            "                    <div class=\"col-sm-4\">"+
+            "                        <div class=\"input-group\">"+
+            "                            <select name=\"id_pharmacy\" id=\"id_pharmacy\" class=\"form-control\" data-ng-model=\"params.id_pharmacy\" data-ng-options=\"o.id as o.name for o in pharmacies | orderBy:'name'\" required>"+
+            "                            </select>"+
+            "                            <div class='input-group-btn'>"+
+            "                                <button type=\"button\" class=\"btn btn-default\" data-ng-attr-title=\"{{translate('Add')}}\" data-ng-click=\"pharmacyAdd()\"><span class=\"glyphicon glyphicon-plus\"></span></button>"+
+            "                            </div>"+
+            "                        </div>"+
             "                        <div class=\"help-block\" data-ng-show=\"infoForm.id_pharmacy.$dirty && infoForm.id_pharmacy.$invalid\">"+
             "                            <span data-ng-show=\"infoForm.id_pharmacy.$error.required\">{{translate('Necessary to choose value.')}}</span>"+
             "                        </div>"+
