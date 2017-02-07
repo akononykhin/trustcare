@@ -94,6 +94,9 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
         else if('date_stopped' == type) {
             $scope.params.suspected_drugs[index].date_stopped_opened = true;
         }
+        else if('expiry_date' == type) {
+            $scope.params.suspected_drugs[index].expiry_date_opened = true;
+        }
     };
 
     $scope.isWaitAnswer = function () {
@@ -191,6 +194,9 @@ adrReportsModule.controller('AdrReportsNewCtrl', ['$scope', '$filter', '$uibModa
             }
             if(drug.date_stopped) {
                 drug.date_stopped = $scope.formatDate(drug.date_stopped);
+            }
+            if(drug.expiry_date) {
+                drug.expiry_date = $scope.formatDate(drug.expiry_date);
             }
         });
         $.each(params.concomitant_drugs, function(index, drug) {

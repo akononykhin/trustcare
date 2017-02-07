@@ -28,7 +28,7 @@ adrPharmacyModule.controller('AdrPharmacyInfoCtrl', ['$scope', '$filter', '$uibM
         return  $scope.itemId ? true : false;
     };
     $scope.getTitle = function () {
-        return  $scope.isEditMode() ? i18n.translate("Edit Pharmacy") : i18n.translate("Create Pharmacy");
+        return  $scope.isEditMode() ? i18n.translate("Edit Reporting Unit") : i18n.translate("Create Reporting Unit");
     };
     $scope.translate = function (key, options) {
         return i18n.translate(key, options);

@@ -24,7 +24,7 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                    </div>"+
             "                </div>"+
             "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.id_pharmacy.$invalid}\">"+
-            "                    <label class=\"col-sm-3 control-label\" for=\"id_pharmacy\">{{translate('Pharmacy')}}</label>"+
+            "                    <label class=\"col-sm-3 control-label\" for=\"id_pharmacy\">{{translate('Reporting Unit')}}</label>"+
             "                    <div class=\"col-sm-4\">"+
             "                        <div class=\"input-group\">"+
             "                            <select name=\"id_pharmacy\" id=\"id_pharmacy\" class=\"form-control\" data-ng-model=\"params.id_pharmacy\" data-ng-options=\"o.id as o.name for o in pharmacies | orderBy:'name'\" required>"+
@@ -268,8 +268,13 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                            </div>"+
             "                            <div class=\"form-group\"  data-ng-class=\"{'has-error': subForm.expiry_date.$invalid}\">"+
             "                                <label class=\"col-sm-3 control-label\" for=\"expiry_date\">{{translate('Expiry Date')}}</label>"+
-            "                                <div class=\"col-sm-6\">"+
-            "                                    <input type=\"text\" class=\"form-control\" name=\"expiry_date\" data-ng-model=\"drug.expiry_date\">"+
+            "                                <div class=\"col-sm-3\">"+
+            "                                    <p class=\"input-group\">"+
+            "                                        <input type=\"text\" name=\"expiry_date\" class=\"form-control\" readonly=\"readonly\" uib-datepicker-popup=\"yyyy-MM-dd\" data-ng-model=\"drug.expiry_date\" is-open=\"drug.expiry_date_opened\" datepicker-options=\"dateOptions\" />"+
+            "                                        <span class=\"input-group-btn\">"+
+            "                                            <button type=\"button\" class=\"btn btn-default\" ng-click=\"suspected_calendar_open('expiry_date', $index)\"><i class=\"glyphicon glyphicon-calendar\"></i></button>"+
+            "                                        </span>"+
+            "                                    </p>"+
             "                                    <div class=\"help-block\" data-ng-show=\"subForm.expiry_date.$dirty && subForm.expiry_date.$invalid\">"+
             "                                        <span data-ng-show=\"subForm.expiry_date.$error.required\">{{translate('Necessary to enter value.')}}</span>"+
             "                                    </div>"+
@@ -519,7 +524,7 @@ angular.module('trustrx.adr.report').run(["$templateCache", function($templateCa
             "                    </div>"+
             "                </div>"+
             "                <div class=\"form-group\"  data-ng-class=\"{'has-error': infoForm.id_pharmacy.$invalid}\">"+
-            "                    <label class=\"col-sm-4 control-label\" for=\"id_pharmacy\">{{translate('Pharmacy')}}</label>"+
+            "                    <label class=\"col-sm-4 control-label\" for=\"id_pharmacy\">{{translate('Reporting Unit')}}</label>"+
             "                    <div class=\"col-sm-6\">"+
             "                        <p class=\"form-control-static\">{{params.pharmacy}}</p>"+
             "                    </div>"+
